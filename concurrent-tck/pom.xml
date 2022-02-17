@@ -14,6 +14,9 @@
         
         <!-- Arquillian Dependencies -->
         <payara.arquillian.container.version>3.0.alpha3</payara.arquillian.container.version>
+        
+        <com.beust-jcommander.version>1.82</com.beust-jcommander.version>
+
     </properties>
 
     <!-- needed for servlet 6.0, concurrent 3.0 -->
@@ -60,17 +63,17 @@
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>6.14.3</version>
-<!--            <scope>compile</scope>-->
+            <!--            <scope>compile</scope>-->
         </dependency>
         <dependency>
             <groupId>org.jboss.arquillian.testng</groupId>
             <artifactId>arquillian-testng-container</artifactId>
-<!--            <scope>compile</scope>-->
+            <!--            <scope>compile</scope>-->
         </dependency>
         <dependency>
             <groupId>com.beust</groupId>
             <artifactId>jcommander</artifactId>
-            <version>1.82</version>
+            <version>${com.beust-jcommander.version}</version>
         </dependency>
         
         <!-- Remote Payara server -->
@@ -126,6 +129,16 @@
                             <groupId>org.apache.derby</groupId>
                             <artifactId>derby</artifactId>
                             <version>10.15.2.0</version>
+                        </artifactItem>
+                        <artifactItem>
+                            <groupId>org.apache.derby</groupId>
+                            <artifactId>derbyclient</artifactId>
+                            <version>10.15.2.0</version>
+                        </artifactItem>
+                        <artifactItem>
+                            <groupId>com.beust</groupId>
+                            <artifactId>jcommander</artifactId>
+                            <version>${com.beust-jcommander.version}</version>
                         </artifactItem>
                     </artifactItems>
                     <outputDirectory>${project.build.directory}/server-dependencies</outputDirectory>
