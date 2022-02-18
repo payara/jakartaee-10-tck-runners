@@ -134,7 +134,12 @@
                         </artifactItem>
                         <artifactItem>
                             <groupId>org.apache.derby</groupId>
-                            <artifactId>derbyclient</artifactId>
+                            <artifactId>derbytools</artifactId>
+                            <version>10.15.2.0</version>
+                        </artifactItem>
+                        <artifactItem>
+                            <groupId>org.apache.derby</groupId>
+                            <artifactId>derbyshared</artifactId>
                             <version>10.15.2.0</version>
                         </artifactItem>
                     </artifactItems>
