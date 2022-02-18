@@ -4,6 +4,8 @@
         <packages>
             <package name="ee.jakarta.tck.concurrent.api.*"/>
             <package name="ee.jakarta.tck.concurrent.spec.*"/>
+            <!-- For a single test: -->
+            <!--<package name="ee.jakarta.tck.concurrent.api.AbortedException.*"/>-->
         </packages>
     </test>
 </suite>
