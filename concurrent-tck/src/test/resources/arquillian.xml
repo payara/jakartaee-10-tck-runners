@@ -2,7 +2,7 @@
             xmlns="http://jboss.org/schema/arquillian"
             xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
     <engine>
-        <property name="deploymentExportPath">/tmp/</property>
+        <property name="deploymentExportPath">target/arquillian-deployments</property>
     </engine>
     <container qualifier="${app_server}" default="true">
         <configuration>
