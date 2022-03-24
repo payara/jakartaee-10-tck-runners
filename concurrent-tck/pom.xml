@@ -121,7 +121,7 @@
                         <id>copy-dependency</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>copy-dependency</goal>
+                            <goal>copy-dependencies</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -142,6 +142,11 @@
                             <artifactId>derbyshared</artifactId>
                             <version>10.15.2.0</version>
                         </artifactItem>
+                        <dependency>
+                                <groupId>org.netbeans.tools</groupId>
+                                <artifactId>sigtest-maven-plugin</artifactId>
+                                <version>1.6</version>
+                        </dependency>
                     </artifactItems>
                     <outputDirectory>${project.build.directory}/server-dependencies</outputDirectory>
                 </configuration>

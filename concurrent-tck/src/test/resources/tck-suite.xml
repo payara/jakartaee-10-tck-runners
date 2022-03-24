@@ -5,7 +5,19 @@
             <package name="ee.jakarta.tck.concurrent.api.*"/>
             <package name="ee.jakarta.tck.concurrent.spec.*"/>
             <!-- For a single test: -->
-            <!--<package name="ee.jakarta.tck.concurrent.api.AbortedException.*"/>-->
+            <!--<package name="ee.jakarta.tck.concurrent.spec.common.context.*"/>-->
+            
+            <!--<package name="ee.jakarta.tck.concurrent.spec.ContextService.contextPropagate.*"/>-->
+            <!--<package name="ee.jakarta.tck.concurrent.spec.ContextService.contextPropagate.*"/>-->
+            <!--<package name="ee.jakarta.tck.concurrent.spec.ManagedExecutorService.resourcedef.*"/>-->
+            
+            <!-- PASSES: -->
+            <!--<package name="ee.jakarta.tck.concurrent.spec.ContextService.tx.*"/>--> 
+            <!--<package name="ee.jakarta.tck.concurrent.spec.ManagedExecutorService.tx.*"/>-->
+            <!--<package name="ee.jakarta.tck.concurrent.spec.ManagedThreadFactory.context.*"/>-->
+
+<!--            <package name="ee.jakarta.tck.concurrent.framework.signaturetest.*"/>
+            <package name="ee.jakarta.tck.concurrent.spec.signature.*"/>-->
         </packages>
     </test>
 </suite>
