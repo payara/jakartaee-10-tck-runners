@@ -1,8 +1,13 @@
 # jakartaee-10-tck-runners
 
-## Prerequisities
+# Concurrent 3.0
 
-run `mvn clean dependency:copy` and `mvn clean dependency:copy-dependencies`
+### Prerequisities
+
+run
+
+    mvn clean dependency:copy
+    mvn clean dependency:copy-dependencies`
 
 * it downloads all server dependencies to target/server-dependencies
 
@@ -10,42 +15,29 @@ Copy the files to Payara:
 
 	cp target/server-dependencies/* ${PAYARA}/glassfish/domains/domain1/lib
 
-Start Payara
-
-	./asadmin start-domain
-
 Prepare password file for account javajoe/javajoe/role=Manager. File`prepare-server-password` contains row:
 
 	AS_ADMIN_USERPASSWORD=javajoe
 
-Create required resources:
+Go to Payara and start the server
 
 	./asadmin start-domain
-	./asadmin create-managed-executor-service concurrent/ExecutorA
-	./asadmin create-managed-executor-service concurrent/ExecutorB
-	./asadmin create-managed-executor-service concurrent/ExecutorC
-	./asadmin create-managed-scheduled-executor-service concurrent/ScheduledExecutorA
-	./asadmin create-managed-scheduled-executor-service concurrent/ScheduledExecutorB
-	./asadmin create-managed-scheduled-executor-service concurrent/ScheduledExecutorC
-	./asadmin create-managed-scheduled-executor-service concurrent/EJBScheduledExecutorA
-	./asadmin create-managed-scheduled-executor-service concurrent/EJBScheduledExecutorB
-	./asadmin create-managed-scheduled-executor-service concurrent/EJBScheduledExecutorC
-	./asadmin create-managed-executor-service concurrent/EJBExecutorA
-	./asadmin create-managed-thread-factory concurrent/EJBThreadFactoryA
-	./asadmin create-managed-thread-factory concurrent/EJBThreadFactoryB
-	./asadmin create-managed-thread-factory concurrent/ThreadFactoryA
-	./asadmin create-managed-thread-factory concurrent/ThreadFactoryB
-	./asadmin create-context-service concurrent/ContextA
-	./asadmin create-context-service concurrent/ContextB
-	./asadmin create-context-service concurrent/ContextC
-	./asadmin create-context-service concurrent/EJBContextA
-	./asadmin create-context-service concurrent/EJBContextB
-	./asadmin create-context-service concurrent/EJBContextC
-	./asadmin --passwordfile=prepare-server-password create-file-user --groups=Manager --authrealmname=file javajoe
+
+Create required resources:
+
+    echo "Setting file user javajoe"
+    ./asadmin --passwordfile=prepare-server-password create-file-user --groups=Manager --authrealmname=file javajoe
+    echo "Setting system property jimage.dir", needed for SignatureTestServlet
+    ./asadmin create-system-properties jimage.dir=/tmp
+    echo "Setting allow setAccessible, needed for SignatureTestServlet"
+    ./asadmin create-jvm-options "--add-exports=java.base/jdk.internal.vm.annotation=ALL-UNNAMED"
+    ./asadmin create-jvm-options "--add-opens=java.base/jdk.internal.vm.annotation=ALL-UNNAMED"
+    echo "Setup phase done, stopping Payara"
 	./asadmin stop-domain
 
-# Running
+### Running
 
 Run maven test in the TCK Runner directory
 
-	mvn test
+	cd concurrent-tck
+    mvn test
