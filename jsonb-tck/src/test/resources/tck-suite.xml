@@ -1,0 +1,9 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="jakarta-jsonb" verbose="2" configfailurepolicy="continue">
+    <test name="jakarta-jsonb.tck" junit="true">
+        <packages>
+            <package name="ee.jakarta.tck.json.bind.api.*"></package>
+            <package name="ee.jakarta.tck.json.bind.signaturetest.*"></package>
+        </packages>
+    </test>
+</suite>
