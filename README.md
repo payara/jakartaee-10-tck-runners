@@ -7,7 +7,7 @@
 run
 
     mvn clean dependency:copy
-    mvn clean dependency:copy-dependencies`
+    mvn clean dependency:copy-dependencies
 
 * it downloads all server dependencies to target/server-dependencies
 
@@ -33,7 +33,11 @@ Create required resources:
     ./asadmin create-jvm-options "--add-exports=java.base/jdk.internal.vm.annotation=ALL-UNNAMED"
     ./asadmin create-jvm-options "--add-opens=java.base/jdk.internal.vm.annotation=ALL-UNNAMED"
     echo "Setup phase done, stopping Payara"
-	./asadmin stop-domain
+    ./asadmin stop-domain
+
+Temporal fix for unknown tag 18: copy default-web.xml to domains/domain1/config
+This sets suppressSmap to false, e.g. smap is not generated. Once Payara will use newer Tomcat, it will be fixed
+and this temporal fix can be removed.
 
 ### Running
 
