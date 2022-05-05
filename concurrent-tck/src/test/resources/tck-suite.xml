@@ -5,21 +5,44 @@
             <package name="ee.jakarta.tck.concurrent.api.*"/>
             <package name="ee.jakarta.tck.concurrent.spec.*"/>
             <!-- For a single test: -->
-<!--            <package name="ee.jakarta.tck.concurrent.spec.common.context.*"/>
+            <!--<package name="ee.jakarta.tck.concurrent.spec.common.context.*"/>-->
             
-            <package name="ee.jakarta.tck.concurrent.spec.ContextService.contextPropagate.*"/> 
-            <package name="ee.jakarta.tck.concurrent.spec.ContextService.tx.*"/> 
-            <package name="ee.jakarta.tck.concurrent.spec.ManagedExecutorService.tx.*"/>
-            <package name="ee.jakarta.tck.concurrent.spec.ManagedThreadFactory.context.*"/>-->
-            <!--<package name="ee.jakarta.tck.concurrent.spec.ManagedExecutorService.resourcedef.*"/>-->
-            
-            <!-- PASSES: -->
-            <!--<package name="ee.jakarta.tck.concurrent.spec.ContextService.tx.*"/>--> 
-            <!--<package name="ee.jakarta.tck.concurrent.spec.ManagedExecutorService.tx.*"/>-->
-            <!--<package name="ee.jakarta.tck.concurrent.spec.ManagedThreadFactory.context.*"/>-->
-
-<!--            <package name="ee.jakarta.tck.concurrent.framework.signaturetest.*"/>
-            <package name="ee.jakarta.tck.concurrent.spec.signature.*"/>-->
+            <!--<package name="ee.jakarta.tck.concurrent.spec.ContextService.contextPropagate.*"/>--> 
         </packages>
+        
+        <!--
+            HOWTO from Scott Marlow:
+            FYI, if anyone on this mailing list wants to see some examples of existing TCK challenges,
+            https://github.com/eclipse-ee4j/jakartaee-tck/projects/2 has a few listed.  Basically the person
+            challenging the test would create an issue with label `challenge` in
+            https://github.com/jakartaee/concurrency/issue to initiate it.  More guidance is in
+            https://jakarta.ee/committees/specification/tckprocess. 
+        -->
+        <classes>
+            <class name="ee.jakarta.tck.concurrent.spec.ManagedExecutorService.resourcedef.ManagedExecutorDefinitionTests">
+                <methods>
+                    <!-- From Nathan Rauh:
+                        It looks like a mistake in the test case where it is accidentally testing the ‘unchanged’
+                        setting as though it were ‘cleared’.  The `unchanged` setting leaves the context type alone, so
+                        whatever the context was on the thread before it must remain.  The mistake went unnoticed on
+                        Open Liberty because the state of the thread happens to already match the test assertion. 
+                        This one should definitely be challenged for the mistaken assertion.
+                        
+                        TODO: fill the TCK challenge!
+                    -->
+                    <exclude name="testCompletedFuture"></exclude>
+                </methods>
+            </class>
+            <class name="ee.jakarta.tck.concurrent.spec.ManagedScheduledExecutorService.resourcedef.ManagedScheduledExecutorDefinitionTests">
+                <methods>
+                    <!-- the same story as for ManagedExecutorDefinitionTests
+                        
+                        TODO: fill the TCK challenge!
+                    -->
+                    <exclude name="testCompletedFutureMSE"></exclude>
+                </methods>
+            </class>
+            <!-- TODO: revert the saving context for ManagedThreadFactory during JNDI lookup and fill TCK challenge. -->
+        </classes>
     </test>
 </suite>
