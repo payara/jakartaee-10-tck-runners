@@ -26,19 +26,20 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>servlet-tck-runner</artifactId>
+    <artifactId>pages-tck-runner</artifactId>
     <packaging>pom</packaging>
 
-    <name>TCK: servlet</name>
+    <name>TCK: pages</name>
 
     <properties>
+        
         <ant.version>1.10.12</ant.version>
         <ant.home>${project.build.directory}/apache-ant-${ant.version}</ant.home>
         <ant.zip.url>https://archive.apache.org/dist/ant/binaries/apache-ant-${ant.version}-bin.zip</ant.zip.url>
         
-        <tck.home>${project.build.directory}/servlet-tck</tck.home>
+        <tck.home>${project.build.directory}/pages-tck</tck.home>
         <tck.tests.home>${tck.home}/src/com/sun/ts/tests</tck.tests.home> 
-
+         
         <payara.home>${project.build.directory}/payara6</payara.home>
         <payara.version>6.2022.1.Alpha3-SNAPSHOT</payara.version>
         <payara.asadmin>${payara.home}/glassfish/bin/asadmin</payara.asadmin>
@@ -66,7 +67,7 @@
         </dependency>
         <dependency>
             <groupId>fish.payara.jakarta.tests.tck</groupId>
-            <artifactId>jakarta-servlet-tck</artifactId>
+            <artifactId>jakarta-pages-tck</artifactId>
             <version>${project.version}</version>
             <type>zip</type>
             <scope>test</scope>
@@ -120,7 +121,7 @@
                             <goal>unpack-dependencies</goal>
                         </goals>
                         <configuration>
-                            <includeArtifactIds>jakarta-servlet-tck</includeArtifactIds>
+                            <includeArtifactIds>jakarta-pages-tck</includeArtifactIds>
                             <outputDirectory>${project.build.directory}</outputDirectory>
                         </configuration>
                     </execution>
@@ -163,29 +164,35 @@
                                 <macrodef name="tck-setting">
                                     <attribute name="key" /> <attribute name="value" />
                                     <sequential>
-                                        <replaceregexp file="${tck.home}/bin/ts.jte" byline="true"
-                                                       match="@{key}=.*" replace="@{key}=@{value}" />
+                                      <replaceregexp file="${tck.home}/bin/ts.jte" byline="true"
+                                        match="@{key}=.*" replace="@{key}=@{value}" />
                                     </sequential>
                                 </macrodef>
                                 
 
                                 <!-- Change configuration -->
                                 
-                                <tck-setting key="web.home" value="${payara.home}/glassfish"/>
+                                <tck-setting key="webServerHome" value="${payara.home}/glassfish"/>
                                 <tck-setting key="webServerHost" value="localhost"/>
                                 <tck-setting key="webServerPort" value="${port.http}"/>
                                 <tck-setting key="securedWebServicePort" value="${port.https}"/>
-                                
                                 <tck-setting key="s1as.admin.port" value="${port.admin}"/>
                                 <tck-setting key="glassfish.admin.port" value="${port.admin}"/>
                                 <tck-setting key="orb.port" value="${port.orb}"/>
                                 <tck-setting key="database.port" value="${port.derby}"/>
                                 <tck-setting key="harness.log.port" value="${port.harness.log}"/>
                                 
-                                <tck-setting key="report.dir" value="${tck.home}/servletreport/servlet"/>
-                                <tck-setting key="work.dir" value="${tck.home}/servletwork/servlet"/>
+                                <tck-setting key="report.dir" value="${tck.home}/pagesreport/pages"/>
+                                <tck-setting key="work.dir" value="${tck.home}/pageswork/pages"/>
                                 
                                 <tck-setting key="impl.vi" value="glassfish"/>
+                                <tck-setting key="impl.vi.deploy.dir" value="${webServerHome}/domains/domain1/autodeploy"/>
+                                <tck-setting key="impl.deploy.timeout.multiplier" value="30"/>
+                                
+                                <tck-setting key="jspservlet.classes" value="${webServerHome}/modules/jakarta.servlet-api.jar${pathsep}${webServerHome}/modules/wasp.jar${pathsep}${webServerHome}/modules/jakarta.servlet.jsp-api.jar"/>
+                                <tck-setting key="jstl.classes" value="${webServerHome}/modules/jakarta.servlet.jsp.jstl.jar"/>
+                                <tck-setting key="el.classes" value="${webServerHome}/modules/jakarta.el.jar${pathsep}${webServerHome}/modules/jakarta.el-api.jar"/>
+								
                           
                                 <limit maxwait="60">
                                     <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
@@ -202,7 +209,7 @@
                                     <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                         <arg value="start-domain"/>
                                     </exec>
-                                    <sleep seconds="60" />
+
                                     <if>
                                         <isset property="jacoco.version" />
                                         <then>
@@ -214,26 +221,22 @@
                                         </then>
                                     </if>
                                     <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
-                                        <arg value="set" />
-                                        <arg value="configs.config.server-config.network-config.protocols.protocol.http-listener-1.http.http2-push-enabled=true" />
-                                    </exec>
-                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                         <arg value="stop-domain"/>
                                         <arg value="domain1"/>
                                     </exec>
                                 </limit>
-                                <mkdir dir="${tck.home}/servlettckreport"/>
-                                <mkdir dir="${tck.home}/servlettckreport/servlettck"/>
+                                <mkdir dir="${tck.home}/pagestckreport"/>
+                                <mkdir dir="${tck.home}/pagestckreport/pagestck"/>
                                 
                                 <replace file="${tck.home}/bin/xml/ts.top.import.xml">
-                                    <replacetoken><![CDATA[<jvmarg value="-Xmx512m"/>]]></replacetoken>
-                                    <replacevalue><![CDATA[<jvmarg value="-Xmx512m"/>
+                                  <replacetoken><![CDATA[<jvmarg value="-Xmx512m"/>]]></replacetoken>
+                                  <replacevalue><![CDATA[<jvmarg value="-Xmx512m"/>
                                 <jvmarg value="-Djavatest.security.noSecurityManager=true"/>]]></replacevalue>
                                 </replace>
                                 
                                 <replace file="${tck.home}/bin/xml/ts.top.import.xml" if:set="suspend-tck" >
-                                    <replacetoken><![CDATA[<jvmarg value="-Xmx512m"/>]]></replacetoken>
-                                    <replacevalue><![CDATA[<jvmarg value="-Xmx512m"/>
+                                  <replacetoken><![CDATA[<jvmarg value="-Xmx512m"/>]]></replacetoken>
+                                  <replacevalue><![CDATA[<jvmarg value="-Xmx512m"/>
                                 <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=9008"/>]]></replacevalue>
                                 </replace>
                             </target>
@@ -252,35 +255,28 @@
                         <configuration>
                             <target xmlns:if="ant:if" xmlns:unless="ant:unless">
                                 <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />
-                                
-                                <!-- Start Payara Server -->
                                 <limit maxwait="20">
                                     <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                         <arg value="start-domain"/>
                                         <arg value="--suspend" if:set="payara.suspend"/>
                                     </exec>
                                 </limit>
-								
-                                <exec executable="${ant.home}/bin/ant" dir="${tck.home}/bin">
-                                    <arg value="-Dutil.dir=${tck.home}"  />
-                                    <arg value="config.security"  />
-                                </exec>
                                 
                                 <!-- Deploy single test -->
                                 <sequential if:set="run.test" >
-                                    <dirname property="test.dir" file="${tck.home}/src/${run.test}"/>
-                                    <echo>Deploying from ${test.dir}</echo>
+                                	<dirname property="test.dir" file="${tck.home}/src/${run.test}"/>
+                                	<echo>Deploying from ${test.dir}</echo>
                                 	
-                                    <exec executable="${ant.home}/bin/ant" dir="${test.dir}">
-                                        <arg value="deploy"  />
-                                    </exec>
+                                	<exec executable="${ant.home}/bin/ant" dir="${test.dir}">
+                                    	<arg value="deploy"  />
+                                	</exec>
                                 </sequential>
                                 
                                 <!-- Deploy all tests -->
                                 <sequential unless:set="run.test" >
-                                    <exec executable="${ant.home}/bin/ant" dir="${tck.tests.home}">
-                                        <arg value="deploy.all"  />
-                                    </exec>
+                                	<exec executable="${ant.home}/bin/ant" dir="${tck.tests.home}">
+                                    	<arg value="deploy.all"  />
+                                	</exec>
                                 </sequential>
                             </target>
                         </configuration>

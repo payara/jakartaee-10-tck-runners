@@ -33,6 +33,7 @@
 
     <modules>
         <module>jakarta-servlet-tck</module>
+        <module>jakarta-pages-tck</module>
     </modules>
 
     <build>
