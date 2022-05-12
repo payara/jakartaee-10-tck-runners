@@ -42,7 +42,54 @@
                     <exclude name="testCompletedFutureMSE"></exclude>
                 </methods>
             </class>
+            <class name="ee.jakarta.tck.concurrent.api.Trigger.TriggerTests">
+                <methods>
+                    <!-- fixed in branch add-forgotten-counter-reset-before-tests
+                        
+                        TODO: fill the TCK challenge!
+                    -->
+                    <exclude name="triggerGetNextRunTimeTest"></exclude>
+                </methods>
+            </class>
+            <class name="ee.jakarta.tck.concurrent.spec.ManagedExecutorService.security.SecurityTests">
+                <methods>
+                    <!-- fixed in branch remove-duplicate-ejb-classes
+                        
+                        TODO: fill the TCK challenge!
+                    -->
+                    <exclude name="managedExecutorServiceAPISecurityTest"></exclude>
+                </methods>
+            </class>
+            <class name="ee.jakarta.tck.concurrent.spec.ManagedScheduledExecutorService.security.SecurityTests">
+                <methods>
+                    <!-- fixed in branch remove-duplicate-classes-in-mses-test
+                        
+                        TODO: fill the TCK challenge!
+                    -->
+                    <exclude name="managedScheduledExecutorServiceAPISecurityTest"></exclude>
+                </methods>
+            </class>
             <!-- TODO: revert the saving context for ManagedThreadFactory during JNDI lookup and fill TCK challenge. -->
+            <!--revert commit a04b4f57470d5cbc4211697ce50f7c183b87890f-->
+                    <!-- fixed in branch fix-managed-thread-factory-tests-save-context
+                        
+                        TODO: fill the TCK challenge!
+                    -->
+<!--            <class name="ee.jakarta.tck.concurrent.spec.ManagedThreadFactory.resourcedef.ManagedThreadFactoryDefinitionServlet">
+                <methods>
+                    <exclude name="testManagedThreadFactoryDefinitionAllAttributes"></exclude>
+                </methods>
+            </class>-->
+                    <!-- fixed in branch fix-managed-thread-factory-tests-save-context
+                        
+                        TODO: fill the TCK challenge!
+                    -->
+<!--            <class name="ee.jakarta.tck.concurrent.spec.ManagedThreadFactory.resourcedef.ManagedThreadFactoryDefinitionOnEJBServlet">
+                <methods>
+                    <exclude name="testParallelStreamBackedByManagedThreadFactoryEJB"></exclude>
+                    <exclude name="testManagedThreadFactoryDefinitionAllAttributesEJB"></exclude>
+                </methods>
+            </class>-->
         </classes>
     </test>
 </suite>
