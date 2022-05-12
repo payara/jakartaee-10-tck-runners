@@ -69,27 +69,23 @@
                     <exclude name="managedScheduledExecutorServiceAPISecurityTest"></exclude>
                 </methods>
             </class>
-            <!-- TODO: revert the saving context for ManagedThreadFactory during JNDI lookup and fill TCK challenge. -->
-            <!--revert commit a04b4f57470d5cbc4211697ce50f7c183b87890f-->
-                    <!-- fixed in branch fix-managed-thread-factory-tests-save-context
+            <!-- fixed in branch fix-managed-thread-factory-tests-save-context
                         
                         TODO: fill the TCK challenge!
                     -->
-<!--            <class name="ee.jakarta.tck.concurrent.spec.ManagedThreadFactory.resourcedef.ManagedThreadFactoryDefinitionServlet">
+            <class name="ee.jakarta.tck.concurrent.spec.ManagedThreadFactory.resourcedef.ManagedThreadFactoryDefinitionTests">
                 <methods>
                     <exclude name="testManagedThreadFactoryDefinitionAllAttributes"></exclude>
-                </methods>
-            </class>-->
-                    <!-- fixed in branch fix-managed-thread-factory-tests-save-context
-                        
-                        TODO: fill the TCK challenge!
-                    -->
-<!--            <class name="ee.jakarta.tck.concurrent.spec.ManagedThreadFactory.resourcedef.ManagedThreadFactoryDefinitionOnEJBServlet">
-                <methods>
-                    <exclude name="testParallelStreamBackedByManagedThreadFactoryEJB"></exclude>
                     <exclude name="testManagedThreadFactoryDefinitionAllAttributesEJB"></exclude>
+                    <exclude name="testParallelStreamBackedByManagedThreadFactory"></exclude>
+                    <exclude name="testParallelStreamBackedByManagedThreadFactoryEJB"></exclude>
                 </methods>
-            </class>-->
+            </class>
+            <class name="ee.jakarta.tck.concurrent.spec.Platform.dd.DeploymentDescriptorTests">
+                <methods>
+                    <exclude name="testDeploymentDescriptorDefinesManagedThreadFactory"></exclude>
+                </methods>
+            </class>
         </classes>
     </test>
 </suite>
