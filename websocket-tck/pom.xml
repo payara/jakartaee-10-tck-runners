@@ -26,15 +26,15 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>servlet-tck-runner</artifactId>
+    <artifactId>websocket-tck-runner</artifactId>
     <packaging>pom</packaging>
 
-    <name>TCK: servlet</name>
+    <name>TCK: websocket</name>
 
     <properties>
-        <tck.home>${project.build.directory}/servlet-tck</tck.home>
+        <tck.home>${project.build.directory}/websocket-tck</tck.home>
         <tck.tests.home>${tck.home}/src/com/sun/ts/tests</tck.tests.home> 
-
+       
         <jacoco.includes>org/glassfish/**\:com/sun/enterprise/**</jacoco.includes>
         
         <port.admin>4848</port.admin>
@@ -58,7 +58,7 @@
         </dependency>
         <dependency>
             <groupId>fish.payara.jakarta.tests.tck</groupId>
-            <artifactId>jakarta-servlet-tck</artifactId>
+            <artifactId>jakarta-websocket-tck</artifactId>
             <version>${project.version}</version>
             <type>zip</type>
             <scope>test</scope>
@@ -112,7 +112,7 @@
                             <goal>unpack-dependencies</goal>
                         </goals>
                         <configuration>
-                            <includeArtifactIds>jakarta-servlet-tck</includeArtifactIds>
+                            <includeArtifactIds>jakarta-websocket-tck</includeArtifactIds>
                             <outputDirectory>${project.build.directory}</outputDirectory>
                         </configuration>
                     </execution>
@@ -174,8 +174,8 @@
                                 <tck-setting key="database.port" value="${port.derby}"/>
                                 <tck-setting key="harness.log.port" value="${port.harness.log}"/>
                                 
-                                <tck-setting key="report.dir" value="${tck.home}/servletreport/servlet"/>
-                                <tck-setting key="work.dir" value="${tck.home}/servletwork/servlet"/>
+                                <tck-setting key="report.dir" value="${tck.home}/websocketreport/websocket"/>
+                                <tck-setting key="work.dir" value="${tck.home}/websocketwork/websocket"/>
                                 
                                 <tck-setting key="impl.vi" value="glassfish"/>
                           
@@ -214,8 +214,8 @@
                                         <arg value="domain1"/>
                                     </exec>
                                 </limit>
-                                <mkdir dir="${tck.home}/servlettckreport"/>
-                                <mkdir dir="${tck.home}/servlettckreport/servlettck"/>
+                                <mkdir dir="${tck.home}/websockettckreport"/>
+                                <mkdir dir="${tck.home}/websockettckreport/websockettck"/>
                                 
                                 <replace file="${tck.home}/bin/xml/ts.top.import.xml">
                                     <replacetoken><![CDATA[<jvmarg value="-Xmx512m"/>]]></replacetoken>

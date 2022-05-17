@@ -7,6 +7,16 @@
     <artifactId>tck</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+    
+    <properties>
+        <ant.version>1.10.12</ant.version>
+        <ant.home>${project.build.directory}/apache-ant-${ant.version}</ant.home>
+        <ant.zip.url>https://archive.apache.org/dist/ant/binaries/apache-ant-${ant.version}-bin.zip</ant.zip.url>
+
+        <payara.home>${project.build.directory}/payara6</payara.home>
+        <payara.version>6.2022.1.Alpha3-SNAPSHOT</payara.version>
+        <payara.asadmin>${payara.home}/glassfish/bin/asadmin</payara.asadmin>
+    </properties>
 
     <modules>
         <module>tck-download</module>
@@ -15,6 +25,7 @@
         <module>jsonp-tck</module>
         <module>servlet-tck</module>
         <module>pages-tck</module>
+        <module>websocket-tck</module>
     </modules>
 
 </project>

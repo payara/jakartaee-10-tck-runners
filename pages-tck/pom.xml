@@ -31,19 +31,10 @@
 
     <name>TCK: pages</name>
 
-    <properties>
-        
-        <ant.version>1.10.12</ant.version>
-        <ant.home>${project.build.directory}/apache-ant-${ant.version}</ant.home>
-        <ant.zip.url>https://archive.apache.org/dist/ant/binaries/apache-ant-${ant.version}-bin.zip</ant.zip.url>
-        
+    <properties>       
         <tck.home>${project.build.directory}/pages-tck</tck.home>
         <tck.tests.home>${tck.home}/src/com/sun/ts/tests</tck.tests.home> 
          
-        <payara.home>${project.build.directory}/payara6</payara.home>
-        <payara.version>6.2022.1.Alpha3-SNAPSHOT</payara.version>
-        <payara.asadmin>${payara.home}/glassfish/bin/asadmin</payara.asadmin>
-       
         <jacoco.includes>org/glassfish/**\:com/sun/enterprise/**</jacoco.includes>
         
         <port.admin>4848</port.admin>
