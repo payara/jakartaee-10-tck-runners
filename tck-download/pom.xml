@@ -34,6 +34,7 @@
     <modules>
         <module>jakarta-servlet-tck</module>
         <module>jakarta-pages-tck</module>
+        <module>jakarta-websocket-tck</module>
     </modules>
 
     <build>
