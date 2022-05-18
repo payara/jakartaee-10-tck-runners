@@ -10,6 +10,7 @@
 
     <modules>
         <module>tck-download</module>
+        <module>authorization-tck</module>
         <module>concurrent-tck</module>
         <module>jsonb-tck</module>
         <module>jsonp-tck</module>
