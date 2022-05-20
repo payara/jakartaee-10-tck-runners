@@ -44,8 +44,8 @@
             </class>
             <!-- 
                 fixed in branch add-forgotten-counter-reset-before-tests
-                https://github.com/jakartaee/concurrency/pull/222
-                TODO: fill the TCK challenge!
+                fix: https://github.com/jakartaee/concurrency/pull/222
+                TCK challenge: https://github.com/jakartaee/concurrency/issues/228
             -->
             <class name="ee.jakarta.tck.concurrent.api.Trigger.TriggerTests">
                 <methods>
@@ -54,8 +54,8 @@
             </class>
             <!-- 
                 fixed in branch remove-duplicate-ejb-classes
-                https://github.com/jakartaee/concurrency/pull/218
-                TODO: fill the TCK challenge!
+                fix: https://github.com/jakartaee/concurrency/pull/218
+                TCK challenge: https://github.com/jakartaee/concurrency/issues/227
             -->
             <class name="ee.jakarta.tck.concurrent.spec.ManagedExecutorService.security.SecurityTests">
                 <methods>
@@ -64,8 +64,8 @@
             </class>
             <!-- 
                 fixed in branch remove-duplicate-classes-in-mses-test
-                https://github.com/jakartaee/concurrency/pull/221
-                TODO: fill the TCK challenge!
+                fix: https://github.com/jakartaee/concurrency/pull/221
+                TCK challenge: https://github.com/jakartaee/concurrency/issues/227
             -->
             <class name="ee.jakarta.tck.concurrent.spec.ManagedScheduledExecutorService.security.SecurityTests">
                 <methods>
@@ -74,8 +74,8 @@
             </class>
             <!-- 
                 fixed in branch fix-managed-thread-factory-tests-save-context
-                https://github.com/jakartaee/concurrency/pull/212       
-                TODO: fill the TCK challenge!
+                fix: https://github.com/jakartaee/concurrency/pull/212       
+                TCK challenge: https://github.com/jakartaee/concurrency/issues/226
             -->
             <class name="ee.jakarta.tck.concurrent.spec.ManagedThreadFactory.resourcedef.ManagedThreadFactoryDefinitionTests">
                 <methods>
