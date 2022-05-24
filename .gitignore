@@ -2,3 +2,9 @@
 .idea/
 target/
 *.iml
+/soap-tck/run-tck-setup.sh
+/soap-tck/soap-tck/
+/soap-tck/jakarta-soap-tck-*.zip
+/xml-ws-tck/run-tck-setup.sh
+/xml-ws-tck/xml-ws-tck/
+/xml-ws-tck/jakarta-xml-ws-tck-*.zip
