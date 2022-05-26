@@ -150,8 +150,7 @@
                         <configuration>
                             <target xmlns:if="ant:if" xmlns:unless="ant:unless">
                                 <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />
-                                         
-                                                                
+            
                                 <echo level="info" message="Start building all tests ${tck.home}" />
                                 <exec executable="${ant.home}/bin/ant" dir="${tck.home}/bin">
                                     <arg value="build.all.tests"/>
@@ -220,7 +219,6 @@
                                             </exec>
                                         </then>
                                     </if>
-                                    
                                     <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                         <arg value="create-jvm-options" />
                                         <arg value="-Djavax.xml.accessExternalStylesheet=all" />
@@ -237,7 +235,6 @@
                                 <mkdir dir="${tck.home}/tagstckreport"/>
                                 <mkdir dir="${tck.home}/tagstckreport/tagstck"/>
                                 
-                                <!--<mkdir dir="${payara.home}/javadb"/>-->
                                 <move todir="${payara.home}/javadb">
                                     <fileset dir="${db.home}" />
                                 </move>
@@ -349,8 +346,7 @@
                                 <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                     <arg value="stop-domain" />
                                 </exec>
-                                
-                                
+
                                 <exec executable="${payara.home}/javadb/bin/stopNetworkServer" dir="${tck.tests.home}" ></exec>
                             </target>
                         </configuration>
