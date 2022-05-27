@@ -35,6 +35,7 @@
         <module>jakarta-authorization-tck</module>
         <module>jakarta-servlet-tck</module>
         <module>jakarta-pages-tck</module>
+        <module>jakarta-tags-tck</module>
         <module>jakarta-websocket-tck</module>
     </modules>
 

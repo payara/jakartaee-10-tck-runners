@@ -27,6 +27,7 @@
         <module>servlet-tck</module>
         <module>pages-tck</module>
         <module>websocket-tck</module>
+        <module>tags-tck</module>
     </modules>
 
 </project>
