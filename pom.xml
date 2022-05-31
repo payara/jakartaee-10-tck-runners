@@ -54,7 +54,26 @@
         <payara.home>${project.build.directory}/payara6</payara.home>
         <payara.version>6.2022.1.Alpha3-SNAPSHOT</payara.version>
         <payara.asadmin>${payara.home}/glassfish/bin/asadmin</payara.asadmin>
+
+        <arquillian.version>1.7.0.Alpha10</arquillian.version>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>payara-nexus-artifacts</id>
+            <url>https://nexus.payara.fish/repository/payara-artifacts</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>staged-jakarta-releases</id>
+            <url>https://jakarta.oss.sonatype.org/content/groups/staging/</url>
+        </repository>
+    </repositories>
 
     <modules>
         <module>tck-download</module>
@@ -67,6 +86,7 @@
         <module>websocket-tck</module>
         <module>tags-tck</module>
         <module>core-tck</module>
+        <module>rest-tck</module>
     </modules>
 
 </project>
