@@ -1,9 +1,7 @@
-
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-
                 <payara.root>${maven.multiModuleProjectDirectory}/target</payara.root>
                 <payara.version>6.2022.1.Alpha3-SNAPSHOT</payara.version>
                 <payara.arquillian.container.version>3.0.alpha3</payara.arquillian.container.version>
