@@ -1,5 +1,5 @@
 Information:
-https://jakarta.ee/specifications/soap-attachments/3.0/
+https://jakarta.ee/specifications/xml-web-services/4.0/
 
 Copy `run-tck-setup.sh-template` to `run-tck-setup.sh` and change the directory to your Payara.
 

@@ -1,4 +1,7 @@
 #!/bin/bash
+export PAYARA=$1
+export PAYARA_REPL=${PAYARA//\//\\/}
+
 if [ JAVA_HOME = "" ] ; then
     export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 fi
@@ -16,7 +19,7 @@ if [[ ! -f ${TS_HOME}/bin/ts.jte-origin ]]
 then
     mv ${TS_HOME}/bin/ts.jte ${TS_HOME}/bin/ts.jte-origin
 fi
-sed "s/^webcontainer.home=\$/webcontainer.home=\/home\/aubi\/work\/payara\/server\/Payara-src-fork\/appserver\/distributions\/payara\/target\/stage\/payara6\/glassfish/" ${TS_HOME}/bin/ts.jte-origin > ${TS_HOME}/bin/ts.jte-temp1
+sed "s/^webcontainer.home=\$/webcontainer.home=${PAYARA_REPL}glassfish/" ${TS_HOME}/bin/ts.jte-origin > ${TS_HOME}/bin/ts.jte-temp1
 sed "s/^local.classes=\$/local.classes=\${webcontainer.home}\/modules\/webservices-api-osgi.jar:\${webcontainer.home}\/modules\/webservices-osgi.jar:\${webcontainer.home}\/modules\/jakarta.activation-api.jar:\${webcontainer.home}\/modules\/jaxb-osgi.jar/" ${TS_HOME}/bin/ts.jte-temp1 > ${TS_HOME}/bin/ts.jte-temp2
 
 mv ${TS_HOME}/bin/ts.jte-temp2 ${TS_HOME}/bin/ts.jte
