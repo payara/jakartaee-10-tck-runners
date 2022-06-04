@@ -45,8 +45,12 @@ package fish.payara.server.tck.jsonb.arquillian;
 import ee.jakarta.tck.json.bind.MappingTester;
 import ee.jakarta.tck.json.bind.TypeContainer;
 import ee.jakarta.tck.json.bind.api.model.SimplePropertyVisibilityStrategy;
+import fish.payara.server.tck.jsonb.propertyextension.ArchiveAppender;
+import fish.payara.server.tck.jsonb.propertyextension.ArchiveProcessor;
 import org.hamcrest.Matchers;
 import org.jboss.arquillian.container.spi.client.deployment.DeploymentDescription;
+import org.jboss.arquillian.container.test.spi.client.deployment.ApplicationArchiveProcessor;
+import org.jboss.arquillian.container.test.spi.client.deployment.AuxiliaryArchiveAppender;
 import org.jboss.arquillian.container.test.spi.client.deployment.DeploymentScenarioGenerator;
 import org.jboss.arquillian.core.spi.LoadableExtension;
 import org.jboss.arquillian.test.spi.TestClass;
@@ -60,7 +64,9 @@ public class ArquillianExtension implements LoadableExtension {
 
     @Override
     public void register(ExtensionBuilder extensionBuilder) {
-        extensionBuilder.service(DeploymentScenarioGenerator.class, JsonbTcksDeploymentGenerator.class);
+        extensionBuilder.service(DeploymentScenarioGenerator.class, JsonbTcksDeploymentGenerator.class)
+                .service(ApplicationArchiveProcessor.class, ArchiveProcessor.class)
+                .service(AuxiliaryArchiveAppender.class, ArchiveAppender.class);
     }
 
     public static class JsonbTcksDeploymentGenerator implements DeploymentScenarioGenerator {
