@@ -1,0 +1,2 @@
+org.jboss.arquillian.junit5.ArquillianExtension
+fish.payara.server.tck.jsonb.arquillian.InvocationExtension
