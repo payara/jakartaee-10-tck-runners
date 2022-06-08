@@ -61,17 +61,17 @@ public class ArchiveProcessor implements ApplicationArchiveProcessor {
             container.addAsResource(
                     new StringAsset(
                             toString(
-                                    filterSystemProperties("signature.sigTestClasspath"))), SystemProperties.FILE_NAME);
+                                    filterSystemProperties())), SystemProperties.FILE_NAME);
         }
     }
 
-    public Properties filterSystemProperties(String prefix) {
+    public Properties filterSystemProperties() {
         Properties filteredProps = new Properties();
         Properties sysProps = System.getProperties();
         for (Map.Entry<Object, Object> entry: sysProps.entrySet())
         {
-            if(entry.getKey().equals(prefix)) {
-                String newKey = entry.getKey().toString(); //.replaceFirst(prefix, "");
+            if(entry.getKey().equals("signature.sigTestClasspath")) {
+                String newKey = entry.getKey().toString();
                 filteredProps.put(newKey, entry.getValue());
             }
             if (entry.getKey().equals("jimage.dir")) {
