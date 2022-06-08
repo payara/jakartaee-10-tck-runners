@@ -88,6 +88,7 @@
         <module>tags-tck</module>
         <module>core-tck</module>
         <module>rest-tck</module>
+        <module>inject-tck</module>
     </modules>
     
 </project>
