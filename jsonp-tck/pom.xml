@@ -3,21 +3,28 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <groupId>fish.payara.jakarta.jsonp.tck</groupId>
+    <parent>
+        <artifactId>tck</artifactId>
+        <groupId>fish.payara.jakarta.tests.tck</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
     <artifactId>jsonp-tck-runner</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>Jakarta JSON Processing TCK Runner</name>
     <description>This pom runs the JakartaEE JSON Processing TCK.</description>
 
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-
-        <!-- Arquillian Dependencies -->
+        <failsafe.plugin.jdk17.args/>
+        <jimage.dir>${project.build.directory}/jdk-bundle</jimage.dir>
+        <signature.sigTestClasspath />
         <payara.arquillian.container.version>3.0.alpha3</payara.arquillian.container.version>
-        <jsonp-impl.version>1.1.0</jsonp-impl.version>
+        <payara.home></payara.home>
+        <payara.json-api.jar>${payara.home}/glassfish/modules/jakarta.json.jar</payara.json-api.jar>
+        <jsonp.api.version>2.1.0</jsonp.api.version>
     </properties>
 
     <!-- needed for servlet 6.0, concurrent 3.0 -->
@@ -38,7 +45,6 @@
         </repository>
     </repositories>
 
-    <!-- The Arquillian test framework -->
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -48,6 +54,20 @@
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>5.8.2</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.json</groupId>
+                <artifactId>jakarta.json-tck</artifactId>
+                <version>${jsonp.api.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -55,67 +75,17 @@
         <!-- The TCK -->
         <dependency>
             <groupId>jakarta.json</groupId>
-            <artifactId>jakarta.json-tck-tests-pluggability</artifactId>
-            <version>2.1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.json</groupId>
             <artifactId>jakarta.json-tck-tests</artifactId>
-            <version>2.1.0-SNAPSHOT</version>
-        </dependency>
-        <!-- APIs -->
-        <dependency>
-            <groupId>jakarta.json</groupId>
-            <artifactId>jakarta.json-api</artifactId>
-            <version>2.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.parsson</groupId>
-            <artifactId>parsson</artifactId>
-            <version>${jsonp-impl.version}</version>
+            <version>${jsonp.api.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
-            <version>6.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.enterprise</groupId>
-            <artifactId>jakarta.enterprise.cdi-api</artifactId>
-            <version>3.0.0</version>
-        </dependency>
-        <!-- Test frameworks -->
-        <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-launcher</artifactId>
-            <version>1.8.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.8.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.8.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.vintage</groupId>
-            <artifactId>junit-vintage-engine</artifactId>
-            <version>5.6.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.junit5</groupId>
-            <artifactId>arquillian-junit5-container</artifactId>
-            <version>1.7.0.Alpha10</version>
+            <groupId>org.netbeans.tools</groupId>
+            <artifactId>sigtest-maven-plugin</artifactId>
+            <version>1.6</version>
         </dependency>
 
-        <!-- Remote Payara server -->
+        <!-- Arquillian Remote Payara server -->
         <dependency>
             <groupId>fish.payara.arquillian</groupId>
             <artifactId>arquillian-payara-server-remote</artifactId>
@@ -125,20 +95,49 @@
         <dependency>
             <groupId>fish.payara.arquillian</groupId>
             <artifactId>payara-client-ee9</artifactId>
-            <scope>test</scope>
             <version>${payara.arquillian.container.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.junit5</groupId>
+            <artifactId>arquillian-junit5-container</artifactId>
+            <scope>test</scope>
         </dependency>
 
-        <!-- jdk11+ dependencies -->
+        <!-- Test frameworks -->
         <dependency>
-            <groupId>jakarta.xml.bind</groupId>
-            <artifactId>jakarta.xml.bind-api</artifactId>
-            <version>3.0.1</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>jakarta.activation</groupId>
-            <artifactId>jakarta.activation-api</artifactId>
-            <version>2.1.0</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-reporting</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!--        &lt;!&ndash; hidden runtime dependencies of arquillian container &ndash;&gt;-->
+        <dependency>
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-api</artifactId>
+            <version>3.0.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.parsson</groupId>
+            <artifactId>parsson-media</artifactId>
+            <version>1.1.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -146,51 +145,20 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>copy</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>copy-dependency</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-dependency</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <artifactItems>
-                        <artifactItem>
-                            <groupId>org.apache.derby</groupId>
-                            <artifactId>derby</artifactId>
-                            <version>10.15.2.0</version>
-                        </artifactItem>
-                        <artifactItem>
-                            <groupId>org.apache.derby</groupId>
-                            <artifactId>derbytools</artifactId>
-                            <version>10.15.2.0</version>
-                        </artifactItem>
-                        <artifactItem>
-                            <groupId>org.apache.derby</groupId>
-                            <artifactId>derbyshared</artifactId>
-                            <version>10.15.2.0</version>
-                        </artifactItem>
-                    </artifactItems>
-                    <outputDirectory>${project.build.directory}/server-dependencies</outputDirectory>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
                 <configuration>
+                    <excludes>
+                        <exclude>JSONPSigTest*</exclude>
+                    </excludes>
+                    <dependenciesToScan>
+                        <dependency>jakarta.json:jakarta.json-tck-tests</dependency>
+                    </dependenciesToScan>
                     <systemPropertyVariables>
+                        <junit.jupiter.extensions.autodetection.enabled>true</junit.jupiter.extensions.autodetection.enabled>
+                        <jimage.dir>${jimage.dir}</jimage.dir>
+                        <optional.tech.packages.to.ignore>jakarta.xml.bind</optional.tech.packages.to.ignore>
+                        <signature.sigTestClasspath>${payara.json-api.jar}${path.separator}${jimage.dir}/java.base${path.separator}${jimage.dir}/java.rmi${path.separator}${jimage.dir}/java.sql${path.separator}${jimage.dir}/java.naming</signature.sigTestClasspath>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>

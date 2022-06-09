@@ -4,11 +4,12 @@
     <engine>
         <property name="deploymentExportPath">/tmp/</property>
     </engine>
-    <container qualifier="${app_server}" default="true">
+    <container qualifier="payara-remote" default="true">
         <configuration>
             <!-- Properties set in surefire plugin could be used here -->
-<!--            <property name="hostname">localhost</property>-->
-<!--Supported property names: [debug, adminHttps, ignoreCertificates, libraries, type, target, adminUser, authorisation, domain, adminPort, properties, adminHost, adminPassword]-->
+            <!--            <property name="hostname">localhost</property>-->
+            <!--Supported property names: [debug, adminHttps, ignoreCertificates, libraries, type, target, adminUser, authorisation, domain, adminPort, properties, adminHost, adminPassword]-->
         </configuration>
     </container>
+
 </arquillian>
