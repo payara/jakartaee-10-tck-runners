@@ -89,7 +89,8 @@
         <module>rest-tck</module>
         <module>inject-tck</module>
         <module>cdi-tck</module>
+        <module>faces-tck</module>
         <module>cdi-langmodel-tck</module>
     </modules>
-    
+
 </project>
