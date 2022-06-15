@@ -1,3 +1,6 @@
 [submodule "inject-tck/ditck-porting"]
 	path = inject-tck/ditck-porting
 	url = git@github.com:payara/ditck-porting.git
+[submodule "cdi-tck/cditck-porting"]
+	path = cdi-tck/cditck-porting
+	url = git@github.com:payara/cditck-porting.git
