@@ -1,4 +1,7 @@
 # How to Run
 1. Build https://github.com/eclipse-ee4j/glassfish-cdi-porting-tck
-2. Ensure that `glassfish.home` is set.
-3. Run `mvn clean verify`
+2. Ensure that `payara.home` is set - Maven will add the "${payara.home}/glassfish" for you so don't include that final bit.
+3. Make sure M2_HOME is set.
+4. Make sure MAVEN_HOME is set.
+5. Make sure ANT_HOME is set.
+6. Run `mvn clean verify`

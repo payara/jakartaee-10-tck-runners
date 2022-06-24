@@ -27,22 +27,6 @@
                 <version>3.0.0</version>
                 <executions>
                     <execution>
-                        <id>set-properties</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <property name="glassfish.home" value="${payara.home}" location="${porting.home}/build.properties"/>
-                                <property name="porting.home" value="${porting.home}" location="${porting.home}/build.properties"/>
-                                <echo>Porting home set to ${porting.home}</echo>
-                                <property name="javaee.level" value="${javaee.level}" location="${porting.home}/build.properties"/>
-                                <echo>TCK Level set to ${javaee.level}</echo>
-                            </target>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>run-tck</id>
                         <phase>verify</phase>
                         <goals>
@@ -50,6 +34,12 @@
                         </goals>
                         <configuration>
                             <target>
+                                <property name="glassfish.home" value="${payara.home}/glassfish" location="${porting.home}/build.properties"/>
+                                <echo>glassfish.home set to ${payara.home}/glassfish</echo>
+                                <property name="porting.home" value="${porting.home}" location="${porting.home}/build.properties"/>
+                                <echo>porting.home set to ${porting.home}</echo>
+                                <property name="javaee.level" value="${javaee.level}" location="${porting.home}/build.properties"/>
+                                <echo>javaee.level set to ${javaee.level}</echo>
                                 <ant antfile="build.xml" target="test" dir="cditck-porting"/>
                             </target>
                         </configuration>
