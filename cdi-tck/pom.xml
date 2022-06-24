@@ -14,8 +14,9 @@
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <glassfish.home></glassfish.home>
+        <payara.home></payara.home>
         <porting.home>${basedir}/cditck-porting</porting.home>
+        <javaee.level>full</javaee.level>
     </properties>
 
     <build>
@@ -33,9 +34,11 @@
                         </goals>
                         <configuration>
                             <target>
-                                <property name="glassfish.home" value="${glassfish.home}" location="cditck-porting/build.properties"/>
-                                <property name="porting.home" value="${porting.home}" location="cditck-porting/build.properties"/>
+                                <property name="glassfish.home" value="${payara.home}" location="${porting.home}/build.properties"/>
+                                <property name="porting.home" value="${porting.home}" location="${porting.home}/build.properties"/>
                                 <echo>Porting home set to ${porting.home}</echo>
+                                <property name="javaee.level" value="${javaee.level}" location="${porting.home}/build.properties"/>
+                                <echo>TCK Level set to ${javaee.level}</echo>
                             </target>
                         </configuration>
                     </execution>
