@@ -4,4 +4,5 @@
 3. Make sure M2_HOME is set.
 4. Make sure MAVEN_HOME is set.
 5. Make sure ANT_HOME is set.
-6. Run `mvn clean verify`
+6. Decide which level of TCK you want to run by defining javaee.level as 'core', 'web', or 'full' (default is full).
+6. Run `mvn clean verify -Dpayara.home=x -Djavaee.level=y`
