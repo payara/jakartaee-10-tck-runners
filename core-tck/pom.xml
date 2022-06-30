@@ -58,7 +58,7 @@
         <core.profile.tck.version>10.0.0</core.profile.tck.version>
         <junit.version>5.8.2</junit.version>
         <arquillian.version>1.7.0.Alpha10</arquillian.version>
-        <payara.arquillian.version>3.0.alpha5</payara.arquillian.version>
+        <payara.arquillian.version>3.0.alpha6</payara.arquillian.version>
         <log4j.version>1.2.17</log4j.version>
         <resteasy.version>6.1.0.Beta2</resteasy.version>
         <weld.version>5.0.0.SP1</weld.version>
