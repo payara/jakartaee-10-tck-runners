@@ -54,65 +54,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-
-        <payara.home></payara.home>
-        <porting.home>${basedir}/ditck-porting</porting.home>
-        <tck.home>${porting.home}/jakarta.inject-tck-2.0.1</tck.home>
-        <cdi.tck.home>${porting.home}/cdi-tck-4.0.4</cdi.tck.home>
-        <report.dir>${porting.home}/330tck-report</report.dir>
     </properties>
 
 
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>3.0.0</version>
-                <executions>
-                    <execution>
-                        <id>run-tck</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <property name="glassfish.home" value="${payara.home}/glassfish" location="${porting.home}/build.properties"/>
-                                <echo>glassfish.home set to ${payara.home}/glassfish</echo>
-                                <property name="porting.home" value="${porting.home}" location="${porting.home}/build.properties"/>
-                                <echo>porting.home set to ${porting.home}</echo>
-                                <property name="tck.home" value="${tck.home}" location="${porting.home}/build.properties"/>
-                                <echo>tck.home set to ${tck.home}</echo>
-                                <property name="299.tck.home" value="${cdi.tck.home}" location="${porting.home}/build.properties"/>
-                                <echo>299.tck.home set to ${cdi.tck.home}</echo>
-                                <property name="report.dir" value="${report.dir}" location="${porting.home}/build.properties"/>
-                                <echo>report.dir set to ${report.dir}</echo>
-
-                                <ant antfile="build.xml" target="test" dir="ditck-porting"/>
-                            </target>
-                        </configuration>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>ant-contrib</groupId>
-                        <artifactId>ant-contrib</artifactId>
-                        <version>1.0b3</version>
-                        <exclusions>
-                            <exclusion>
-                                <groupId>ant</groupId>
-                                <artifactId>ant</artifactId>
-                            </exclusion>
-                        </exclusions>
-                    </dependency>
-                </dependencies>
-            </plugin>
-
-
-
-
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>

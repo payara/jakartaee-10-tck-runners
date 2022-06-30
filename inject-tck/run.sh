@@ -2,37 +2,31 @@
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
 export PORTING=$SCRIPTPATH/ditck-porting
-OUTPUT=$PORTING/bundles
-
-rm $PORTING/latest-glassfish.zip
-
-rm -rf ditck-porting/jakarta.inject-tck-*/
-rm -rf ditck-porting/cdi-tck-*/
-
 export WORKSPACE=$SCRIPTPATH/ditck-porting
-export GF_BUNDLE_URL=http://localhost:8000/payara-prerelease.zip
-# Let ditck-porting/docker/run_ditck.sh figure out its own JSR299_TCK_URL for now - it needs CDI 4 and functions.sh is trying to tell it to use CDI 3
-#export JSR299_TCK_URL=$CDI_TCK_URL
-export JAKARTA_INJECT_TCK_URL=http://localhost:8000/jakarta.inject-tck-2.0.1-bin.zip
-echo Build should download from $GF_BUNDLE_URL
 
-if [ -z $MAVEN_HOME ]; then
-    export MAVEN_HOME=`mvn -v | sed -n 's/Maven home: \(.\+\)/\1/p'`
-fi
+### Adapted from run_ditck.sh ###
+export TS_HOME=${WORKSPACE}/330-tck-glassfish-porting
 
-rm -rf $WORKSPACE/330-tck-glassfish-porting
+which ant
+ant -version
 
-bash -x $WORKSPACE/docker/run_ditck.sh | tee $WORKSPACE/di.log
+REPORT=${WORKSPACE}/330tck-report
+mkdir -p ${REPORT}
 
-cat > $SCRIPTPATH/stage_di <<EOF
-### di
+#Run Tests
+cd ${TS_HOME}
+echo "+++ Ant build.properties:"
+cat build.properties
+ant run
 
-\`\`\`
-`grep "Tests run:" -B 1 $WORKSPACE/di.log`
-\`\`\`
-EOF
+#Generate Reports
+cp ${REPORT}/index.html  ${REPORT}/report.html
+echo "Saving TCK results"
 
-TIMESTAMP=`date -Iminutes | tr -d :`
-report=$WORKSPACE/di-$TIMESTAMP.tar.gz
-echo Creating report $report
-tar zcf $report $WORKSPACE/330tck-report/ $WORKSPACE/payara6/glassfish/domains/domain1/logs
+mv $REPORT/TESTS-TestSuites.xml $REPORT/330tck-junit-report.xml
+rm $REPORT/TEST-*.xml
+
+tar zcvf ${WORKSPACE}/330tck-results.tar.gz ${REPORT}
+### End of adapted run_ditck.sh ###
+
+cd ${SCRIPTPATH}
