@@ -10,7 +10,7 @@ export TS_HOME=${WORKSPACE}/330-tck-glassfish-porting
 which ant
 ant -version
 
-REPORT=${WORKSPACE}/330tck-report
+export REPORT=${WORKSPACE}/330tck-report
 mkdir -p ${REPORT}
 
 #Run Tests
