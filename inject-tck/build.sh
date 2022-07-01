@@ -64,6 +64,7 @@ ls target/dependency
 
 #Edit test properties
 export TS_HOME=${WORKSPACE}/330-tck-glassfish-porting
+export REPORT=${WORKSPACE}/330tck-report
 sed -i "s#tck.home=.*#tck.home=${WORKSPACE}/jakarta.inject-tck-2.0.1#g" ${TS_HOME}/build.properties
 sed -i "s#porting.home=.*#porting.home=${TS_HOME}#g" ${TS_HOME}/build.properties
 sed -i "s#glassfish.home=.*#glassfish.home=${WORKSPACE}/payara6/glassfish#g" ${TS_HOME}/build.properties
