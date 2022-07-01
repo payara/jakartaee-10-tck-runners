@@ -87,7 +87,7 @@
         <module>tags-tck</module>
         <module>core-tck</module>
         <module>rest-tck</module>
-		<module>cdi-langmodel-tck</module>
+        <module>cdi-langmodel-tck</module>
     </modules>
     
 </project>
