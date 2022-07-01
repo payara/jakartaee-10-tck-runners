@@ -13,7 +13,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         
         <!-- Arquillian Dependencies -->
-        <payara.arquillian.container.version>3.0.alpha3</payara.arquillian.container.version>
+        <payara.arquillian.container.version>3.0.alpha6</payara.arquillian.container.version>
         
         <com.beust-jcommander.version>1.82</com.beust-jcommander.version>
 
@@ -45,13 +45,13 @@
         <dependency>
             <groupId>jakarta.enterprise.concurrent</groupId>
             <artifactId>jakarta.enterprise.concurrent-tck</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.1</version>
         </dependency>
         <!-- APIs -->
         <dependency>
             <groupId>jakarta.enterprise.concurrent</groupId>
             <artifactId>jakarta.enterprise.concurrent-api</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.1</version>
         </dependency>
         <dependency>
             <groupId>jakarta.servlet</groupId>
