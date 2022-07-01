@@ -14,6 +14,8 @@
     <description>This pom runs the JakartaEE CDI langmodel TCK.</description>
 
     <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <testng.version>7.4.0</testng.version>
         <maven.compiler.release>11</maven.compiler.release>
         <cdi.tck.version>4.0.5</cdi.tck.version>
