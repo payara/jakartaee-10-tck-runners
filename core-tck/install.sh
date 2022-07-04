@@ -17,6 +17,6 @@ cd ${BUNDLES}
 unzip jakarta-core-profile-tck-10.0.0.zip -d .
 
 cd core-profile-tck-10.0.0/artifacts
-mvn clean install
+mvn install
 
 cd ${SCRIPTPATH}
