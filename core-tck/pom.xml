@@ -207,7 +207,7 @@
                     </properties>
                     <forkMode>once</forkMode>
                     <dependenciesToScan>
-                        <dependency>jakarta.ee.tck:core-profile-tck-impl</dependency>
+                        <dependency>jakarta.ee.tck.coreprofile:core-profile-tck-impl</dependency>
                     </dependenciesToScan>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     <systemPropertyVariables>
