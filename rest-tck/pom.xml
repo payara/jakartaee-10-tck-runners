@@ -63,7 +63,7 @@
         <dependency>
             <groupId>fish.payara.arquillian</groupId>
             <artifactId>arquillian-payara-server-remote</artifactId>
-            <version>3.0.alpha6-SNAPSHOT</version>
+            <version>3.0.alpha6</version>
             <scope>test</scope>
         </dependency>
 

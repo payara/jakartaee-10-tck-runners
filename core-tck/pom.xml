@@ -58,7 +58,7 @@
         <core.profile.tck.version>10.0.0</core.profile.tck.version>
         <junit.version>5.8.2</junit.version>
         <arquillian.version>1.7.0.Alpha10</arquillian.version>
-        <payara.arquillian.version>3.0.alpha5</payara.arquillian.version>
+        <payara.arquillian.version>3.0.alpha6</payara.arquillian.version>
         <log4j.version>1.2.17</log4j.version>
         <resteasy.version>6.1.0.Beta2</resteasy.version>
         <weld.version>5.0.0.SP1</weld.version>
@@ -66,48 +66,56 @@
         <maven.failsafe.plugin.version>3.0.0-M6</maven.failsafe.plugin.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>${arquillian.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
-            <groupId>jakarta.ee.tck</groupId>
+            <groupId>jakarta.ee.tck.coreprofile</groupId>
             <artifactId>core-profile-tck-impl</artifactId>
             <version>${core.profile.tck.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Junit Dependencies -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>${junit.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.core</groupId>
-            <artifactId>arquillian-core-impl-base</artifactId>
-            <version>${arquillian.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.jboss.arquillian.test</groupId>
-            <artifactId>arquillian-test-impl-base</artifactId>
-            <version>${arquillian.version}</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.jboss.arquillian.container</groupId>
-            <artifactId>arquillian-container-impl-base</artifactId>
-            <version>${arquillian.version}</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.jboss.arquillian.junit5</groupId>
-            <artifactId>arquillian-junit5-container</artifactId>
-            <version>${arquillian.version}</version>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-reporting</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.junit5</groupId>
-            <artifactId>arquillian-junit5-core</artifactId>
-            <version>${arquillian.version}</version>
-            <scope>test</scope>
-        </dependency>
+        
+        <!-- Payara Arquillian Dependencies -->
         <dependency>
             <groupId>fish.payara.arquillian</groupId>
             <artifactId>arquillian-payara-server-managed</artifactId>
@@ -115,16 +123,18 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.jboss.arquillian.protocol</groupId>
-            <artifactId>arquillian-protocol-servlet-jakarta</artifactId>
-            <version>${arquillian.version}</version>
+            <groupId>org.jboss.arquillian.junit5</groupId>
+            <artifactId>arquillian-junit5-container</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- Commented out for now since Jersey Client seems to fail 
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
+            <groupId>fish.payara.arquillian</groupId>
+            <artifactId>payara-client-ee9</artifactId>
+            <version>${payara.arquillian.version}</version>
+            <scope>test</scope>
+        </dependency> -->
+        <!-- Use RESTEasy for now since Jersey Client seems to fail -->
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-core</artifactId>
@@ -147,12 +157,6 @@
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jaxb-provider</artifactId>
             <version>${resteasy.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.weld</groupId>
-            <artifactId>weld-core-impl</artifactId>
-            <version>${weld.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -207,7 +211,7 @@
                     </properties>
                     <forkMode>once</forkMode>
                     <dependenciesToScan>
-                        <dependency>jakarta.ee.tck:core-profile-tck-impl</dependency>
+                        <dependency>jakarta.ee.tck.coreprofile:core-profile-tck-impl</dependency>
                     </dependenciesToScan>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     <systemPropertyVariables>
