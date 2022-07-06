@@ -9,9 +9,5 @@
         <!-- property name="deploymentExportPath">target/</property -->
     </engine>
 
-    <container qualifier="weld" default="true">
-        <configuration>
-            <property name="environment">SE</property>
-        </configuration>
-    </container>
+    <container qualifier="weld" default="true"/>
 </arquillian>
