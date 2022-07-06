@@ -22,6 +22,7 @@
         <cdi.api.version>4.0.1</cdi.api.version>
         <weld.version>5.0.0.SP2</weld.version>
         <arquillian.version>1.7.0.Alpha10</arquillian.version>
+        <payara.arquillian.version>3.0.alpha6</payara.arquillian.version>
     </properties>
 
     <dependencies>
@@ -55,12 +56,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.jboss.arquillian.container</groupId>
-            <artifactId>arquillian-weld-embedded</artifactId>
-            <version>3.0.2.Final</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13.2</version>
@@ -72,30 +67,142 @@
             <version>${arquillian.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>fish.payara.arquillian</groupId>
+            <artifactId>arquillian-payara-server-managed</artifactId>
+            <version>${payara.arquillian.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.protocol</groupId>
+            <artifactId>arquillian-protocol-servlet-jakarta</artifactId>
+            <version>${arquillian.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M6</version>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
-                    <argLine>
-                        --add-exports=java.desktop/sun.awt=ALL-UNNAMED
-                        --add-opens=java.base/java.io=ALL-UNNAMED
-                        --add-opens=java.base/java.lang=ALL-UNNAMED
-                        --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
-                        --add-opens=java.base/java.security=ALL-UNNAMED
-                        --add-opens=java.base/java.util=ALL-UNNAMED
-                        --add-opens=java.management/javax.management=ALL-UNNAMED
-                        --add-opens=java.naming/javax.naming=ALL-UNNAMED
-                    </argLine>
-                    <enableAssertions>true</enableAssertions>
-                    <forkCount>1</forkCount>
+                    <artifactItems>
+                        <artifactItem>
+                            <groupId>jakarta.enterprise</groupId>
+                            <artifactId>cdi-tck-lang-model</artifactId>
+                            <type>jar</type>
+                            <overWrite>false</overWrite>
+                            <outputDirectory>${payara.home}/glassfish/lib</outputDirectory>
+                        </artifactItem>
+                    </artifactItems>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-resource-one</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <outputDirectory>${payara.home}/glassfish/lib</outputDirectory>
+                    <resources>
+                        <resource>
+                            <directory>${basedir}</directory>
+                            <includes>
+                                <include>cdi-langmodel-extension-1.0.jar</include>
+                            </includes>
+                        </resource>
+                    </resources>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.ant</groupId>
+                        <artifactId>ant</artifactId>
+                        <version>1.10.12</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>ant-contrib</groupId>
+                        <artifactId>ant-contrib</artifactId>
+                        <version>1.0b3</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>ant</groupId>
+                                <artifactId>ant</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <configuration>
+                            <target name="enabling assertions">
+                                <property name="domain.file" value="${payara.home}/glassfish/domains/domain1/config/domain.xml"/>
+                                <echo message="domain file: ${domain.file}"/>
+                                <replace file="${domain.file}">
+                                    <replacetoken><![CDATA[</java-config>]]></replacetoken>
+                                    <replacevalue><![CDATA[<jvm-options>-ea</jvm-options></java-config>]]></replacevalue>
+                                </replace>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>payara-managed</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>3.0.0-M6</version>
+                        <configuration>
+                            <argLine>
+                                --add-exports=java.desktop/sun.awt=ALL-UNNAMED
+                                --add-opens=java.base/java.io=ALL-UNNAMED
+                                --add-opens=java.base/java.lang=ALL-UNNAMED
+                                --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
+                                --add-opens=java.base/java.security=ALL-UNNAMED
+                                --add-opens=java.base/java.util=ALL-UNNAMED
+                                --add-opens=java.management/javax.management=ALL-UNNAMED
+                                --add-opens=java.naming/javax.naming=ALL-UNNAMED
+                            </argLine>
+                            <forkCount>1</forkCount>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
