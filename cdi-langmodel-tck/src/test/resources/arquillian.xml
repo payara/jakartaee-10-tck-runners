@@ -9,5 +9,5 @@
         <!-- property name="deploymentExportPath">target/</property -->
     </engine>
 
-    <container qualifier="weld" default="true"/>
+    <container qualifier="payara-managed" default="true"/>
 </arquillian>
