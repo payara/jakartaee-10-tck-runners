@@ -44,7 +44,7 @@ public class LangModelTckTest {
                 .addAsWebInfResource(new BeansXml(BeanDiscoveryMode.ALL), "beans.xml")
                 .addAsServiceProvider(BuildCompatibleExtension.class, LangModelExtension.class)
                 // add this class into the deployment so that it's subject to discovery
-                .addClasses(LangModelVerifier.class);
+                .addClasses(LangModelVerifier.class, LangModelExtension.class);
         System.out.println(webArchive.toString(true));
         return webArchive;
     }

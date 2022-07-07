@@ -90,7 +90,7 @@
                 <executions>
                     <execution>
                         <id>copy</id>
-                        <phase>install</phase>
+                        <phase>generate-test-resources</phase>
                         <goals>
                             <goal>copy</goal>
                         </goals>
@@ -102,35 +102,10 @@
                             <groupId>jakarta.enterprise</groupId>
                             <artifactId>cdi-tck-lang-model</artifactId>
                             <type>jar</type>
-                            <overWrite>false</overWrite>
+                            <overWrite>true</overWrite>
                             <outputDirectory>${payara.home}/glassfish/lib</outputDirectory>
                         </artifactItem>
                     </artifactItems>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>copy-resource-one</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <outputDirectory>${payara.home}/glassfish/lib</outputDirectory>
-                    <resources>
-                        <resource>
-                            <directory>${basedir}</directory>
-                            <includes>
-                                <include>cdi-langmodel-extension-1.0.jar</include>
-                            </includes>
-                        </resource>
-                    </resources>
                 </configuration>
             </plugin>
             <plugin>
@@ -157,7 +132,7 @@
                 </dependencies>
                 <executions>
                     <execution>
-                        <phase>install</phase>
+                        <phase>generate-test-resources</phase>
                         <configuration>
                             <target name="enabling assertions">
                                 <property name="domain.file" value="${payara.home}/glassfish/domains/domain1/config/domain.xml"/>
