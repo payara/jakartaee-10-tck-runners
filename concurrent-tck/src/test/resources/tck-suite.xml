@@ -12,7 +12,8 @@
                 Config should be cleared=APPLICATION instead of UNCHANGED
 
                 TCK Challenge: https://github.com/jakartaee/concurrency/issues/253
-                FIX: TBD
+                FIX: https://github.com/eclipse-ee4j/concurrency-ri/pull/59,
+                     https://github.com/jakartaee/concurrency/pull/255
             -->
             <class name="ee.jakarta.tck.concurrent.spec.ContextService.contextPropagate.ContextPropagationTests">
                 <methods>
