@@ -1,0 +1,14 @@
+<arquillian xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns="http://jboss.org/schema/arquillian"
+            xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
+    <engine>
+        <property name="deploymentExportPath">target/arquillian-deployments</property>
+    </engine>
+    <container qualifier="${app_server}" default="true">
+        <configuration>
+            <!-- Properties set in surefire plugin could be used here -->
+<!--            <property name="hostname">localhost</property>-->
+<!--Supported property names: [debug, adminHttps, ignoreCertificates, libraries, type, target, adminUser, authorisation, domain, adminPort, properties, adminHost, adminPassword]-->
+        </configuration>
+    </container>
+</arquillian>
