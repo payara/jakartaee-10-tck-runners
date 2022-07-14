@@ -1,0 +1,5 @@
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>jakarta.faces</artifactId>
+            <version>4.0.0</version>
+        </dependency>
