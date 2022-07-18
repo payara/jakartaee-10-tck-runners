@@ -76,21 +76,20 @@
     </repositories>
 
     <modules>
-        <module>tck-download</module>
         <module>authorization-tck</module>
+        <module>cdi-langmodel-tck</module>
+        <module>cdi-tck</module>
         <module>concurrent-tck</module>
+        <module>core-tck</module>
+        <module>inject-tck</module>
         <module>jsonb-tck</module>
         <module>jsonp-tck</module>
-        <module>servlet-tck</module>
         <module>pages-tck</module>
-        <module>websocket-tck</module>
-        <module>tags-tck</module>
-        <module>core-tck</module>
         <module>rest-tck</module>
-        <module>inject-tck</module>
-        <module>cdi-tck</module>
-        <module>faces-tck</module>
-        <module>cdi-langmodel-tck</module>
+        <module>servlet-tck</module>
+        <module>tags-tck</module>
+        <module>tck-download</module>
+        <module>websocket-tck</module>
     </modules>
 
 </project>
