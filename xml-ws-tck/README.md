@@ -1,6 +1,6 @@
 Information:
 https://jakarta.ee/specifications/xml-web-services/4.0/
 
-Copy `run-tck-setup.sh-template` to `run-tck-setup.sh` and change the directory to your Payara.
+Execute the `run-tck.sh` script, providing it the location to your Payara install, e.g. `bash run-tck.sh /path/to/payara6/`
 
-Run `run-tck-setup.sh`, it starts JT GUI. Follow the documentation in xml-ws-tck/docs/html-usersguide/config.html#GBFWG (downloaded by the script) and run the tests.
+**Note**: The trailing slash is important!

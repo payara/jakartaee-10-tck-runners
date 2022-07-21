@@ -45,4 +45,4 @@ ant config.vi
 
 ant deploy.all
 
-ant gui
+ant run.all
