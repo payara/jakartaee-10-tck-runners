@@ -33,4 +33,3 @@ ant config.vi -Dwork.dir=${TS_HOME}/JTwork -Dreport.dir=${TS_HOME}/JTreport
 ant deploy.all -Dwork.dir=${TS_HOME}/JTwork -Dreport.dir=${TS_HOME}/JTreport
 
 ant run.all -Dwork.dir=${TS_HOME}/JTwork -Dreport.dir=${TS_HOME}/JTreport
-d
