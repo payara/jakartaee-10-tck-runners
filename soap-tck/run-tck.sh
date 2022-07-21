@@ -24,9 +24,13 @@ sed "s/^local.classes=\$/local.classes=\${webcontainer.home}\/modules\/webservic
 
 mv ${TS_HOME}/bin/ts.jte-temp2 ${TS_HOME}/bin/ts.jte
 
+mkdir ${TS_HOME}/JTwork
+mkdir ${TS_HOME}/JTreport
+
 cd ${TS_HOME}/bin
-ant config.vi
+ant config.vi -Dwork.dir=${TS_HOME}/JTwork -Dreport.dir=${TS_HOME}/JTreport
 
-ant deploy.all
+ant deploy.all -Dwork.dir=${TS_HOME}/JTwork -Dreport.dir=${TS_HOME}/JTreport
 
-ant run.all
+ant run.all -Dwork.dir=${TS_HOME}/JTwork -Dreport.dir=${TS_HOME}/JTreport
+d

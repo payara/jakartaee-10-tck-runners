@@ -40,9 +40,12 @@ sed "s/^webcontainer.home=\$/webcontainer.home=${PAYARA_REPL}glassfish/" ${TS_HO
 
 mv ${TS_HOME}/bin/ts.jte-temp1 ${TS_HOME}/bin/ts.jte
 
+mkdir ${TS_HOME}/JTwork
+mkdir ${TS_HOME}/JTreport
+
 cd ${TS_HOME}/bin
-ant config.vi
+ant config.vi -Dwork.dir=${TS_HOME}/JTwork -Dreport.dir=${TS_HOME}/JTreport
 
-ant deploy.all
+ant deploy.all -Dwork.dir=${TS_HOME}/JTwork -Dreport.dir=${TS_HOME}/JTreport
 
-ant run.all
+ant run.all -Dwork.dir=${TS_HOME}/JTwork -Dreport.dir=${TS_HOME}/JTreport
