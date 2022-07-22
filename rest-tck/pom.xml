@@ -270,6 +270,8 @@
                     <dependenciesToScan>jakarta.ws.rs:jakarta-restful-ws-tck</dependenciesToScan>
                     <excludes>
                         <exclude>**/SeBootstrapIT.java</exclude>
+                        <exclude>ee.jakarta.tck.ws.rs.jaxrs21.ee.client.executor.rx.JAXRSClientIT</exclude>
+                        <exclude>ee.jakarta.tck.ws.rs.jaxrs21.ee.client.rxinvoker.JAXRSClientIT</exclude>
                     </excludes>
                     <statelessTestsetReporter implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5Xml30StatelessReporter">
                         <disable>false</disable>

@@ -232,8 +232,8 @@
                                         <arg value="domain1"/>
                                     </exec>
                                 </limit>
-                                <mkdir dir="${tck.home}/tagstckreport"/>
-                                <mkdir dir="${tck.home}/tagstckreport/tagstck"/>
+                                <mkdir dir="${tck.home}/tagsreport"/>
+                                <mkdir dir="${tck.home}/tagsreport/tags"/>
                                 
                                 <move todir="${payara.home}/javadb">
                                     <fileset dir="${db.home}" />

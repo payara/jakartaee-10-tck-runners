@@ -214,8 +214,8 @@
                                         <arg value="domain1"/>
                                     </exec>
                                 </limit>
-                                <mkdir dir="${tck.home}/websockettckreport"/>
-                                <mkdir dir="${tck.home}/websockettckreport/websockettck"/>
+                                <mkdir dir="${tck.home}/websocketreport"/>
+                                <mkdir dir="${tck.home}/websocketreport/websocket"/>
                                 
                                 <replace file="${tck.home}/bin/xml/ts.top.import.xml">
                                     <replacetoken><![CDATA[<jvmarg value="-Xmx512m"/>]]></replacetoken>
