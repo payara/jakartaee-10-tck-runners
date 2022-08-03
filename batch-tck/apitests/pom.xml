@@ -137,7 +137,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                 <version>${maven.antrun.plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>copy-arquillian-config-to-cp</id>
+                        <id>copy-arquillian-config</id>
                         <phase>generate-test-resources</phase>
                         <goals>
                             <goal>run</goal>
@@ -328,11 +328,11 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
 
                 <configuration>
                     <failIfNoTests>false</failIfNoTests>
-                    <systemPropertiesFile>${project.basedir}/test.properties</systemPropertiesFile>
                     <systemPropertyVariables>
                         <junit.jupiter.extensions.autodetection.enabled>true</junit.jupiter.extensions.autodetection.enabled>
                         <arquillian.launch>payara</arquillian.launch>
                         <arquillian.extensions.jakarta.batch.groupPrefixesToIgnore>org.glassfish</arquillian.extensions.jakarta.batch.groupPrefixesToIgnore>
+                        <payara.home>${payara.home}</payara.home>
                     </systemPropertyVariables>
                 </configuration>
 
@@ -487,7 +487,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                                     <goal>unpack</goal>
                                 </goals>
                                 <configuration>
-                                    <skip>!${payara.server.remote}</skip>
+                                    <skip>!${skipITs}</skip>
                                     <artifactItems>
                                         <artifactItem>
                                             <groupId>fish.payara.distributions</groupId>
