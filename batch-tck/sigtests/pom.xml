@@ -10,14 +10,6 @@
 
     <artifactId>batch-tck.sig-tests</artifactId>
 
-    <properties>
-        <payara.version>6.2022.1.Alpha5-SNAPSHOT</payara.version>
-        <payara.home>${project.build.directory}${file.separator}payara6</payara.home>
-
-        <payara.arquillian.version>3.0.alpha6</payara.arquillian.version>
-        <arquillian.version>1.7.0.Alpha10</arquillian.version>
-    </properties>
-
     <repositories>
         <repository>
             <id>jakarta-snapshots</id>
