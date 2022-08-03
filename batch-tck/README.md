@@ -14,22 +14,25 @@ SPDX-License-Identifier: Apache-2.0
 
 # Executing Jakarta Batch TCK against Payara
 
-To run the full TCK against Payara Server using the managed Arquillian container, execute:
+To run the full TCK against Payara Server using the managed Arquillian container, first edit the pom and define your payara.version.
+You **CANNOT** simply override this with `-Dpayara.version` - Shrinkwrap will ignore this and **ALWAYS** read the pom as-is.
+
+Once you have defined your payara version, execute:
 
 ```
-mvn clean verify -Dpayara.version=xyz
+mvn clean verify
 ```
 
 To run the full TCK against Payara Server using remote Arquillian container, activate the `payara-server-remote` profile and specify `payara.home`:
 
 ```
-mvn clean verify -Dpayara.version=xyz -Dpayara.home=/path/to/payara6 -Ppayara-server-remote
+mvn clean verify -Dpayara.home=/path/to/payara6 -Ppayara-server-remote
 ```
 
 If you wish to skip the test setup (for example if re-running against a remote server), add the `-Dskip.setup` property:
 
 ```
-mvn clean verify -Dpayara.version=xyz -Dpayara.home=/path/to/payara6 -Dskip.setup -Ppayara-server-remote
+mvn clean verify -Dpayara.home=/path/to/payara6 -Dskip.setup -Ppayara-server-remote
 ```
 
 ## Details
