@@ -24,7 +24,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
     <parent>
         <groupId>fish.payara.jakarta.tests.tck</groupId>
         <artifactId>batch-tck</artifactId>
-        <version>2.1.1</version>
+        <version>1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>batch-tck-api-tests</artifactId>
@@ -51,15 +51,18 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
             <groupId>jakarta.batch</groupId>
             <artifactId>com.ibm.jbatch.tck</artifactId>
             <scope>test</scope>
+            <version>${jakarta.batch.tck.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.batch</groupId>
             <artifactId>com.ibm.jbatch.tck.spi</artifactId>
             <scope>test</scope>
+            <version>${jakarta.batch.tck.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.batch</groupId>
             <artifactId>jakarta.batch.arquillian.extension</artifactId>
+            <version>${jakarta.batch.tck.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.arquillian.container</groupId>
@@ -79,11 +82,12 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
             <groupId>jakarta.batch</groupId>
             <artifactId>jakarta.batch.reporting</artifactId>
             <scope>test</scope>
+            <version>${jakarta.batch.tck.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-jdk14</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.slf4j</groupId>-->
+<!--            <artifactId>slf4j-jdk14</artifactId>-->
+<!--        </dependency>-->
 
         <!-- Payara-specific Batch TCK Dependencies -->
         <dependency>
@@ -117,7 +121,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                 <executions>
                     <execution>
                         <id>download-derby</id>
-                        <phase>generate-resources</phase>
+                        <phase>generate-test-resources</phase>
                         <goals>
                             <goal>wget</goal>
                         </goals>
@@ -193,8 +197,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                         <configuration>
                             <skip>${skipITs}</skip>
                             <target>
-                                <exec executable="${db.home}/bin/startNetworkServer${script.ext}">
-                                </exec>
+                                <exec executable="${db.home}/bin/startNetworkServer${script.ext}" spawn="true"/>
                             </target>
                         </configuration>
                     </execution>
@@ -293,8 +296,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                         <configuration>
                             <skip>${skipITs}</skip>
                             <target>
-                                <exec executable="${db.home}/bin/stopNetworkServer${script.ext}">
-                                </exec>
+                                <exec executable="${db.home}/bin/stopNetworkServer${script.ext}"/>
                             </target>
                         </configuration>
                     </execution>
@@ -346,7 +348,9 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
         <profile>
             <id>payara-server-managed</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>!payara.server.remote</name>
+                </property>
             </activation>
 
             <properties>
@@ -370,12 +374,12 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                         <executions>
                             <execution>
                                 <id>unpack-payara</id>
-                                <phase>pre-integration-test</phase>
+                                <phase>generate-test-resources</phase>
                                 <goals>
                                     <goal>unpack</goal>
                                 </goals>
                                 <configuration>
-                                    <skip>${skipITs}</skip>
+                                    <skip>!${payara.server.remote}</skip>
                                     <artifactItems>
                                         <artifactItem>
                                             <groupId>fish.payara.distributions</groupId>
