@@ -52,7 +52,7 @@
         <ant.zip.url>https://archive.apache.org/dist/ant/binaries/apache-ant-${ant.version}-bin.zip</ant.zip.url>
 
         <payara.home>${project.build.directory}/payara6</payara.home>
-        <payara.version>6.2022.1.Alpha4-SNAPSHOT</payara.version>
+        <payara.version>6.2022.1.Alpha5-SNAPSHOT</payara.version>
         <payara.asadmin>${payara.home}/glassfish/bin/asadmin</payara.asadmin>
 
         <arquillian.version>1.7.0.Alpha10</arquillian.version>
@@ -77,6 +77,7 @@
 
     <modules>
         <module>authorization-tck</module>
+        <module>batch-tck</module>
         <module>cdi-langmodel-tck</module>
         <module>cdi-tck</module>
         <module>concurrent-tck</module>
