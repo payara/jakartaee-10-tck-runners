@@ -43,6 +43,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
         <download.maven.plugin.version>1.6.8</download.maven.plugin.version>
         <maven.antrun.plugin.version>3.1.0</maven.antrun.plugin.version>
         <maven.dependency.plugin.version>3.3.0</maven.dependency.plugin.version>
+        <maven.failsafe.plugin.version>3.0.0-M7</maven.failsafe.plugin.version>
     </properties>
 
     <dependencies>
@@ -327,7 +328,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-
+                <version>${maven.failsafe.plugin.version}</version>
                 <configuration>
                     <failIfNoTests>false</failIfNoTests>
                     <systemPropertyVariables>
