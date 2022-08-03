@@ -30,15 +30,14 @@
     <name>Jakarta Batch TCK Runner for Payara</name>
 
     <properties>
-        <jakarta.batch.api.version>2.1.0</jakarta.batch.api.version>
-        <jakarta.batch.tck.version>2.1.1</jakarta.batch.tck.version>
+        <jakarta.batch.version>2.1.1</jakarta.batch.version>
 
         <payara.version>6.2022.1.Alpha5-SNAPSHOT</payara.version>
         <payara.home>${project.build.directory}${file.separator}payara6</payara.home>
 
         <payara.arquillian.version>3.0.alpha6</payara.arquillian.version>
         <arquillian.version>1.7.0.Alpha10</arquillian.version>
-        <junit.version>5.9.0</junit.version>
+        <junit.version>5.8.2</junit.version>
     </properties>
 
     <modules>

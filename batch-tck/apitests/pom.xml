@@ -51,18 +51,18 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
             <groupId>jakarta.batch</groupId>
             <artifactId>com.ibm.jbatch.tck</artifactId>
             <scope>test</scope>
-            <version>${jakarta.batch.tck.version}</version>
+            <version>${jakarta.batch.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.batch</groupId>
             <artifactId>com.ibm.jbatch.tck.spi</artifactId>
             <scope>test</scope>
-            <version>${jakarta.batch.tck.version}</version>
+            <version>${jakarta.batch.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.batch</groupId>
             <artifactId>jakarta.batch.arquillian.extension</artifactId>
-            <version>${jakarta.batch.tck.version}</version>
+            <version>${jakarta.batch.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.arquillian.container</groupId>
@@ -82,12 +82,8 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
             <groupId>jakarta.batch</groupId>
             <artifactId>jakarta.batch.reporting</artifactId>
             <scope>test</scope>
-            <version>${jakarta.batch.tck.version}</version>
+            <version>${jakarta.batch.version}</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.slf4j</groupId>-->
-<!--            <artifactId>slf4j-jdk14</artifactId>-->
-<!--        </dependency>-->
 
         <!-- Payara-specific Batch TCK Dependencies -->
         <dependency>
@@ -305,13 +301,125 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-tck</id>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <phase>pre-integration-test</phase>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>jakarta.batch</groupId>
+                                    <artifactId>com.ibm.jbatch.tck</artifactId>
+                                    <outputDirectory>${project.build.directory}/test-classes</outputDirectory>
+                                    <includes>testprofiles/*,ddls/*,test-summary-stylesheet.xsl</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
+
                 <configuration>
+                    <failIfNoTests>false</failIfNoTests>
+                    <systemPropertiesFile>${project.basedir}/test.properties</systemPropertiesFile>
                     <systemPropertyVariables>
+                        <junit.jupiter.extensions.autodetection.enabled>true</junit.jupiter.extensions.autodetection.enabled>
                         <arquillian.launch>payara</arquillian.launch>
                         <arquillian.extensions.jakarta.batch.groupPrefixesToIgnore>org.glassfish</arquillian.extensions.jakarta.batch.groupPrefixesToIgnore>
                     </systemPropertyVariables>
                 </configuration>
+
+                <executions>
+                    <execution>
+                        <id>core-ejb</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                        <configuration>
+                            <classpathDependencyExcludes>jakarta.batch:com.ibm.jbatch.tck.appbean</classpathDependencyExcludes>
+                            <dependenciesToScan>
+                                <dependency>jakarta.batch:com.ibm.jbatch.tck</dependency>
+                            </dependenciesToScan>
+                            <includesFile>${project.build.directory}/test-classes/testprofiles/batch-tck-impl-EE-platform-core-suite-includes.txt</includesFile>
+                            <reportNameSuffix>core-ejb</reportNameSuffix>
+                            <systemPropertyVariables>
+                                <junit.jupiter.extensions.autodetection.enabled>true</junit.jupiter.extensions.autodetection.enabled>
+                                <jakarta.batch.tck.vehicles.vehicleName>ejb</jakarta.batch.tck.vehicles.vehicleName>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>core-web</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                        <configuration>
+                            <classpathDependencyExcludes>jakarta.batch:com.ibm.jbatch.tck.appbean</classpathDependencyExcludes>
+                            <dependenciesToScan>
+                                <dependency>jakarta.batch:com.ibm.jbatch.tck</dependency>
+                            </dependenciesToScan>
+                            <includesFile>${project.build.directory}/test-classes/testprofiles/batch-tck-impl-EE-platform-core-suite-includes.txt</includesFile>
+                            <reportNameSuffix>core-web</reportNameSuffix>
+                            <systemPropertyVariables>
+                                <junit.jupiter.extensions.autodetection.enabled>true</junit.jupiter.extensions.autodetection.enabled>
+                                <jakarta.batch.tck.vehicles.vehicleName>web</jakarta.batch.tck.vehicles.vehicleName>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>appbean-ejb</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                        <configuration>
+                            <dependenciesToScan>
+                                <dependency>jakarta.batch:com.ibm.jbatch.tck.appbean</dependency>
+                            </dependenciesToScan>
+                            <includesFile>${project.build.directory}/test-classes/testprofiles/batch-tck-impl-appjoboperator-suite-includes.txt</includesFile>
+                            <reportNameSuffix>appbean-ejb</reportNameSuffix>
+                            <systemPropertyVariables>
+                                <jakarta.batch.tck.vehicles.vehicleName>ejb</jakarta.batch.tck.vehicles.vehicleName>
+                                <arquillian.extensions.jakarta.batch.appbean>true</arquillian.extensions.jakarta.batch.appbean>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>appbean-web</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                        <configuration>
+                            <dependenciesToScan>
+                                <dependency>jakarta.batch:com.ibm.jbatch.tck.appbean</dependency>
+                            </dependenciesToScan>
+                            <includesFile>${project.build.directory}/test-classes/testprofiles/batch-tck-impl-appjoboperator-suite-includes.txt</includesFile>
+                            <reportNameSuffix>appbean-web</reportNameSuffix>
+                            <systemPropertyVariables>
+                                <jakarta.batch.tck.vehicles.vehicleName>web</jakarta.batch.tck.vehicles.vehicleName>
+                                <arquillian.extensions.jakarta.batch.appbean>true</arquillian.extensions.jakarta.batch.appbean>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>verify</id>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+
             </plugin>
         </plugins>
     </build>

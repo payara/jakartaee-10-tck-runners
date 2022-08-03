@@ -2,15 +2,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- We don't use the root module as a parent because it brings unnecessary dependencies, which we can't exclude from the sigtest classpath -->
-    <groupId>fish.payara.jakarta.tests.tck</groupId>
+    <parent>
+        <groupId>fish.payara.jakarta.tests.tck</groupId>
+        <artifactId>batch-tck</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
     <artifactId>batch-tck.sig-tests</artifactId>
-    <version>2.1.0</version>
 
     <properties>
         <payara.version>6.2022.1.Alpha5-SNAPSHOT</payara.version>
         <payara.home>${project.build.directory}${file.separator}payara6</payara.home>
-        <jakarta.batch.version>2.1.0</jakarta.batch.version>
 
         <payara.arquillian.version>3.0.alpha6</payara.arquillian.version>
         <arquillian.version>1.7.0.Alpha10</arquillian.version>
