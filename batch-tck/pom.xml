@@ -40,6 +40,11 @@
         <payara.arquillian.version>3.0.alpha6</payara.arquillian.version>
         <arquillian.version>1.7.0.Alpha10</arquillian.version>
         <junit.version>5.8.2</junit.version>
+
+        <download.maven.plugin.version>1.6.8</download.maven.plugin.version>
+        <maven.dependency.plugin.version>3.3.0</maven.dependency.plugin.version>
+        <maven.failsafe.plugin.version>3.0.0-M7</maven.failsafe.plugin.version>
+        <maven.antrun.plugin.version>3.1.0</maven.antrun.plugin.version>
     </properties>
 
     <modules>

@@ -41,11 +41,6 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
         <script.ext/>
         <payara.executable>${payara.home}${file.separator}glassfish${file.separator}bin${file.separator}asadmin${script.ext}</payara.executable>
 
-        <download.maven.plugin.version>1.6.8</download.maven.plugin.version>
-        <maven.antrun.plugin.version>3.1.0</maven.antrun.plugin.version>
-        <maven.dependency.plugin.version>3.3.0</maven.dependency.plugin.version>
-        <maven.failsafe.plugin.version>3.0.0-M7</maven.failsafe.plugin.version>
-
         <slf4j.version>1.7.30</slf4j.version>
     </properties>
 
