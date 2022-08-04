@@ -34,7 +34,8 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
     <properties>
         <derby.version>10.15.2.0</derby.version>
         <derby.zip.url>https://dlcdn.apache.org//db/derby/db-derby-${derby.version}/db-derby-${derby.version}-bin.zip</derby.zip.url>
-        <db.home>${project.build.directory}${file.separator}db-derby-${derby.version}-bin</db.home>
+        <db.download.location>${project.build.directory}${file.separator}db-derby-${derby.version}-bin</db.download.location>
+        <payara.db.home>${payara.home}${file.separator}javadb</payara.db.home>
 
         <!-- Used to help determine sh vs. bat -->
         <script.ext/>
@@ -160,8 +161,8 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                         <configuration>
                             <skip>${skipITs}</skip>
                             <target>
-                                <copy file="${project.basedir}/src/test/resources/arquillian.xml"
-                                      todir="${project.build.directory}/test-classes"
+                                <copy file="${project.basedir}${file.separator}src${file.separator}test${file.separator}resources${file.separator}arquillian.xml"
+                                      todir="${project.build.directory}${file.separator}test-classes"
                                       overwrite="true"/>
                             </target>
                         </configuration>
@@ -170,15 +171,18 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                     <execution>
                         <id>copy-derby-to-payara</id>
                         <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
                         <configuration>
                             <skip>${skipITs}</skip>
                             <target unless="skip.setup">
-                                <move todir="${payara.home}/javadb">
-                                    <fileset dir="${db.home}" />
+                                <move todir="${payara.db.home}">
+                                    <fileset dir="${db.download.location}" />
                                 </move>
-                                <copy file="${payara.home}/javadb/lib/derbytools.jar" todir="${payara.home}/glassfish/domains/domain1/lib"/>
-                                <copy file="${payara.home}/javadb/lib/derbyclient.jar" todir="${payara.home}/glassfish/domains/domain1/lib"/>
-                                <copy file="${payara.home}/javadb/lib/derbyshared.jar" todir="${payara.home}/glassfish/domains/domain1/lib"/>
+                                <copy file="${payara.db.home}${file.separator}lib${file.separator}derbytools.jar" todir="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}lib"/>
+                                <copy file="${payara.db.home}${file.separator}lib${file.separator}derbyclient.jar" todir="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}lib"/>
+                                <copy file="${payara.db.home}${file.separator}lib${file.separator}derbyshared.jar" todir="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}lib"/>
                             </target>
                         </configuration>
                     </execution>
@@ -208,7 +212,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                         <configuration>
                             <skip>${skipITs}</skip>
                             <target>
-                                <exec executable="${db.home}/bin/startNetworkServer${script.ext}" spawn="true"/>
+                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}startNetworkServer${script.ext}" spawn="true"/>
                             </target>
                         </configuration>
                     </execution>
@@ -222,8 +226,8 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                         <configuration>
                             <skip>${skipITs}</skip>
                             <target>
-                                <exec executable="${db.home}/bin/ij${script.ext}">
-                                    <arg value="${basedir}/src/test/resources/derby.ddl.jbatch-tck.sql" />
+                                <exec executable="${payara.db.home}${file.separator}bin/ij${script.ext}">
+                                    <arg value="${basedir}${file.separator}src${file.separator}test${file.separator}resources${file.separator}derby.ddl.jbatch-tck.sql" />
                                 </exec>
                             </target>
                         </configuration>
@@ -307,7 +311,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                         <configuration>
                             <skip>${skipITs}</skip>
                             <target>
-                                <exec executable="${db.home}/bin/stopNetworkServer${script.ext}"/>
+                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}stopNetworkServer${script.ext}"/>
                             </target>
                         </configuration>
                     </execution>
@@ -330,8 +334,8 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                                 <artifactItem>
                                     <groupId>jakarta.batch</groupId>
                                     <artifactId>com.ibm.jbatch.tck</artifactId>
-                                    <outputDirectory>${project.build.directory}/test-classes</outputDirectory>
-                                    <includes>testprofiles/*,ddls/*,test-summary-stylesheet.xsl</includes>
+                                    <outputDirectory>${project.build.directory}${file.separator}test-classes</outputDirectory>
+                                    <includes>testprofiles${file.separator}*,ddls${file.separator}*,test-summary-stylesheet.xsl</includes>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
@@ -363,7 +367,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                             <dependenciesToScan>
                                 <dependency>jakarta.batch:com.ibm.jbatch.tck</dependency>
                             </dependenciesToScan>
-                            <includesFile>${project.build.directory}/test-classes/testprofiles/batch-tck-impl-EE-platform-core-suite-includes.txt</includesFile>
+                            <includesFile>${project.build.directory}${file.separator}test-classes${file.separator}testprofiles${file.separator}batch-tck-impl-EE-platform-core-suite-includes.txt</includesFile>
                             <reportNameSuffix>ee-core-suite</reportNameSuffix>
                             <systemPropertyVariables>
                                 <junit.jupiter.extensions.autodetection.enabled>true</junit.jupiter.extensions.autodetection.enabled>
@@ -380,7 +384,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                             <dependenciesToScan>
                                 <dependency>jakarta.batch:com.ibm.jbatch.tck.appbean</dependency>
                             </dependenciesToScan>
-                            <includesFile>${project.build.directory}/test-classes/testprofiles/batch-tck-impl-appjoboperator-suite-includes.txt</includesFile>
+                            <includesFile>${project.build.directory}${file.separator}test-classes${file.separator}testprofiles${file.separator}batch-tck-impl-appjoboperator-suite-includes.txt</includesFile>
                             <reportNameSuffix>appjoboperator</reportNameSuffix>
                             <systemPropertyVariables>
                                 <jakarta.batch.tck.vehicles.vehicleName>appjoboperator</jakarta.batch.tck.vehicles.vehicleName>
