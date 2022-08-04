@@ -33,6 +33,7 @@
         <jakarta.batch.version>2.1.1</jakarta.batch.version>
 
         <!-- Note that Shrinkwrap Maven resolver WILL NOT read in whatever you specify on the command line - it will ALWAYS read this -->
+        <!-- DO NOT COMMIT A VERSION HERE! -->
         <payara.version></payara.version>
         <payara.home>${project.build.directory}${file.separator}payara6</payara.home>
 
