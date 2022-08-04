@@ -44,6 +44,8 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
         <maven.antrun.plugin.version>3.1.0</maven.antrun.plugin.version>
         <maven.dependency.plugin.version>3.3.0</maven.dependency.plugin.version>
         <maven.failsafe.plugin.version>3.0.0-M7</maven.failsafe.plugin.version>
+
+        <slf4j.version>1.7.30</slf4j.version>
     </properties>
 
     <dependencies>
@@ -91,6 +93,11 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
             <artifactId>jakarta.batch.reporting</artifactId>
             <scope>test</scope>
             <version>${jakarta.batch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
 
         <!-- Payara-specific Batch TCK Dependencies -->
