@@ -212,7 +212,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                         <configuration>
                             <skip>${skipITs}</skip>
                             <target>
-                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}startNetworkServer${script.ext}" spawn="true"/>
+                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}startNetworkServer${script.ext}" spawn="true" dir="${payara.db.home}"/>
                                 <echo message="Waiting 3 seconds for database in forked process to start..."/>
                                 <sleep seconds="3"/>
                             </target>
@@ -228,7 +228,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                         <configuration>
                             <skip>${skipITs}</skip>
                             <target>
-                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}ij${script.ext}">
+                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}ij${script.ext}" dir="${payara.db.home}">
                                     <arg value="${basedir}${file.separator}src${file.separator}test${file.separator}resources${file.separator}derby.ddl.jbatch-tck.sql" />
                                 </exec>
                             </target>
@@ -313,7 +313,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                         <configuration>
                             <skip>${skipITs}</skip>
                             <target>
-                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}stopNetworkServer${script.ext}"/>
+                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}stopNetworkServer${script.ext}" dir="${payara.db.home}"/>
                             </target>
                         </configuration>
                     </execution>
