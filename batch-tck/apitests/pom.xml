@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Copyright (c) 2022 Contributors to the Eclipse Foundation
+
+  See the NOTICE file distributed with this work for additional information
+  regarding copyright ownership. Licensed under the Apache License,
+  Version 2.0 (the "License"); you may not use this file except in compliance
+  with the License. You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+  SPDX-License-Identifier: Apache-2.0
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>fish.payara.jakarta.tests.tck</groupId>
+        <artifactId>batch-tck</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>batch-tck-api-tests</artifactId>
+    <packaging>pom</packaging>
+    <name>Jakarta Batch API TCK Runner for Payara</name>
+
+    <properties>
+        <derby.version>10.15.2.0</derby.version>
+        <derby.zip.url>https://dlcdn.apache.org//db/derby/db-derby-${derby.version}/db-derby-${derby.version}-bin.zip</derby.zip.url>
+        <db.download.location>${project.build.directory}${file.separator}db-derby-${derby.version}-bin</db.download.location>
+        <payara.db.home>${payara.home}${file.separator}javadb</payara.db.home>
+
+        <!-- Used to help determine sh vs. bat -->
+        <script.ext/>
+        <payara.executable>${payara.home}${file.separator}glassfish${file.separator}bin${file.separator}asadmin${script.ext}</payara.executable>
+
+        <slf4j.version>1.7.30</slf4j.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- Common Batch TCK dependencies -->
+        <dependency>
+            <groupId>jakarta.batch</groupId>
+            <artifactId>com.ibm.jbatch.tck</artifactId>
+            <scope>test</scope>
+            <version>${jakarta.batch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.batch</groupId>
+            <artifactId>com.ibm.jbatch.tck.appbean</artifactId>
+            <scope>test</scope>
+            <version>${jakarta.batch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.batch</groupId>
+            <artifactId>com.ibm.jbatch.tck.spi</artifactId>
+            <scope>test</scope>
+            <version>${jakarta.batch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.batch</groupId>
+            <artifactId>jakarta.batch.arquillian.extension</artifactId>
+            <version>${jakarta.batch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-container-test-spi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.junit5</groupId>
+            <artifactId>arquillian-junit5-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.junit5</groupId>
+            <artifactId>arquillian-junit5-container</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.batch</groupId>
+            <artifactId>jakarta.batch.reporting</artifactId>
+            <scope>test</scope>
+            <version>${jakarta.batch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+        <!-- Payara-specific Batch TCK Dependencies -->
+        <dependency>
+            <groupId>org.glassfish.hk2</groupId>
+            <artifactId>hk2-locator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.inject</groupId>
+            <artifactId>jersey-hk2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-multipart</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.googlecode.maven-download-plugin</groupId>
+                <artifactId>download-maven-plugin</artifactId>
+                <version>${download.maven.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>download-derby</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipITs}</skip>
+                            <url>${derby.zip.url}</url>
+                            <unpack>true</unpack>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>${maven.antrun.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>copy-arquillian-config</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipITs}</skip>
+                            <target>
+                                <copy file="${project.basedir}${file.separator}src${file.separator}test${file.separator}resources${file.separator}arquillian.xml"
+                                      todir="${project.build.directory}${file.separator}test-classes"
+                                      overwrite="true"/>
+                            </target>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>copy-derby-to-payara</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipITs}</skip>
+                            <target unless="skip.setup">
+                                <move todir="${payara.db.home}">
+                                    <fileset dir="${db.download.location}" />
+                                </move>
+                                <copy file="${payara.db.home}${file.separator}lib${file.separator}derbytools.jar" todir="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}lib"/>
+                                <copy file="${payara.db.home}${file.separator}lib${file.separator}derbyclient.jar" todir="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}lib"/>
+                                <copy file="${payara.db.home}${file.separator}lib${file.separator}derbyshared.jar" todir="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}lib"/>
+                            </target>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>start-managed-payara-server-for-test-setup</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipITs}</skip>
+                            <target if="payara.server.managed" unless="skip.setup">
+                                <exec executable="${payara.executable}">
+                                    <arg value="start-domain" />
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>start-database</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipITs}</skip>
+                            <target>
+                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}startNetworkServer${script.ext}" spawn="true" dir="${payara.db.home}"/>
+                                <echo message="Waiting 3 seconds for database in forked process to start..."/>
+                                <sleep seconds="3"/>
+                            </target>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>execute-ddl</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipITs}</skip>
+                            <target>
+                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}ij${script.ext}" dir="${payara.db.home}">
+                                    <arg value="${basedir}${file.separator}src${file.separator}test${file.separator}resources${file.separator}derby.ddl.jbatch-tck.sql" />
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>create-jdbc-connection-pool</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipITs}</skip>
+                            <target unless="skip.setup">
+                                <exec executable="${payara.executable}">
+                                    <arg value="create-jdbc-connection-pool" />
+                                    <arg value="--datasourceClassname=org.apache.derby.jdbc.ClientDataSource40" />
+                                    <arg value="--resType=javax.sql.DataSource" />
+                                    <arg value="--property=DatabaseName=batch:serverName=localhost:PortNumber=1527:User=batch:Password=batch" />
+                                    <arg value="batchtck" />
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>create-jdbc-resource</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipITs}</skip>
+                            <target unless="skip.setup">
+                                <exec executable="${payara.executable}">
+                                    <arg value="create-jdbc-resource" />
+                                    <arg value="--poolName=batchtck" />
+                                    <arg value="jdbc/orderDB" />
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>stop-managed-payara-server-post-test-setup</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipITs}</skip>
+                            <target if="payara.server.managed" unless="skip.setup">
+                                <exec executable="${payara.executable}">
+                                    <arg value="stop-domain" />
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>restart-remote-payara-server-post-test-setup</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipITs}</skip>
+                            <target if="payara.server.remote" unless="skip.setup">
+                                <exec executable="${payara.executable}">
+                                    <arg value="restart-domain" />
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>stop-database</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipITs}</skip>
+                            <target>
+                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}stopNetworkServer${script.ext}" dir="${payara.db.home}"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>${maven.dependency.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>unpack-tck</id>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <phase>pre-integration-test</phase>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>jakarta.batch</groupId>
+                                    <artifactId>com.ibm.jbatch.tck</artifactId>
+                                    <outputDirectory>${project.build.directory}${file.separator}test-classes</outputDirectory>
+                                    <includes>testprofiles${file.separator}*,ddls${file.separator}*,test-summary-stylesheet.xsl</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${maven.failsafe.plugin.version}</version>
+                <configuration>
+                    <failIfNoTests>false</failIfNoTests>
+                    <systemPropertyVariables>
+                        <junit.jupiter.extensions.autodetection.enabled>true</junit.jupiter.extensions.autodetection.enabled>
+                        <arquillian.launch>payara</arquillian.launch>
+                        <arquillian.extensions.jakarta.batch.groupPrefixesToIgnore>org.glassfish</arquillian.extensions.jakarta.batch.groupPrefixesToIgnore>
+                        <payara.home>${payara.home}</payara.home>
+                    </systemPropertyVariables>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>ee-core-suite</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                        <configuration>
+                            <classpathDependencyExcludes>jakarta.batch:com.ibm.jbatch.tck.appbean</classpathDependencyExcludes>
+                            <dependenciesToScan>
+                                <dependency>jakarta.batch:com.ibm.jbatch.tck</dependency>
+                            </dependenciesToScan>
+                            <includesFile>${project.build.directory}${file.separator}test-classes${file.separator}testprofiles${file.separator}batch-tck-impl-EE-platform-core-suite-includes.txt</includesFile>
+                            <reportNameSuffix>ee-core-suite</reportNameSuffix>
+                            <systemPropertyVariables>
+                                <junit.jupiter.extensions.autodetection.enabled>true</junit.jupiter.extensions.autodetection.enabled>
+                                <jakarta.batch.tck.vehicles.vehicleName>ee-core-suite</jakarta.batch.tck.vehicles.vehicleName>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>appjoboperator-suite</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                        <configuration>
+                            <dependenciesToScan>
+                                <dependency>jakarta.batch:com.ibm.jbatch.tck.appbean</dependency>
+                            </dependenciesToScan>
+                            <includesFile>${project.build.directory}${file.separator}test-classes${file.separator}testprofiles${file.separator}batch-tck-impl-appjoboperator-suite-includes.txt</includesFile>
+                            <reportNameSuffix>appjoboperator</reportNameSuffix>
+                            <systemPropertyVariables>
+                                <jakarta.batch.tck.vehicles.vehicleName>appjoboperator</jakarta.batch.tck.vehicles.vehicleName>
+                                <arquillian.extensions.jakarta.batch.appbean>true</arquillian.extensions.jakarta.batch.appbean>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <script.ext>.bat</script.ext>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>payara-server-remote</id>
+
+            <properties>
+                <payara.server.remote/>
+            </properties>
+
+            <dependencies>
+                <dependency>
+                    <groupId>fish.payara.arquillian</groupId>
+                    <artifactId>arquillian-payara-server-remote</artifactId>
+                    <version>${payara.arquillian.version}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>payara-server-managed</id>
+            <activation>
+                <property>
+                    <name>!payara.server.remote</name>
+                </property>
+            </activation>
+
+            <properties>
+                <payara.server.managed/>
+            </properties>
+
+            <dependencies>
+                <dependency>
+                    <groupId>fish.payara.arquillian</groupId>
+                    <artifactId>arquillian-payara-server-managed</artifactId>
+                    <version>${payara.arquillian.version}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack-payara</id>
+                                <phase>generate-test-resources</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>!${skipITs}</skip>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>fish.payara.distributions</groupId>
+                                            <artifactId>payara</artifactId>
+                                            <version>${payara.version}</version>
+                                            <type>zip</type>
+                                            <overWrite>false</overWrite>
+                                            <outputDirectory>${project.build.directory}</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
