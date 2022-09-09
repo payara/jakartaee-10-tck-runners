@@ -54,6 +54,13 @@
         <port.orb.mutual>13920</port.orb.mutual>
         <port.orb.ssl>13820</port.orb.ssl>
         <port.harness.log>12000</port.harness.log>
+
+        <derby.version>10.15.2.0</derby.version>
+        <derby.zip.url>https://dlcdn.apache.org//db/derby/db-derby-${derby.version}/db-derby-${derby.version}-bin.zip</derby.zip.url>
+        <db.download.location>${project.build.directory}${file.separator}db-derby-${derby.version}-bin</db.download.location>
+        <payara.db.home>${payara.home}${file.separator}javadb</payara.db.home>
+
+        <script.ext/>
     </properties>
 
     <dependencies>
@@ -86,6 +93,19 @@
                             <goal>wget</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>download-derby</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipITs}</skip>
+                            <url>${derby.zip.url}</url>
+                            <unpack>true</unpack>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                        </configuration>
+                    </execution>
                 </executions>
                 <configuration>
                     <skip>${skipITs}</skip>
@@ -94,6 +114,8 @@
                     <outputDirectory>${project.build.directory}</outputDirectory>
                 </configuration>
             </plugin>
+
+
 
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -155,6 +177,13 @@
                         <phase>pre-integration-test</phase>
                         <configuration>
                             <target xmlns:if="ant:if" xmlns:unless="ant:unless">
+                                <move todir="${payara.db.home}">
+                                    <fileset dir="${db.download.location}" />
+                                </move>
+                                <copy file="${payara.db.home}${file.separator}lib${file.separator}derbytools.jar" todir="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}lib"/>
+                                <copy file="${payara.db.home}${file.separator}lib${file.separator}derbyclient.jar" todir="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}lib"/>
+                                <copy file="${payara.db.home}${file.separator}lib${file.separator}derbyshared.jar" todir="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}lib"/>
+
                                 <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />
                                          
                                 <macrodef name="tck-setting">
@@ -233,6 +262,22 @@
                     </execution>
 
                     <execution>
+                        <id>start-database</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipITs}</skip>
+                            <target>
+                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}startNetworkServer${script.ext}" spawn="true" dir="${payara.db.home}"/>
+                                <echo message="Waiting 3 seconds for database in forked process to start..."/>
+                                <sleep seconds="3"/>
+                            </target>
+                        </configuration>
+                    </execution>
+
+                    <execution>
                         <id>configure-tck-tests</id>
                         <phase>pre-integration-test</phase>
                         <goals>
@@ -244,7 +289,6 @@
                                 <limit maxwait="20">
                                     <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                         <arg value="start-domain"/>
-                                        <arg value="--suspend" if:set="glassfish.suspend"/>
                                     </exec>
                                 </limit>
                                 
@@ -310,8 +354,34 @@
                             </target>
                         </configuration>
                     </execution>
+
+                    <execution>
+                        <id>stop-database</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipITs}</skip>
+                            <target>
+                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}stopNetworkServer${script.ext}" dir="${payara.db.home}"/>
+                            </target>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>
     </build>
+
+    <profile>
+        <id>windows</id>
+        <activation>
+            <os>
+                <family>windows</family>
+            </os>
+        </activation>
+        <properties>
+            <script.ext>.bat</script.ext>
+        </properties>
+    </profile>
 </project>
