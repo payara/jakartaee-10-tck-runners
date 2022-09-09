@@ -373,15 +373,18 @@
         </plugins>
     </build>
 
-    <profile>
-        <id>windows</id>
-        <activation>
-            <os>
-                <family>windows</family>
-            </os>
-        </activation>
-        <properties>
-            <script.ext>.bat</script.ext>
-        </properties>
-    </profile>
+    <profiles>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <script.ext>.bat</script.ext>
+            </properties>
+        </profile>
+    </profiles>
+
 </project>
