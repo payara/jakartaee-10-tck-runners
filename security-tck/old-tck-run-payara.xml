@@ -519,6 +519,11 @@
                                                 <arg value="--nopassword" />
                                                 <arg value="domain1" />
                                             </exec>
+
+                                            <copy file="${payara.db.home}${file.separator}lib${file.separator}derbytools.jar" todir="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}lib"/>
+                                            <copy file="${payara.db.home}${file.separator}lib${file.separator}derbyclient.jar" todir="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}lib"/>
+                                            <copy file="${payara.db.home}${file.separator}lib${file.separator}derbyshared.jar" todir="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}lib"/>
+
                                             <exec executable="${glassfish.asadmin}" dir="${glassfish.home}/glassfish/bin">
                                                 <arg value="start-domain"/>
                                             </exec>
