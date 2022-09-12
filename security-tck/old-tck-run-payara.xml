@@ -650,23 +650,7 @@
                                     </target>
                                 </configuration>
                             </execution>
-
-                            <!-- config.vi ant task defined in build.xml currently tries to start Derby using asadmin, which actually starts H2 -->
-                            <execution>
-                                <id>stop-h2-database</id>
-                                <phase>post-integration-test</phase>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                                <configuration>
-                                    <skip>${skipITs}</skip>
-                                    <target>
-                                        <exec executable="${payara.home}${file.separator}bin${file.separator}asadmin{script.ext}">
-                                            <arg value="stop-database" />
-                                        </exec>
-                                    </target>
-                                </configuration>
-                            </execution>
+                            
                         </executions>
                     </plugin>
                 </plugins>
