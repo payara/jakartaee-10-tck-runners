@@ -355,7 +355,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
 
                 <executions>
                     <execution>
-                        <id>ee-core-suite</id>
+                        <id>ee-core-suite-ejb</id>
                         <goals>
                             <goal>integration-test</goal>
                         </goals>
@@ -365,15 +365,33 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                                 <dependency>jakarta.batch:com.ibm.jbatch.tck</dependency>
                             </dependenciesToScan>
                             <includesFile>${project.build.directory}${file.separator}test-classes${file.separator}testprofiles${file.separator}batch-tck-impl-EE-platform-core-suite-includes.txt</includesFile>
-                            <reportNameSuffix>ee-core-suite</reportNameSuffix>
+                            <reportNameSuffix>ee-core-suite-ejb</reportNameSuffix>
                             <systemPropertyVariables>
                                 <junit.jupiter.extensions.autodetection.enabled>true</junit.jupiter.extensions.autodetection.enabled>
-                                <jakarta.batch.tck.vehicles.vehicleName>ee-core-suite</jakarta.batch.tck.vehicles.vehicleName>
+                                <jakarta.batch.tck.vehicles.vehicleName>ejb</jakarta.batch.tck.vehicles.vehicleName>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </execution>
+		    <execution>
+                        <id>ee-core-suite-web</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                        <configuration>
+                            <classpathDependencyExcludes>jakarta.batch:com.ibm.jbatch.tck.appbean</classpathDependencyExcludes>
+                            <dependenciesToScan>
+                                <dependency>jakarta.batch:com.ibm.jbatch.tck</dependency>
+                            </dependenciesToScan>
+                            <includesFile>${project.build.directory}${file.separator}test-classes${file.separator}testprofiles${file.separator}batch-tck-impl-EE-platform-core-suite-includes.txt</includesFile>
+                            <reportNameSuffix>ee-core-suite-web</reportNameSuffix>
+                            <systemPropertyVariables>
+                                <junit.jupiter.extensions.autodetection.enabled>true</junit.jupiter.extensions.autodetection.enabled>
+                                <jakarta.batch.tck.vehicles.vehicleName>web</jakarta.batch.tck.vehicles.vehicleName>
                             </systemPropertyVariables>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>appjoboperator-suite</id>
+                        <id>appjoboperator-suite-ejb</id>
                         <goals>
                             <goal>integration-test</goal>
                         </goals>
@@ -382,9 +400,26 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                                 <dependency>jakarta.batch:com.ibm.jbatch.tck.appbean</dependency>
                             </dependenciesToScan>
                             <includesFile>${project.build.directory}${file.separator}test-classes${file.separator}testprofiles${file.separator}batch-tck-impl-appjoboperator-suite-includes.txt</includesFile>
-                            <reportNameSuffix>appjoboperator</reportNameSuffix>
+                            <reportNameSuffix>appjoboperator-ejb</reportNameSuffix>
                             <systemPropertyVariables>
-                                <jakarta.batch.tck.vehicles.vehicleName>appjoboperator</jakarta.batch.tck.vehicles.vehicleName>
+                                <jakarta.batch.tck.vehicles.vehicleName>ejb</jakarta.batch.tck.vehicles.vehicleName>
+                                <arquillian.extensions.jakarta.batch.appbean>true</arquillian.extensions.jakarta.batch.appbean>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </execution>
+		    <execution>
+                        <id>appjoboperator-suite-web</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                        <configuration>
+                            <dependenciesToScan>
+                                <dependency>jakarta.batch:com.ibm.jbatch.tck.appbean</dependency>
+                            </dependenciesToScan>
+                            <includesFile>${project.build.directory}${file.separator}test-classes${file.separator}testprofiles${file.separator}batch-tck-impl-appjoboperator-suite-includes.txt</includesFile>
+                            <reportNameSuffix>appjoboperator-web</reportNameSuffix>
+                            <systemPropertyVariables>
+                                <jakarta.batch.tck.vehicles.vehicleName>web</jakarta.batch.tck.vehicles.vehicleName>
                                 <arquillian.extensions.jakarta.batch.appbean>true</arquillian.extensions.jakarta.batch.appbean>
                             </systemPropertyVariables>
                         </configuration>
