@@ -55,10 +55,6 @@
         <port.orb.ssl>13820</port.orb.ssl>
         <port.harness.log>12000</port.harness.log>
 
-        <derby.version>10.15.2.0</derby.version>
-        <derby.zip.url>https://dlcdn.apache.org//db/derby/db-derby-${derby.version}/db-derby-${derby.version}-bin.zip</derby.zip.url>
-        <db.download.location>${project.build.directory}${file.separator}db-derby-${derby.version}-bin</db.download.location>
-
         <script.ext/>
     </properties>
 
@@ -379,6 +375,10 @@
                 <payara.asadmin>${payara.home}/glassfish/bin/asadmin</payara.asadmin>
 
                 <payara.db.home>${payara.home}${file.separator}javadb</payara.db.home>
+
+                <derby.version>10.15.2.0</derby.version>
+                <derby.zip.url>https://dlcdn.apache.org//db/derby/db-derby-${derby.version}/db-derby-${derby.version}-bin.zip</derby.zip.url>
+                <db.download.location>${project.build.directory}${file.separator}db-derby-${derby.version}-bin</db.download.location>
             </properties>
 
             <dependencies>
