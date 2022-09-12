@@ -139,8 +139,8 @@
             </dependency>
             <dependency>
                 <groupId>fish.payara.arquillian</groupId>
-                <artifactId>payara-client-ee8</artifactId>
-                <version>2.3.1</version>
+                <artifactId>payara-client-ee9</artifactId>
+                <version>3.0.alpha6</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -409,85 +409,18 @@
 	</reporting>
 
     <profiles>
-        
-        
-        <profile>
-            <id>payara-ci-managed</id>
-            
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <payara.root>${maven.multiModuleProjectDirectory}/target</payara.root>
-                <payara.version>6.2022.1.Alpha4-SNAPSHOT</payara.version>
-                <payara.arquillian.container.version>3.0.alpha6</payara.arquillian.container.version>
-            </properties>
-            <dependencies>
-                <dependency>
-                    <groupId>fish.payara.arquillian</groupId>
-                    <artifactId>arquillian-payara-server-managed</artifactId>
-                    <version>${payara.arquillian.container.version}</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>fish.payara.arquillian</groupId>
-                    <artifactId>payara-client-ee9</artifactId>
-                    <scope>test</scope>
-                    <version>${payara.arquillian.container.version}</version>
-                </dependency>
-            </dependencies>
 
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>unpack</id>
-                                <phase>process-test-classes</phase>
-                                <goals>
-                                    <goal>unpack</goal>
-                                </goals>
-                                <configuration>
-                                    <outputDirectory>${payara.root}</outputDirectory>
-                                    <markersDirectory>${payara.root}/dependency-maven-plugin-markers</markersDirectory>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>fish.payara.distributions</groupId>
-                                            <artifactId>payara</artifactId>
-                                            <version>${payara.version}</version>
-                                            <type>zip</type>
-                                            <overWrite>false</overWrite>
-                                            <outputDirectory>${payara.root}</outputDirectory>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <configuration>
-                            <systemPropertyVariables>
-                                <payara.home>${payara.root}/payara6</payara.home>
-                            </systemPropertyVariables>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
         <!-- ### GlassFish ### -->
        
         <profile>
             <id>glassfish-ci-managed</id>
 
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <activeByDefault>false</activeByDefault>
             </activation>
 
             <properties>
-                <glassfish.version>7.0.0-M4</glassfish.version>
+                <glassfish.version>7.0.0-M8</glassfish.version>
                 <glassfish.port>8080</glassfish.port>
                 <glassfish.suspend>false</glassfish.suspend>
                 <glassfish.root>${maven.multiModuleProjectDirectory}/target</glassfish.root>
@@ -576,7 +509,7 @@
             <id>glassfish-ci-managed-update</id>
 
             <properties>
-                <glassfish.version>7.0.0-M4</glassfish.version>
+                <glassfish.version>7.0.0-M8</glassfish.version>
                 <glassfish.port>8080</glassfish.port>
                 <glassfish.suspend>false</glassfish.suspend>
                 <glassfish.root>${maven.multiModuleProjectDirectory}/target</glassfish.root>
@@ -1041,6 +974,106 @@
                                     </run>
                                 </image>
                             </images>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>payara-ci-managed</id>
+
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <glassfish.version>7.0.0-M8</glassfish.version>
+                <glassfish.port>8080</glassfish.port>
+                <glassfish.suspend>false</glassfish.suspend>
+                <glassfish.root>${maven.multiModuleProjectDirectory}/target</glassfish.root>
+
+                <payara.version>6.2022.1.Alpha4</payara.version>
+                <payara.port>8080</payara.port>
+                <payara.root>${maven.multiModuleProjectDirectory}/target</payara.root>
+                <payara.arquillian.container.version>3.0.alpha6</payara.arquillian.container.version>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>fish.payara.arquillian</groupId>
+                    <artifactId>arquillian-payara-server-managed</artifactId>
+                    <version>${payara.arquillian.container.version}</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>fish.payara.arquillian</groupId>
+                    <artifactId>payara-client-ee9</artifactId>
+                    <scope>test</scope>
+                    <version>${payara.arquillian.container.version}</version>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack</id>
+                                <phase>process-test-classes</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${skipITs}</skip>
+                                    <outputDirectory>${payara.root}</outputDirectory>
+                                    <markersDirectory>${payara.root}/dependency-maven-plugin-markers</markersDirectory>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>fish.payara.distributions</groupId>
+                                            <artifactId>payara</artifactId>
+                                            <version>${payara.version}</version>
+                                            <type>zip</type>
+                                            <overWrite>true</overWrite>
+                                            <outputDirectory>${payara.root}</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>3.0.0</version>
+                        <executions>
+                            <execution>
+                                <id>set-port</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${skipITs}</skip>
+                                    <target>
+                                        <echo level="info">Replacing in ${payara.root}</echo>
+                                        <replace token="8080"
+                                                 value="${payara.port}"
+                                                 dir="${payara.root}/payara6/glassfish/domains/domain1/config/"
+                                                 summary="yes">
+                                            <include name="domain.xml" />
+                                        </replace>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <payara.home>${payara.root}/payara6</payara.home>
+                            </systemPropertyVariables>
                         </configuration>
                     </plugin>
                 </plugins>

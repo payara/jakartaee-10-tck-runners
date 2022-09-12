@@ -37,13 +37,13 @@
         <ant.zip.url>https://archive.apache.org/dist/ant/binaries/apache-ant-${ant.version}-bin.zip</ant.zip.url>
         
         <tck.home>${project.build.directory}/security-tck</tck.home>
-        <tck.tests.home>${tck.home}/src/com/sun/ts/tests</tck.tests.home> 
-         
-        <payara.home>${project.build.directory}/payara6</payara.home>
-        <payara.asadmin>${payara.home}/glassfish/bin/asadmin</payara.asadmin>
-       
+        <tck.tests.home>${tck.home}/src/com/sun/ts/tests</tck.tests.home>
+
+        <glassfish.home>${project.build.directory}/glassfish7</glassfish.home>
+        <glassfish.asadmin>${glassfish.home}/glassfish/bin/asadmin</glassfish.asadmin>
+
         <jacoco.includes>org/glassfish/**\:com/sun/enterprise/**</jacoco.includes>
-        
+
         <port.admin>14848</port.admin>
         <port.derby>11527</port.derby>
         <port.http>18080</port.http>
@@ -58,19 +58,11 @@
         <derby.version>10.15.2.0</derby.version>
         <derby.zip.url>https://dlcdn.apache.org//db/derby/db-derby-${derby.version}/db-derby-${derby.version}-bin.zip</derby.zip.url>
         <db.download.location>${project.build.directory}${file.separator}db-derby-${derby.version}-bin</db.download.location>
-        <payara.db.home>${payara.home}${file.separator}javadb</payara.db.home>
 
         <script.ext/>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>fish.payara.distributions</groupId>
-            <artifactId>payara</artifactId>
-            <version>${payara.version}</version>
-            <type>zip</type>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.eclipse.ee4j.security.tck</groupId>
             <artifactId>old-security-tck</artifactId>
@@ -93,19 +85,6 @@
                             <goal>wget</goal>
                         </goals>
                     </execution>
-                    <execution>
-                        <id>download-derby</id>
-                        <phase>generate-test-resources</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${skipITs}</skip>
-                            <url>${derby.zip.url}</url>
-                            <unpack>true</unpack>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                        </configuration>
-                    </execution>
                 </executions>
                 <configuration>
                     <skip>${skipITs}</skip>
@@ -123,17 +102,6 @@
                     <skip>${skipITs}</skip>
                 </configuration>
                 <executions>
-                    <execution>
-                        <id>unpack-payara</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>unpack-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <includeArtifactIds>payara</includeArtifactIds>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                        </configuration>
-                    </execution>
                     <execution>
                         <id>unpack-tck</id>
                         <phase>pre-integration-test</phase>
@@ -173,85 +141,78 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>prepare-tck-and-payara</id>
+                        <id>prepare-tck</id>
                         <phase>pre-integration-test</phase>
                         <configuration>
                             <target xmlns:if="ant:if" xmlns:unless="ant:unless">
-                                <move todir="${payara.db.home}">
-                                    <fileset dir="${db.download.location}" />
-                                </move>
-                                <copy file="${payara.db.home}${file.separator}lib${file.separator}derbytools.jar" todir="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}lib"/>
-                                <copy file="${payara.db.home}${file.separator}lib${file.separator}derbyclient.jar" todir="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}lib"/>
-                                <copy file="${payara.db.home}${file.separator}lib${file.separator}derbyshared.jar" todir="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}lib"/>
-
                                 <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />
-                                         
+
                                 <macrodef name="tck-setting">
                                     <attribute name="key" /> <attribute name="value" />
                                     <sequential>
-                                      <replaceregexp file="${tck.home}/bin/ts.jte" byline="true"
-                                        match="@{key}=.*" replace="@{key}=@{value}" />
+                                        <replaceregexp file="${tck.home}/bin/ts.jte" byline="true"
+                                                       match="@{key}=.*" replace="@{key}=@{value}" />
                                     </sequential>
                                 </macrodef>
-                                
+
 
                                 <!-- Change configuration -->
-                                
-                                <tck-setting key="web.home" value="${payara.home}/glassfish"/>
-                                <tck-setting key="webServerHome" value="${payara.home}/glassfish"/>
+
+                                <tck-setting key="web.home" value="${glassfish.home}/glassfish"/>
+                                <tck-setting key="webServerHome" value="${glassfish.home}/glassfish"/>
                                 <tck-setting key="webServerHost" value="localhost"/>
                                 <tck-setting key="webServerPort" value="${port.http}"/>
-                                
+
                                 <tck-setting key="securedWebServicePort" value="${port.https}"/>
                                 <tck-setting key="s1as.admin.port" value="${port.admin}"/>
-                                <tck-setting key="payara.admin.port" value="${port.admin}"/>
+                                <tck-setting key="glassfish.admin.port" value="${port.admin}"/>
                                 <tck-setting key="orb.port" value="${port.orb}"/>
                                 <tck-setting key="database.port" value="${port.derby}"/>
                                 <tck-setting key="harness.log.port" value="${port.harness.log}"/>
-                                
+
                                 <tck-setting key="report.dir" value="${tck.home}/securityreport/security"/>
                                 <tck-setting key="work.dir" value="${tck.home}/securitywork/security"/>
-                                
-								<tck-setting key="securityapi.classes" value="${web.home}/modules/jakarta.servlet-api.jar${pathsep}${web.home}/modules/jakarta.security.enterprise-api.jar${pathsep}${web.home}/modules/jakarta.authentication-api.jar${pathsep}${web.home}/modules/endorsed/jakarta.annotation-api.jar${pathsep}${web.home}/modules/jakarta.inject.jar${pathsep}${web.home}/modules/jakarta.enterprise.cdi-api.jar${pathsep}${web.home}/modules/jakarta.faces.jar${pathsep}${web.home}/modules/jakarta.interceptor-api.jar${pathsep}${web.home}/modules/jakarta.ejb-api.jar${pathsep}/${ts.home}/lib/unboundid-ldapsdk.jar"/>
-                          
+
+                                <tck-setting key="securityapi.classes" value="${web.home}/modules/jakarta.servlet-api.jar${pathsep}${web.home}/modules/jakarta.security.enterprise-api.jar${pathsep}${web.home}/modules/jakarta.authentication-api.jar${pathsep}${web.home}/modules/endorsed/jakarta.annotation-api.jar${pathsep}${web.home}/modules/jakarta.inject.jar${pathsep}${web.home}/modules/jakarta.enterprise.cdi-api.jar${pathsep}${web.home}/modules/jakarta.faces.jar${pathsep}${web.home}/modules/jakarta.interceptor-api.jar${pathsep}${web.home}/modules/jakarta.ejb-api.jar${pathsep}/${ts.home}/lib/unboundid-ldapsdk.jar"/>
+
                                 <limit maxwait="60">
-                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
+                                    <exec executable="${glassfish.asadmin}" dir="${glassfish.home}/glassfish/bin">
                                         <arg value="delete-domain"/>
                                         <arg value="domain1" />
                                     </exec>
-                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
+                                    <exec executable="${glassfish.asadmin}" dir="${glassfish.home}/glassfish/bin">
                                         <arg value="create-domain"/>
                                         <arg value="--domainproperties=domain.adminPort=${port.admin}:domain.instancePort=${port.http}:http.ssl.port=${port.https}:jms.port=${port.jms}:domain.jmxPort=${port.jmx}:orb.listener.port=${port.orb}:orb.ssl.port=${port.orb.ssl}:orb.mutualauth.port=${port.orb.mutual}" />
                                         <arg value="--user=admin" />
                                         <arg value="--nopassword" />
                                         <arg value="domain1" />
                                     </exec>
-                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
+                                    <exec executable="${glassfish.asadmin}" dir="${glassfish.home}/glassfish/bin">
                                         <arg value="start-domain"/>
                                     </exec>
 
                                     <if>
                                         <isset property="jacoco.version" />
                                         <then>
-                                            <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
+                                            <exec executable="${glassfish.asadmin}" dir="${glassfish.home}/glassfish/bin">
                                                 <arg value="create-jvm-options" />
                                                 <arg value="--port=${port.admin}" />
                                                 <arg value="&quot;-javaagent\:${settings.localRepository}/org/jacoco/org.jacoco.agent/${jacoco.version}/org.jacoco.agent-${jacoco.version}-runtime.jar=destfile=${project.build.directory}/jacoco-it.exec,includes=${jacoco.includes}&quot;" />
                                             </exec>
                                         </then>
                                     </if>
-                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
+                                    <exec executable="${glassfish.asadmin}" dir="${glassfish.home}/glassfish/bin">
                                         <arg value="stop-domain"/>
                                         <arg value="domain1"/>
                                     </exec>
                                 </limit>
-                                
+
                                 <mkdir dir="${tck.home}/securityreport"/>
                                 <mkdir dir="${tck.home}/securityreport/security"/>
-                                
+
                                 <replace file="${tck.home}/bin/xml/ts.top.import.xml" if:set="suspend-tck" >
-                                  <replacetoken><![CDATA[<jvmarg value="-Xmx512m"/>]]></replacetoken>
-                                  <replacevalue><![CDATA[<jvmarg value="-Xmx512m"/>
+                                    <replacetoken><![CDATA[<jvmarg value="-Xmx512m"/>]]></replacetoken>
+                                    <replacevalue><![CDATA[<jvmarg value="-Xmx512m"/>
                                 <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=9008"/>]]></replacevalue>
                                 </replace>
                             </target>
@@ -259,22 +220,6 @@
                         <goals>
                             <goal>run</goal>
                         </goals>
-                    </execution>
-
-                    <execution>
-                        <id>start-database</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${skipITs}</skip>
-                            <target>
-                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}startNetworkServer${script.ext}" spawn="true" dir="${payara.db.home}"/>
-                                <echo message="Waiting 3 seconds for database in forked process to start..."/>
-                                <sleep seconds="3"/>
-                            </target>
-                        </configuration>
                     </execution>
 
                     <execution>
@@ -287,33 +232,34 @@
                             <target xmlns:if="ant:if" xmlns:unless="ant:unless">
                                 <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />
                                 <limit maxwait="20">
-                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
+                                    <exec executable="${glassfish.asadmin}" dir="${glassfish.home}/glassfish/bin">
                                         <arg value="start-domain"/>
+                                        <arg value="--suspend" if:set="glassfish.suspend"/>
                                     </exec>
                                 </limit>
-                                
-								<exec executable="${ant.home}/bin/ant" dir="${tck.home}/bin">
-									<arg value="config.vi" />
-								</exec>
-								<exec executable="${ant.home}/bin/ant" dir="${tck.home}/bin">
-									<arg value="init.ldap" />
-								</exec>
-                                
+
+                                <exec executable="${ant.home}/bin/ant" dir="${tck.home}/bin">
+                                    <arg value="config.vi" />
+                                </exec>
+                                <exec executable="${ant.home}/bin/ant" dir="${tck.home}/bin">
+                                    <arg value="init.ldap" />
+                                </exec>
+
                                 <!-- Deploy single test -->
                                 <sequential if:set="run.test" >
-                                	<dirname property="test.dir" file="${tck.home}/src/${run.test}"/>
-                                	<echo>Deploying from ${test.dir}</echo>
-                                	
-                                	<exec executable="${ant.home}/bin/ant" dir="${test.dir}">
-                                    	<arg value="deploy"  />
-                                	</exec>
+                                    <dirname property="test.dir" file="${tck.home}/src/${run.test}"/>
+                                    <echo>Deploying from ${test.dir}</echo>
+
+                                    <exec executable="${ant.home}/bin/ant" dir="${test.dir}">
+                                        <arg value="deploy"  />
+                                    </exec>
                                 </sequential>
-                                
+
                                 <!-- Deploy all tests -->
                                 <sequential unless:set="run.test" >
-                                	<exec executable="${ant.home}/bin/ant" dir="${tck.home}/bin">
-                                    	<arg value="deploy.all"  />
-                                	</exec>
+                                    <exec executable="${ant.home}/bin/ant" dir="${tck.home}/bin">
+                                        <arg value="deploy.all"  />
+                                    </exec>
                                 </sequential>
                             </target>
                         </configuration>
@@ -343,28 +289,14 @@
                                     </not>
                                     <then>
                                         <echo message="Running tests failed." />
-                                        <loadfile property="contents" srcFile="${payara.home}/glassfish/domains/domain1/logs/server.log" />
+                                        <loadfile property="contents" srcFile="${glassfish.home}/glassfish/domains/domain1/logs/server.log" />
                                         <echo message="${contents}" />
                                     </then>
                                 </if>
 
-                                <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
+                                <exec executable="${glassfish.asadmin}" dir="${glassfish.home}/glassfish/bin">
                                     <arg value="stop-domain" />
                                 </exec>
-                            </target>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>stop-database</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${skipITs}</skip>
-                            <target>
-                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}stopNetworkServer${script.ext}" dir="${payara.db.home}"/>
                             </target>
                         </configuration>
                     </execution>
@@ -385,6 +317,191 @@
                 <script.ext>.bat</script.ext>
             </properties>
         </profile>
+
+        <!-- ### GlassFish ### -->
+
+        <profile>
+            <id>glassfish-ci-managed</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+
+            <dependencies>
+                <dependency>
+                    <groupId>org.glassfish.main.distributions</groupId>
+                    <artifactId>glassfish</artifactId>
+                    <version>${glassfish.version}</version>
+                    <type>zip</type>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+
+
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <configuration>
+                            <skip>${skipITs}</skip>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>unpack-glassfish</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>unpack-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <includeArtifactIds>glassfish</includeArtifactIds>
+                                    <outputDirectory>${project.build.directory}</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- ### Payara ### -->
+
+        <profile>
+            <id>payara-ci-managed</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
+            <properties>
+                <glassfish.home>${project.build.directory}/payara6</glassfish.home>
+                <glassfish.asadmin>${glassfish.home}/glassfish/bin/asadmin</glassfish.asadmin>
+
+                <payara.home>${project.build.directory}/payara6</payara.home>
+                <payara.asadmin>${payara.home}/glassfish/bin/asadmin</payara.asadmin>
+
+                <payara.db.home>${payara.home}${file.separator}javadb</payara.db.home>
+            </properties>
+
+            <dependencies>
+                <dependency>
+                    <groupId>fish.payara.distributions</groupId>
+                    <artifactId>payara</artifactId>
+                    <version>${payara.version}</version>
+                    <type>zip</type>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.googlecode.maven-download-plugin</groupId>
+                        <artifactId>download-maven-plugin</artifactId>
+                        <version>1.6.8</version>
+                        <executions>
+                            <execution>
+                                <id>download-derby</id>
+                                <phase>generate-test-resources</phase>
+                                <goals>
+                                    <goal>wget</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${skipITs}</skip>
+                                    <url>${derby.zip.url}</url>
+                                    <unpack>true</unpack>
+                                    <outputDirectory>${project.build.directory}</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <skip>${skipITs}</skip>
+                            <url>${ant.zip.url}</url>
+                            <unpack>true</unpack>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <configuration>
+                            <skip>${skipITs}</skip>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>unpack-payara</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>unpack-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <includeArtifactIds>payara</includeArtifactIds>
+                                    <outputDirectory>${project.build.directory}</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <configuration>
+                            <skip>${skipITs}</skip>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>copy-derby-to-payara</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${skipITs}</skip>
+                                    <target unless="skip.setup">
+                                        <move todir="${payara.db.home}">
+                                            <fileset dir="${db.download.location}" />
+                                        </move>
+                                        <copy file="${payara.db.home}${file.separator}lib${file.separator}derbytools.jar" todir="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}lib"/>
+                                        <copy file="${payara.db.home}${file.separator}lib${file.separator}derbyclient.jar" todir="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}lib"/>
+                                        <copy file="${payara.db.home}${file.separator}lib${file.separator}derbyshared.jar" todir="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}lib"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>start-database</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${skipITs}</skip>
+                                    <target>
+                                        <exec executable="${payara.db.home}${file.separator}bin${file.separator}startNetworkServer${script.ext}" spawn="true" dir="${payara.db.home}"/>
+                                        <echo message="Waiting 3 seconds for database in forked process to start..."/>
+                                        <sleep seconds="3"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>stop-database</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${skipITs}</skip>
+                                    <target>
+                                        <exec executable="${payara.db.home}${file.separator}bin${file.separator}stopNetworkServer${script.ext}" dir="${payara.db.home}"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+
+
     </profiles>
 
 </project>
