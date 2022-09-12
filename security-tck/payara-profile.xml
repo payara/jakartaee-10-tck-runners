@@ -989,7 +989,6 @@
             <properties>
                 <glassfish.version>7.0.0-M8</glassfish.version>
                 <glassfish.port>8080</glassfish.port>
-                <glassfish.suspend>false</glassfish.suspend>
                 <glassfish.root>${maven.multiModuleProjectDirectory}/target</glassfish.root>
 
                 <payara.version>6.2022.1.Alpha4</payara.version>
