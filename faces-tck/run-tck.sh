@@ -3,8 +3,8 @@ if [ JAVA_HOME = "" ] ; then
     export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 fi
 
-#rm -r target
-#mkdir target
+rm -r target
+mkdir target
 if [ ! -f target/jakarta-faces-tck-4.0.1.zip ]; then
     echo "Downloading jakarta-faces-tck-4.0.1.zip"
     wget -q https://download.eclipse.org/ee4j/jakartaee-tck/jakartaee10/staged/eftl/jakarta-faces-tck-4.0.1.zip -O target/jakarta-faces-tck-4.0.1.zip
