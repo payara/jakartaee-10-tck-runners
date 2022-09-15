@@ -12,7 +12,7 @@
 
     <artifactId>payara-jsonp-tck-runner</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>Jakarta JSON Processing TCK Runner - Dynamic</name>
+    <name>Jakarta JSON Processing TCK Runner - Payara Runner</name>
     <description>This pom runs the JakartaEE JSON Processing TCK against a running Payara Server</description>
 
 
