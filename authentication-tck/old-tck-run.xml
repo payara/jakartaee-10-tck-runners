@@ -39,11 +39,10 @@
         <tck.tests.home>${tck.home}/src/com/sun/ts/tests/jaspic</tck.tests.home>
         <tck.mode>standalone</tck.mode>
         <payara.home>${project.build.directory}/payara6</payara.home>
-        <glassfish.asadmin>${payara.home}/glassfish/bin/asadmin</glassfish.asadmin>
+        <payara.asadmin>${payara.home}/glassfish/bin/asadmin</payara.asadmin>
         <jakartaee.profile>full</jakartaee.profile>
-        <glassfish.artifact>glassfish</glassfish.artifact>
-        <glassfish.version>7.0.0-M5</glassfish.version>
 
+	<payara.artifact>payara</payara.artifact>
 
         <jacoco.includes>org/glassfish/**\:com/sun/enterprise/**</jacoco.includes>
 
@@ -62,7 +61,7 @@
     <dependencies>
         <dependency>
             <groupId>fish.payara.distributions</groupId>
-            <artifactId>payara</artifactId>
+            <artifactId>${payara.artifact}</artifactId>
             <version>${payara.version}</version>
             <type>zip</type>
             <scope>test</scope>
@@ -188,7 +187,7 @@
                                 <tck-setting key="orb.port" value="${port.orb}"/>
                                 <tck-setting key="wsgen.ant.classname" value="com.sun.tools.ws.ant.WsGen"/>
                                 <tck-setting key="wsimport.ant.classname" value="com.sun.tools.ws.ant.WsImport"/>
-
+                                <tck-setting key="vendor.authconfig.factory" value="com.sun.enterprise.security.jaspic.config.GFAuthConfigFactory"/>
 
 
                                 <tck-setting key="report.dir" value="${tck.home}/authenticationtckreport/authenticationtck"/>
@@ -210,21 +209,21 @@
                                 <tck-add key="persistence.second.level.caching.supported" value="true"/>
 
                                 <limit maxwait="240">
-                                    <exec executable="${glassfish.asadmin}" dir="${payara.home}/glassfish/bin">
+                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                         <arg value="start-domain"/>
                                     </exec>
 
                                     <if>
                                         <isset property="jacoco.version" />
                                         <then>
-                                            <exec executable="${glassfish.asadmin}" dir="${payara.home}/glassfish/bin">
+                                            <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                                 <arg value="create-jvm-options" />
                                                 <arg value="--port=${port.admin}" />
                                                 <arg value="&quot;-javaagent\:${settings.localRepository}/org/jacoco/org.jacoco.agent/${jacoco.version}/org.jacoco.agent-${jacoco.version}-runtime.jar=destfile=${project.build.directory}/jacoco-it.exec,includes=${jacoco.includes}&quot;" />
                                             </exec>
                                         </then>
                                     </if>
-                                    <exec executable="${glassfish.asadmin}" dir="${payara.home}/glassfish/bin">
+                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                         <arg value="stop-domain"/>
                                         <arg value="domain1"/>
                                     </exec>
@@ -269,12 +268,12 @@
                                 <exec executable="${ant.home}/bin/ant" dir="${tck.home}/bin">
                                     <arg value="enable.jaspic"  />
                                 </exec>
-                                <exec executable="${glassfish.asadmin}" dir="${payara.home}/glassfish/bin">
+                                <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                     <arg value="stop-domain"/>
                                     <arg value="domain1"/>
                                 </exec>
                                 <limit maxwait="120">
-                                    <exec executable="${glassfish.asadmin}" dir="${payara.home}/glassfish/bin">
+                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                         <arg value="start-domain"/>
                                     </exec>
                                 </limit>
@@ -315,7 +314,7 @@
                                     </then>
                                 </if>
 
-                                <exec executable="${glassfish.asadmin}" dir="${payara.home}/glassfish/bin">
+                                <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                     <arg value="stop-domain" />
                                 </exec>
                             </target>
@@ -348,7 +347,7 @@
             </activation>
             <properties>
                 <jakartaee.profile>web</jakartaee.profile>
-                <glassfish.artifact>web</glassfish.artifact>
+                <payara.artifact>payara-web</payara.artifact>
                 <KEYWORDS>jaspic_web_profile</KEYWORDS>
             </properties>
         </profile>
