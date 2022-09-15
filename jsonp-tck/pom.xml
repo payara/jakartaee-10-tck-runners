@@ -18,6 +18,7 @@
 
     <modules>
         <module>dynamic</module>
+        <module>static</module>
     </modules>
 
 </project>
