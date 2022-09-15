@@ -20,7 +20,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <failsafe.plugin.jdk17.args/>
         <jimage.dir>${project.build.directory}/jdk-bundle</jimage.dir>
-        <signature.sigTestClasspath />
+        <signature.sigTestClasspath/>
         <payara.arquillian.container.version>3.0.alpha3</payara.arquillian.container.version>
         <payara.home></payara.home>
         <payara.json-api.jar>${payara.home}/glassfish/modules/jakarta.json.jar</payara.json-api.jar>
@@ -80,6 +80,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>jakarta.json</groupId>
+            <artifactId>jakarta.json-tck-tests-pluggability</artifactId>
+            <version>${jsonp.api.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.netbeans.tools</groupId>
             <artifactId>sigtest-maven-plugin</artifactId>
             <version>1.6</version>
@@ -126,7 +132,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!--        &lt;!&ndash; hidden runtime dependencies of arquillian container &ndash;&gt;-->
+        <!-- hidden runtime dependencies of arquillian container -->
         <dependency>
             <groupId>jakarta.enterprise</groupId>
             <artifactId>jakarta.enterprise.cdi-api</artifactId>
@@ -147,20 +153,52 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
-                <configuration>
-                    <excludes>
-                        <exclude>JSONPSigTest*</exclude>
-                    </excludes>
-                    <dependenciesToScan>
-                        <dependency>jakarta.json:jakarta.json-tck-tests</dependency>
-                    </dependenciesToScan>
-                    <systemPropertyVariables>
-                        <junit.jupiter.extensions.autodetection.enabled>true</junit.jupiter.extensions.autodetection.enabled>
-                        <jimage.dir>${jimage.dir}</jimage.dir>
-                        <optional.tech.packages.to.ignore>jakarta.xml.bind</optional.tech.packages.to.ignore>
-                        <signature.sigTestClasspath>${payara.json-api.jar}${path.separator}${jimage.dir}/java.base${path.separator}${jimage.dir}/java.rmi${path.separator}${jimage.dir}/java.sql${path.separator}${jimage.dir}/java.naming</signature.sigTestClasspath>
-                    </systemPropertyVariables>
-                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>default-test</id>
+                        <phase>none</phase>
+                    </execution>
+
+                    <execution>
+                        <id>json-tck-tests</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <dependenciesToScan>
+                                <dependency>jakarta.json:jakarta.json-tck-tests</dependency>
+                            </dependenciesToScan>
+                            <excludes>
+                                <exclude>JSONPSigTest*</exclude>
+                            </excludes>
+                            <systemPropertyVariables>
+                                <junit.jupiter.extensions.autodetection.enabled>true</junit.jupiter.extensions.autodetection.enabled>
+                                <jimage.dir>${jimage.dir}</jimage.dir>
+                                <optional.tech.packages.to.ignore>jakarta.xml.bind</optional.tech.packages.to.ignore>
+                                <signature.sigTestClasspath>${payara.json-api.jar}${path.separator}${jimage.dir}/java.base${path.separator}${jimage.dir}/java.rmi${path.separator}${jimage.dir}/java.sql${path.separator}${jimage.dir}/java.naming</signature.sigTestClasspath>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>json-tck-pluggability-tests</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <excludes>
+                                <exclude>JsonpSignatureTest*</exclude>
+                            </excludes>
+                            <dependenciesToScan>
+                                <dependency>jakarta.json:jakarta.json-tck-tests-pluggability</dependency>
+                            </dependenciesToScan>
+                            <reuseForks>false</reuseForks>
+                            <trimStackTrace>false</trimStackTrace>
+                            <failIfNoTests>true</failIfNoTests>
+                            <testFailureIgnore>true</testFailureIgnore>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
