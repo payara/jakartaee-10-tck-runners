@@ -16,9 +16,34 @@
     <name>Jakarta JSON Processing TCK Runner</name>
     <description>This pom runs the JakartaEE JSON Processing TCK.</description>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <jsonp.api.version>2.1.0</jsonp.api.version>
+    </properties>
+
     <modules>
         <module>dynamic</module>
         <module>static</module>
     </modules>
 
+    <!-- needed for servlet 6.0, concurrent 3.0 -->
+    <repositories>
+        <repository>
+            <id>payara-nexus-artifacts</id>
+            <url>https://nexus.payara.fish/repository/payara-artifacts</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>staged-jakarta-releases</id>
+            <url>https://jakarta.oss.sonatype.org/content/groups/staging/</url>
+        </repository>
+    </repositories>
+    
 </project>

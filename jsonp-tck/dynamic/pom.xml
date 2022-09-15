@@ -17,35 +17,13 @@
 
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
         <failsafe.plugin.jdk17.args/>
         <jimage.dir>${project.build.directory}/jdk-bundle</jimage.dir>
         <signature.sigTestClasspath/>
-        <payara.arquillian.container.version>3.0.alpha3</payara.arquillian.container.version>
+        <payara.arquillian.container.version>3.0.alpha6</payara.arquillian.container.version>
         <payara.home></payara.home>
         <payara.json-api.jar>${payara.home}/glassfish/modules/jakarta.json.jar</payara.json-api.jar>
-        <jsonp.api.version>2.1.0</jsonp.api.version>
     </properties>
-
-    <!-- needed for servlet 6.0, concurrent 3.0 -->
-    <repositories>
-        <repository>
-            <id>payara-nexus-artifacts</id>
-            <url>https://nexus.payara.fish/repository/payara-artifacts</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>staged-jakarta-releases</id>
-            <url>https://jakarta.oss.sonatype.org/content/groups/staging/</url>
-        </repository>
-    </repositories>
 
     <dependencyManagement>
         <dependencies>
