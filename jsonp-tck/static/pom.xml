@@ -104,7 +104,7 @@
                                 <signature.sigTestClasspath>${project.build.directory}/payara6/glassfish/modules/jakarta.json.jar:${project.build.directory}/jdk-bundle/java.base:${project.build.directory}/jdk-bundle/java.rmi:${project.build.directory}/jdk-bundle/java.sql:${project.build.directory}/jdk-bundle/java.naming</signature.sigTestClasspath>
                             </systemPropertyVariables>
                             <additionalClasspathElements>
-                                <additionalClasspathElement>${project.build.directory}/payara6/glassfish/modules/jakarta.json-api.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/payara6/glassfish/modules/jakarta.json.jar</additionalClasspathElement>
                                 <additionalClasspathElement>${project.build.directory}/payara6/glassfish/modules/parsson.jar</additionalClasspathElement>
                             </additionalClasspathElements>
                         </configuration>
