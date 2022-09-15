@@ -25,7 +25,8 @@
 
     <modules>
         <module>dynamic</module>
-        <module>static</module>
+        <module>glassfish-runner</module>
+        <module>glassfish-runner-pluggability</module>
     </modules>
 
     <!-- needed for servlet 6.0, concurrent 3.0 -->
@@ -45,5 +46,5 @@
             <url>https://jakarta.oss.sonatype.org/content/groups/staging/</url>
         </repository>
     </repositories>
-    
+
 </project>
