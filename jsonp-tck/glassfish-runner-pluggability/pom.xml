@@ -14,10 +14,6 @@
     <name>Jakarta JSON Processing TCK Runner - GlassFish Pluggability Runner</name>
     <description>This pom runs the JakartaEE JSON Processing Pluggability TCK</description>
 
-    <properties>
-        <jsonp.api.version>2.1.0</jsonp.api.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>jakarta.json</groupId>
