@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>jsonp-tck-runner-static</artifactId>
+    <artifactId>glassfish-jsonp-pluggability-tck-runner</artifactId>
 
     <name>Jakarta JSON Processing TCK Runner - GlassFish Pluggability Runner</name>
     <description>This pom runs the JakartaEE JSON Processing Pluggability TCK</description>
