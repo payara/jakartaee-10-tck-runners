@@ -16,5 +16,11 @@ path to payara installation, so that SigTest can verify jar files statically
 
 ## Running
 
-Run `mvn verify -Dpayara.home=/path/to/payara` in your desired module.
-There is no "run all" currently until the issue with port conflicts is resolved.
+### Main TCK
+Run `mvn verify -Dpayara.home=/path/to/payara`
+
+### SE Tests
+* Make sure you don't have a running server
+* `cd se-tests`
+* Run `mvn verify -Dpayara.home=/path/to/payara`
+
