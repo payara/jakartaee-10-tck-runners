@@ -243,45 +243,83 @@
                 <version>3.0.0-M6</version>
                 <executions>
                     <execution>
+                        <id>payara-tests</id>
                         <goals>
                             <goal>integration-test</goal>
                             <goal>verify</goal>
                         </goals>
+                        <configuration>
+                            <excludedGroups>${excluded.groups}</excludedGroups>
+                            <systemPropertyVariables>
+                                <!-- credentials for the test -->
+                                <user>j2ee</user>
+                                <password>j2ee</password>
+                                <authuser>javajoe</authuser>
+                                <authpassword>javajoe</authpassword>
+
+                                <webServerHost>${adminHost}</webServerHost>
+                                <webServerPort>8080</webServerPort>
+                                <cts.harness.debug>false</cts.harness.debug>
+                                <porting.ts.url.class.1>ee.jakarta.tck.ws.rs.lib.implementation.sun.common.SunRIURL</porting.ts.url.class.1>
+
+                                <jimage.dir>${project.build.directory}/jdk11-bundle</jimage.dir>
+                                <optional.tech.packages.to.ignore>jakarta.xml.bind</optional.tech.packages.to.ignore>
+                                <signature.sigTestClasspath>${payara.home}/glassfish/modules/jakarta.ws.rs-api.jar${path.separator}${payara.home}/glassfish/modules/jakarta.xml.bind-api.jar${path.separator}${project.build.directory}/jdk11-bundle/java.base${path.separator}${project.build.directory}/jdk11-bundle/java.rmi${path.separator}${project.build.directory}/jdk11-bundle/java.sql${path.separator}${project.build.directory}/jdk11-bundle/java.naming</signature.sigTestClasspath>
+                            </systemPropertyVariables>
+                            <dependenciesToScan>jakarta.ws.rs:jakarta-restful-ws-tck</dependenciesToScan>
+                            <excludes>
+                                <exclude>**/SeBootstrapIT.java</exclude>
+                                <exclude>ee.jakarta.tck.ws.rs.jaxrs21.ee.client.executor.rx.JAXRSClientIT</exclude>
+                                <exclude>ee.jakarta.tck.ws.rs.jaxrs21.ee.client.rxinvoker.JAXRSClientIT</exclude>
+                            </excludes>
+                            <statelessTestsetReporter implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5Xml30StatelessReporter">
+                                <disable>false</disable>
+                                <version>3.0</version>
+                                <usePhrasedFileName>false</usePhrasedFileName>
+                                <usePhrasedTestSuiteClassName>true</usePhrasedTestSuiteClassName>
+                                <usePhrasedTestCaseClassName>true</usePhrasedTestCaseClassName>
+                                <usePhrasedTestCaseMethodName>true</usePhrasedTestCaseMethodName>
+                            </statelessTestsetReporter>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>se-tests</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+
+                        <configuration>
+                            <dependenciesToScan>jakarta.ws.rs:jakarta-restful-ws-tck</dependenciesToScan>
+                            <includes>
+                                <include>**/SeBootstrapIT.java</include>
+                            </includes>
+                            <additionalClasspathElements>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-server.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-client.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-common.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-media-sse.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-container-grizzly2-http.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-container-servlet.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-container-servlet-core.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-media-json-binding.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-media-jaxb.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jakarta.ws.rs-api.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jakarta.xml.bind-api.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jakarta.json.bind-api.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jakarta.json.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/parsson.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/hk2-locator.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jaxb-osgi.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/yasson.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/nucleus-grizzly-all.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jakarta.activation-api.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/angus-activation.jar</additionalClasspathElement>
+                            </additionalClasspathElements>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <excludedGroups>${excluded.groups}</excludedGroups>
-                    <systemPropertyVariables>
-                        <!-- credentials for the test -->
-                        <user>j2ee</user>
-                        <password>j2ee</password>
-                        <authuser>javajoe</authuser>
-                        <authpassword>javajoe</authpassword>
 
-                        <webServerHost>${adminHost}</webServerHost>
-                        <webServerPort>8080</webServerPort>
-                        <cts.harness.debug>false</cts.harness.debug>
-                        <porting.ts.url.class.1>ee.jakarta.tck.ws.rs.lib.implementation.sun.common.SunRIURL</porting.ts.url.class.1>
-
-                        <jimage.dir>${project.build.directory}/jdk11-bundle</jimage.dir>
-                        <optional.tech.packages.to.ignore>jakarta.xml.bind</optional.tech.packages.to.ignore>
-                        <signature.sigTestClasspath>${payara.home}/glassfish/modules/jakarta.ws.rs-api.jar${path.separator}${payara.home}/glassfish/modules/jakarta.xml.bind-api.jar${path.separator}${project.build.directory}/jdk11-bundle/java.base${path.separator}${project.build.directory}/jdk11-bundle/java.rmi${path.separator}${project.build.directory}/jdk11-bundle/java.sql${path.separator}${project.build.directory}/jdk11-bundle/java.naming</signature.sigTestClasspath>
-                    </systemPropertyVariables>
-                    <dependenciesToScan>jakarta.ws.rs:jakarta-restful-ws-tck</dependenciesToScan>
-                    <excludes>
-                        <exclude>**/SeBootstrapIT.java</exclude>
-                        <exclude>ee.jakarta.tck.ws.rs.jaxrs21.ee.client.executor.rx.JAXRSClientIT</exclude>
-                        <exclude>ee.jakarta.tck.ws.rs.jaxrs21.ee.client.rxinvoker.JAXRSClientIT</exclude>
-                    </excludes>
-                    <statelessTestsetReporter implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5Xml30StatelessReporter">
-                        <disable>false</disable>
-                        <version>3.0</version>
-                        <usePhrasedFileName>false</usePhrasedFileName>
-                        <usePhrasedTestSuiteClassName>true</usePhrasedTestSuiteClassName>
-                        <usePhrasedTestCaseClassName>true</usePhrasedTestCaseClassName>
-                        <usePhrasedTestCaseMethodName>true</usePhrasedTestCaseMethodName>
-                    </statelessTestsetReporter>
-                </configuration>
             </plugin>
         </plugins>
     </build>
