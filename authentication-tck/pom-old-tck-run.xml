@@ -34,21 +34,18 @@
         <ant.version>1.10.11</ant.version>
         <ant.home>${project.build.directory}/apache-ant-${ant.version}</ant.home>
         <ant.zip.url>https://archive.apache.org/dist/ant/binaries/apache-ant-${ant.version}-bin.zip</ant.zip.url>
-        
+
         <tck.home>${project.build.directory}/authentication-tck</tck.home>
         <tck.tests.home>${tck.home}/src/com/sun/ts/tests/jaspic</tck.tests.home>
         <tck.mode>standalone</tck.mode>
-        <glassfish.home>${project.build.directory}/payara6</glassfish.home>
-        <glassfish.asadmin>${glassfish.home}/glassfish/bin/asadmin</glassfish.asadmin>
+        <payara.home>${project.build.directory}/payara6</payara.home>
+        <payara.asadmin>${payara.home}/glassfish/bin/asadmin</payara.asadmin>
         <jakartaee.profile>full</jakartaee.profile>
-        <glassfish.groupId>fish.payara.distributions</glassfish.groupId>
-        <glassfish.artifact>payara</glassfish.artifact>
-        <glassfish.home>${project.build.directory}/payara6</glassfish.home>
-        <glassfish.version>7.0.0-M5</glassfish.version>
 
-       
+        <payara.artifact>payara</payara.artifact>
+
         <jacoco.includes>org/glassfish/**\:com/sun/enterprise/**</jacoco.includes>
-        
+
         <port.admin>4848</port.admin>
         <port.derby>1527</port.derby>
         <port.http>8080</port.http>
@@ -63,9 +60,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>${glassfish.groupId}</groupId>
-            <artifactId>${glassfish.artifact}</artifactId>
-            <version>${glassfish.version}</version>
+            <groupId>fish.payara.distributions</groupId>
+            <artifactId>${payara.artifact}</artifactId>
+            <version>${payara.version}</version>
             <type>zip</type>
             <scope>test</scope>
         </dependency>
@@ -108,13 +105,13 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>unpack-glassfish</id>
+                        <id>unpack-payara</id>
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>unpack-dependencies</goal>
                         </goals>
                         <configuration>
-                            <includeArtifactIds>${glassfish.artifact}</includeArtifactIds>
+                            <includeArtifactIds>${payara.artifact}</includeArtifactIds>
                             <outputDirectory>${project.build.directory}</outputDirectory>
                         </configuration>
                     </execution>
@@ -158,49 +155,49 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>prepare-tck-and-glassfish</id>
+                        <id>prepare-tck-and-payara</id>
                         <phase>pre-integration-test</phase>
                         <configuration>
                             <target xmlns:if="ant:if" xmlns:unless="ant:unless">
                                 <taskdef resource="net/sf/antcontrib/antcontrib.properties"
                                          classpathref="maven.plugin.classpath" />
-                                         
-                               <macrodef name="tck-setting">
+
+                                <macrodef name="tck-setting">
                                     <attribute name="key" /> <attribute name="value" />
                                     <sequential>
-                                      <replaceregexp file="${tck.home}/bin/ts.jte" byline="true"
-                                        match="@{key}=.*" replace="@{key}=@{value}" />
+                                        <replaceregexp file="${tck.home}/bin/ts.jte" byline="true"
+                                                       match="@{key}=.*" replace="@{key}=@{value}" />
                                     </sequential>
                                 </macrodef>
-                                
+
                                 <macrodef name="tck-add">
                                     <attribute name="key" /> <attribute name="value" />
                                     <sequential>
                                         <concat append="true" destfile="${tck.home}/bin/ts.jte">@{key}=@{value}${line.separator}</concat>
                                     </sequential>
                                 </macrodef>
-                                
+
 
                                 <!-- Change configuration -->
-                                <tck-setting key="jaspic.home" value="${glassfish.home}/glassfish"/>
+                                <tck-setting key="jaspic.home" value="${payara.home}/glassfish"/>
                                 <tck-setting key="harness.log.traceflag" value="true"/>
-                                
+
                                 <tck-setting key="webServerHost" value="localhost"/>
                                 <tck-setting key="webServerPort" value="${port.http}"/>
                                 <tck-setting key="orb.port" value="${port.orb}"/>
                                 <tck-setting key="wsgen.ant.classname" value="com.sun.tools.ws.ant.WsGen"/>
                                 <tck-setting key="wsimport.ant.classname" value="com.sun.tools.ws.ant.WsImport"/>
+                                <tck-setting key="vendor.authconfig.factory" value="com.sun.enterprise.security.jaspic.config.GFAuthConfigFactory"/>
 
-                                
-                                
+
                                 <tck-setting key="report.dir" value="${tck.home}/authenticationtckreport/authenticationtck"/>
                                 <tck-setting key="work.dir" value="${tck.home}/authenticationtckwork/authenticationtck"/>
-                                
-                                <!-- 
+
+                                <!--
                                     # It's an open question why these settings are not just part of ts.jte to begin with.
                                     # It's also an open question why the Authentication TCK insists on these being defined
                                 -->
-                                
+
                                 <tck-add key="persistence.unit.name.2" value="JPATCK2"/>
                                 <tck-add key="persistence.unit.name" value="CTS-EM"/>
                                 <tck-add key="jakarta.persistence.provider" value="org.eclipse.persistence.jpa.PersistenceProvider"/>
@@ -210,23 +207,23 @@
                                 <tck-add key="jakarta.persistence.jdbc.password" value="cts1"/>
                                 <tck-add key="jpa.provider.implementation.specific.properties" value="eclipselink.logging.level=OFF"/>
                                 <tck-add key="persistence.second.level.caching.supported" value="true"/>
-                          
+
                                 <limit maxwait="240">
-                                    <exec executable="${glassfish.asadmin}" dir="${glassfish.home}/glassfish/bin">
+                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                         <arg value="start-domain"/>
                                     </exec>
 
                                     <if>
                                         <isset property="jacoco.version" />
                                         <then>
-                                            <exec executable="${glassfish.asadmin}" dir="${glassfish.home}/glassfish/bin">
+                                            <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                                 <arg value="create-jvm-options" />
                                                 <arg value="--port=${port.admin}" />
                                                 <arg value="&quot;-javaagent\:${settings.localRepository}/org/jacoco/org.jacoco.agent/${jacoco.version}/org.jacoco.agent-${jacoco.version}-runtime.jar=destfile=${project.build.directory}/jacoco-it.exec,includes=${jacoco.includes}&quot;" />
                                             </exec>
                                         </then>
                                     </if>
-                                    <exec executable="${glassfish.asadmin}" dir="${glassfish.home}/glassfish/bin">
+                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                         <arg value="stop-domain"/>
                                         <arg value="domain1"/>
                                     </exec>
@@ -235,16 +232,16 @@
                                 <mkdir dir="${tck.home}/authenticationtckreport/authenticationtck"/>
                                 <mkdir dir="${tck.home}/authenticationtckwork"/>
 
-                                
+
                                 <replace file="${tck.home}/bin/xml/ts.top.import.xml">
-                                  <replacetoken><![CDATA[<jvmarg value="-Xmx512m"/>]]></replacetoken>
-                                  <replacevalue><![CDATA[<jvmarg value="-Xmx512m"/>
+                                    <replacetoken><![CDATA[<jvmarg value="-Xmx512m"/>]]></replacetoken>
+                                    <replacevalue><![CDATA[<jvmarg value="-Xmx512m"/>
                                 <jvmarg value="-Djavatest.security.noSecurityManager=true"/>]]></replacevalue>
                                 </replace>
-                                
+
                                 <replace file="${tck.home}/bin/xml/ts.top.import.xml" if:set="suspend-tck" >
-                                  <replacetoken><![CDATA[<jvmarg value="-Xmx512m"/>]]></replacetoken>
-                                  <replacevalue><![CDATA[<jvmarg value="-Xmx512m"/>
+                                    <replacetoken><![CDATA[<jvmarg value="-Xmx512m"/>]]></replacetoken>
+                                    <replacevalue><![CDATA[<jvmarg value="-Xmx512m"/>
                                 <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=9008"/>]]></replacevalue>
                                 </replace>
                             </target>
@@ -264,28 +261,28 @@
                             <target>
                                 <taskdef resource="net/sf/antcontrib/antcontrib.properties"
                                          classpathref="maven.plugin.classpath" />
-                                
+
                                 <exec executable="${ant.home}/bin/ant" dir="${tck.home}/bin">
                                     <arg value="config.vi"  />
                                 </exec>
                                 <exec executable="${ant.home}/bin/ant" dir="${tck.home}/bin">
                                     <arg value="enable.jaspic"  />
                                 </exec>
-                                <exec executable="${glassfish.asadmin}" dir="${glassfish.home}/glassfish/bin">
-                                        <arg value="stop-domain"/>
-                                        <arg value="domain1"/>
+                                <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
+                                    <arg value="stop-domain"/>
+                                    <arg value="domain1"/>
                                 </exec>
                                 <limit maxwait="120">
-                                    <exec executable="${glassfish.asadmin}" dir="${glassfish.home}/glassfish/bin">
+                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                         <arg value="start-domain"/>
                                     </exec>
                                 </limit>
                             </target>
                         </configuration>
                     </execution>
-      
 
-                     <execution>
+
+                    <execution>
                         <id>run-tck-tests</id>
                         <phase>integration-test</phase>
                         <goals>
@@ -312,12 +309,12 @@
                                     </not>
                                     <then>
                                         <echo message="Running tests failed." />
-                                        <loadfile property="contents" srcFile="${glassfish.home}/glassfish/domains/domain1/logs/server.log" />
+                                        <loadfile property="contents" srcFile="${payara.home}/glassfish/domains/domain1/logs/server.log" />
                                         <echo message="${contents}" />
                                     </then>
                                 </if>
 
-                                <exec executable="${glassfish.asadmin}" dir="${glassfish.home}/glassfish/bin">
+                                <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                     <arg value="stop-domain" />
                                 </exec>
                             </target>
@@ -342,7 +339,7 @@
             </properties>
         </profile>
 
-        <!-- ### GlassFish Web Profile### -->
+        <!-- ### Payara Web Profile ### -->
         <profile>
             <id>web</id>
             <activation>
@@ -350,7 +347,7 @@
             </activation>
             <properties>
                 <jakartaee.profile>web</jakartaee.profile>
-                <glassfish.artifact>web</glassfish.artifact>
+                <payara.artifact>payara-web</payara.artifact>
                 <KEYWORDS>jaspic_web_profile</KEYWORDS>
             </properties>
         </profile>
