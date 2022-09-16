@@ -42,7 +42,7 @@
         <payara.asadmin>${payara.home}/glassfish/bin/asadmin</payara.asadmin>
         <jakartaee.profile>full</jakartaee.profile>
 
-	<payara.artifact>payara</payara.artifact>
+        <payara.artifact>payara</payara.artifact>
 
         <jacoco.includes>org/glassfish/**\:com/sun/enterprise/**</jacoco.includes>
 
@@ -339,7 +339,7 @@
             </properties>
         </profile>
 
-        <!-- ### GlassFish Web Profile### -->
+        <!-- ### Payara Web Profile ### -->
         <profile>
             <id>web</id>
             <activation>
