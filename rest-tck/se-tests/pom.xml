@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>fish.payara.jakarta.tests.tck</groupId>
+        <artifactId>rest-tck</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>rest-tck-se-tests</artifactId>
+
+    <dependencies>
+        <!-- ../tck-download/jakarta-rest-tck installs TCK artifacts -->
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta-restful-ws-tck</artifactId>
+            <version>${rest-tck.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>fish.payara.arquillian</groupId>
+            <artifactId>arquillian-payara-server-remote</artifactId>
+            <version>3.0.alpha6</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- tests run client-side and therefore need jersey on test classpath as well -->
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jersey.inject</groupId>
+            <artifactId>jersey-hk2</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-binding</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-jaxb</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-sse</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.junit5</groupId>
+            <artifactId>arquillian-junit5-container</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.protocol</groupId>
+            <artifactId>arquillian-protocol-servlet-jakarta</artifactId>
+        </dependency>
+
+        <!-- TCK runtime dependencies -->
+
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>3.0.0</version>
+            <scope>runtime</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.0.0-M6</version>
+                <executions>
+                    <execution>
+                        <id>se-tests</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+
+                        <configuration>
+                            <dependenciesToScan>jakarta.ws.rs:jakarta-restful-ws-tck</dependenciesToScan>
+                            <includes>
+                                <include>**/SeBootstrapIT.java</include>
+                            </includes>
+                            <additionalClasspathElements>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-server.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-client.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-common.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-media-sse.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-container-grizzly2-http.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-container-servlet.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-container-servlet-core.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-media-json-binding.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-media-jaxb.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jakarta.ws.rs-api.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jakarta.xml.bind-api.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jakarta.json.bind-api.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jakarta.json.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/parsson.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/hk2-locator.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jaxb-osgi.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/yasson.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/nucleus-grizzly-all.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jakarta.activation-api.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/angus-activation.jar</additionalClasspathElement>
+                            </additionalClasspathElements>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
