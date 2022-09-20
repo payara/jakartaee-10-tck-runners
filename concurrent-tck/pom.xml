@@ -19,14 +19,6 @@
         <com.beust-jcommander.version>1.82</com.beust-jcommander.version>
 
     </properties>
-
-    <!-- needed for servlet 6.0, concurrent 3.0 -->
-    <repositories>
-        <repository>
-            <id>staged-jakarta-releases</id>
-            <url>https://jakarta.oss.sonatype.org/content/groups/staging/</url>
-        </repository>
-    </repositories>
     
     <!-- The Arquillian test framework -->
     <dependencyManagement>
@@ -46,13 +38,13 @@
         <dependency>
             <groupId>jakarta.enterprise.concurrent</groupId>
             <artifactId>jakarta.enterprise.concurrent-tck</artifactId>
-            <version>3.0.1</version>
+            <version>3.0.2</version>
         </dependency>
         <!-- APIs -->
         <dependency>
             <groupId>jakarta.enterprise.concurrent</groupId>
             <artifactId>jakarta.enterprise.concurrent-api</artifactId>
-            <version>3.0.1</version>
+            <version>3.0.2</version>
         </dependency>
         <dependency>
             <groupId>jakarta.servlet</groupId>
@@ -167,4 +159,16 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>jakarta-staging</id>
+            <repositories>
+                <repository>
+                    <id>staged-jakarta-releases</id>
+                    <url>https://jakarta.oss.sonatype.org/content/groups/staging/</url>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
 </project>
