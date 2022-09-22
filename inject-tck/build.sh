@@ -24,7 +24,7 @@ export WORKSPACE=$SCRIPTPATH/ditck-porting
 mkdir -p ${WORKSPACE}/bundles
 
 if [ ! -f $BUNDLES/jakarta.inject-tck.zip ]; then
-  wget https://download.eclipse.org/ee4j/cdi/inject/2.0/jakarta.inject-tck-2.0.1-bin.zip -O $BUNDLES/jakarta.inject-tck.zip
+  wget https://download.eclipse.org/ee4j/cdi/inject/2.0/jakarta.inject-tck-2.0.2-bin.zip -O $BUNDLES/jakarta.inject-tck.zip
 fi
 if [ ! -f $BUNDLES/jsr299-tck.zip ]; then
   wget https://download.eclipse.org/ee4j/cdi/4.0/cdi-tck-4.0.4-dist.zip -O $BUNDLES/jsr299-tck.zip
@@ -65,7 +65,7 @@ ls target/dependency
 #Edit test properties
 export TS_HOME=${WORKSPACE}/330-tck-glassfish-porting
 export REPORT=${WORKSPACE}/330tck-report
-sed -i "s#tck.home=.*#tck.home=${WORKSPACE}/jakarta.inject-tck-2.0.1#g" ${TS_HOME}/build.properties
+sed -i "s#tck.home=.*#tck.home=${WORKSPACE}/jakarta.inject-tck-2.0.2#g" ${TS_HOME}/build.properties
 sed -i "s#porting.home=.*#porting.home=${TS_HOME}#g" ${TS_HOME}/build.properties
 sed -i "s#glassfish.home=.*#glassfish.home=${WORKSPACE}/payara6/glassfish#g" ${TS_HOME}/build.properties
 sed -i "s#299.tck.home=.*#299.tck.home=${WORKSPACE}/cdi-tck-4.0.4#g" ${TS_HOME}/build.properties
