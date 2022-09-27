@@ -4,6 +4,7 @@
             <properties>
                 <payara.root>${maven.multiModuleProjectDirectory}/target</payara.root>
                 <payara.version>6.2022.1.Alpha5-SNAPSHOT</payara.version>
+                <payara.artifact>payara</payara.artifact>
                 <payara.arquillian.container.version>3.0.alpha6</payara.arquillian.container.version>
             </properties>
             <dependencies>
@@ -39,7 +40,7 @@
                                     <artifactItems>
                                         <artifactItem>
                                             <groupId>fish.payara.distributions</groupId>
-                                            <artifactId>payara</artifactId>
+                                            <artifactId>${payara.artifact}</artifactId>
                                             <version>${payara.version}</version>
                                             <type>zip</type>
                                             <overWrite>false</overWrite>
