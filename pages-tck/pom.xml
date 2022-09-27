@@ -47,8 +47,6 @@
         <port.orb.mutual>13920</port.orb.mutual>
         <port.orb.ssl>13820</port.orb.ssl>
         <port.harness.log>12000</port.harness.log>
-
-        <payara.artifact>payara</payara.artifact>
     </properties>
 
     <dependencies>
@@ -314,17 +312,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>web</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-
-            <properties>
-                <payara.artifact>payara-web</payara.artifact>
-            </properties>
-        </profile>
-    </profiles>
 </project>
