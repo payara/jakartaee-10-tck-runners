@@ -35,18 +35,6 @@ If you wish to skip the test setup (for example if re-running against a remote s
 mvn clean verify -Dpayara.home=/path/to/payara6 -Dskip.setup -Ppayara-server-remote
 ```
 
-To test against Payara Web (managed container), activate the `-Ppayara-web` profile:
-
-```
-mvn clean verify -Ppayara-web
-```
-
-Alternatively, you can define the `-Dpayara.artifact` property yourself:
-
-```
-mvn clean verify -Dpayara.artifact=payara-web
-```
-
 ## Details
 
 This module is composed of 2 modules, which are executed from the root module:

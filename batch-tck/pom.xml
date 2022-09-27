@@ -199,16 +199,5 @@
                 </plugins>
             </build>
         </profile>
-
-        <profile>
-            <id>payara-web</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-
-            <properties>
-                <payara.artifact>payara-web</payara.artifact>
-            </properties>
-        </profile>
     </profiles>
 </project>
