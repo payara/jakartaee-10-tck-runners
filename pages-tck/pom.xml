@@ -47,12 +47,14 @@
         <port.orb.mutual>13920</port.orb.mutual>
         <port.orb.ssl>13820</port.orb.ssl>
         <port.harness.log>12000</port.harness.log>
+
+        <payara.artifact>payara</payara.artifact>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>fish.payara.distributions</groupId>
-            <artifactId>payara</artifactId>
+            <artifactId>${payara.artifact}</artifactId>
             <version>${payara.version}</version>
             <type>zip</type>
         </dependency>
@@ -101,7 +103,7 @@
                             <goal>unpack-dependencies</goal>
                         </goals>
                         <configuration>
-                            <includeArtifactIds>payara</includeArtifactIds>
+                            <includeArtifactIds>${payara.artifact}</includeArtifactIds>
                             <outputDirectory>${project.build.directory}</outputDirectory>
                         </configuration>
                     </execution>
@@ -312,4 +314,17 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>web</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+
+            <properties>
+                <payara.artifact>payara-web</payara.artifact>
+            </properties>
+        </profile>
+    </profiles>
 </project>

@@ -48,7 +48,7 @@
             <url>https://jakarta.oss.sonatype.org/content/groups/staging/</url>
         </repository>
     </repositories>
-    
+
     <profiles>
         <profile>
             <id>web</id>
