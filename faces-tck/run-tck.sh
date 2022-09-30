@@ -7,7 +7,7 @@ rm -r target
 mkdir target
 if [ ! -f target/jakarta-faces-tck-4.0.1.zip ]; then
     echo "Downloading jakarta-faces-tck-4.0.1.zip"
-    wget -q https://download.eclipse.org/ee4j/jakartaee-tck/jakartaee10/staged/eftl/jakarta-faces-tck-4.0.1.zip -O target/jakarta-faces-tck-4.0.1.zip
+    wget -q https://download.eclipse.org/jakartaee/faces/4.0/jakarta-faces-tck-4.0.1.zip -O target/jakarta-faces-tck-4.0.1.zip
 fi
 echo "Unzipping"
 rm -rf target/faces-tck-4.0.1

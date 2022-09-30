@@ -33,7 +33,7 @@
 
     <properties>
     	<tck.test.websocket.file>jakarta-websocket-tck-2.1.0.zip</tck.test.websocket.file>
-        <tck.test.websocket.url>https://download.eclipse.org/ee4j/jakartaee-tck/jakartaee10/staged/eftl/${tck.test.websocket.file}</tck.test.websocket.url>
+        <tck.test.websocket.url>https://download.eclipse.org/jakartaee/websocket/2.1/${tck.test.websocket.file}</tck.test.websocket.url>
     </properties>
 
     <build>

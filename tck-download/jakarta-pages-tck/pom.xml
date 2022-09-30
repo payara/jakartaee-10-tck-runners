@@ -33,7 +33,7 @@
 
     <properties>
     	<tck.test.pages.file>jakarta-pages-tck-3.1.0.zip</tck.test.pages.file>
-        <tck.test.pages.url>https://download.eclipse.org/ee4j/jakartaee-tck/jakartaee10/staged/eftl/${tck.test.pages.file}</tck.test.pages.url>
+        <tck.test.pages.url>https://download.eclipse.org/jakartaee/pages/3.1/${tck.test.pages.file}</tck.test.pages.url>
     </properties>
 
     <build>
