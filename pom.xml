@@ -54,6 +54,7 @@
         <payara.home>${project.build.directory}/payara6</payara.home>
         <payara.version>6.2022.1.Alpha5-SNAPSHOT</payara.version>
         <payara.asadmin>${payara.home}/glassfish/bin/asadmin</payara.asadmin>
+        <payara.artifact>payara</payara.artifact>
 
         <arquillian.version>1.7.0.Alpha10</arquillian.version>
     </properties>
@@ -90,4 +91,16 @@
         <module>websocket-tck</module>
     </modules>
 
+    <profiles>
+        <profile>
+            <id>web</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+
+            <properties>
+                <payara.artifact>payara-web</payara.artifact>
+            </properties>
+        </profile>
+    </profiles>
 </project>

@@ -57,7 +57,7 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>fish.payara.distributions</groupId>
-                                    <artifactId>payara</artifactId>
+                                    <artifactId>${payara.artifact}</artifactId>
                                     <version>${payara.version}</version>
                                     <type>zip</type>
                                     <overWrite>false</overWrite>

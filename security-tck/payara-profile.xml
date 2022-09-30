@@ -995,6 +995,8 @@
                 <payara.port>8080</payara.port>
                 <payara.root>${maven.multiModuleProjectDirectory}/target</payara.root>
                 <payara.arquillian.container.version>3.0.alpha6</payara.arquillian.container.version>
+
+                <payara.artifact>payara</payara.artifact>
             </properties>
             <dependencies>
                 <dependency>
@@ -1030,7 +1032,7 @@
                                     <artifactItems>
                                         <artifactItem>
                                             <groupId>fish.payara.distributions</groupId>
-                                            <artifactId>payara</artifactId>
+                                            <artifactId>${payara.artifact}</artifactId>
                                             <version>${payara.version}</version>
                                             <type>zip</type>
                                             <overWrite>true</overWrite>
@@ -1078,9 +1080,20 @@
                 </plugins>
             </build>
         </profile>
+
+        <profile>
+            <id>web</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+
+            <properties>
+                <payara.artifact>payara-web</payara.artifact>
+            </properties>
+        </profile>
     </profiles>
     
-        <repositories>
+    <repositories>
         <repository>
             <id>payara-nexus-artifacts</id>
             <url>https://nexus.payara.fish/repository/payara-artifacts</url>

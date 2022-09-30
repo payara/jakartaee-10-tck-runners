@@ -37,7 +37,7 @@
     <dependencies>
         <dependency>
             <groupId>fish.payara.distributions</groupId>
-            <artifactId>payara</artifactId>
+            <artifactId>${payara.artifact}</artifactId>
             <version>${payara.version}</version>
             <type>zip</type>
         </dependency>
@@ -100,7 +100,7 @@
                             <goal>unpack-dependencies</goal>
                         </goals>
                         <configuration>
-                            <includeArtifactIds>payara</includeArtifactIds>
+                            <includeArtifactIds>${payara.artifact}</includeArtifactIds>
                             <outputDirectory>${project.build.directory}</outputDirectory>
                         </configuration>
                     </execution>
