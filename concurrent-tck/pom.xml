@@ -165,6 +165,13 @@
         <profile>
             <id>web</id>
 
+            <activation>
+                <property>
+                    <name>javaee.level</name>
+                    <value>web</value>
+                </property>
+            </activation>
+
             <properties>
                 <tck-suite.xml>src${file.separator}test${file.separator}resources${file.separator}tck-suite-web.xml</tck-suite.xml>
             </properties>
