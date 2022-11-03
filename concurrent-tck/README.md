@@ -41,5 +41,8 @@ and this temporal fix can be removed.
 
 Run maven test in the TCK Runner directory
 
-	cd concurrent-tck
     mvn test
+
+For running against Payara Web Profile, activate the `web` profile
+
+    mvn test -Pweb
