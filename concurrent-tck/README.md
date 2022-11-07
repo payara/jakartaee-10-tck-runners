@@ -5,7 +5,7 @@
 run
 
     mvn clean dependency:copy
-    mvn clean dependency:copy-dependencies
+    mvn dependency:copy-dependencies
 
 * it downloads all server dependencies to target/server-dependencies
 
