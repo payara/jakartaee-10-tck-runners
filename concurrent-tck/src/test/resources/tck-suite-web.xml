@@ -1,0 +1,30 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="jakarta-concurrency" verbose="2" configfailurepolicy="continue">
+    <test name="jakarta-concurrency.tck">
+        <groups>
+            <run>
+                <exclude name="eefull" />
+            </run>
+        </groups>
+        <packages>
+            <package name="ee.jakarta.tck.concurrent.api.*"/>
+            <package name="ee.jakarta.tck.concurrent.spec.*"/>
+            <!--<package name="ee.jakarta.tck.concurrent.spec.ContextService.contextPropagate.*"/>-->
+            <!--<package name="ee.jakarta.tck.concurrent.spec.ManagedExecutorService.*"/>-->
+        </packages>
+        <classes>
+            <!--
+                Config should be cleared=APPLICATION instead of UNCHANGED
+
+                TCK Challenge: https://github.com/jakartaee/concurrency/issues/253
+                FIX: https://github.com/eclipse-ee4j/concurrency-ri/pull/59,
+                     https://github.com/jakartaee/concurrency/pull/255
+            -->
+            <class name="ee.jakarta.tck.concurrent.spec.ContextService.contextPropagate.ContextPropagationTests">
+                <methods>
+                    <exclude name="testContextualFunction"></exclude>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

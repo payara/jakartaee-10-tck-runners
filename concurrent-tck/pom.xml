@@ -18,6 +18,7 @@
         
         <com.beust-jcommander.version>1.82</com.beust-jcommander.version>
 
+        <tck-suite.xml>src${file.separator}test${file.separator}resources${file.separator}tck-suite.xml</tck-suite.xml>
     </properties>
     
     <!-- The Arquillian test framework -->
@@ -152,11 +153,28 @@
                     <systemPropertyVariables>
                     </systemPropertyVariables>
                     <suiteXmlFiles>
-                        <suiteXmlFile>src/test/resources/tck-suite.xml</suiteXmlFile>
+                        <suiteXmlFile>${tck-suite.xml}</suiteXmlFile>
                     </suiteXmlFiles>
                     <testSourceDirectory>${basedir}${file.separarator}src${file.separarator}main${file.separarator}java${file.separarator}</testSourceDirectory>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>web</id>
+
+            <activation>
+                <property>
+                    <name>javaee.level</name>
+                    <value>web</value>
+                </property>
+            </activation>
+
+            <properties>
+                <tck-suite.xml>src${file.separator}test${file.separator}resources${file.separator}tck-suite-web.xml</tck-suite.xml>
+            </properties>
+        </profile>
+    </profiles>
 </project>
