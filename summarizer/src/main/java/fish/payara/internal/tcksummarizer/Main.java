@@ -133,7 +133,7 @@ public class Main {
                     System.out.println("Format not recognised");
                     report += "Format not recognised for the test suite " + testSuiteName;  
             }
-        };
+        }
     }
 
     public static void main(String... args) throws IOException {
@@ -183,5 +183,4 @@ public class Main {
             out.println(report);
         }
     }
-
 }

@@ -89,6 +89,7 @@
         <module>tags-tck</module>
         <module>tck-download</module>
         <module>websocket-tck</module>
+        <module>tck-summarizer</module>
     </modules>
 
     <profiles>

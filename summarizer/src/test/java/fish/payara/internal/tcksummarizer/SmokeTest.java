@@ -41,13 +41,12 @@
 package fish.payara.internal.tcksummarizer;
 
 import java.io.File;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -55,10 +54,22 @@ import static org.junit.Assert.assertTrue;
 
 public class SmokeTest {   
 
+
+    private static void deleteDir(File file) {
+    File[] contents = file.listFiles();
+    if (contents != null) {
+        for (File f : contents) {
+            if (! Files.isSymbolicLink(f.toPath())) {
+                deleteDir(f);
+            }
+        }
+    }
+    file.delete();
+    }
+    
     @Test
     public void fileCreationTest() throws IOException, ParserConfigurationException, SAXException {
         String[] args = new String[3];
-        //args[0]=".*[/\\\\]src[/\\\\]test[/\\\\]sample[/\\\\].*junit-report.xml";
         args[0]="**/*junit-report.xml";
         args[1]="jUnitReport";
         args[2]="testSuiteCreation";
@@ -70,6 +81,8 @@ public class SmokeTest {
         
         File file = new File("results/" + filename);
         assertTrue(file.exists());
+        
+        deleteDir(file);        
     }   
 
     @Test
@@ -87,6 +100,8 @@ public class SmokeTest {
         
         File file = new File("testFolder/subFolder/" + filename);
         assertTrue(file.exists());
+        
+        deleteDir(new File("testFolder"));
     }
     
     @Test
@@ -103,5 +118,7 @@ public class SmokeTest {
         
         File file = new File("results/" + filename);
         assertTrue(file.exists());
+        
+        deleteDir(file);   
     }
 }
