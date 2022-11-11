@@ -115,7 +115,6 @@ public class TxtParser {
                           // Example of the line we parse: "Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 27.655 s"
                           // To ease parsing the line, we remove every white space
                           currentLine = currentLine.replaceAll("\\s+", "");
-                          System.out.println(currentLine);
                           String[] splitLine = currentLine.split(",", 5);
                           // Parsing "Testsrun:1" to get the integer
                           String testNumber = splitLine[0].split(":")[1];

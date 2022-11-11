@@ -61,7 +61,7 @@ public class SmokeTest {
         //args[0]=".*[/\\\\]src[/\\\\]test[/\\\\]sample[/\\\\].*junit-report.xml";
         args[0]="**/*junit-report.xml";
         args[1]="jUnitReport";
-        args[2]="testSuite";
+        args[2]="testSuiteCreation";
         Main.main(args);
         
         

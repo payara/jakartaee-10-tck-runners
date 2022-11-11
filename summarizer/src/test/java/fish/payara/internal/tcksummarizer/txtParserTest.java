@@ -65,18 +65,18 @@ public class txtParserTest {
 
     @Test
     public void txtParserSummaryTest() throws IOException, ParserConfigurationException {
-        String result = txtParser.parseSummaryReport("src/test/sample/summary.txt", "testSuite");
-        assertTrue(result.contains("### testSuite"));
-        assertTrue(result.contains("Completed running 1694 tests"));
-        assertTrue(result.contains("Number of tests failed 6"));
-        assertTrue(result.contains("Number of tests with errors 0"));
-        assertTrue(result.contains("Number of tests skipped 0"));
+        String result = txtParser.parseSummaryReport("src/test/sample/summary.txt", "testSuiteSummary");
+        assertTrue(result.contains("### testSuiteSummary"));
+        assertTrue(result.contains("Completed running 1713 tests"));
+        assertTrue(result.contains("Number of tests failed 9"));
+        assertTrue(result.contains("Number of tests with errors 2"));
+        assertTrue(result.contains("Number of tests skipped 1"));
     }
 
     @Test
     public void parseTestSetReport() throws IOException, ParserConfigurationException {
-        String result = txtParser.parseTestSetReport(inputFiles, "testSuite");
-        assertTrue(result.contains("### testSuite"));
+        String result = txtParser.parseTestSetReport(inputFiles, "testSuiteTestSet");
+        assertTrue(result.contains("### testSuiteTestSet"));
         assertTrue(result.contains("Completed running 19 tests"));
         assertTrue(result.contains("Number of tests failed 3"));
         assertTrue(result.contains("Number of tests with errors 2"));

@@ -55,8 +55,8 @@ public class xmlParserTest {
 
     @Test
     public void xmlParserJunitTest() throws IOException, ParserConfigurationException, SAXException {
-        String result = xmlParser.parsejUnitReport("src/test/sample/330tck-junit-report.xml", "testSuite");
-        assertTrue(result.contains("### testSuite"));
+        String result = xmlParser.parsejUnitReport("src/test/sample/330tck-junit-report.xml", "testSuiteJunit");
+        assertTrue(result.contains("### testSuiteJunit"));
         assertTrue(result.contains("Completed running 50 tests"));
         assertTrue(result.contains("Number of tests failed 2"));
         assertTrue(result.contains("Number of tests with errors 1"));
@@ -65,8 +65,8 @@ public class xmlParserTest {
     
     @Test
     public void xmlParserFailSafeTest() throws IOException, ParserConfigurationException, SAXException {
-        String result = xmlParser.parseFailsafeReport("src/test/sample/failsafe-summary.xml", "testSuite");
-        assertTrue(result.contains("### testSuite"));
+        String result = xmlParser.parseFailsafeReport("src/test/sample/failsafe-summary.xml", "testSuiteFailSafe");
+        assertTrue(result.contains("### testSuiteFailSafe"));
         assertTrue(result.contains("Completed running 20 tests"));
         assertTrue(result.contains("Number of tests failed 3"));
         assertTrue(result.contains("Number of tests with errors 1"));

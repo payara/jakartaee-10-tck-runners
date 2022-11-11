@@ -69,14 +69,10 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
                 <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>fish.payara.internal.tcksummarizer.Main</mainClass>
-                        </manifest>
-                    </archive>
+                    <mainClass>fish.payara.internal.tcksummarizer.Main</mainClass>
                 </configuration>
             </plugin>
         </plugins>

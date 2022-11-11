@@ -40,12 +40,10 @@
 
 package fish.payara.internal.tcksummarizer;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.DirectoryStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -178,10 +176,8 @@ public class Main {
     }
 
     private void print() throws IOException {
-        System.out.println("outputPath = " + this.outputPath);
         Path outDir = Paths.get(this.outputPath);
         Files.createDirectories(outDir);
-        System.out.println("outputFilename = " + outputFilename());
         Path outPath = Paths.get(this.outputPath + outputFilename());
         try (PrintWriter out = new PrintWriter(Files.newBufferedWriter(outPath,StandardCharsets.UTF_8))) {
             out.println(report);
