@@ -42,10 +42,13 @@ package fish.payara.internal.tcksummarizer;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class TxtParser {
 
@@ -92,6 +95,7 @@ public class TxtParser {
 
         String result;
 
+        List<Exception> exceptions = new ArrayList<>();
         inputFilePaths.forEach(new Consumer<String>() {
             @Override
             public void accept(String inputFilePath) {
@@ -125,8 +129,9 @@ public class TxtParser {
 
                     }
 
-                } catch (Exception e) {
+                } catch (FileNotFoundException | NumberFormatException e) {
                     e.printStackTrace();
+                    exceptions.add(e);
                 }
             }
         });
@@ -135,6 +140,10 @@ public class TxtParser {
         result += "Number of tests failed " + failures + "\n";
         result += "Number of tests with errors " + errors + "\n";
         result += "Number of tests skipped " + skipped + "\n";
+
+        result += exceptions.stream()
+                .map(e -> "Exception captured! " + e.getMessage() + "\n")
+                .collect(Collectors.joining());
 
         System.out.println(result);
 
