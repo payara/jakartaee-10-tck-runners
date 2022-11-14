@@ -1,7 +1,7 @@
 /*
  *    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- *    Copyright (c) [2019] Payara Foundation and/or its affiliates. All rights reserved.
+ *    Copyright (c) [2022] Payara Foundation and/or its affiliates. All rights reserved.
  *
  *    The contents of this file are subject to the terms of either the GNU
  *    General Public License Version 2 only ("GPL") or the Common Development
@@ -110,8 +110,7 @@ public class TxtParser {
                   {
                       String currentLine = sc.nextLine();
                       
-                      if (currentLine.contains("Tests run: "))
-                      {
+                      if (currentLine.contains("Tests run: ")) {
                           // Example of the line we parse: "Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 27.655 s"
                           // To ease parsing the line, we remove every white space
                           currentLine = currentLine.replaceAll("\\s+", "");
