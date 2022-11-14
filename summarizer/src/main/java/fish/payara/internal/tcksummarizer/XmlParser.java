@@ -37,10 +37,10 @@
  *    only if the new code is made subject to such option by the copyright
  *    holder.
  */
-
 package fish.payara.internal.tcksummarizer;
 
 import java.io.File;
+import java.io.IOException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -51,136 +51,136 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.XMLConstants;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.DOMException;
+import org.xml.sax.SAXException;
 
 public class XmlParser {
 
-  public String parsejUnitReport(String inputFilePath, String testSuiteName) {
+    public String parsejUnitReport(String inputFilePath, String testSuiteName) {
 
-      // Instantiate the Factory
-      DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        // Instantiate the Factory
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
-      String result = new String();
-      
-      List<String> resultList = new ArrayList<>();
-      
-      try {
+        String result = new String();
 
-          // optional, but recommended
-          // process XML securely, avoid attacks like XML External Entities (XXE)
-          dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        List<String> resultList = new ArrayList<>();
 
-          // parse XML file
-          DocumentBuilder db = dbf.newDocumentBuilder();
+        try {
 
-          Document doc = db.parse(new File(inputFilePath));
+            // optional, but recommended
+            // process XML securely, avoid attacks like XML External Entities (XXE)
+            dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
 
-          doc.getDocumentElement().normalize();
+            // parse XML file
+            DocumentBuilder db = dbf.newDocumentBuilder();
 
-          // get <staff>
-          NodeList testSuites = doc.getElementsByTagName("testsuite");
-          
-          
-          for (int temp = 0; temp < testSuites.getLength(); temp++) {
+            Document doc = db.parse(new File(inputFilePath));
 
-              String testResult = "";
-              
-              Node node = testSuites.item(temp);
-              
-              if (node.getNodeType() == Node.ELEMENT_NODE) {
+            doc.getDocumentElement().normalize();
 
-                  Element element = (Element) node;
-                  
-                  if (testSuiteName.equals("unknown suite")){
-                      testSuiteName = element.getAttribute("name");
-                  }
-                                   
-                  String tests = element.getAttribute("tests");                 
-                  String failures = element.getAttribute("failures");          
-                  String errors = element.getAttribute("errors");
-                  String skipped = element.getAttribute("skipped"); 
+            // get <staff>
+            NodeList testSuites = doc.getElementsByTagName("testsuite");
 
-                  testResult = "### " + testSuiteName + "\n \nCompleted running " + tests + " tests\n";
-                  testResult +=  "Number of tests failed " + failures +  "\n";
-                  testResult +=  "Number of tests with errors " + errors +  "\n";
-                  testResult +=  "Number of tests skipped " + skipped +  "\n";
-                  
-              }
-              if (!testResult.isEmpty()) {
-                  resultList.add(testResult);
-              }
+            for (int temp = 0; temp < testSuites.getLength(); temp++) {
+
+                String testResult = "";
+
+                Node node = testSuites.item(temp);
+
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+
+                    Element element = (Element) node;
+
+                    if (testSuiteName.equals("unknown suite")) {
+                        testSuiteName = element.getAttribute("name");
+                    }
+
+                    String tests = element.getAttribute("tests");
+                    String failures = element.getAttribute("failures");
+                    String errors = element.getAttribute("errors");
+                    String skipped = element.getAttribute("skipped");
+
+                    testResult = "### " + testSuiteName + "\n \nCompleted running " + tests + " tests\n";
+                    testResult += "Number of tests failed " + failures + "\n";
+                    testResult += "Number of tests with errors " + errors + "\n";
+                    testResult += "Number of tests skipped " + skipped + "\n";
+
+                }
+                if (!testResult.isEmpty()) {
+                    resultList.add(testResult);
+                }
             }
-          } catch (Exception e) {
-          e.printStackTrace();
-      }
-      if (!resultList.isEmpty()){
-          for (int temp = 0; temp < resultList.size(); temp++) {
-              result += resultList.get(temp) + "\n";
-          }
-      }
-      return result;
-  }
-  
-
-  public String parseFailsafeReport(String inputFilePath, String testSuiteName) {
-
-      // Instantiate the Factory
-      DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-
-      String result = new String();
-      
-      List<String> resultList = new ArrayList<String>();
-      
-      try {
-
-          // optional, but recommended
-          // process XML securely, avoid attacks like XML External Entities (XXE)
-          dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-
-          // parse XML file
-          DocumentBuilder db = dbf.newDocumentBuilder();
-
-          Document doc = db.parse(new File(inputFilePath));
-
-          doc.getDocumentElement().normalize();
-
-          // get <staff>
-          NodeList testSuites = doc.getElementsByTagName("failsafe-summary");
-          
-          
-          for (int temp = 0; temp < testSuites.getLength(); temp++) {
-
-              String testResult = "";
-              
-              Node node = testSuites.item(temp);
-              
-              if (node.getNodeType() == Node.ELEMENT_NODE) {
-
-                  Element element = (Element) node;
-                                                     
-                  String tests = element.getElementsByTagName("completed").item(0).getTextContent();                 
-                  String failures = element.getElementsByTagName("failures").item(0).getTextContent();          
-                  String errors = element.getElementsByTagName("errors").item(0).getTextContent();
-                  String skipped = element.getElementsByTagName("skipped").item(0).getTextContent(); 
-
-                  testResult = "### " + testSuiteName + "\n \nCompleted running "+ tests + " tests\n";
-                  testResult +=  "Number of tests failed " + failures +  "\n";
-                  testResult +=  "Number of tests with errors " + errors +  "\n";
-                  testResult +=  "Number of tests skipped " + skipped +  "\n";
-             
-              }
-              if (!testResult.isEmpty()) {
-                  resultList.add(testResult);
-              }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (!resultList.isEmpty()) {
+            for (int temp = 0; temp < resultList.size(); temp++) {
+                result += resultList.get(temp) + "\n";
             }
-          } catch (Exception e) {
-          e.printStackTrace();
-      }
-      if (!resultList.isEmpty()){
-          for (int temp = 0; temp < resultList.size(); temp++) {
-              result += resultList.get(temp) + "\n";
-          }
-      }
-      return result;
-  }
+        }
+        return result;
+    }
+
+    public String parseFailsafeReport(String inputFilePath, String testSuiteName) throws IOException {
+
+        // Instantiate the Factory
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+
+        String result = new String();
+
+        List<String> resultList = new ArrayList<>();
+
+        try {
+
+            // optional, but recommended
+            // process XML securely, avoid attacks like XML External Entities (XXE)
+            dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+
+            // parse XML file
+            DocumentBuilder db = dbf.newDocumentBuilder();
+
+            Document doc = db.parse(new File(inputFilePath));
+
+            doc.getDocumentElement().normalize();
+
+            // get <staff>
+            NodeList testSuites = doc.getElementsByTagName("failsafe-summary");
+
+            for (int temp = 0; temp < testSuites.getLength(); temp++) {
+
+                String testResult = "";
+
+                Node node = testSuites.item(temp);
+
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+
+                    Element element = (Element) node;
+
+                    String tests = element.getElementsByTagName("completed").item(0).getTextContent();
+                    String failures = element.getElementsByTagName("failures").item(0).getTextContent();
+                    String errors = element.getElementsByTagName("errors").item(0).getTextContent();
+                    String skipped = element.getElementsByTagName("skipped").item(0).getTextContent();
+
+                    testResult = "### " + testSuiteName + "\n \nCompleted running " + tests + " tests\n";
+                    testResult += "Number of tests failed " + failures + "\n";
+                    testResult += "Number of tests with errors " + errors + "\n";
+                    testResult += "Number of tests skipped " + skipped + "\n";
+
+                }
+                if (!testResult.isEmpty()) {
+                    resultList.add(testResult);
+                }
+            }
+        } catch (IOException | ParserConfigurationException | DOMException | SAXException e) {
+            throw new IOException("Error during parsing test suite " + testSuiteName + ", file " + inputFilePath + ": " + e.getMessage(), e);
+        }
+        if (!resultList.isEmpty()) {
+            for (int temp = 0; temp < resultList.size(); temp++) {
+                result += resultList.get(temp) + "\n";
+            }
+        }
+        return result;
+    }
 
 }

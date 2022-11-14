@@ -37,10 +37,11 @@
  *    only if the new code is made subject to such option by the copyright
  *    holder.
  */
-
 package fish.payara.internal.tcksummarizer;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 import java.util.Collection;
@@ -52,97 +53,91 @@ public class TxtParser {
     private int failures = 0;
     private int errors = 0;
     private int skipped = 0;
-    
-  public String parseSummaryReport(String inputFilePath, String testSuiteName) {
 
-      String result = new String();
-            
-      try {
+    public String parseSummaryReport(String inputFilePath, String testSuiteName) throws IOException {
 
-        File file = new File(inputFilePath);
-        Scanner sc = new Scanner(file);
+        String result = new String();
 
-        while (sc.hasNextLine())
-        {
-            String currentLine = sc.nextLine();
-            
-            if (!currentLine.isEmpty()) 
-                {
-                    tests ++;
+        try {
+
+            File file = new File(inputFilePath);
+            Scanner sc = new Scanner(file);
+
+            while (sc.hasNextLine()) {
+                String currentLine = sc.nextLine();
+
+                if (!currentLine.isEmpty()) {
+                    tests++;
                 }
-            if (currentLine.contains("Failed.")) 
-                { 
-                    failures ++; 
+                if (currentLine.contains("Failed.")) {
+                    failures++;
                 }
-       }
-        
+            }
+
+            result = "### " + testSuiteName + "\n \nCompleted running " + tests + " tests\n";
+            result += "Number of tests failed " + failures + "\n";
+            result += "Number of tests with errors " + errors + "\n";
+            result += "Number of tests skipped " + skipped + "\n";
+
+            System.out.println(result);
+
+        } catch (FileNotFoundException e) {
+            throw new IOException("Error during parsing test suite " + testSuiteName + ", file " + inputFilePath + ": " + e.getMessage(), e);
+        }
+
+        return result;
+    }
+
+    public String parseTestSetReport(Collection<String> inputFilePaths, String testSuiteName) {
+
+        String result;
+
+        inputFilePaths.forEach(new Consumer<String>() {
+            @Override
+            public void accept(String inputFilePath) {
+                try {
+
+                    // pass the path to the file as a parameter
+                    File file = new File(inputFilePath);
+                    Scanner sc = new Scanner(file);
+
+                    while (sc.hasNextLine()) {
+                        String currentLine = sc.nextLine();
+
+                        if (currentLine.contains("Tests run: ")) {
+                            // Example of the line we parse: "Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 27.655 s"
+                            // To ease parsing the line, we remove every white space
+                            currentLine = currentLine.replaceAll("\\s+", "");
+                            String[] splitLine = currentLine.split(",", 5);
+                            // Parsing "Testsrun:1" to get the integer
+                            String testNumber = splitLine[0].split(":")[1];
+                            tests += Integer.parseInt(testNumber);
+                            // Parsing "Failures:0" to get the integer
+                            String failureNumber = splitLine[1].split(":")[1];
+                            failures += Integer.parseInt(failureNumber);
+                            // Parsing "Errors:0" to get the integer
+                            String errorNumber = splitLine[2].split(":")[1];
+                            errors += Integer.parseInt(errorNumber);
+                            // Parsing "Skipped:0" to get the integer
+                            String skippedNumber = splitLine[3].split(":")[1];
+                            skipped += Integer.parseInt(skippedNumber);
+                        }
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         result = "### " + testSuiteName + "\n \nCompleted running " + tests + " tests\n";
-        result +=  "Number of tests failed " + failures +  "\n";
-        result +=  "Number of tests with errors " + errors +  "\n";
-        result +=  "Number of tests skipped " + skipped +  "\n";
-
-        System.out.println(result);
-        
-        
-        
-      } catch (Exception e) {
-              e.printStackTrace();
-      }
-      
-      return result;
-  }
-  
-
-  public String parseTestSetReport(Collection<String> inputFilePaths, String testSuiteName) {
-
-      String result;
-      
-      inputFilePaths.forEach(new Consumer<String>() {
-          @Override
-          public void accept(String inputFilePath) {
-              try {
-                  
-                  // pass the path to the file as a parameter
-                  File file = new File(inputFilePath);
-                  Scanner sc = new Scanner(file);
-                  
-                  while (sc.hasNextLine()) 
-                  {
-                      String currentLine = sc.nextLine();
-                      
-                      if (currentLine.contains("Tests run: ")) {
-                          // Example of the line we parse: "Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 27.655 s"
-                          // To ease parsing the line, we remove every white space
-                          currentLine = currentLine.replaceAll("\\s+", "");
-                          String[] splitLine = currentLine.split(",", 5);
-                          // Parsing "Testsrun:1" to get the integer
-                          String testNumber = splitLine[0].split(":")[1];
-                          tests += Integer.parseInt(testNumber);
-                          // Parsing "Failures:0" to get the integer
-                          String failureNumber = splitLine[1].split(":")[1];
-                          failures += Integer.parseInt(failureNumber);
-                          // Parsing "Errors:0" to get the integer
-                          String errorNumber = splitLine[2].split(":")[1];
-                          errors += Integer.parseInt(errorNumber);
-                          // Parsing "Skipped:0" to get the integer
-                          String skippedNumber = splitLine[3].split(":")[1];
-                          skipped += Integer.parseInt(skippedNumber);
-                      }
-                      
-                  }
-                  
-              } catch (Exception e) {
-                  e.printStackTrace();
-              } }
-      });
-      
-        result = "### " + testSuiteName + "\n \nCompleted running " + tests + " tests\n";
-        result +=  "Number of tests failed " + failures +  "\n";
-        result +=  "Number of tests with errors " + errors +  "\n";
-        result +=  "Number of tests skipped " + skipped +  "\n";
+        result += "Number of tests failed " + failures + "\n";
+        result += "Number of tests with errors " + errors + "\n";
+        result += "Number of tests skipped " + skipped + "\n";
 
         System.out.println(result);
 
-      return result;
-  }
+        return result;
+    }
 }

@@ -37,7 +37,6 @@
  *    only if the new code is made subject to such option by the copyright
  *    holder.
  */
-
 package fish.payara.internal.tcksummarizer;
 
 import java.io.IOException;
@@ -56,8 +55,8 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-
 public class Main {
+
     private final String path;
     private final String format;
     private final String testSuiteName;
@@ -85,13 +84,13 @@ public class Main {
         this.testSuiteName = testSuiteName;
         this.outputPath = outputPath;
     }
-    
-    private static Collection<String> createInputFileList(String pathPattern){
+
+    private static Collection<String> createInputFileList(String pathPattern) {
         final Collection<String> fileCollection = new ArrayList<>();
-         final Path dir = Paths.get(".");
+        final Path dir = Paths.get(".");
 
         PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:" + pathPattern);
-        
+
         try {
             Stream<Path> results = Files.find(dir,
                     Integer.MAX_VALUE,
@@ -103,15 +102,15 @@ public class Main {
             throw new UncheckedIOException(e);
         }
         return fileCollection;
-    };
+    }
 
     private void process() throws IOException {
         Optional<String> firstFile = files.stream().findFirst();
         TxtParser txtParser = new TxtParser();
         XmlParser xmlParser = new XmlParser();
-        if (firstFile.isPresent()){
+        if (firstFile.isPresent()) {
             String file = firstFile.get();
-            switch(format){
+            switch (format) {
                 case "jUnitReport":
                     System.out.println("Parsing jUnit report");
                     report += xmlParser.parsejUnitReport(file, testSuiteName);
@@ -131,7 +130,7 @@ public class Main {
                     break;
                 default:
                     System.out.println("Format not recognised");
-                    report += "Format not recognised for the test suite " + testSuiteName;  
+                    report += "Format not recognised for the test suite " + testSuiteName;
             }
         }
     }
@@ -142,44 +141,44 @@ public class Main {
         }
         String path = args[0];
         String format = args[1];
-        
+
         files = createInputFileList(path);
-        
-        switch(args.length){
+
+        switch (args.length) {
             case 2: {
                 Main main = new Main(path, format);
                 main.process();
                 main.print();
                 break;
-            }   
+            }
             case 3: {
                 String testSuiteName = args[2];
-                Main main = new Main(path, format, testSuiteName); 
+                Main main = new Main(path, format, testSuiteName);
                 main.process();
-                main.print();  
-                break;         
-            }   
+                main.print();
+                break;
+            }
             case 4: {
                 String testSuiteName = args[2];
                 String outputPath = args[3];
-                Main main = new Main(path, format, testSuiteName, outputPath);    
+                Main main = new Main(path, format, testSuiteName, outputPath);
                 main.process();
-                main.print(); 
-                break;       
+                main.print();
+                break;
             }
         }
     }
 
     private String outputFilename() {
         String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-        return "summary-"+testSuiteName+"-"+timestamp+".txt";
+        return "summary-" + testSuiteName + "-" + timestamp + ".txt";
     }
 
     private void print() throws IOException {
         Path outDir = Paths.get(this.outputPath);
         Files.createDirectories(outDir);
         Path outPath = Paths.get(this.outputPath + outputFilename());
-        try (PrintWriter out = new PrintWriter(Files.newBufferedWriter(outPath,StandardCharsets.UTF_8))) {
+        try ( PrintWriter out = new PrintWriter(Files.newBufferedWriter(outPath, StandardCharsets.UTF_8))) {
             out.println(report);
         }
     }
