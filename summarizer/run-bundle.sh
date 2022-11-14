@@ -1,3 +1,4 @@
+#!/bin/sh
 process_targz () {
   rm -rf bundle/
   mkdir bundle
