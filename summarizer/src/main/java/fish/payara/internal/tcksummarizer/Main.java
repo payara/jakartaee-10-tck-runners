@@ -137,7 +137,7 @@ public class Main {
 
     public static void main(String... args) throws IOException {
         if (args.length < 1 || args.length > 4) {
-            System.out.println("Usage: -jar ... <tck report file> <format:jUnitReport|summaryTxt|testSet|failsafeSummary> [testSuiteName] [<output report path>]");
+            System.out.println("Usage: java -jar <path to .jar> <tck report file> <format:jUnitReport|summaryTxt|testSet|failsafeSummary> [testSuiteName] [<output report path>]");
             return;
         }
         String path = args[0];

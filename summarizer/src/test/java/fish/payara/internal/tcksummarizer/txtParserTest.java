@@ -47,11 +47,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-
 import static org.junit.Assert.assertTrue;
 
 public class txtParserTest {
-    static TxtParser txtParser = new TxtParser();
     private static Collection<String> inputFiles = new ArrayList<>();
     
     @BeforeClass
@@ -65,16 +63,18 @@ public class txtParserTest {
 
     @Test
     public void txtParserSummaryTest() throws IOException, ParserConfigurationException {
+        TxtParser txtParser = new TxtParser();
         String result = txtParser.parseSummaryReport("src/test/sample/summary.txt", "testSuiteSummary");
         assertTrue(result.contains("### testSuiteSummary"));
-        assertTrue(result.contains("Completed running 1713 tests"));
-        assertTrue(result.contains("Number of tests failed 9"));
-        assertTrue(result.contains("Number of tests with errors 2"));
-        assertTrue(result.contains("Number of tests skipped 1"));
+        assertTrue(result.contains("Completed running 1694 tests"));
+        assertTrue(result.contains("Number of tests failed 6"));
+        assertTrue(result.contains("Number of tests with errors 0"));
+        assertTrue(result.contains("Number of tests skipped 0"));
     }
 
     @Test
     public void parseTestSetReport() throws IOException, ParserConfigurationException {
+        TxtParser txtParser = new TxtParser();
         String result = txtParser.parseTestSetReport(inputFiles, "testSuiteTestSet");
         assertTrue(result.contains("### testSuiteTestSet"));
         assertTrue(result.contains("Completed running 19 tests"));

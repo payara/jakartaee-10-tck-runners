@@ -24,7 +24,6 @@ Run maven test from summarizer
     cd summarizer
     mvn exec:java -Dexec.arguments=[<tck report file>,<format:jUnitReport|summaryTxt|testSet|failsafeSummary>,[testSuiteName],[<output report path>]]
 
-
 The command takes up to 4 arguments:
 * tck report file: path and filename for the file to summarize. Note: the path needs to be written from the current directory. Glob syntax is supported, but only the format testSet can handle multiple files
 * format: 4 formats are supported. See the examples in src/test/sample to see what is supported.
@@ -33,3 +32,21 @@ The command takes up to 4 arguments:
 
 Example:
 >    mvn exec:java -Dexec.arguments=[**/*junit-report.xml,jUnitReport,testSuiteName]
+
+###  Alternative ways to execute the summarizer:
+
+#### Running the jar 
+
+Run the following command to create the jar in ./target:
+
+>   mvn package
+
+Execute the jar with the following command:
+
+>   java -jar target/tck-summarizer-1.0-SNAPSHOT.jar <tck report file> <format:jUnitReport|summaryTxt|testSet|failsafeSummary> [testSuiteName] [<output report path>
+
+#### Using run-bundle.sh
+
+This script runs the 2 commands described above (mvn package and java -jar ...):
+
+>    ./run-bundle.sh <tck report file> <format:jUnitReport|summaryTxt|testSet|failsafeSummary> [testSuiteName] [<output report path>
