@@ -37,9 +37,7 @@ Example:
 
 #### Running the jar 
 
-Run the following command to create the jar in ./target:
-
->   mvn package
+To compile: `mvn package`
 
 Execute the jar with the following command:
 
@@ -47,6 +45,6 @@ Execute the jar with the following command:
 
 #### Using run-bundle.sh
 
-This script runs the 2 commands described above (mvn package and java -jar ...):
+This script compiles and runs the summarizer:
 
 >    ./run-bundle.sh <tck report file> <format:jUnitReport|summaryTxt|testSet|failsafeSummary> [testSuiteName] [<output report path>
