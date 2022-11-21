@@ -61,7 +61,7 @@ public class Main {
     private final String format;
     private final String testSuiteName;
     private final String outputPath;
-    private String report = "";
+    private String report;
     private static Collection<String> files;
 
     public Main(String path, String format) {
@@ -108,29 +108,33 @@ public class Main {
         Optional<String> firstFile = files.stream().findFirst();
         TxtParser txtParser = new TxtParser();
         XmlParser xmlParser = new XmlParser();
+        report = "";
         if (firstFile.isPresent()) {
             String file = firstFile.get();
             switch (format) {
                 case "jUnitReport":
                     System.out.println("Parsing jUnit report");
-                    report += xmlParser.parsejUnitReport(file, testSuiteName);
+                    report = xmlParser.parsejUnitReport(file, testSuiteName);
                     break;
                 case "failsafeSummary":
                     System.out.println("Parsing Failsafe Summary");
-                    report += xmlParser.parseFailsafeReport(file, testSuiteName);
+                    report = xmlParser.parseFailsafeReport(file, testSuiteName);
                     break;
                 case "summaryTxt":
                     System.out.println("Parsing summary.txt");
-                    report += txtParser.parseSummaryReport(file, testSuiteName);
+                    report = txtParser.parseSummaryReport(file, testSuiteName);
                     break;
                 case "testSet":
                     System.out.println("Parsing test set results");
-                    report += txtParser.parseTestSetReport(files, testSuiteName);
-                    System.out.println("report = " + report);
+                    report = txtParser.parseTestSetReport(files, testSuiteName);
+                    break;
+                case "collection":
+                    System.out.println("Merging summary files");
+                    report = txtParser.mergeSummaries(files, testSuiteName);
                     break;
                 default:
                     System.out.println("Format not recognised");
-                    report += "Format not recognised for the test suite " + testSuiteName;
+                    report = "Format not recognised for the test suite " + testSuiteName;
             }
         }
     }
@@ -182,5 +186,6 @@ public class Main {
         try ( PrintWriter out = new PrintWriter(Files.newBufferedWriter(outPath, StandardCharsets.UTF_8))) {
             out.println(report);
         }
+        System.out.println("Report created: " + outPath);
     }
 }

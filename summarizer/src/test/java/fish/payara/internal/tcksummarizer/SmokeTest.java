@@ -69,10 +69,7 @@ public class SmokeTest {
     
     @Test
     public void fileCreationTest() throws IOException, ParserConfigurationException, SAXException {
-        String[] args = new String[3];
-        args[0]="**/*junit-report.xml";
-        args[1]="jUnitReport";
-        args[2]="testSuiteCreation";
+        String[] args = new String[]{"**/*junit-report.xml", "jUnitReport", "testSuiteCreation"};
         Main.main(args);
         
         
@@ -87,11 +84,7 @@ public class SmokeTest {
 
     @Test
     public void fileCreationCustomPathTest() throws IOException, ParserConfigurationException, SAXException {
-        String[] args = new String[4];
-        args[0]="**/*tck-junit-report.xml";
-        args[1]="jUnitReport";
-        args[2]="testSuiteCustomPath";
-        args[3]="testFolder/subFolder/";
+        String[] args = new String[]{"**/*tck-junit-report.xml", "jUnitReport", "testSuiteCustomPath", "testFolder/subFolder/"};
         Main.main(args);
         
         
@@ -106,10 +99,7 @@ public class SmokeTest {
     
     @Test
     public void fileCreationMultipleInput() throws IOException, ParserConfigurationException, SAXException {
-        String[] args = new String[3];
-        args[0]="**/ee.jakarta*txt";
-        args[1]="testSet";
-        args[2]="testSuiteMultipleFiles";
+        String[] args = new String[]{"**/ee.jakarta*txt", "testSet", "testSuiteMultipleFiles"};
         Main.main(args);
         
         
@@ -120,5 +110,34 @@ public class SmokeTest {
         assertTrue(file.exists());
         
         deleteDir(file);   
+    }
+
+    @Test
+    public void fileCreationCollection() throws IOException, ParserConfigurationException, SAXException {
+        String[] args1 = new String[]{"**/ee.jakarta*txt", "testSet", "testSuiteMultipleFilesForCollection"};
+        Main.main(args1);
+
+        String timestamp1 = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String filename1 = "summary-" + args1[2] + "-" + timestamp1 + ".txt";
+        File file1 = new File("results/" + filename1);
+
+        String[] args2 = new String[]{"**/*tck-junit-report.xml", "jUnitReport", "testSuiteJunitReportForCollection"};
+        Main.main(args2);
+
+        String timestamp2 = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String filename2 = "summary-" + args2[2] + "-" + timestamp2 + ".txt";
+        File file2 = new File("results/" + filename2);
+
+        String[] args3 = new String[]{"./results/summary-*txt", "collection", "Collected"};
+        Main.main(args3);
+
+        String timestamp3 = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String filename3 = "summary-" + args3[2] + "-" + timestamp3 + ".txt";
+        File file3 = new File("results/" + filename3);
+        assertTrue(file3.exists());
+
+        deleteDir(file1);
+        deleteDir(file2);
+        deleteDir(file3);
     }
 }

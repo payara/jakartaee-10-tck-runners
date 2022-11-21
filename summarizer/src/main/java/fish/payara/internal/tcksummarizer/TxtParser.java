@@ -82,11 +82,12 @@ public class TxtParser {
             result += "Number of tests with errors " + errors + "\n";
             result += "Number of tests skipped " + skipped + "\n";
 
-            System.out.println(result);
 
         } catch (FileNotFoundException e) {
             throw new IOException("Error during parsing test suite " + testSuiteName + ", file " + inputFilePath + ": " + e.getMessage(), e);
         }
+
+        System.out.println(result);
 
         return result;
     }
@@ -128,7 +129,7 @@ public class TxtParser {
                         }
 
                     }
-
+                    sc.close();
                 } catch (FileNotFoundException | NumberFormatException e) {
                     e.printStackTrace();
                     exceptions.add(e);
@@ -140,6 +141,43 @@ public class TxtParser {
         result += "Number of tests failed " + failures + "\n";
         result += "Number of tests with errors " + errors + "\n";
         result += "Number of tests skipped " + skipped + "\n";
+
+        result += exceptions.stream()
+                .map(e -> "Exception captured! " + e.getMessage() + "\n")
+                .collect(Collectors.joining());
+
+        System.out.println(result);
+
+        return result;
+    }
+
+    public String mergeSummaries(Collection<String> inputFilePaths, String testSuiteName) {
+
+        String result = null;
+
+        List<Exception> exceptions = new ArrayList<>();
+        List<String> fileContent = new ArrayList<>();
+        inputFilePaths.forEach(new Consumer<String>() {
+            @Override
+            public void accept(String inputFilePath) {
+                try {
+
+                    // pass the path to the file as a parameter
+                    File file = new File(inputFilePath);
+                    Scanner sc = new Scanner(file);
+                    while (sc.hasNextLine()) {
+                        String currentLine = sc.nextLine();
+                        fileContent.add(currentLine + "\n");
+                    }
+                    sc.close();
+                } catch (FileNotFoundException | NumberFormatException e) {
+                    e.printStackTrace();
+                    exceptions.add(e);
+                }
+            }
+        });
+
+        result = String.join("", fileContent);
 
         result += exceptions.stream()
                 .map(e -> "Exception captured! " + e.getMessage() + "\n")
