@@ -22,11 +22,11 @@ The output looks like this:
 Run maven test from summarizer
     
     cd summarizer
-    mvn exec:java -Dexec.arguments=[<tck report file>,<format:jUnitReport|summaryTxt|testSet|failsafeSummary>,[testSuiteName],[<output report path>]]
+    mvn exec:java -Dexec.arguments=[<tck report file>,<format:jUnitReport|summaryTxt|testSet|failsafeSummary|collection>,[testSuiteName],[<output report path>]]
 
 The command takes up to 4 arguments:
 * tck report file: path and filename for the file to summarize. Note: the path needs to be written from the current directory. Glob syntax is supported, but only the format testSet can handle multiple files
-* format: 4 formats are supported. See the examples in src/test/sample to see what is supported.
+* format: 5 formats are supported. See the examples in src/test/sample to see what is supported. "collection" takes other summaries as input and merge them in one collected file.
 * test suite name: optional. If missing, the default test suite name is "unknown suite"
 * output report path: optional. Path where to create the summary. If missing, the default output is in ./summarizer/results
 

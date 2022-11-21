@@ -119,6 +119,8 @@ public class XmlParser {
                 result += resultList.get(temp) + "\n";
             }
         }
+        System.out.println(result);
+
         return result;
     }
 
@@ -180,6 +182,9 @@ public class XmlParser {
                 result += resultList.get(temp) + "\n";
             }
         }
+
+        System.out.println(result);
+
         return result;
     }
 

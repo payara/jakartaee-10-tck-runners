@@ -121,4 +121,43 @@ public class SmokeTest {
         
         deleteDir(file);   
     }
+
+    @Test
+    public void fileCreationCollection() throws IOException, ParserConfigurationException, SAXException {
+        String[] args1 = new String[3];
+        args1[0] = "**/ee.jakarta*txt";
+        args1[1] = "testSet";
+        args1[2] = "testSuiteMultipleFilesForCollection";
+        Main.main(args1);
+
+        String timestamp1 = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String filename1 = "summary-" + args1[2] + "-" + timestamp1 + ".txt";
+        File file1 = new File("results/" + filename1);
+
+        String[] args2 = new String[3];
+        args2[0] = "**/*tck-junit-report.xml";
+        args2[1] = "jUnitReport";
+        args2[2] = "testSuiteJunitReportForCollection";
+        Main.main(args2);
+
+        String timestamp2 = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String filename2 = "summary-" + args2[2] + "-" + timestamp2 + ".txt";
+        File file2 = new File("results/" + filename2);
+
+        String[] args3 = new String[3];
+        args3[0] = "./results/summary-*txt";
+        args3[1] = "collection";
+        args3[2] = "Collected";
+        Main.main(args3);
+
+        String timestamp3 = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String filename3 = "summary-" + args3[2] + "-" + timestamp3 + ".txt";
+        File file3 = new File("results/" + filename3);
+        assertTrue(file3.exists());
+
+        deleteDir(file1);
+        deleteDir(file2);
+        deleteDir(file3);
+        //deleteDir(new File("results"));
+    }
 }
