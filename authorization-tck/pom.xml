@@ -333,6 +333,14 @@
                                 <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                     <arg value="stop-domain" />
                                 </exec>
+                                
+                                <fail message="Running tests failed." status="${testResult}">
+                                    <condition>
+                                        <not>
+                                            <equals arg1="${testResult}" arg2="0" />
+                                        </not>
+                                    </condition>
+                                </fail>
                             </target>
                         </configuration>
                     </execution>
