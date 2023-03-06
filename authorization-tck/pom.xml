@@ -198,6 +198,10 @@
                                     match="work\.dir=.*"
                                     replace="work\.dir=${tck.home}/jacctckwork/jacctck" />
 
+                                <replaceregexp file="${tck.home}/bin/ts.jte" byline="true"
+                                    match="        -Djavax\.net\.ssl\.trustStore=.*"
+                                    replace="        -Djavax\.net\.ssl\.trustStore=$\\{jacc.home\\}/domains/domain1/config/cacerts\.p12 -Djavax\.net\.ssl\.trustStorePassword=changeit \\\\" />
+
                                 <!-- Run just selected subset tests -->
                                 <replaceregexp file="${tck.home}/bin/build.xml" byline="true"
                                     match="&lt;/project&gt;"
