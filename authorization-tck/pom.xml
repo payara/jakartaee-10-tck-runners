@@ -198,6 +198,10 @@
                                     match="work\.dir=.*"
                                     replace="work\.dir=${tck.home}/jacctckwork/jacctck" />
 
+                                <replaceregexp file="${tck.home}/bin/ts.jte" byline="true"
+                                    match="        -Djavax\.net\.ssl\.trustStore=.*"
+                                    replace="        -Djavax\.net\.ssl\.trustStore=$\\{jacc.home\\}/domains/domain1/config/cacerts\.p12 -Djavax\.net\.ssl\.trustStorePassword=changeit \\\\" />
+
                                 <!-- Run just selected subset tests -->
                                 <replaceregexp file="${tck.home}/bin/build.xml" byline="true"
                                     match="&lt;/project&gt;"
@@ -333,6 +337,14 @@
                                 <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                     <arg value="stop-domain" />
                                 </exec>
+                                
+                                <fail message="Running tests failed." status="${testResult}">
+                                    <condition>
+                                        <not>
+                                            <equals arg1="${testResult}" arg2="0" />
+                                        </not>
+                                    </condition>
+                                </fail>
                             </target>
                         </configuration>
                     </execution>
