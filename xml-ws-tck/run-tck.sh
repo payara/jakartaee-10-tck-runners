@@ -8,7 +8,7 @@ fi
 export TS_HOME=`pwd`/xml-ws-tck
 export PATH=${PATH}:${TS_HOME}/bin
 
-#rm jakarta-xml-ws-tck-4.0.0.zip
+rm jakarta-xml-ws-tck-4.0.0.zip
 wget -c https://download.eclipse.org/jakartaee/xml-web-services/4.0/jakarta-xml-ws-tck-4.0.0.zip
 rm -rf ./xml-ws-tck
 unzip jakarta-xml-ws-tck-4.0.0.zip
