@@ -15,8 +15,6 @@
         
         <!-- Arquillian Dependencies -->
         <payara.arquillian.container.version>3.0.alpha8</payara.arquillian.container.version>
-        
-        <!-- com.beust-jcommander.version>1.82</com.beust-jcommander.version -->
 
         <tck-suite.xml>src${file.separator}test${file.separator}resources${file.separator}tck-suite.xml</tck-suite.xml>
     </properties>
@@ -57,37 +55,29 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>5.10.2</version>
-            <!--            <scope>compile</scope>-->
         </dependency>
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
             <version>1.10.2</version>
-            <!--            <scope>compile</scope>-->
         </dependency>
         <dependency>
             <groupId>org.jboss.arquillian.junit5</groupId>
             <artifactId>arquillian-junit5-container</artifactId>
-            <!--            <scope>compile</scope>-->
         </dependency>
-        <!-- dependency>
-            <groupId>com.beust</groupId>
-            <artifactId>jcommander</artifactId>
-            <version>${com.beust-jcommander.version}</version>
-        </dependency -->
         
         <!-- Remote Payara server -->
         <dependency>
             <groupId>fish.payara.arquillian</groupId>
             <artifactId>arquillian-payara-server-remote</artifactId>
             <version>${payara.arquillian.container.version}</version>
-            <!-- scope>test</scope -->
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>fish.payara.arquillian</groupId>
             <artifactId>payara-client-ee9</artifactId>
-            <!-- scope>test</scope -->
             <version>${payara.arquillian.container.version}</version>
+            <scope>test</scope>
         </dependency>
         
         <!-- jdk11+ dependencies -->
@@ -166,6 +156,7 @@
                     <systemPropertyVariables>
                     </systemPropertyVariables>
                     <groups>full</groups>                        <!-- Groups to include i.e. web/full -->
+                    <!-- For debugging, include only subset of tests: -->
                     <!-- <includes>
                         <include>ee.jakarta.tck.concurrent.spec.ManagedThreadFactory.injected.*Tests</include>
                     </includes> -->
