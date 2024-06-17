@@ -17,11 +17,11 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.release>11</maven.compiler.release>
-        <cdi.tck.version>4.0.6</cdi.tck.version>
-        <cdi.api.version>4.0.1</cdi.api.version>
-        <weld.version>5.0.0.SP2</weld.version>
-        <arquillian.version>1.7.0.Alpha10</arquillian.version>
-        <payara.arquillian.version>3.0.alpha6</payara.arquillian.version>
+        <cdi.tck.version>4.1.0</cdi.tck.version>
+        <cdi.api.version>4.1.0</cdi.api.version>
+        <weld.version>6.0.0.Beta1</weld.version>
+        <arquillian.version>1.8.0.Final</arquillian.version>
+        <payara.arquillian.version>3.0</payara.arquillian.version>
     </properties>
 
     <dependencies>
