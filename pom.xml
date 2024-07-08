@@ -101,6 +101,9 @@
         <jakarta.tck.signaturetest.version>11.0.0-M1</jakarta.tck.signaturetest.version>
         <jakarta.tck.persistence.version>3.2.0</jakarta.tck.persistence.version>
         <cdi.api.version>4.1.0</cdi.api.version>
+
+        <!-- The profile to run - acceptable parameters are 'full', 'web', and 'core' -->
+        <jakarta.tck.platform>full</jakarta.tck.platform>
     </properties>
 
     <repositories>
@@ -292,6 +295,7 @@
 
             <properties>
                 <payara.artifact>payara-web</payara.artifact>
+                <jakarta.tck.platform>web</jakarta.tck.platform>
             </properties>
         </profile>
         <profile>
