@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>fish.payara.jakarta.tests.tck</groupId>
+        <artifactId>tck</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>annotations-tck</artifactId>
+    <packaging>pom</packaging>
+
+    <name>TCK: Annotations</name>
+
+
+    <properties>
+        <jimage.dir>${project.build.directory}${file.separator}jdk-bundle</jimage.dir>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta-annotations-tck</artifactId>
+            <version>${jakarta-annotations-tck.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.tck</groupId>
+            <artifactId>sigtest-maven-plugin</artifactId>
+        </dependency>
+
+        <!-- Dependency added to ensure it resolves in the correct order -->
+        <dependency>
+            <groupId>fish.payara.jakarta.tests.tck</groupId>
+            <artifactId>jakarta-annotations-tck</artifactId>
+            <version>${project.version}</version>
+            <type>pom</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-install-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-install</id>
+                        <phase>disabled</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>sig-test</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                        <configuration>
+                            <dependenciesToScan>jakarta.annotation:jakarta-annotations-tck</dependenciesToScan>
+                            <systemPropertyVariables>
+                                <jimage.dir>${jimage.dir}</jimage.dir>
+                                <sigTestClasspath>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.annotation-api.jar${path.separator}${jimage.dir}${file.separator}java.base${path.separator}${jimage.dir}${file.separator}java.rmi${path.separator}${jimage.dir}${file.separator}java.sql${path.separator}${jimage.dir}${file.separator}java.naming</sigTestClasspath>
+                                <ca.sig.generated>true</ca.sig.generated>
+                                <ca.sig.postconstruct>true</ca.sig.postconstruct>
+                                <ca.sig.priority>true</ca.sig.priority>
+                                <ca.sig.predestroy>true</ca.sig.predestroy>
+                                <ca.sig.resource>true</ca.sig.resource>
+                                <ca.sig.resources>true</ca.sig.resources>
+                                <ca.sig.securitydeclareroles>true</ca.sig.securitydeclareroles>
+                                <ca.sig.securitydenyall>true</ca.sig.securitydenyall>
+                                <ca.sig.securitypermitall>true</ca.sig.securitypermitall>
+                                <ca.sig.securityrolesallowed>true</ca.sig.securityrolesallowed>
+                                <ca.sig.securityrunas>true</ca.sig.securityrunas>
+                                <ca.sig.sqldatasourcedefinition>true</ca.sig.sqldatasourcedefinition>
+                                <ca.sig.sqldatasourcedefinitions>true</ca.sig.sqldatasourcedefinitions>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

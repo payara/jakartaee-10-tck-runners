@@ -32,6 +32,7 @@
     <name>TCK: Download and Install Dependencies not in Maven Repos</name>
 
     <modules>
+        <module>jakarta-annotations-tck</module>
         <module>jakarta-authorization-tck</module>
         <module>jakarta-servlet-tck</module>
         <module>jakarta-pages-tck</module>
