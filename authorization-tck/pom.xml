@@ -134,7 +134,7 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>org.glassfish.main.tests.tck</groupId>
+                                    <groupId>org.payara.jakarta.tests.tck</groupId>
                                     <artifactId>jakarta-authorization-tck</artifactId>
                                     <type>zip</type>
                                     <version>${project.version}</version>
