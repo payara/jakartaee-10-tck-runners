@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2022, 2024 Contributors to the Eclipse Foundation.
+    Copyright (c) 2015, 2020 Oracle and/or its affiliates. All rights reserved.
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Public License v. 2.0, which is available at
+    http://www.eclipse.org/legal/epl-2.0.
+
+    This Source Code may also be made available under the following Secondary
+    Licenses when the conditions for such availability set forth in the
+    Eclipse Public License v. 2.0 are satisfied: GNU General Public License,
+    version 2 with the GNU Classpath Exception, which is available at
+    https://www.gnu.org/software/classpath/license.html.
+
+    SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.eclipse.ee4j</groupId>
+        <artifactId>project</artifactId>
+        <version>1.0.9</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>org.eclipse.ee4j.authorization.tck</groupId>
+    <artifactId>jakarta-authorization-tck</artifactId>
+    <version>3.0.0-SNAPSHOT</version>
+
+    <packaging>pom</packaging>
+
+    <name>Jakarta Authorization TCK - main</name>
+
+    <!--
+        M O D U L E S
+
+        Each module represent a different test, with the exception of the "common"
+        module which contains utility code.
+
+        To print responses received by the tests (except those from the old TCK)
+
+        execute with mvn ... -Dtck.log.response
+
+        For a somewhat faster execution using GlassFish use:
+
+        mvn clean install -Dglassfish.keepServerRunning -Dglassfish.keepDeployment -DskipSBOM
+    -->
+    <modules>
+        <module>common</module>
+
+        <!-- Signature test for the API -->
+        <module>authorization-signaturetest</module>
+
+        <!-- Setting a custom Jakarta Authorization policy -->
+        <module>app-custom-policy</module>
+        <module>app-custom-policy2</module>
+
+        <!-- Setting a custom Jakarta Authorization policy factory -->
+        <module>app-custom-policyfactory</module>
+
+        <!--
+            Setting a custom Jakarta Authorization policy and policy configuration (factory) that traces
+            (logs) the operations on it.
+        -->
+        <module>app-custom-trace-policy</module>
+        <module>app-custom-trace-policyconfiguration</module>
+        <module>app-custom-trace-policyconfigurationfactory</module>
+
+        <!-- Using the default Jakarta Authorization policy from within a Servlet -->
+        <module>app-policy-within-servlet</module>
+
+        <!-- Instantiating API permission instances and calling equals and hashcode on it -->
+        <module>app-permissions-equals-hashcode</module>
+
+        <!-- Testing plain Servlet behaviour without anything Jakarta Authorization specific -->
+        <module>app-servlet-constraints</module>
+
+        <!-- Testing plain EJB behaviour without anything Jakarta Authorization specific -->
+        <module>app-ejb-constraints</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.release>17</maven.compiler.release>
+
+        <zipname>${project.artifactId}-${project.version}</zipname>
+        <licenseFile>${project.basedir}/LICENSE_EFTL.md</licenseFile>
+
+        <buildDirectory>${project.basedir}/target</buildDirectory>
+
+        <jakarta.authorization.version>3.0.0-M4</jakarta.authorization.version>
+        <jakarta.servlet.version>6.1.0</jakarta.servlet.version>
+        <jakarta.annotation.version>3.0.0</jakarta.annotation.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>jakarta.authorization</groupId>
+                <artifactId>jakarta.authorization-api</artifactId>
+                <version>${jakarta.authorization.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta.servlet</groupId>
+                <artifactId>jakarta.servlet-api</artifactId>
+                <version>${jakarta.servlet.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta.annotation</groupId>
+                <artifactId>jakarta.annotation-api</artifactId>
+                <version>${jakarta.annotation.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>1.8.0.Final</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.arquillian.container</groupId>
+                <artifactId>arquillian-container-test-api</artifactId>
+                <version>1.8.0.Final</version>
+            </dependency>
+            <dependency>
+                <groupId>org.omnifaces.arquillian</groupId>
+                <artifactId>glassfish-client-ee10</artifactId>
+                <version>1.4</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>jakarta.authorization</groupId>
+            <artifactId>jakarta.authorization-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+        </dependency>
+
+
+        <!-- Test dependencies which can be used in sub-modules -->
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.protocol</groupId>
+            <artifactId>arquillian-protocol-servlet</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.htmlunit</groupId>
+            <artifactId>htmlunit</artifactId>
+            <version>3.11.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.17.2</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <directory>${buildDirectory}</directory>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>3.4.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>3.6.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>3.2.5</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>4.0.0-M13</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>3.9.0</version>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <systemPropertyVariables>
+                        <finalName>${project.build.finalName}</finalName>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>3.2.5</version>
+                <executions>
+                    <execution>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>failsafe-report-only</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <aggregate>true</aggregate>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <skipSurefireReport>${skipSurefireReport}</skipSurefireReport>
+                    <aggregate>true</aggregate>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+
+    <profiles>
+
+        <!-- ### Payara ### -->
+
+        <profile>
+            <id>glassfish-ci-managed</id>
+
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
+            <properties>
+                <glassfish.version>7.2024.1-SNAPSHOT</glassfish.version>
+                <glassfish.port>8080</glassfish.port>
+                <glassfish.suspend>false</glassfish.suspend>
+                <glassfish.root>${maven.multiModuleProjectDirectory}/target</glassfish.root>
+
+                <authorization-api.noupdate>true</authorization-api.noupdate>
+                <exousia.noupdate>true</exousia.noupdate>
+                <exousia.version>3.0.0-SNAPSHOT</exousia.version>
+
+                <!--
+                    Exact artefact used by GlassFish that holds the API classes. The actual API
+                    jar in the GlassFish root folder is installed to these coordinates below.
+                    This is used by the signature test in module /authorization-signaturetest
+                -->
+                <sigtest.api.groupId>jakarta.authorization</sigtest.api.groupId>
+                <sigtest.api.artifactId>jakarta.authorization-vendor-api</sigtest.api.artifactId>
+                <sigtest.api.version>${glassfish.version}</sigtest.api.version>
+            </properties>
+
+            <dependencies>
+                <!-- The actual Arquillian connector -->
+                <dependency>
+                    <groupId>org.omnifaces.arquillian</groupId>
+                    <artifactId>arquillian-glassfish-server-managed</artifactId>
+                    <version>1.4</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+
+                        <!-- Download and unpack GlassFish -->
+                        <executions>
+                            <execution>
+                                <id>unpack</id>
+                                <phase>process-test-classes</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${skipITs}</skip>
+                                    <outputDirectory>${glassfish.root}</outputDirectory>
+                                    <markersDirectory>${glassfish.root}/dependency-maven-plugin-markers</markersDirectory>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>fish.payara.distributions</groupId>
+                                            <artifactId>payara</artifactId>
+                                            <version>${glassfish.version}</version>
+                                            <type>zip</type>
+                                            <overWrite>false</overWrite>
+                                            <outputDirectory>${glassfish.root}</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+
+                            <!-- Optionally update Authorization API jar in GlassFish -->
+                            <execution>
+                                <id>update-authorization-api</id>
+                                <phase>process-test-classes</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${authorization-api.noupdate}</skip>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>jakarta.authorization</groupId>
+                                            <artifactId>jakarta.authorization-api</artifactId>
+                                            <version>${jakarta.authorization.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>
+                                            <outputDirectory>${glassfish.root}/glassfish8/glassfish/modules</outputDirectory>
+                                            <destFileName>jakarta.authorization-api.jar</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+
+                            <!-- Optionally update Authorization IMPL (Exousia) jar in GlassFish -->
+                            <execution>
+                                <id>update-authorization-impl</id>
+                                <phase>process-test-classes</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${exousia.noupdate}</skip>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>org.glassfish.exousia</groupId>
+                                            <artifactId>exousia</artifactId>
+                                            <version>${exousia.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>
+                                            <outputDirectory>${glassfish.root}/glassfish8/glassfish/modules</outputDirectory>
+                                            <destFileName>exousia.jar</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>3.0.0</version>
+                        <executions>
+                            <execution>
+                                <id>set-port</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${skipITs}</skip>
+                                    <target>
+                                        <echo level="info">Replacing in ${glassfish.root}</echo>
+                                        <replace token="8080"
+                                                 value="${glassfish.port}"
+                                                 dir="${glassfish.root}/glassfish8/glassfish/domains/domain1/config/"
+                                                 summary="yes">
+                                            <include name="domain.xml" />
+                                        </replace>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!--
+                        Installs the jakarta.authorization-api.jar from GF on the filesystem to the
+                        coordinates expected by the signature test.
+                    -->
+                    <plugin>
+                        <artifactId>maven-install-plugin</artifactId>
+                        <version>3.1.1</version>
+                        <executions>
+                            <execution>
+                                <id>unpack</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <configuration>
+                                    <file>${glassfish.root}/glassfish8/glassfish/modules/jakarta.authorization-api.jar</file>
+                                    <groupId>${sigtest.api.groupId}</groupId>
+                                    <artifactId>${sigtest.api.artifactId}</artifactId>
+                                    <version>${sigtest.api.version}</version>
+                                    <packaging>jar</packaging>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <systemProperties>
+                                <glassfish.home>${glassfish.root}/glassfish8</glassfish.home>
+
+                                <log.file.location>${glassfish.root}/glassfish8/glassfish/domains/domain1/logs</log.file.location>
+
+                                <glassfish.systemProperties>
+                                    log.file.location=${glassfish.root}/glassfish8/glassfish/domains/domain1/logs
+                                    vendor.jakarta.security.jacc.PolicyConfigurationFactory.provider=org.glassfish.exousia.modules.def.DefaultPolicyConfigurationFactory
+                                </glassfish.systemProperties>
+
+                                <glassfish.postBootCommands>
+                                    create-file-user --groups foo:bar --passwordfile ${maven.multiModuleProjectDirectory}/reza.pass reza
+                                    create-file-user --groups Administrator:Manager:Employee --passwordfile ${maven.multiModuleProjectDirectory}/javajoe.pass javajoe
+                                    create-file-user --groups Manager:Employee --passwordfile ${maven.multiModuleProjectDirectory}/javajoe.pass Manager
+                                    create-file-user --groups Employee --passwordfile ${maven.multiModuleProjectDirectory}/j2ee.pass j2ee
+                                </glassfish.postBootCommands>
+                            </systemProperties>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
