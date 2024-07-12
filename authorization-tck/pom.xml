@@ -147,6 +147,23 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <copy file="${project.basedir}/payara-pom.xml" tofile="${tck.root}/payara-pom.xml"/>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
@@ -165,7 +182,7 @@
                         <argument>-s</argument>
                         <argument>${maven.settings.xml}</argument>
                         <argument>-f</argument>
-                        <argument>${project.basedir}/payara-pom.xml</argument>
+                        <argument>${tck.root}/payara-pom.xml</argument>
                         <argument>clean</argument>
                         <argument>install</argument>
                         <argument>-Dglassfish.version=${payara.version}</argument>
