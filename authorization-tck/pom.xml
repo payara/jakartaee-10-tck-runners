@@ -157,7 +157,7 @@
                         </goals>
                         <configuration>
                             <tasks>
-                                <copy file="${project.basedir}/payara-pom.xml" tofile="${tck.root}/payara-pom.xml"/>
+                                <copy file="${project.basedir}/payara-pom.xml" tofile="${tck.root}/authorization-tck-3.0.0/tck/pom.xml"/>
                             </tasks>
                         </configuration>
                     </execution>

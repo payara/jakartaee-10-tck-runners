@@ -49,37 +49,37 @@
         mvn clean install -Dglassfish.keepServerRunning -Dglassfish.keepDeployment -DskipSBOM
     -->
     <modules>
-        <module>authorization-tck-3.0.0/tck/common</module>
+        <module>common</module>
 
         <!-- Signature test for the API -->
-        <module>authorization-tck-3.0.0/tck/authorization-signaturetest</module>
+        <module>authorization-signaturetest</module>
 
         <!-- Setting a custom Jakarta Authorization policy -->
-        <module>authorization-tck-3.0.0/tck/app-custom-policy</module>
-        <module>authorization-tck-3.0.0/tck/app-custom-policy2</module>
+        <module>app-custom-policy</module>
+        <module>app-custom-policy2</module>
 
         <!-- Setting a custom Jakarta Authorization policy factory -->
-        <module>authorization-tck-3.0.0/tck/app-custom-policyfactory</module>
+        <module>app-custom-policyfactory</module>
 
         <!--
             Setting a custom Jakarta Authorization policy and policy configuration (factory) that traces
             (logs) the operations on it.
         -->
-        <module>authorization-tck-3.0.0/tck/app-custom-trace-policy</module>
-        <module>authorization-tck-3.0.0/tck/app-custom-trace-policyconfiguration</module>
-        <module>authorization-tck-3.0.0/tck/app-custom-trace-policyconfigurationfactory</module>
+        <module>app-custom-trace-policy</module>
+        <module>app-custom-trace-policyconfiguration</module>
+        <module>app-custom-trace-policyconfigurationfactory</module>
 
         <!-- Using the default Jakarta Authorization policy from within a Servlet -->
-        <module>authorization-tck-3.0.0/tck/app-policy-within-servlet</module>
+        <module>app-policy-within-servlet</module>
 
         <!-- Instantiating API permission instances and calling equals and hashcode on it -->
-        <module>authorization-tck-3.0.0/tck/app-permissions-equals-hashcode</module>
+        <module>app-permissions-equals-hashcode</module>
 
         <!-- Testing plain Servlet behaviour without anything Jakarta Authorization specific -->
-        <module>authorization-tck-3.0.0/tck/app-servlet-constraints</module>
+        <module>app-servlet-constraints</module>
 
         <!-- Testing plain EJB behaviour without anything Jakarta Authorization specific -->
-        <module>authorization-tck-3.0.0/tck/app-ejb-constraints</module>
+        <module>app-ejb-constraints</module>
     </modules>
 
     <properties>
@@ -375,7 +375,7 @@
                                             <version>${jakarta.authorization.version}</version>
                                             <type>jar</type>
                                             <overWrite>true</overWrite>
-                                            <outputDirectory>${glassfish.root}/glassfish8/glassfish/modules</outputDirectory>
+                                            <outputDirectory>${glassfish.root}/payara7/glassfish/modules</outputDirectory>
                                             <destFileName>jakarta.authorization-api.jar</destFileName>
                                         </artifactItem>
                                     </artifactItems>
@@ -398,7 +398,7 @@
                                             <version>${exousia.version}</version>
                                             <type>jar</type>
                                             <overWrite>true</overWrite>
-                                            <outputDirectory>${glassfish.root}/glassfish8/glassfish/modules</outputDirectory>
+                                            <outputDirectory>${glassfish.root}/payara7/glassfish/modules</outputDirectory>
                                             <destFileName>exousia.jar</destFileName>
                                         </artifactItem>
                                     </artifactItems>
@@ -423,7 +423,7 @@
                                         <echo level="info">Replacing in ${glassfish.root}</echo>
                                         <replace token="8080"
                                                  value="${glassfish.port}"
-                                                 dir="${glassfish.root}/glassfish8/glassfish/domains/domain1/config/"
+                                                 dir="${glassfish.root}/payara7/glassfish/domains/domain1/config/"
                                                  summary="yes">
                                             <include name="domain.xml" />
                                         </replace>
@@ -448,7 +448,7 @@
                                     <goal>install-file</goal>
                                 </goals>
                                 <configuration>
-                                    <file>${glassfish.root}/glassfish8/glassfish/modules/jakarta.authorization-api.jar</file>
+                                    <file>${glassfish.root}/payara7/glassfish/modules/jakarta.authorization-api.jar</file>
                                     <groupId>${sigtest.api.groupId}</groupId>
                                     <artifactId>${sigtest.api.artifactId}</artifactId>
                                     <version>${sigtest.api.version}</version>
@@ -463,12 +463,12 @@
                         <artifactId>maven-failsafe-plugin</artifactId>
                         <configuration>
                             <systemProperties>
-                                <glassfish.home>${glassfish.root}/glassfish8</glassfish.home>
+                                <glassfish.home>${glassfish.root}/payara7</glassfish.home>
 
-                                <log.file.location>${glassfish.root}/glassfish8/glassfish/domains/domain1/logs</log.file.location>
+                                <log.file.location>${glassfish.root}/payara7/glassfish/domains/domain1/logs</log.file.location>
 
                                 <glassfish.systemProperties>
-                                    log.file.location=${glassfish.root}/glassfish8/glassfish/domains/domain1/logs
+                                    log.file.location=${glassfish.root}/payara7/glassfish/domains/domain1/logs
                                     vendor.jakarta.security.jacc.PolicyConfigurationFactory.provider=org.glassfish.exousia.modules.def.DefaultPolicyConfigurationFactory
                                 </glassfish.systemProperties>
 
