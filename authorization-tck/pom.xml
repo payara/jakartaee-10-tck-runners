@@ -182,7 +182,7 @@
                         <argument>-s</argument>
                         <argument>${maven.settings.xml}</argument>
                         <argument>-f</argument>
-                        <argument>${tck.root}/payara-pom.xml</argument>
+                        <argument>${tck.root}/authorization-tck-3.0.0/tck/pom.xml</argument>
                         <argument>clean</argument>
                         <argument>install</argument>
                         <argument>-Dglassfish.version=${payara.version}</argument>
