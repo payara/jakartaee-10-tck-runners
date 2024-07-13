@@ -49,37 +49,37 @@
         mvn clean install -Dglassfish.keepServerRunning -Dglassfish.keepDeployment -DskipSBOM
     -->
     <modules>
-        <module>common</module>
+        <module>authorization-tck-3.0.0/tck/common</module>
 
         <!-- Signature test for the API -->
-        <module>authorization-signaturetest</module>
+        <module>authorization-tck-3.0.0/tck/authorization-signaturetest</module>
 
         <!-- Setting a custom Jakarta Authorization policy -->
-        <module>app-custom-policy</module>
-        <module>app-custom-policy2</module>
+        <module>authorization-tck-3.0.0/tck/app-custom-policy</module>
+        <module>authorization-tck-3.0.0/tck/app-custom-policy2</module>
 
         <!-- Setting a custom Jakarta Authorization policy factory -->
-        <module>app-custom-policyfactory</module>
+        <module>authorization-tck-3.0.0/tck/app-custom-policyfactory</module>
 
         <!--
             Setting a custom Jakarta Authorization policy and policy configuration (factory) that traces
             (logs) the operations on it.
         -->
-        <module>app-custom-trace-policy</module>
-        <module>app-custom-trace-policyconfiguration</module>
-        <module>app-custom-trace-policyconfigurationfactory</module>
+        <module>authorization-tck-3.0.0/tck/app-custom-trace-policy</module>
+        <module>authorization-tck-3.0.0/tck/app-custom-trace-policyconfiguration</module>
+        <module>authorization-tck-3.0.0/tck/app-custom-trace-policyconfigurationfactory</module>
 
         <!-- Using the default Jakarta Authorization policy from within a Servlet -->
-        <module>app-policy-within-servlet</module>
+        <module>authorization-tck-3.0.0/tck/app-policy-within-servlet</module>
 
         <!-- Instantiating API permission instances and calling equals and hashcode on it -->
-        <module>app-permissions-equals-hashcode</module>
+        <module>authorization-tck-3.0.0/tck/app-permissions-equals-hashcode</module>
 
         <!-- Testing plain Servlet behaviour without anything Jakarta Authorization specific -->
-        <module>app-servlet-constraints</module>
+        <module>authorization-tck-3.0.0/tck/app-servlet-constraints</module>
 
         <!-- Testing plain EJB behaviour without anything Jakarta Authorization specific -->
-        <module>app-ejb-constraints</module>
+        <module>authorization-tck-3.0.0/tck/app-ejb-constraints</module>
     </modules>
 
     <properties>
