@@ -28,15 +28,15 @@
             <scope>test</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>jakarta.json</groupId>
-                    <artifactId>jakarta.json-api</artifactId>
+                    <groupId>org.junit.jupiter</groupId>
+                    <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.netbeans.tools</groupId>
-            <artifactId>sigtest-maven-plugin</artifactId>
-            <version>1.6</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -78,23 +78,26 @@
                     <testFailureIgnore>true</testFailureIgnore>
                     <dependenciesToScan>jakarta.json:jakarta.json-tck-tests-pluggability</dependenciesToScan>
                     <additionalClasspathElements>
-                        <additionalClasspathElement>${project.build.directory}/payara6/glassfish/modules/jakarta.json.jar</additionalClasspathElement>
-                        <additionalClasspathElement>${project.build.directory}/payara6/glassfish/modules/parsson.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/payara7/glassfish/modules/jakarta.json.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/payara7/glassfish/modules/parsson.jar</additionalClasspathElement>
                     </additionalClasspathElements>
                 </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>3.0.0-M5</version>
                 <executions>
                     <execution>
-                        <id>post-unit-test</id>
-                        <phase>test</phase>
+                        <id>generate-test-report</id>
+                        <phase>verify</phase>
                         <goals>
-                            <goal>report</goal>
+                            <goal>report-only</goal>
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <linkXRef>false</linkXRef>
+                    <outputName>test-report</outputName>
+                </configuration>
             </plugin>
         </plugins>
     </build>

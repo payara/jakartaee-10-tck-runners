@@ -21,7 +21,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <jsonp.api.version>2.1.1</jsonp.api.version>
-
+        <skip.surefire.report>true</skip.surefire.report>
     </properties>
 
     <modules>
