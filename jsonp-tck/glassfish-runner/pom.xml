@@ -104,23 +104,20 @@
                     </additionalClasspathElements>
                 </configuration>
             </plugin>
-            <plugin>
+            <!-- Disabled for now: Error parsing JUnit XML report ... An invalid XML character (Unicode: 0xffff) was found in the CDATA section - que? -->
+            <!--<plugin>
                 <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>3.0.0-M5</version>
                 <executions>
                     <execution>
-                        <id>generate-test-report</id>
-                        <phase>verify</phase>
+                        <id>post-unit-test</id>
+                        <phase>test</phase>
                         <goals>
-                            <goal>report-only</goal>
+                            <goal>report</goal>
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <linkXRef>false</linkXRef>
-                    <outputName>test-report</outputName>
-                    <skipSurefireReport>${skip.surefire.report}</skipSurefireReport>
-                </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 </project>
