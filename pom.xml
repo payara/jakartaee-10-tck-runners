@@ -90,7 +90,7 @@
         <module>tck-download</module>
         <module>websocket-tck</module>
         <module>summarizer</module>
-        <module>expression_language_tck</module>
+        <module>expression-language-tck</module>
     </modules>
 
     <profiles>
