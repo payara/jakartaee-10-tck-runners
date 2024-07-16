@@ -14,18 +14,6 @@
     <name>Jakarta JSON Processing TCK Runner - GlassFish Runner</name>
     <description>This pom runs the JakartaEE JSON Processing TCK</description>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.junit</groupId>
-                <artifactId>junit-bom</artifactId>
-                <version>${junit.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
         <dependency>
             <groupId>jakarta.json</groupId>

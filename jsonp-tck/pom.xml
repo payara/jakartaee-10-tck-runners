@@ -24,6 +24,18 @@
         <skip.surefire.report>true</skip.surefire.report>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <modules>
         <module>payara-runner</module>
         <module>glassfish-runner</module>
