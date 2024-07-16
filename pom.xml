@@ -52,7 +52,7 @@
         <ant.zip.url>https://archive.apache.org/dist/ant/binaries/apache-ant-${ant.version}-bin.zip</ant.zip.url>
 
         <payara.home>${project.build.directory}/payara7</payara.home>
-        <payara.version>7.2024.1-SNAPSHOT</payara.version>
+        <payara.version>7.2024.1.Alpha2-SNAPSHOT</payara.version>
         <payara.asadmin>${payara.home}/glassfish/bin/asadmin</payara.asadmin>
         <payara.artifact>payara</payara.artifact>
 
@@ -89,7 +89,8 @@
         <module>tags-tck</module>
         <module>tck-download</module>
         <module>websocket-tck</module>
-        <module>tck-summarizer</module>
+        <module>summarizer</module>
+        <module>expression_language_tck</module>
     </modules>
 
     <profiles>
