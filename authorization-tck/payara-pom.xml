@@ -292,7 +292,7 @@
         <!-- ### Payara ### -->
 
         <profile>
-            <id>glassfish-ci-managed</id>
+            <id>payara-server-managed</id>
 
             <activation>
                 <activeByDefault>true</activeByDefault>
