@@ -299,7 +299,7 @@
             </activation>
 
             <properties>
-                <glassfish.version>7.2024.1-SNAPSHOT</glassfish.version>
+                <payara.version>7.2024.1.Alpha2-SNAPSHOT</payara.version>
                 <glassfish.port>8080</glassfish.port>
                 <glassfish.suspend>false</glassfish.suspend>
                 <glassfish.root>${maven.multiModuleProjectDirectory}/target</glassfish.root>
