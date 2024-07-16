@@ -29,7 +29,7 @@
             <exclusions>
                 <exclusion>
                     <groupId>org.junit.jupiter</groupId>
-                    <artifactId>*</artifactId>
+                    <artifactId>junit-jupiter-engine</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -71,7 +71,6 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
                 <configuration>
                     <reuseForks>false</reuseForks>
                     <trimStackTrace>false</trimStackTrace>
@@ -86,7 +85,6 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>3.0.0-M5</version>
                 <executions>
                     <execution>
                         <id>post-unit-test</id>
