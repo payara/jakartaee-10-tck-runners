@@ -463,8 +463,7 @@
                         <artifactId>maven-failsafe-plugin</artifactId>
                         <configuration>
                             <systemPropertyVariables>
-                                <payara.home>${payara.home}</payara.home>
-                                <glassfish.home>${glassfish.root}/payara7</glassfish.home>
+                                <payara.home>${glassfish.root}/payara7</payara.home>
 
                                 <log.file.location>${glassfish.root}/payara7/glassfish/domains/domain1/logs</log.file.location>
 
