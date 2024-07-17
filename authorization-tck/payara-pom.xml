@@ -462,7 +462,8 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
                         <configuration>
-                            <systemProperties>
+                            <systemPropertyVariables>
+                                <payara.home>${payara.home}</payara.home>
                                 <glassfish.home>${glassfish.root}/payara7</glassfish.home>
 
                                 <log.file.location>${glassfish.root}/payara7/glassfish/domains/domain1/logs</log.file.location>
@@ -478,7 +479,7 @@
                                     create-file-user --groups Manager:Employee --passwordfile ${maven.multiModuleProjectDirectory}/javajoe.pass Manager
                                     create-file-user --groups Employee --passwordfile ${maven.multiModuleProjectDirectory}/j2ee.pass j2ee
                                 </glassfish.postBootCommands>
-                            </systemProperties>
+                            </systemPropertyVariables>
                         </configuration>
                     </plugin>
                 </plugins>
