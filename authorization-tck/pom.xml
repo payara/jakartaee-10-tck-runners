@@ -51,7 +51,7 @@
         <port.orb.ssl>13820</port.orb.ssl>
         <port.harness.log>12000</port.harness.log>
     </properties>
-    
+
     <dependencies>
         <dependency>
             <groupId>fish.payara.distributions</groupId>
@@ -194,4 +194,18 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+            <properties>
+                <maven.executable>${env.MAVEN_HOME}${file.separator}bin${file.separator}mvn.cmd</maven.executable>
+            </properties>
+        </profile>
+    </profiles>
 </project>
