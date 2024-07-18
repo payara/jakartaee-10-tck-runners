@@ -315,7 +315,7 @@
                 -->
                 <sigtest.api.groupId>jakarta.authorization</sigtest.api.groupId>
                 <sigtest.api.artifactId>jakarta.authorization-vendor-api</sigtest.api.artifactId>
-                <sigtest.api.version>${glassfish.version}</sigtest.api.version>
+                <sigtest.api.version>${payara.version}</sigtest.api.version>
             </properties>
 
             <dependencies>
