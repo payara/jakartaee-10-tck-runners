@@ -185,7 +185,7 @@
                         <argument>${tck.root}/authorization-tck-3.0.0/tck/pom.xml</argument>
                         <argument>clean</argument>
                         <argument>install</argument>
-                        <argument>-Dglassfish.version=${payara.version}</argument>
+                        <argument>-Dpayara.version=${payara.version}</argument>
                     </arguments>
                     <environmentVariables>
                         <LC_ALL>C</LC_ALL>
