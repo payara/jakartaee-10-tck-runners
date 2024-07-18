@@ -35,13 +35,6 @@
                 <type>pom</type>
             </dependency>
             <dependency>
-                <groupId>org.junit</groupId>
-                <artifactId>junit-bom</artifactId>
-                <version>5.8.2</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-            <dependency>
                 <groupId>jakarta.json</groupId>
                 <artifactId>jakarta.json-tck</artifactId>
                 <version>${jsonp.api.version}</version>

@@ -60,7 +60,7 @@
         <payara.asadmin>${payara.home}/glassfish/bin/asadmin</payara.asadmin>
         <payara.artifact>payara</payara.artifact>
         <payara.arquillian.version>3.0</payara.arquillian.version>
-
+        <junit.version>5.10.3</junit.version>
         <skipTests>false</skipTests>
 
         <!-- Build & test plugin versions -->

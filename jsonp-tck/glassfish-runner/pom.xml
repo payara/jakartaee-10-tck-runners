@@ -34,9 +34,14 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.netbeans.tools</groupId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.tck</groupId>
             <artifactId>sigtest-maven-plugin</artifactId>
-            <version>1.6</version>
+            <version>2.2</version>
         </dependency>
     </dependencies>
 
@@ -79,11 +84,11 @@
                     <dependenciesToScan>jakarta.json:jakarta.json-tck-tests</dependenciesToScan>
                     <systemPropertyVariables>
                         <jimage.dir>${project.build.directory}/jdk-bundle</jimage.dir>
-                        <signature.sigTestClasspath>${project.build.directory}/payara6/glassfish/modules/jakarta.json.jar:${project.build.directory}/jdk-bundle/java.base:${project.build.directory}/jdk-bundle/java.rmi:${project.build.directory}/jdk-bundle/java.sql:${project.build.directory}/jdk-bundle/java.naming</signature.sigTestClasspath>
+                        <signature.sigTestClasspath>${project.build.directory}/payara7/glassfish/modules/jakarta.json.jar:${project.build.directory}/jdk-bundle/java.base:${project.build.directory}/jdk-bundle/java.rmi:${project.build.directory}/jdk-bundle/java.sql:${project.build.directory}/jdk-bundle/java.naming</signature.sigTestClasspath>
                     </systemPropertyVariables>
                     <additionalClasspathElements>
-                        <additionalClasspathElement>${project.build.directory}/payara6/glassfish/modules/jakarta.json.jar</additionalClasspathElement>
-                        <additionalClasspathElement>${project.build.directory}/payara6/glassfish/modules/parsson.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/payara7/glassfish/modules/jakarta.json.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${project.build.directory}/payara7/glassfish/modules/parsson.jar</additionalClasspathElement>
                     </additionalClasspathElements>
                 </configuration>
             </plugin>
