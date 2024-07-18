@@ -34,7 +34,7 @@
     <properties>
         <tck.root>${project.build.directory}</tck.root>
         <maven.settings.xml>${user.home}/.m2/settings.xml</maven.settings.xml>
-        <maven.executable>/opt/maven/bin/mvn</maven.executable>
+        <maven.executable>${env.M2_HOME}/bin/mvn</maven.executable>
         <tck.home>${project.build.directory}/authorization-tck</tck.home>
         <tck.tests.home>${tck.home}/src/com/sun/ts/tests</tck.tests.home>
 
