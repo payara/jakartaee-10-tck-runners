@@ -350,7 +350,7 @@
                                         <artifactItem>
                                             <groupId>fish.payara.distributions</groupId>
                                             <artifactId>payara</artifactId>
-                                            <version>${glassfish.version}</version>
+                                            <version>${payara.version}</version>
                                             <type>zip</type>
                                             <overWrite>false</overWrite>
                                             <outputDirectory>${glassfish.root}</outputDirectory>
