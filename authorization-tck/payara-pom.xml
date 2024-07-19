@@ -6,6 +6,7 @@
                 <payara.suspend>false</payara.suspend>
                 <payara.root>${maven.multiModuleProjectDirectory}/target</payara.root>
                 <payara.home>${payara.root}${file.separator}payara7</payara.home>
+                <payara.asadmin>${payara.home}/glassfish/bin/asadmin</payara.asadmin>
 
                 <arquillian.version>1.8.0.Final</arquillian.version>
                 <payara.arquillian.version>3.0</payara.arquillian.version>
@@ -147,23 +148,89 @@
 
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <inherited>false</inherited>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>start-payara-server</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <exec executable="${payara.asadmin}">
+                                            <arg value="start-domain" />
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>prepare-payara-server</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <exec executable="${payara.asadmin}">
+                                            <arg value="create-system-properties" />
+                                            <arg value="vendor.jakarta.security.jacc.PolicyConfigurationFactory.provider=org.glassfish.exousia.modules.def.DefaultPolicyConfigurationFactory" />
+                                        </exec>
+                                        <exec executable="${payara.asadmin}">
+                                            <arg value="create-file-user" />
+                                            <arg value="--groups=foo:bar" />
+                                            <arg value="--passwordfile=${maven.multiModuleProjectDirectory}/reza.pass" />
+                                            <arg value="reza" />
+                                        </exec>
+                                        <exec executable="${payara.asadmin}">
+                                            <arg value="create-file-user" />
+                                            <arg value="--groups=Administrator:Manager:Employee" />
+                                            <arg value="--passwordfile=${maven.multiModuleProjectDirectory}/javajoe.pass" />
+                                            <arg value="javajoe" />
+                                        </exec>
+                                        <exec executable="${payara.asadmin}">
+                                            <arg value="create-file-user" />
+                                            <arg value="--groups=Manager:Employee" />
+                                            <arg value="--passwordfile=${maven.multiModuleProjectDirectory}/javajoe.pass" />
+                                            <arg value="Manager" />
+                                        </exec>
+                                        <exec executable="${payara.asadmin}">
+                                            <arg value="create-file-user" />
+                                            <arg value="--groups=Employee" />
+                                            <arg value="--passwordfile=${maven.multiModuleProjectDirectory}/j2ee.pass" />
+                                            <arg value="j2ee" />
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop-payara-server</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <exec executable="${payara.asadmin}">
+                                            <arg value="stop-domain" />
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
                         <configuration>
                             <systemPropertyVariables>
                                 <payara.home>${payara.home}</payara.home>
                                 <log.file.location>${payara.home}/glassfish/domains/domain1/logs</log.file.location>
-
-                                <!-- I'm not convinced these work, I think these are GlassFish arquillian things... -->
-                                <payara.systemProperties>
-                                    log.file.location=${payara.home}/glassfish/domains/domain1/logs
-                                    vendor.jakarta.security.jacc.PolicyConfigurationFactory.provider=org.glassfish.exousia.modules.def.DefaultPolicyConfigurationFactory
-                                </payara.systemProperties>
-                                <payara.postBootCommands>
-                                    create-file-user --groups foo:bar --passwordfile ${maven.multiModuleProjectDirectory}/reza.pass reza
-                                    create-file-user --groups Administrator:Manager:Employee --passwordfile ${maven.multiModuleProjectDirectory}/javajoe.pass javajoe
-                                    create-file-user --groups Manager:Employee --passwordfile ${maven.multiModuleProjectDirectory}/javajoe.pass Manager
-                                    create-file-user --groups Employee --passwordfile ${maven.multiModuleProjectDirectory}/j2ee.pass j2ee
-                                </payara.postBootCommands>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
@@ -184,6 +251,17 @@
                     </snapshots>
                 </repository>
             </repositories>
+        </profile>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+            <properties>
+                <payara.asadmin>${payara.home}/glassfish/bin/asadmin.bat</payara.asadmin>
+            </properties>
         </profile>
     </profiles>
 </project>
