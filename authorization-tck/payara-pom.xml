@@ -17,8 +17,7 @@
 -->
 
 <!-- This is a copy of the original TCK pom from https://download.eclipse.org/jakartaee/authorization/3.0/jakarta-authorization-tck-3.0.0.zip
-     with an extra Payara profile added in and the Jakarta Authorization API version commented out so that
-     we don't override our BOM -->
+     with an extra Payara profile added in -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -95,21 +94,19 @@
 
         <buildDirectory>${project.basedir}/target</buildDirectory>
 
-        <!-- Commented out so that it doesn't override our BOM -->
-<!--        <jakarta.authorization.version>3.0.0-M4</jakarta.authorization.version>-->
+        <jakarta.authorization.version>3.0.0-M4</jakarta.authorization.version>
         <jakarta.servlet.version>6.1.0</jakarta.servlet.version>
         <jakarta.annotation.version>3.0.0</jakarta.annotation.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-            <!-- Commented out so that it doesn't override our BOM -->
-<!--            <dependency>-->
-<!--                <groupId>jakarta.authorization</groupId>-->
-<!--                <artifactId>jakarta.authorization-api</artifactId>-->
-<!--                <version>${jakarta.authorization.version}</version>-->
-<!--                <scope>provided</scope>-->
-<!--            </dependency>-->
+            <dependency>
+                <groupId>jakarta.authorization</groupId>
+                <artifactId>jakarta.authorization-api</artifactId>
+                <version>${jakarta.authorization.version}</version>
+                <scope>provided</scope>
+            </dependency>
 
             <dependency>
                 <groupId>jakarta.servlet</groupId>
@@ -665,6 +662,21 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+        <profile>
+            <id>jakarta-staging</id>
+            <repositories>
+                <repository>
+                    <id>jakarta-releases</id>
+                    <url>https://jakarta.oss.sonatype.org/content/groups/staging/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
         </profile>
     </profiles>
 </project>

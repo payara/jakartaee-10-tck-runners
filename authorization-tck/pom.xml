@@ -193,7 +193,7 @@
                                 <argument>-Dmaven-failsafe-plugin.version=${maven-failsafe-plugin.version}</argument>
                                 <argument>-Djunit.version=${junit.version}</argument>
                                 <argument>-Dmaven-antrun-plugin.version=${maven-antrun-plugin.version}</argument>
-                                <argument>-Ppayara-server-managed</argument>
+                                <argument>-Ppayara-server-managed,jakarta-staging</argument>
                                 <argument>-fae</argument>
                             </arguments>
                             <environmentVariables>
