@@ -109,13 +109,23 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
                     <execution>
+                        <id>append-payara-profile-to-tck-pom</id>
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>run</goal>
                         </goals>
                         <configuration>
                             <target>
-                                <copy file="${project.basedir}/payara-pom.xml" tofile="${tck.root}/authorization-tck-${jakarta-authorization-tck.version}/tck/pom.xml"/>
+                                <loadfile srcfile="${tck.root}${file.separator}authorization-tck-${jakarta-authorization-tck.version}${file.separator}tck${file.separator}pom.xml" property="new.pom">
+                                    <filterchain>
+                                        <!-- Strip the final two lines of the POM under the assumption it ends with '</profiles> </project>' -->
+                                        <tailfilter lines="-1" skip="2"/>
+                                        <!-- Append our profile to the end of the pom -->
+                                        <concatfilter append="${project.basedir}${file.separator}payara-pom.xml"/>
+                                    </filterchain>
+                                </loadfile>
+                                <!-- Replace the old pom with our edited one -->
+                                <echo message="${new.pom}" file="${tck.root}${file.separator}authorization-tck-${jakarta-authorization-tck.version}${file.separator}tck${file.separator}pom.xml"/>
                             </target>
                         </configuration>
                     </execution>
