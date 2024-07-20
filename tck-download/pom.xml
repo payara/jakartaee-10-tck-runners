@@ -39,6 +39,7 @@
         <module>jakarta-tags-tck</module>
         <module>jakarta-websocket-tck</module>
         <module>jakarta-rest-tck</module>
+        <module>jakarta-activation-tck</module>
     </modules>
 
     <build>
