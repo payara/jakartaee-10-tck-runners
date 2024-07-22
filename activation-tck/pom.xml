@@ -57,11 +57,8 @@
     <properties>
         <ant.home>${project.build.directory}/apache-ant-${ant.version}</ant.home>
         <ant.zip.url>https://archive.apache.org/dist/ant/binaries/apache-ant-${ant.version}-bin.zip</ant.zip.url>
-
         <tck.home>${project.build.directory}/activation-tck</tck.home>
-
-        <glassfish.home>${project.build.directory}/payara7</glassfish.home>
-        <glassfish.version>${project.version}</glassfish.version>
+        <payara.home>${project.build.directory}/payara7</payara.home>
     </properties>
 
     <dependencies>
@@ -103,7 +100,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Unpack GlassFish and TCK -->
+            <!-- Unpack Payara and TCK -->
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <configuration>
@@ -150,7 +147,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>prepare-tck-and-glassfish</id>
+                        <id>prepare-tck-and-payara</id>
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>run</goal>
