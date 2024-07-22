@@ -90,8 +90,8 @@
                         </goals>
                         <configuration>
                             <additionalClasspathElements>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/jakarta.el-api.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/expressly.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.el-api.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}expressly.jar</additionalClasspathElement>
                             </additionalClasspathElements>
 
                             <dependenciesToScan>jakarta.tck:expression-language-tck</dependenciesToScan>
@@ -99,13 +99,13 @@
                             <test>${run.test}</test>
 
                             <systemPropertyVariables>
-                                <el.classes>${payara.home}/glassfish/modules/jakarta.el-api.jar:${payara.home}/glassfish/modules/expressly.jar</el.classes>
+                                <el.classes>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.el-api.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}expressly.jar</el.classes>
                                 <variable.mapper>org.glassfish.expressly.lang.VariableMapperImpl</variable.mapper>
                                 <junit.log.traceflag>true</junit.log.traceflag>
                                 <harness.log.traceflag>true</harness.log.traceflag>
                                 <cts.harness.debug>true</cts.harness.debug>
-                                <jimage.dir>${project.build.directory}/jdk-bundle</jimage.dir>
-                                <sigTestClasspath>${payara.home}/glassfish/modules/jakarta.el-api.jar:${payara.home}/glassfish/modules/expressly.jar:${project.build.directory}/jdk-bundle/java.base:${project.build.directory}/jdk-bundle/java.rmi:${project.build.directory}/jdk-bundle/java.sql:${project.build.directory}/jdk-bundle/java.naming</sigTestClasspath>
+                                <jimage.dir>${project.build.directory}${file.separator}jdk-bundle</jimage.dir>
+                                <sigTestClasspath>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.el-api.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}expressly.jar${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.base${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.rmi${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.sql${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.naming</sigTestClasspath>
                             </systemPropertyVariables>
                         </configuration>
                     </execution>
