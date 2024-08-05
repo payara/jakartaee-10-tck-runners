@@ -55,19 +55,14 @@
     <name>TCK: Activation</name>
 
     <properties>
-        <ant.home>${project.build.directory}/apache-ant-${ant.version}</ant.home>
+        <ant.home>${project.build.directory}${file.separator}apache-ant-${ant.version}</ant.home>
         <ant.zip.url>https://archive.apache.org/dist/ant/binaries/apache-ant-${ant.version}-bin.zip</ant.zip.url>
-        <tck.home>${project.build.directory}/activation-tck</tck.home>
-        <payara.home>${project.build.directory}/payara7</payara.home>
+        <ant.executable>${ant.home}${file.separator}bin${file.separator}ant</ant.executable>
+        <tck.home>${project.build.directory}${file.separator}activation-tck</tck.home>
+        <payara.home>${project.build.directory}${file.separator}payara7</payara.home>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>fish.payara.distributions</groupId>
-            <artifactId>payara</artifactId>
-            <version>${payara.version}</version>
-            <type>zip</type>
-        </dependency>
         <dependency>
             <groupId>fish.payara.jakarta.tests.tck</groupId>
             <artifactId>jakarta-activation-tck</artifactId>
@@ -93,7 +88,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <skip>${skipITs}</skip>
+                    <skip>${skipTests}</skip>
                     <url>${ant.zip.url}</url>
                     <unpack>true</unpack>
                     <outputDirectory>${project.build.directory}</outputDirectory>
@@ -104,17 +99,17 @@
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <configuration>
-                    <skip>${skipITs}</skip>
+                    <skip>${skipTests}</skip>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>unpack-payara</id>
+                        <id>unpack-tck</id>
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>unpack-dependencies</goal>
                         </goals>
                         <configuration>
-                            <includeArtifactIds>payara,jakarta-activation-tck</includeArtifactIds>
+                            <includeArtifactIds>jakarta-activation-tck</includeArtifactIds>
                             <outputDirectory>${project.build.directory}</outputDirectory>
                         </configuration>
                     </execution>
@@ -143,7 +138,7 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <skip>${skipITs}</skip>
+                    <skip>${skipTests}</skip>
                 </configuration>
                 <executions>
                     <execution>
@@ -194,7 +189,7 @@
                                 <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />
 
                                 <echo level="info" message="Start running all tests" />
-                                <exec executable="${ant.home}/bin/ant" dir="${tck.home}" resultproperty="testResult">
+                                <exec executable="${ant.executable}" dir="${tck.home}" resultproperty="testResult">
                                     <arg value="run" />
                                     <arg value="run.pluggability" />
                                     <arg value="-DfailOnError=true" />
@@ -209,7 +204,7 @@
                                     </not>
                                     <then>
                                         <echo message="Running tests failed." />
-                                        <loadfile property="contents" srcFile="${payara.home}/glassfish/domains/domain1/logs/server.log" />
+                                        <loadfile property="contents" srcFile="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}logs${file.separator}server.log" />
                                         <echo message="${contents}" />
                                     </then>
                                 </if>
@@ -229,4 +224,18 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+            <properties>
+                <ant.executable>${ant.home}${file.separator}bin${file.separator}ant.cmd</ant.executable>
+            </properties>
+        </profile>
+    </profiles>
 </project>
