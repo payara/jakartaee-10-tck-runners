@@ -95,6 +95,7 @@
     </repositories>
 
     <modules>
+        <module>activation-tck</module>
         <module>annotations-tck</module>
         <module>authorization-tck</module>
         <!-- Ignore for now since this module, by design, doesn't have payara.version set - see comment in batch-tck/pom.xml for reason (shrinkwrap maven resolver limitation) -->

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+  Copyright (c) 2024 Payara Foundation and/or its affiliates. All rights reserved.
+
+  The contents of this file are subject to the terms of either the GNU
+  General Public License Version 2 only ("GPL") or the Common Development
+  and Distribution License("CDDL") (collectively, the "License").  You
+  may not use this file except in compliance with the License.  You can
+  obtain a copy of the License at
+  https://github.com/payara/Payara/blob/master/LICENSE.txt
+  See the License for the specific
+  language governing permissions and limitations under the License.
+
+  When distributing the software, include this License Header Notice in each
+  file and include the License file at glassfish/legal/LICENSE.txt.
+
+  GPL Classpath Exception:
+  The Payara Foundation designates this particular file as subject to the "Classpath"
+  exception as provided by the Payara Foundation in the GPL Version 2 section of the License
+  file that accompanied this code.
+
+  Modifications:
+  If applicable, add the following below the License Header, with the fields
+  enclosed by brackets [] replaced by your own identifying information:
+  "Portions Copyright [year] [name of copyright owner]"
+
+  Contributor(s):
+  If you wish your version of this file to be governed by only the CDDL or
+  only the GPL Version 2, indicate your decision by adding "[Contributor]
+  elects to include this software in this distribution under the [CDDL or GPL
+  Version 2] license."  If you don't indicate a single choice of license, a
+  recipient has the option to distribute your version of this file under
+  either the CDDL, the GPL Version 2 or to extend the choice of license to
+  its licensees as provided above.  However, if you add GPL Version 2 code
+  and therefore, elected the GPL Version 2 license, then the option applies
+  only if the new code is made subject to such option by the copyright
+  holder.
+
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>fish.payara.jakarta.tests.tck</groupId>
+        <artifactId>tck</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>activation-tck</artifactId>
+    <packaging>pom</packaging>
+
+    <name>TCK: Activation</name>
+
+    <properties>
+        <ant.home>${project.build.directory}${file.separator}apache-ant-${ant.version}</ant.home>
+        <ant.zip.url>https://archive.apache.org/dist/ant/binaries/apache-ant-${ant.version}-bin.zip</ant.zip.url>
+        <ant.executable>${ant.home}${file.separator}bin${file.separator}ant</ant.executable>
+        <tck.home>${project.build.directory}${file.separator}activation-tck</tck.home>
+        <payara.home>${project.build.directory}${file.separator}payara7</payara.home>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>fish.payara.jakarta.tests.tck</groupId>
+            <artifactId>jakarta-activation-tck</artifactId>
+            <version>${project.version}</version>
+            <type>zip</type>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Download Ant -->
+            <plugin>
+                <groupId>com.googlecode.maven-download-plugin</groupId>
+                <artifactId>download-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>download-ant</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <skip>${skipTests}</skip>
+                    <url>${ant.zip.url}</url>
+                    <unpack>true</unpack>
+                    <outputDirectory>${project.build.directory}</outputDirectory>
+                </configuration>
+            </plugin>
+
+            <!-- Unpack Payara and TCK -->
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <configuration>
+                    <skip>${skipTests}</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>unpack-tck</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeArtifactIds>jakarta-activation-tck</includeArtifactIds>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Configure and run TCK -->
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.ant</groupId>
+                        <artifactId>ant</artifactId>
+                        <version>${ant.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>ant-contrib</groupId>
+                        <artifactId>ant-contrib</artifactId>
+                        <version>1.0b3</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>ant</groupId>
+                                <artifactId>ant</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <skip>${skipTests}</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>prepare-tck-and-payara</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target xmlns:if="ant:if" xmlns:unless="ant:unless">
+                                <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />
+
+                                <macrodef name="tck-setting">
+                                    <attribute name="key" /> <attribute name="value" />
+                                    <sequential>
+                                        <replaceregexp file="${tck.home}/lib/ts.jte" byline="true"
+                                                       match="@{key}=.*" replace="@{key}=@{value}" />
+                                        <replaceregexp file="${tck.home}/lib/ts.pluggability.jte" byline="true"
+                                                       match="@{key}=.*" replace="@{key}=@{value}" />
+                                    </sequential>
+                                </macrodef>
+
+
+                                <!-- Change configuration -->
+
+                                <tck-setting key="TS_HOME" value="${tck.home}"/>
+                                <tck-setting key="JAVA_HOME" value="${java.home}"/>
+                                <tck-setting key="JARPATH" value="${payara.home}/glassfish/modules"/>
+
+                                <replace file="${tck.home}/build.xml">
+                                    <replacetoken><![CDATA[<sysproperty key="testDebug" value="${tests.debug}"/>]]></replacetoken>
+                                    <replacevalue><![CDATA[<sysproperty key="testDebug" value="${tests.debug}"/>
+                                <jvmarg value="-Djavatest.security.noSecurityManager=true"/>]]></replacevalue>
+                                </replace>
+                            </target>
+                        </configuration>
+                    </execution>
+
+
+                    <execution>
+                        <id>run-tck-tests</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target xmlns:if="ant:if" xmlns:unless="ant:unless">
+                                <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />
+
+                                <echo level="info" message="Start running all tests" />
+                                <exec executable="${ant.executable}" dir="${tck.home}" resultproperty="testResult">
+                                    <arg value="run" />
+                                    <arg value="run.pluggability" />
+                                    <arg value="-DfailOnError=true" />
+                                    <env key="AS_JAVA" value="${java.home}"/>
+                                    <env key="JAVA_HOME" value="${java.home}"/>
+                                    <env key="LC_ALL" value="C" />
+                                </exec>
+
+                                <if>
+                                    <not>
+                                        <equals arg1="${testResult}" arg2="0" />
+                                    </not>
+                                    <then>
+                                        <echo message="Running tests failed." />
+                                        <loadfile property="contents" srcFile="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}logs${file.separator}server.log" />
+                                        <echo message="${contents}" />
+                                    </then>
+                                </if>
+
+                                <if>
+                                    <not>
+                                        <equals arg1="${testResult}" arg2="0" />
+                                    </not>
+                                    <then>
+                                        <fail/>
+                                    </then>
+                                </if>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+            <properties>
+                <ant.executable>${ant.home}${file.separator}bin${file.separator}ant.cmd</ant.executable>
+            </properties>
+        </profile>
+    </profiles>
+</project>
