@@ -55,17 +55,18 @@
         <ant.home>${project.build.directory}/apache-ant-${ant.version}</ant.home>
         <ant.zip.url>https://archive.apache.org/dist/ant/binaries/apache-ant-${ant.version}-bin.zip</ant.zip.url>
 
-        <payara.home>${project.build.directory}${file.separator}payara7</payara.home>
+        <payara.home>${maven.multiModuleProjectDirectory}${file.separator}target${file.separator}payara7</payara.home>
         <payara.version>7.2024.1.Alpha2-SNAPSHOT</payara.version>
-        <payara.asadmin>${payara.home}/glassfish/bin/asadmin</payara.asadmin>
+        <payara.asadmin>${payara.home}${file.separator}glassfish${file.separator}bin${file.separator}asadmin</payara.asadmin>
         <payara.artifact>payara</payara.artifact>
-        <payara.arquillian.version>3.0</payara.arquillian.version>
+        <payara.arquillian.version>4.0.alpha1</payara.arquillian.version>
         <junit.version>5.10.3</junit.version>
         <skipTests>false</skipTests>
 
         <!-- Build & test plugin versions -->
         <maven-install-plugin.version>3.1.2</maven-install-plugin.version>
         <maven-failsafe-plugin.version>3.3.0</maven-failsafe-plugin.version>
+        <maven-surefire-plugin.version>3.3.1</maven-surefire-plugin.version>
         <maven-dependency-plugin.version>3.7.1</maven-dependency-plugin.version>
         <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
@@ -95,6 +96,8 @@
     </repositories>
 
     <modules>
+        <!-- 'tck-download' module at the top to ensure it resolves first -->
+        <module>tck-download</module>
         <module>activation-tck</module>
         <module>annotations-tck</module>
         <module>authorization-tck</module>
@@ -111,7 +114,6 @@
         <module>rest-tck</module>
         <module>servlet-tck</module>
         <module>tags-tck</module>
-        <module>tck-download</module>
         <module>websocket-tck</module>
         <module>summarizer</module>
         <module>expression-language-tck</module>
@@ -191,6 +193,12 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-antrun-plugin</artifactId>
                     <version>${maven-antrun-plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
