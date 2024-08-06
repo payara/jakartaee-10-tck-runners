@@ -28,8 +28,8 @@ mkdir ${TS_HOME}/JTwork
 mkdir ${TS_HOME}/JTreport
 
 cd ${TS_HOME}/bin
-ant config.vi -Dwork.dir=${TS_HOME}/JTwork -Dreport.dir=${TS_HOME}/JTreport
+ant config.vi -Dwork.dir=${TS_HOME}/JTwork -Dreport.dir=${TS_HOME}/JTreport -Djava.security.manager=disallow
 
-ant deploy.all -Dwork.dir=${TS_HOME}/JTwork -Dreport.dir=${TS_HOME}/JTreport
+ant deploy.all -Dwork.dir=${TS_HOME}/JTwork -Dreport.dir=${TS_HOME}/JTreport -Djava.security.manager=disallow
 
-ant run.all -Dwork.dir=${TS_HOME}/JTwork -Dreport.dir=${TS_HOME}/JTreport
+ant run.all -Dwork.dir=${TS_HOME}/JTwork -Dreport.dir=${TS_HOME}/JTreport -Djava.security.manager=disallow
