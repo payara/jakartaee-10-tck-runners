@@ -14,8 +14,6 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
         <sigtest.plugin.version>1.6</sigtest.plugin.version>
         <failsafe.plugin.jdk17.args/>
         <signature.sigTestClasspath />
