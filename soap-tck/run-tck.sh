@@ -9,10 +9,10 @@ export TS_HOME=`pwd`/soap-tck
 #/home/aubi/work/payara/server/defects/FISH-6064-upgrade-metro/soap-tck
 export PATH=${PATH}:${TS_HOME}/bin
 
-rm jakarta-soap-tck-3.0.0.zip
-wget https://download.eclipse.org/jakartaee/soap-attachments/3.0/jakarta-soap-tck-3.0.0.zip
+rm jakarta-soap-tck-3.0.1.zip
+wget https://download.eclipse.org/jakartaee/soap-attachments/3.0/jakarta-soap-tck-3.0.1.zip
 rm -rf ./soap-tck
-unzip jakarta-soap-tck-3.0.0.zip
+unzip jakarta-soap-tck-3.0.1.zip
 
 # replace settings
 if [[ ! -f ${TS_HOME}/bin/ts.jte-origin ]]
@@ -28,8 +28,8 @@ mkdir ${TS_HOME}/JTwork
 mkdir ${TS_HOME}/JTreport
 
 cd ${TS_HOME}/bin
-ant config.vi -Dwork.dir=${TS_HOME}/JTwork -Dreport.dir=${TS_HOME}/JTreport -Djava.security.manager=disallow
+ant config.vi -Dwork.dir=${TS_HOME}/JTwork -Dreport.dir=${TS_HOME}/JTreport
 
-ant deploy.all -Dwork.dir=${TS_HOME}/JTwork -Dreport.dir=${TS_HOME}/JTreport -Djava.security.manager=disallow
+ant deploy.all -Dwork.dir=${TS_HOME}/JTwork -Dreport.dir=${TS_HOME}/JTreport
 
-ant run.all -Dwork.dir=${TS_HOME}/JTwork -Dreport.dir=${TS_HOME}/JTreport -Djava.security.manager=disallow
+ant run.all -Dwork.dir=${TS_HOME}/JTwork -Dreport.dir=${TS_HOME}/JTreport
