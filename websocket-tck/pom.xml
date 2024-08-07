@@ -194,7 +194,7 @@
                                     <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                         <arg value="start-domain"/>
                                     </exec>
-                                    <sleep seconds="60" />
+                                    <sleep seconds="5" />
                                     <if>
                                         <isset property="jacoco.version" />
                                         <then>
