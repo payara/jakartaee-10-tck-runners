@@ -20,8 +20,6 @@
         <cdi.tck.version>4.1.0</cdi.tck.version>
         <cdi.api.version>4.1.0</cdi.api.version>
         <weld.version>6.0.0.Beta4</weld.version>
-        <arquillian.version>1.8.0.Final</arquillian.version>
-        <payara.arquillian.version>4.0.alpha1</payara.arquillian.version>
     </properties>
 
     <dependencies>
