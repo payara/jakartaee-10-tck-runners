@@ -80,6 +80,7 @@
         <!-- Jakarta EE versions -->
         <jakarta-annotations-tck.version>3.0.0</jakarta-annotations-tck.version>
         <jakarta-authorization-tck.version>3.0.0</jakarta-authorization-tck.version>
+        <jakarta-rest-tck.version>4.0.0</jakarta-rest-tck.version>
     </properties>
 
     <repositories>
@@ -315,6 +316,18 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+            <properties>
+                <payara.asadmin>${payara.home}${file.separator}glassfish${file.separator}bin${file.separator}asadmin.bat</payara.asadmin>
+            </properties>
         </profile>
     </profiles>
 </project>
