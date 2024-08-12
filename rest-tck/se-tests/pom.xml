@@ -72,6 +72,12 @@
             <artifactId>arquillian-protocol-servlet-jakarta</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!-- TCK runtime dependencies -->
 
         <dependency>
