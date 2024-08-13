@@ -32,8 +32,9 @@
     <name>TCK: Install Jakarta Websocket TCK</name>
 
     <properties>
-    	<tck.test.websocket.file>jakarta-websocket-tck-2.1.0.zip</tck.test.websocket.file>
-        <tck.test.websocket.url>https://download.eclipse.org/jakartaee/websocket/2.1/${tck.test.websocket.file}</tck.test.websocket.url>
+    	<tck.test.websocket.file>jakarta-websocket-tck-${tck.test.websocket.version}.zip</tck.test.websocket.file>
+        <tck.test.websocket.url>https://download.eclipse.org/jakartaee/websocket/2.2/${tck.test.websocket.file}</tck.test.websocket.url>
+        <tck.test.websocket.version>${jakarta.tck.websocket.version}</tck.test.websocket.version>
     </properties>
 
     <build>
@@ -52,15 +53,15 @@
                 </executions>
                 <configuration>
                     <url>${tck.test.websocket.url}</url>
-                    <unpack>false</unpack>
+                    <unpack>true</unpack>
                     <outputDirectory>${project.build.directory}</outputDirectory>
                 </configuration>
             </plugin>
-            <plugin>
+            <!--plugin>
                 <artifactId>maven-install-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>install-servlet-tck</id>
+                        <id>install-websocket-tck-pom</id>
                         <phase>process-resources</phase>
                         <goals>
                             <goal>install-file</goal>
@@ -72,6 +73,22 @@
                             <version>${project.version}</version>
                             <packaging>zip</packaging>
                             <generatePom>true</generatePom>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>installing artifacts</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${project.build.directory}${file.separator}artifacts${file.separator}artifact-install.sh</executable>
                         </configuration>
                     </execution>
                 </executions>
