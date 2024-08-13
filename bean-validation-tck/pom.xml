@@ -56,6 +56,7 @@
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <asadmin>${payara.home}${file.separator}bin${file.separator}asadmin</asadmin>
     </properties>
 
 
@@ -158,6 +159,52 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>Pre-Test Server Start</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${asadmin}</executable>
+                            <arguments>
+                                <argument>start-domain</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>Setup Validation Provider</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${asadmin}</executable>
+                            <arguments>
+                                <argument>create-system-properties</argument>
+                                <argument>validation.provider=org.hibernate.validator.HibernateValidator</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>Pre-Test Server Stop</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${asadmin}</executable>
+                            <arguments>
+                                <argument>stop-domain</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <argLine>-Xmx1024m</argLine>
@@ -179,14 +226,7 @@
                     <forkMode>once</forkMode>
                     <systemPropertyVariables>
                         <payara.home>${payara.home}</payara.home>
-                        <payara.enableDerby>true</payara.enableDerby>
-                        <payara.maxHeapSize>2048m</payara.maxHeapSize>
-
                         <validation.provider>org.hibernate.validator.HibernateValidator</validation.provider>
-
-                        <payara.systemProperties>
-                            validation.provider=org.hibernate.validator.HibernateValidator
-                        </payara.systemProperties>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
