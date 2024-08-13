@@ -127,6 +127,7 @@
         <module>websocket-tck</module>
         <module>summarizer</module>
         <module>expression-language-tck</module>
+        <module>bean-validation-tck</module>
     </modules>
 
     <dependencyManagement>
