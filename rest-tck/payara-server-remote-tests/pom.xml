@@ -93,6 +93,11 @@
             <version>3.1</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>jakarta.tck</groupId>
+            <artifactId>sigtest-maven-plugin</artifactId>
+        </dependency>
         
         <!-- TCK runtime dependencies -->
 
