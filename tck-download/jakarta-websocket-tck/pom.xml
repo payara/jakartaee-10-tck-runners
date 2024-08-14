@@ -32,7 +32,7 @@
     <name>TCK: Install Jakarta Websocket TCK</name>
 
     <properties>
-    	<tck.test.websocket.file>jakarta-websocket-tck-${tck.test.websocket.version}.zip</tck.test.websocket.file>
+        <tck.test.websocket.file>jakarta-websocket-tck-${tck.test.websocket.version}.zip</tck.test.websocket.file>
         <tck.test.websocket.url>https://download.eclipse.org/jakartaee/websocket/2.2/${tck.test.websocket.file}</tck.test.websocket.url>
         <tck.test.websocket.version>${jakarta.tck.websocket.version}</tck.test.websocket.version>
     </properties>
@@ -84,11 +84,13 @@
                 <executions>
                     <execution>
                         <id>installing artifacts</id>
+                        <phase>install</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${project.build.directory}${file.separator}artifacts${file.separator}artifact-install.sh</executable>
+                            <executable>${project.build.directory}${file.separator}websocket-tck${file.separator}artifacts${file.separator}artifact-install.sh</executable>
+                            <workingDirectory>${project.build.directory}${file.separator}websocket-tck${file.separator}artifacts${file.separator}</workingDirectory>
                         </configuration>
                     </execution>
                 </executions>

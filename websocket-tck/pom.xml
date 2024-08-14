@@ -28,27 +28,14 @@
 
     <artifactId>websocket-tck-runner</artifactId>
     <packaging>pom</packaging>
-
     <name>TCK: websocket</name>
-
+    
     <properties>
-        <tck.home>${project.build.directory}/websocket-tck</tck.home>
-        <tck.tests.home>${tck.home}/src/com/sun/ts/tests</tck.tests.home> 
-       
-        <jacoco.includes>org/glassfish/**\:com/sun/enterprise/**</jacoco.includes>
-        
-        <port.admin>4848</port.admin>
-        <port.derby>11527</port.derby>
-        <port.http>18080</port.http>
-        <port.https>18181</port.https>
-        <port.jms>17676</port.jms>
-        <port.jmx>18686</port.jmx>
-        <port.orb>13700</port.orb>
-        <port.orb.mutual>13920</port.orb.mutual>
-        <port.orb.ssl>13820</port.orb.ssl>
-        <port.harness.log>12000</port.harness.log>
+        <tck.test.websocket.file>jakarta-websocket-tck-${tck.test.websocket.version}.zip</tck.test.websocket.file>
+        <tck.test.websocket.url>https://download.eclipse.org/jakartaee/websocket/2.2/${tck.test.websocket.file}</tck.test.websocket.url>
+        <tck.test.websocket.version>${jakarta.tck.websocket.version}</tck.test.websocket.version>
     </properties>
-
+    
     <dependencies>
         <dependency>
             <groupId>fish.payara.distributions</groupId>
@@ -57,10 +44,38 @@
             <type>zip</type>
         </dependency>
         <dependency>
-            <groupId>fish.payara.jakarta.tests.tck</groupId>
-            <artifactId>jakarta-websocket-tck</artifactId>
-            <version>${project.version}</version>
-            <type>zip</type>
+            <groupId>jakarta.tck</groupId>
+            <artifactId>websocket-tck-common</artifactId>
+            <version>${jakarta.tck.websocket.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.tck</groupId>
+            <artifactId>websocket-tck-spec-tests</artifactId>
+            <version>${jakarta.tck.websocket.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.junit5</groupId>
+            <artifactId>arquillian-junit5-container</artifactId>
+            <version>1.8.0.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit</groupId>
+            <artifactId>junit-bom</artifactId>
+            <version>5.7.2</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.tools</groupId>
+            <artifactId>sigtest-maven-plugin</artifactId>
+            <version>1.7</version>
+        </dependency>
+        <dependency>
+            <groupId>fish.payara.arquillian</groupId>
+            <artifactId>arquillian-payara-server-managed</artifactId>
+            <version>${payara.arquillian.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -70,10 +85,9 @@
             <plugin>
                 <groupId>com.googlecode.maven-download-plugin</groupId>
                 <artifactId>download-maven-plugin</artifactId>
-                <version>1.6.8</version>
                 <executions>
                     <execution>
-                        <id>download-ant</id>
+                        <id>download-servlet-tck</id>
                         <phase>generate-resources</phase>
                         <goals>
                             <goal>wget</goal>
@@ -81,244 +95,71 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <skip>${skipITs}</skip>
-                    <url>${ant.zip.url}</url>
+                    <url>${tck.test.websocket.url}</url>
                     <unpack>true</unpack>
                     <outputDirectory>${project.build.directory}</outputDirectory>
                 </configuration>
             </plugin>
-
             <plugin>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <configuration>
-                    <skip>${skipITs}</skip>
-                </configuration>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.3.0</version>
                 <executions>
                     <execution>
-                        <id>unpack-payara</id>
-                        <phase>pre-integration-test</phase>
+                        <id>installing artifacts</id>
+                        <phase>install</phase>
                         <goals>
-                            <goal>unpack-dependencies</goal>
+                            <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <includeArtifactIds>${payara.artifact}</includeArtifactIds>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>unpack-tck</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>unpack-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <includeArtifactIds>jakarta-websocket-tck</includeArtifactIds>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
+                            <executable>${project.build.directory}${file.separator}websocket-tck${file.separator}artifacts${file.separator}artifact-install.sh</executable>
+                            <workingDirectory>${project.build.directory}${file.separator}websocket-tck${file.separator}artifacts${file.separator}</workingDirectory>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>3.1.0</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.ant</groupId>
-                        <artifactId>ant</artifactId>
-                        <version>${ant.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>ant-contrib</groupId>
-                        <artifactId>ant-contrib</artifactId>
-                        <version>1.0b3</version>
-                        <exclusions>
-                            <exclusion>
-                                <groupId>ant</groupId>
-                                <artifactId>ant</artifactId>
-                            </exclusion>
-                        </exclusions>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <skip>${skipITs}</skip>
-                </configuration>
+                <artifactId>maven-failsafe-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>prepare-tck-and-payara</id>
-                        <phase>pre-integration-test</phase>
-                        <configuration>
-                            <target xmlns:if="ant:if" xmlns:unless="ant:unless">
-                                <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />
-                                         
-                                <macrodef name="tck-setting">
-                                    <attribute name="key" /> <attribute name="value" />
-                                    <sequential>
-                                        <replaceregexp file="${tck.home}/bin/ts.jte" byline="true"
-                                                       match="@{key}=.*" replace="@{key}=@{value}" />
-                                    </sequential>
-                                </macrodef>
-                                
-
-                                <!-- Change configuration -->
-                                
-                                <tck-setting key="web.home" value="${payara.home}/glassfish"/>
-                                <tck-setting key="webServerHost" value="localhost"/>
-                                <tck-setting key="webServerPort" value="${port.http}"/>
-                                <tck-setting key="securedWebServicePort" value="${port.https}"/>
-                                
-                                <tck-setting key="s1as.admin.port" value="${port.admin}"/>
-                                <tck-setting key="glassfish.admin.port" value="${port.admin}"/>
-                                <tck-setting key="orb.port" value="${port.orb}"/>
-                                <tck-setting key="database.port" value="${port.derby}"/>
-                                <tck-setting key="harness.log.port" value="${port.harness.log}"/>
-                                
-                                <tck-setting key="report.dir" value="${tck.home}/websocketreport/websocket"/>
-                                <tck-setting key="work.dir" value="${tck.home}/websocketwork/websocket"/>
-                                
-                                <tck-setting key="impl.vi" value="glassfish"/>
-                          
-                                <limit maxwait="60">
-                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
-                                        <arg value="delete-domain"/>
-                                        <arg value="domain1" />
-                                    </exec>
-                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
-                                        <arg value="create-domain"/>
-                                        <arg value="--domainproperties=domain.adminPort=${port.admin}:domain.instancePort=${port.http}:http.ssl.port=${port.https}:jms.port=${port.jms}:domain.jmxPort=${port.jmx}:orb.listener.port=${port.orb}:orb.ssl.port=${port.orb.ssl}:orb.mutualauth.port=${port.orb.mutual}" />
-                                        <arg value="--user=admin" />
-                                        <arg value="--nopassword" />
-                                        <arg value="domain1" />
-                                    </exec>
-                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
-                                        <arg value="start-domain"/>
-                                    </exec>
-                                    <sleep seconds="60" />
-                                    <if>
-                                        <isset property="jacoco.version" />
-                                        <then>
-                                            <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
-                                                <arg value="create-jvm-options" />
-                                                <arg value="--port=${port.admin}" />
-                                                <arg value="&quot;-javaagent\:${settings.localRepository}/org/jacoco/org.jacoco.agent/${jacoco.version}/org.jacoco.agent-${jacoco.version}-runtime.jar=destfile=${project.build.directory}/jacoco-it.exec,includes=${jacoco.includes}&quot;" />
-                                            </exec>
-                                        </then>
-                                    </if>
-                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
-                                        <arg value="set" />
-                                        <arg value="configs.config.server-config.network-config.protocols.protocol.http-listener-1.http.http2-push-enabled=true" />
-                                    </exec>
-                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
-                                        <arg value="stop-domain"/>
-                                        <arg value="domain1"/>
-                                    </exec>
-                                </limit>
-                                <mkdir dir="${tck.home}/websocketreport"/>
-                                <mkdir dir="${tck.home}/websocketreport/websocket"/>
-                                
-                                <replace file="${tck.home}/bin/xml/ts.top.import.xml">
-                                    <replacetoken><![CDATA[<jvmarg value="-Xmx512m"/>]]></replacetoken>
-                                    <replacevalue><![CDATA[<jvmarg value="-Xmx512m"/>
-                                <jvmarg value="-Djavatest.security.noSecurityManager=true"/>]]></replacevalue>
-                                </replace>
-                                
-                                <replace file="${tck.home}/bin/xml/ts.top.import.xml" if:set="suspend-tck" >
-                                    <replacetoken><![CDATA[<jvmarg value="-Xmx512m"/>]]></replacetoken>
-                                    <replacevalue><![CDATA[<jvmarg value="-Xmx512m"/>
-                                <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=9008"/>]]></replacevalue>
-                                </replace>
-                            </target>
-                        </configuration>
+                        <id>payara-tests</id>
                         <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-
-                    <execution>
-                        <id>configure-tck-tests</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>run</goal>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
                         </goals>
                         <configuration>
-                            <target xmlns:if="ant:if" xmlns:unless="ant:unless">
-                                <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />
-                                
-                                <!-- Start Payara Server -->
-                                <limit maxwait="20">
-                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
-                                        <arg value="start-domain"/>
-                                        <arg value="--suspend" if:set="payara.suspend"/>
-                                    </exec>
-                                </limit>
-								
-                                <exec executable="${ant.home}/bin/ant" dir="${tck.home}/bin">
-                                    <arg value="-Dutil.dir=${tck.home}"  />
-                                    <arg value="config.security"  />
-                                </exec>
-                                
-                                <!-- Deploy single test -->
-                                <sequential if:set="run.test" >
-                                    <dirname property="test.dir" file="${tck.home}/src/${run.test}"/>
-                                    <echo>Deploying from ${test.dir}</echo>
-                                	
-                                    <exec executable="${ant.home}/bin/ant" dir="${test.dir}">
-                                        <arg value="deploy"  />
-                                    </exec>
-                                </sequential>
-                                
-                                <!-- Deploy all tests -->
-                                <sequential unless:set="run.test" >
-                                    <exec executable="${ant.home}/bin/ant" dir="${tck.tests.home}">
-                                        <arg value="deploy.all"  />
-                                    </exec>
-                                </sequential>
-                            </target>
-                        </configuration>
-                    </execution>
+                            <additionalClasspathElements>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.websocket-api.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.websocket-client-api.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.servlet-api.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.enterprise.cdi-api.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}tyrus-core.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}tyrus-server.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}tyrus-spi.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}tyrus-container-grizzly-client.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}tyrus-container-servlet.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}tyrus-client.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}tyrus-container-glassfish-ejb.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}tyrus-container-glassfish-cdi.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}nucleus-grizzly-all.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}glassfish-grizzly-extra-all.jar</additionalClasspathElement>
+                            </additionalClasspathElements>
 
-                    <execution>
-                        <id>run-tck-tests</id>
-                        <phase>integration-test</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target xmlns:if="ant:if" xmlns:unless="ant:unless">
-                                <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />
+                            <dependenciesToScan>jakarta.tck:websocket-tck-spec-tests</dependenciesToScan>
 
-                                <echo level="info" message="Start running all tests" />
-                                <exec executable="${ant.home}/bin/ant" dir="${tck.tests.home}" resultproperty="testResult">
-                                    <arg value="-Dmultiple.tests=${run.test}" if:set="run.test" />
-                                    <arg value="run.all" unless:set="run.test"/>
-                                    <arg value="runclient" if:set="run.test" />
-                                    <env key="LC_ALL" value="C" />
-                                </exec>
+                            <test>${run.test}</test>
 
-                                <if>
-                                    <not>
-                                        <equals arg1="${testResult}" arg2="0" />
-                                    </not>
-                                    <then>
-                                        <echo message="Running tests failed." />
-                                        <loadfile property="contents" srcFile="${payara.home}/glassfish/domains/domain1/logs/server.log" />
-                                        <echo message="${contents}" />
-                                    </then>
-                                </if>
-
-                                <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
-                                    <arg value="stop-domain" />
-                                </exec>
-                                
-                                <fail message="Running tests failed." status="${testResult}">
-                                    <condition>
-                                        <not>
-                                            <equals arg1="${testResult}" arg2="0" />
-                                        </not>
-                                    </condition>
-                                </fail>
-                            </target>
+                            <systemPropertyVariables>
+                                <payara.home>${payara.home}</payara.home>
+                                <junit.log.traceflag>true</junit.log.traceflag>
+                                <harness.log.traceflag>true</harness.log.traceflag>
+                                <cts.harness.debug>true</cts.harness.debug>
+                                <lib.name>websockettck</lib.name>
+                                <ws_wait>10</ws_wait>
+                                <porting.ts.url.class.1>com.sun.ts.tests.websocket.lib.implementation.sun.common.SunRIURL</porting.ts.url.class.1>
+                                <signature.sigTestClasspath>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.websocket-api.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.websocket-client-api.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}tyrus-core.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}tyrus-server.jar${path.separator}${project.build.directory}/jdk-bundle/java.base${path.separator}${project.build.directory}/jdk-bundle/java.rmi${path.separator}${project.build.directory}/jdk-bundle/java.sql${path.separator}${project.build.directory}/jdk-bundle/java.naming</signature.sigTestClasspath>
+                                <jimage.dir>${project.build.directory}/jdk-bundle</jimage.dir>
+                            </systemPropertyVariables>
                         </configuration>
                     </execution>
                 </executions>
