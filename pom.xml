@@ -89,6 +89,8 @@
         <jakarta.tck.sigtest-maven-plugin.version>2.3</jakarta.tck.sigtest-maven-plugin.version>
         <jakarta.tck.el.version>6.0.0</jakarta.tck.el.version>
         <jakarta.tck.websocket.version>2.2.0</jakarta.tck.websocket.version>
+        <jakarta.tck.bean-validation.version>3.1.1</jakarta.tck.bean-validation.version>
+
         <cdi.api.version>4.1.0</cdi.api.version>
     </properties>
 

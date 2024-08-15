@@ -53,20 +53,13 @@
     <name>TCK: Validation</name>
     <description>Aggregates dependencies and runs the Jakarta Validation TCK</description>
 
-    <properties>
-        <maven.compiler.release>17</maven.compiler.release>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <asadmin>${payara.home}${file.separator}bin${file.separator}asadmin</asadmin>
-    </properties>
-
-
     <dependencies>
 
         <!--  The TCK  -->
         <dependency>
             <groupId>jakarta.validation</groupId>
             <artifactId>validation-tck-tests</artifactId>
-            <version>3.1.1</version>
+            <version>${jakarta.tck.bean-validation.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -99,18 +92,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
-
-        <!--
-            The Arquillian connector that starts Payara and deploys archives to it.
-        -->
-        <dependency>
-            <groupId>fish.payara.arquillian</groupId>
-            <artifactId>arquillian-payara-server-managed</artifactId>
-            <version>${payara.arquillian.version}</version>
-            <scope>test</scope>
-        </dependency>
-
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
@@ -134,42 +115,17 @@
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>unpack-payara</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                        <configuration>
-                            <markersDirectory>${project.build.directory}${file.separator}dependency-maven-plugin-markers</markersDirectory>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>fish.payara.distributions</groupId>
-                                    <artifactId>${payara.artifact}</artifactId>
-                                    <version>${payara.version}</version>
-                                    <type>zip</type>
-                                    <overWrite>false</overWrite>
-                                    <outputDirectory>${project.build.directory}</outputDirectory>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
                     <execution>
                         <id>Pre-Test Server Start</id>
-                        <phase>process-test-resources</phase>
+                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${asadmin}</executable>
+                            <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>start-domain</argument>
                             </arguments>
@@ -177,12 +133,12 @@
                     </execution>
                     <execution>
                         <id>Setup Validation Provider</id>
-                        <phase>process-test-resources</phase>
+                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${asadmin}</executable>
+                            <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>create-system-properties</argument>
                                 <argument>validation.provider=org.hibernate.validator.HibernateValidator</argument>
@@ -191,12 +147,12 @@
                     </execution>
                     <execution>
                         <id>Pre-Test Server Stop</id>
-                        <phase>process-test-resources</phase>
+                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${asadmin}</executable>
+                            <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>stop-domain</argument>
                             </arguments>
@@ -205,10 +161,19 @@
                 </executions>
             </plugin>
             <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>run-tests</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
                     <argLine>-Xmx1024m</argLine>
-
                     <!-- Surefire / TestNG Properties -->
                     <!-- The suite, the exclude and the test dependencies together determine which tests are being run -->
                     <suiteXmlFiles>
@@ -217,34 +182,10 @@
                     <dependenciesToScan>
                         <dependency>jakarta.validation:validation-tck-tests</dependency>
                     </dependenciesToScan>
-                    <properties>
-                        <property>
-                            <name>surefire.testng.verbose</name>
-                            <value>-1</value>
-                        </property>
-                    </properties>
-                    <forkMode>once</forkMode>
                     <systemPropertyVariables>
                         <payara.home>${payara.home}</payara.home>
                         <validation.provider>org.hibernate.validator.HibernateValidator</validation.provider>
                     </systemPropertyVariables>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-report-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>generate-test-report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report-only</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <outputDirectory>${project.build.directory}/surefire-reports</outputDirectory>
-                    <outputName>test-report</outputName>
                 </configuration>
             </plugin>
         </plugins>
