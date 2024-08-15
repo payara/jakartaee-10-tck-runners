@@ -32,12 +32,6 @@
     
     <dependencies>
         <dependency>
-            <groupId>fish.payara.distributions</groupId>
-            <artifactId>${payara.artifact}</artifactId>
-            <version>${payara.version}</version>
-            <type>zip</type>
-        </dependency>
-        <dependency>
             <groupId>jakarta.tck</groupId>
             <artifactId>websocket-tck-common</artifactId>
             <version>${jakarta.tck.websocket.version}</version>
@@ -52,24 +46,17 @@
         <dependency>
             <groupId>org.jboss.arquillian.junit5</groupId>
             <artifactId>arquillian-junit5-container</artifactId>
-            <version>1.8.0.Final</version>
+            <version>${arquillian.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.junit</groupId>
-            <artifactId>junit-bom</artifactId>
-            <version>5.7.2</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.netbeans.tools</groupId>
+            <groupId>jakarta.tck</groupId>
             <artifactId>sigtest-maven-plugin</artifactId>
-            <version>1.7</version>
+            <version>${jakarta.tck.sigtest-maven-plugin.version}</version>
         </dependency>
         <dependency>
             <groupId>fish.payara.arquillian</groupId>
             <artifactId>payara-client-ee11</artifactId>
-            <version>4.0.alpha1</version>
+            <version>${payara.arquillian.version}</version>
         </dependency>
     </dependencies>
 
@@ -108,8 +95,8 @@
                                 <lib.name>websockettck</lib.name>
                                 <ws_wait>5</ws_wait>
                                 <porting.ts.url.class.1>com.sun.ts.tests.websocket.lib.implementation.sun.common.SunRIURL</porting.ts.url.class.1>
-                                <signature.sigTestClasspath>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.websocket-api.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.websocket-client-api.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}tyrus-core.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}tyrus-server.jar${path.separator}${project.build.directory}/jdk-bundle/java.base${path.separator}${project.build.directory}/jdk-bundle/java.rmi${path.separator}${project.build.directory}/jdk-bundle/java.sql${path.separator}${project.build.directory}/jdk-bundle/java.naming</signature.sigTestClasspath>
-                                <jimage.dir>${project.build.directory}/jdk-bundle</jimage.dir>
+                                <signature.sigTestClasspath>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.websocket-api.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.websocket-client-api.jar${path.separator}${jimage.dir}${file.separator}java.base${path.separator}${jimage.dir}${file.separator}java.rmi${path.separator}${jimage.dir}${file.separator}java.sql${path.separator}${jimage.dir}${file.separator}java.naming</signature.sigTestClasspath>
+                                <jimage.dir>${jimage.dir}</jimage.dir>
                             </systemPropertyVariables>
                         </configuration>
                     </execution>
