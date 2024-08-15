@@ -96,7 +96,6 @@
                                 <ws_wait>5</ws_wait>
                                 <porting.ts.url.class.1>com.sun.ts.tests.websocket.lib.implementation.sun.common.SunRIURL</porting.ts.url.class.1>
                                 <signature.sigTestClasspath>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.websocket-api.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.websocket-client-api.jar${path.separator}${jimage.dir}${file.separator}java.base${path.separator}${jimage.dir}${file.separator}java.rmi${path.separator}${jimage.dir}${file.separator}java.sql${path.separator}${jimage.dir}${file.separator}java.naming</signature.sigTestClasspath>
-                                <jimage.dir>${jimage.dir}</jimage.dir>
                             </systemPropertyVariables>
                         </configuration>
                     </execution>
