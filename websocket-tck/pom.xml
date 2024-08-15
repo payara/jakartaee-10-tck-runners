@@ -30,12 +30,6 @@
     <packaging>pom</packaging>
     <name>TCK: websocket</name>
     
-    <properties>
-        <tck.test.websocket.file>jakarta-websocket-tck-${tck.test.websocket.version}.zip</tck.test.websocket.file>
-        <tck.test.websocket.url>https://download.eclipse.org/jakartaee/websocket/2.2/${tck.test.websocket.file}</tck.test.websocket.url>
-        <tck.test.websocket.version>${jakarta.tck.websocket.version}</tck.test.websocket.version>
-    </properties>
-    
     <dependencies>
         <dependency>
             <groupId>fish.payara.distributions</groupId>
@@ -74,50 +68,13 @@
         </dependency>
         <dependency>
             <groupId>fish.payara.arquillian</groupId>
-            <artifactId>arquillian-payara-server-managed</artifactId>
-            <version>${payara.arquillian.version}</version>
-            <scope>test</scope>
+            <artifactId>payara-client-ee11</artifactId>
+            <version>4.0.alpha1</version>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>com.googlecode.maven-download-plugin</groupId>
-                <artifactId>download-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>download-servlet-tck</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <url>${tck.test.websocket.url}</url>
-                    <unpack>true</unpack>
-                    <outputDirectory>${project.build.directory}</outputDirectory>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.3.0</version>
-                <executions>
-                    <execution>
-                        <id>installing artifacts</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${project.build.directory}${file.separator}websocket-tck${file.separator}artifacts${file.separator}artifact-install.sh</executable>
-                            <workingDirectory>${project.build.directory}${file.separator}websocket-tck${file.separator}artifacts${file.separator}</workingDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <executions>
@@ -144,18 +101,12 @@
                                 <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}nucleus-grizzly-all.jar</additionalClasspathElement>
                                 <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}glassfish-grizzly-extra-all.jar</additionalClasspathElement>
                             </additionalClasspathElements>
-
                             <dependenciesToScan>jakarta.tck:websocket-tck-spec-tests</dependenciesToScan>
-
-                            <test>${run.test}</test>
-
                             <systemPropertyVariables>
                                 <payara.home>${payara.home}</payara.home>
                                 <junit.log.traceflag>true</junit.log.traceflag>
-                                <harness.log.traceflag>true</harness.log.traceflag>
-                                <cts.harness.debug>true</cts.harness.debug>
                                 <lib.name>websockettck</lib.name>
-                                <ws_wait>10</ws_wait>
+                                <ws_wait>5</ws_wait>
                                 <porting.ts.url.class.1>com.sun.ts.tests.websocket.lib.implementation.sun.common.SunRIURL</porting.ts.url.class.1>
                                 <signature.sigTestClasspath>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.websocket-api.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.websocket-client-api.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}tyrus-core.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}tyrus-server.jar${path.separator}${project.build.directory}/jdk-bundle/java.base${path.separator}${project.build.directory}/jdk-bundle/java.rmi${path.separator}${project.build.directory}/jdk-bundle/java.sql${path.separator}${project.build.directory}/jdk-bundle/java.naming</signature.sigTestClasspath>
                                 <jimage.dir>${project.build.directory}/jdk-bundle</jimage.dir>
