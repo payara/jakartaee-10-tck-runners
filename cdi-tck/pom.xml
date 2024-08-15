@@ -12,8 +12,6 @@
     <artifactId>cdi-tck</artifactId>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
         <payara.home></payara.home>
         <porting.home>${basedir}/cditck-porting</porting.home>
         <javaee.level>full</javaee.level>
