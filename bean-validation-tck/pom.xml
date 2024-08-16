@@ -62,6 +62,14 @@
             <version>${jakarta.tck.bean-validation.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>validation-tck-tests</artifactId>
+            <version>${jakarta.tck.bean-validation.version}</version>
+            <type>xml</type>
+            <classifier>suite</classifier>
+            <scope>test</scope>
+        </dependency>
 
         <!-- Utility classes for TestNG and Arquillian, used in suite.xml -->
         <dependency>
@@ -115,8 +123,32 @@
     <build>
         <plugins>
             <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <configuration>
+                    <skip>${skipTests}</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>copy-tck-suite</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeArtifactIds>validation-tck-tests</includeArtifactIds>
+                            <type>xml</type>
+                            <classifier>suite</classifier>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
+                <configuration>
+                    <skip>${skipTests}</skip>
+                </configuration>
                 <executions>
                     <execution>
                         <id>Pre-Test Server Start</id>
@@ -177,7 +209,7 @@
                     <!-- Surefire / TestNG Properties -->
                     <!-- The suite, the exclude and the test dependencies together determine which tests are being run -->
                     <suiteXmlFiles>
-                        <suiteXmlFile>suite.xml</suiteXmlFile>
+                        <suiteXmlFile>${project.build.directory}${file.separator}validation-tck-tests-${jakarta.tck.bean-validation.version}-suite.xml</suiteXmlFile>
                     </suiteXmlFiles>
                     <dependenciesToScan>
                         <dependency>jakarta.validation:validation-tck-tests</dependency>
