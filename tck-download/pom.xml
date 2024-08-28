@@ -41,6 +41,7 @@
         <module>jakarta-servlet-tck</module>
         <module>jakarta-tags-tck</module>
         <module>jakarta-websocket-tck</module>
+        <module>jakarta-validation-tck</module>
     </modules>
 
     <build>
