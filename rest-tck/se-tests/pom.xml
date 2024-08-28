@@ -16,14 +16,13 @@
         <dependency>
             <groupId>jakarta.ws.rs</groupId>
             <artifactId>jakarta-restful-ws-tck</artifactId>
-            <version>${rest-tck.version}</version>
+            <version>${jakarta-rest-tck.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>fish.payara.arquillian</groupId>
             <artifactId>arquillian-payara-server-remote</artifactId>
-            <version>3.0.alpha6</version>
             <scope>test</scope>
         </dependency>
 
@@ -73,12 +72,18 @@
             <artifactId>arquillian-protocol-servlet-jakarta</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!-- TCK runtime dependencies -->
 
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
-            <version>3.0.0</version>
+            <version>4.0.1</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -89,7 +94,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.0.0-M6</version>
                 <executions>
                     <execution>
                         <id>se-tests</id>
