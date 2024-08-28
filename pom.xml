@@ -86,7 +86,7 @@
         <!-- Jakarta EE versions -->
         <jakarta-annotations-tck.version>3.0.0</jakarta-annotations-tck.version>
         <jakarta-authorization-tck.version>3.0.0</jakarta-authorization-tck.version>
-        <jakarta.tck.sigtest-maven-plugin.version>2.3</jakarta.tck.sigtest-maven-plugin.version>
+        <jakarta.tck.sigtest-maven-plugin.version>2.2</jakarta.tck.sigtest-maven-plugin.version>
         <jakarta.tck.el.version>6.0.0</jakarta.tck.el.version>
         <jakarta.tck.websocket.version>2.2.0</jakarta.tck.websocket.version>
         <jakarta.tck.bean-validation.version>3.1.1</jakarta.tck.bean-validation.version>

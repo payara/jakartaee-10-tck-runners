@@ -72,30 +72,17 @@
                             <goal>verify</goal>
                         </goals>
                         <configuration>
-                            <additionalClasspathElements>
-                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.websocket-api.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.websocket-client-api.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.servlet-api.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.enterprise.cdi-api.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}tyrus-core.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}tyrus-server.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}tyrus-spi.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}tyrus-container-grizzly-client.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}tyrus-container-servlet.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}tyrus-client.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}tyrus-container-glassfish-ejb.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}tyrus-container-glassfish-cdi.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}nucleus-grizzly-all.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}glassfish-grizzly-extra-all.jar</additionalClasspathElement>
-                            </additionalClasspathElements>
                             <dependenciesToScan>jakarta.tck:websocket-tck-spec-tests</dependenciesToScan>
                             <systemPropertyVariables>
                                 <payara.home>${payara.home}</payara.home>
+                                <jimage.dir>${jimage.dir}</jimage.dir>
                                 <junit.log.traceflag>true</junit.log.traceflag>
                                 <lib.name>websockettck</lib.name>
                                 <ws_wait>5</ws_wait>
                                 <porting.ts.url.class.1>com.sun.ts.tests.websocket.lib.implementation.sun.common.SunRIURL</porting.ts.url.class.1>
-                                <signature.sigTestClasspath>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.websocket-api.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.websocket-client-api.jar${path.separator}${jimage.dir}${file.separator}java.base${path.separator}${jimage.dir}${file.separator}java.rmi${path.separator}${jimage.dir}${file.separator}java.sql${path.separator}${jimage.dir}${file.separator}java.naming</signature.sigTestClasspath>
+                                <sigTestClasspath>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.websocket-api.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.websocket-client-api.jar${path.separator}${jimage.dir}${file.separator}java.base${path.separator}${jimage.dir}${file.separator}java.rmi${path.separator}${jimage.dir}${file.separator}java.sql${path.separator}${jimage.dir}${file.separator}java.naming</sigTestClasspath>
+                                <harness.log.traceflag>true</harness.log.traceflag>
+                                <cts.harness.debug>true</cts.harness.debug>
                             </systemPropertyVariables>
                         </configuration>
                     </execution>
