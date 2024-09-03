@@ -39,7 +39,6 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
 
         <!-- Used to help determine sh vs. bat -->
         <script.ext/>
-        <payara.executable>${payara.home}${file.separator}glassfish${file.separator}bin${file.separator}asadmin${script.ext}</payara.executable>
 
         <slf4j.version>2.0.16</slf4j.version>
     </properties>
@@ -189,7 +188,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                         <configuration>
                             <skip>${skipTests}</skip>
                             <target if="payara.server.managed" unless="skip.setup">
-                                <exec executable="${payara.executable}">
+                                <exec executable="${payara.asadmin}">
                                     <arg value="start-domain" />
                                 </exec>
                             </target>
@@ -237,7 +236,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                         <configuration>
                             <skip>${skipTests}</skip>
                             <target unless="skip.setup">
-                                <exec executable="${payara.executable}">
+                                <exec executable="${payara.asadmin}">
                                     <arg value="create-jdbc-connection-pool" />
                                     <arg value="--datasourceClassname=org.apache.derby.jdbc.ClientDataSource40" />
                                     <arg value="--resType=javax.sql.DataSource" />
@@ -257,7 +256,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                         <configuration>
                             <skip>${skipTests}</skip>
                             <target unless="skip.setup">
-                                <exec executable="${payara.executable}">
+                                <exec executable="${payara.asadmin}">
                                     <arg value="create-jdbc-resource" />
                                     <arg value="--poolName=batchtck" />
                                     <arg value="jdbc/orderDB" />
@@ -275,7 +274,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                         <configuration>
                             <skip>${skipTests}</skip>
                             <target if="payara.server.managed" unless="skip.setup">
-                                <exec executable="${payara.executable}">
+                                <exec executable="${payara.asadmin}">
                                     <arg value="stop-domain" />
                                 </exec>
                             </target>
@@ -290,7 +289,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                         <configuration>
                             <skip>${skipTests}</skip>
                             <target if="payara.server.remote" unless="skip.setup">
-                                <exec executable="${payara.executable}">
+                                <exec executable="${payara.asadmin}">
                                     <arg value="restart-domain" />
                                 </exec>
                             </target>
