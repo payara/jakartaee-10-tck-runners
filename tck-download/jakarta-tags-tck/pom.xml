@@ -16,6 +16,10 @@
 
     <properties>
     	<tck.test.tags.file>jakarta-tags-tck-4.0.0.jar</tck.test.tags.file>
+        <tck.pom.file>jakarta-tck-pom.xml</tck.pom.file>
+        <tck.common.file>common-11.0.0-SNAPSHOT.jar</tck.common.file>
+        <tck.libutil.file>libutil-11.0.0-SNAPSHOT.jar</tck.libutil.file>
+        <tck.runtime.file>runtime-11.0.0-SNAPSHOT.jar</tck.runtime.file>
     </properties>
 
     <build>
@@ -34,6 +38,66 @@
                             <groupId>${project.groupId}</groupId>
                             <artifactId>${project.artifactId}</artifactId>
                             <version>${project.version}</version>
+                            <packaging>jar</packaging>
+                            <generatePom>false</generatePom>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install-jakarta-pom</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <file>${tck.pom.file}</file>
+                            <groupId>jakarta.tck</groupId>
+                            <artifactId>project</artifactId>
+                            <version>11.0.0-SNAPSHOT</version>
+                            <packaging>pom</packaging>
+                            <generatePom>false</generatePom>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install-jakarta-common</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <file>${tck.common.file}</file>
+                            <groupId>jakarta.tck</groupId>
+                            <artifactId>common</artifactId>
+                            <version>11.0.0-SNAPSHOT</version>
+                            <packaging>jar</packaging>
+                            <generatePom>false</generatePom>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install-jakarta-libutil</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <file>${tck.libutil.file}</file>
+                            <groupId>jakarta.tck</groupId>
+                            <artifactId>libutil</artifactId>
+                            <version>11.0.0-SNAPSHOT</version>
+                            <packaging>jar</packaging>
+                            <generatePom>false</generatePom>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install-jakarta-runtime</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <file>${tck.runtime.file}</file>
+                            <groupId>jakarta.tck</groupId>
+                            <artifactId>runtime</artifactId>
+                            <version>11.0.0-SNAPSHOT</version>
                             <packaging>jar</packaging>
                             <generatePom>false</generatePom>
                         </configuration>
