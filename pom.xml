@@ -60,6 +60,7 @@
         <ant.zip.url>https://archive.apache.org/dist/ant/binaries/apache-ant-${ant.version}-bin.zip</ant.zip.url>
 
         <payara.home>${maven.multiModuleProjectDirectory}${file.separator}target${file.separator}payara7</payara.home>
+        <!-- Note that Shrinkwrap Maven resolver WILL NOT read in whatever you specify on the command line - it will ALWAYS read this as-is -->
         <payara.version>7.2024.1.Alpha2-SNAPSHOT</payara.version>
         <payara.asadmin>${payara.home}${file.separator}glassfish${file.separator}bin${file.separator}asadmin</payara.asadmin>
         <payara.artifact>payara</payara.artifact>
@@ -114,8 +115,7 @@
         <module>activation-tck</module>
         <module>annotations-tck</module>
         <module>authorization-tck</module>
-        <!-- Ignore for now since this module, by design, doesn't have payara.version set - see comment in batch-tck/pom.xml for reason (shrinkwrap maven resolver limitation) -->
-        <!-- <module>batch-tck</module> -->
+        <module>batch-tck</module>
         <module>cdi-langmodel-tck</module>
         <module>cdi-tck</module>
         <module>concurrent-tck</module>
@@ -235,6 +235,12 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven-surefire-plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>jakarta.tck</groupId>
+                    <artifactId>sigtest-maven-plugin</artifactId>
+                    <version>${jakarta.tck.sigtest-maven-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

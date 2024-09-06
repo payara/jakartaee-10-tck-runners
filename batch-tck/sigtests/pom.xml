@@ -10,16 +10,11 @@
 
     <artifactId>batch-tck.sig-tests</artifactId>
 
-    <properties>
-        <sigtest.maven.plugin.version>1.6</sigtest.maven.plugin.version>
-    </properties>
-
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>${maven.dependency.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>unpack-sigfiles</id>
@@ -43,7 +38,6 @@
             </plugin>
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>${maven.antrun.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>expand-payara-modules</id>
@@ -64,9 +58,8 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.netbeans.tools</groupId>
+                <groupId>jakarta.tck</groupId>
                 <artifactId>sigtest-maven-plugin</artifactId>
-                <version>${sigtest.maven.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>sigtest</id>
@@ -87,24 +80,6 @@
 
     <profiles>
         <profile>
-            <id>jdk11</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-                <jdk>11</jdk>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.netbeans.tools</groupId>
-                        <artifactId>sigtest-maven-plugin</artifactId>
-                        <configuration>
-                            <sigfile>${project.build.directory}${file.separator}sigtest-copy${file.separator}sigtest${file.separator}sigtest-1.6-batch.standalone.tck.sig-2.1-se11-OpenJDK-J9</sigfile>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
             <id>jdk17</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
@@ -113,10 +88,28 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.netbeans.tools</groupId>
+                        <groupId>jakarta.tck</groupId>
                         <artifactId>sigtest-maven-plugin</artifactId>
                         <configuration>
                             <sigfile>${project.build.directory}${file.separator}sigtest-copy${file.separator}sigtest${file.separator}sigtest-1.6-batch.standalone.tck.sig-2.1-se17-TemurinHotSpot</sigfile>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>jdk21</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <jdk>21</jdk>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>jakarta.tck</groupId>
+                        <artifactId>sigtest-maven-plugin</artifactId>
+                        <configuration>
+                            <sigfile>${project.build.directory}${file.separator}sigtest-copy${file.separator}sigtest${file.separator}jakarta.sigtest-2.2-batch.standalone.tck.sig-2.1-se21-Temurin</sigfile>
                         </configuration>
                     </plugin>
                 </plugins>
