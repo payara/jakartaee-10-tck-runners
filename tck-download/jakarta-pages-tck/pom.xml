@@ -56,7 +56,7 @@
                     <outputDirectory>${project.build.directory}</outputDirectory>
                 </configuration>
             </plugin>
-            <!--plugin>
+            <plugin>
                 <artifactId>maven-install-plugin</artifactId>
                 <executions>
                     <execution>
@@ -66,16 +66,17 @@
                             <goal>install-file</goal>
                         </goals>
                         <configuration>
-                            <file>${project.build.directory}/${tck.test.pages.file}</file>
-                            <groupId>${project.groupId}</groupId>
-                            <artifactId>${project.artifactId}</artifactId>
-                            <version>${project.version}</version>
-                            <packaging>zip</packaging>
+                            <file>${project.build.directory}${file.separator}pages-tck${file.separator}artifacts${file.separator}jakarta-page-tck-${jakarta.tck.pages.version}.jar</file>
+                            <sources>${project.build.directory}${file.separator}pages-tck${file.separator}artifacts${file.separator}jakarta-page-tck-${jakarta.tck.pages.version}-sources.jar</sources>
+                            <groupId>jakarta.tck</groupId>
+                            <artifactId>jakarta-pages-tck</artifactId>
+                            <version>${jakarta.tck.pages.version}</version>
+                            <packaging>jar</packaging>
                             <generatePom>true</generatePom>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin-->
+            </plugin>
         </plugins>
     </build>
 
