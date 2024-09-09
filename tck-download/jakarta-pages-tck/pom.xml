@@ -66,8 +66,8 @@
                             <goal>install-file</goal>
                         </goals>
                         <configuration>
-                            <file>${project.build.directory}${file.separator}pages-tck${file.separator}artifacts${file.separator}jakarta-page-tck-${jakarta.tck.pages.version}.jar</file>
-                            <sources>${project.build.directory}${file.separator}pages-tck${file.separator}artifacts${file.separator}jakarta-page-tck-${jakarta.tck.pages.version}-sources.jar</sources>
+                            <file>${project.build.directory}${file.separator}pages-tck${file.separator}artifacts${file.separator}jakarta-pages-tck-${jakarta.tck.pages.version}.jar</file>
+                            <sources>${project.build.directory}${file.separator}pages-tck${file.separator}artifacts${file.separator}jakarta-pages-tck-${jakarta.tck.pages.version}-sources.jar</sources>
                             <groupId>jakarta.tck</groupId>
                             <artifactId>jakarta-pages-tck</artifactId>
                             <version>${jakarta.tck.pages.version}</version>
