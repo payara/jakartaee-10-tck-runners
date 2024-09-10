@@ -17,7 +17,8 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -30,8 +31,13 @@
     <packaging>pom</packaging>
 
     <name>TCK: pages</name>
-    
+
     <dependencies>
+        <dependency>
+            <groupId>jakarta.servlet.jsp</groupId>
+            <artifactId>jakarta.servlet.jsp-api</artifactId>
+            <version>${jakarta.tck.pages.version}</version>
+        </dependency>
         <dependency>
             <groupId>jakarta.tck</groupId>
             <artifactId>jakarta-pages-tck</artifactId>
@@ -57,48 +63,53 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.jboss.arquillian.junit5</groupId>
-            <artifactId>arquillian-junit5-container</artifactId>
-            <version>${arquillian.version}</version>
-        </dependency>
-        <dependency>
             <groupId>jakarta.tck</groupId>
             <artifactId>sigtest-maven-plugin</artifactId>
             <version>${jakarta.tck.sigtest-maven-plugin.version}</version>
         </dependency>
         <dependency>
-            <groupId>fish.payara.arquillian</groupId>
-            <artifactId>payara-client-ee11</artifactId>
-            <version>${payara.arquillian.version}</version>
+            <groupId>org.jboss.arquillian.junit5</groupId>
+            <artifactId>arquillian-junit5-container</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
-           <plugin>
-               <artifactId>maven-failsafe-plugin</artifactId>
-               <executions>
-                   <execution>
-                       <id>payara-tests</id>
-                       <goals>
-                           <goal>integration-test</goal>
-                           <goal>verify</goal>
-                       </goals>
-                       <configuration>
-                           <dependenciesToScan>jakarta.tck:jakarta-pages-tck</dependenciesToScan>
-                           <systemPropertyVariables>
-                               <payara.home>${payara.home}</payara.home>
-                               <jimage.dir>${jimage.dir}</jimage.dir>
-                               <junit.log.traceflag>true</junit.log.traceflag>
-                               <porting.ts.url.class.1>ee.jakarta.tck.pages.lib.implementation.sun.common.SunRIURL</porting.ts.url.class.1>
-                               <sigTestClasspath>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.servlet.jsp-api.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.servlet-api.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.el-api.jar${path.separator}${jimage.dir}${file.separator}java.base${path.separator}${jimage.dir}${file.separator}java.rmi${path.separator}${jimage.dir}${file.separator}java.sql${path.separator}${jimage.dir}${file.separator}java.naming</sigTestClasspath>
-                               <harness.log.traceflag>true</harness.log.traceflag>
-                               <cts.harness.debug>true</cts.harness.debug>
-                           </systemPropertyVariables>
-                       </configuration>
-                   </execution>
-               </executions>
-           </plugin>
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>payara-tests</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                        <configuration>
+                            <dependenciesToScan>jakarta.tck:jakarta-pages-tck</dependenciesToScan>
+                            <systemPropertyVariables>
+                                <payara.home>${payara.home}</payara.home>
+                                <jimage.dir>${jimage.dir}</jimage.dir>
+                                <junit.log.traceflag>true</junit.log.traceflag>
+                                <porting.ts.url.class.1>ee.jakarta.tck.pages.lib.implementation.sun.common.SunRIURL</porting.ts.url.class.1>
+                                <sigTestClasspath>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.servlet.jsp-api.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.servlet-api.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.el-api.jar${path.separator}${jimage.dir}${file.separator}java.base${path.separator}${jimage.dir}${file.separator}java.rmi${path.separator}${jimage.dir}${file.separator}java.sql${path.separator}${jimage.dir}${file.separator}java.naming</sigTestClasspath>
+                                <harness.log.traceflag>true</harness.log.traceflag>
+                                <cts.harness.debug>true</cts.harness.debug>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>
