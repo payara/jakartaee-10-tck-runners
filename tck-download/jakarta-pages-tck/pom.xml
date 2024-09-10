@@ -99,7 +99,7 @@
                             <goal>install-file</goal>
                         </goals>
                         <configuration>
-                            <file>${project.build.directory}${file.separator}javatest.jar</file>
+                            <file>tck-download${file.separator}javatest${file.separator}javatest.jar</file>
                             <sources>${project.build.directory}${file.separator}javatest-sources.jar</sources>
                             <groupId>javatest</groupId>
                             <artifactId>javatest</artifactId>
