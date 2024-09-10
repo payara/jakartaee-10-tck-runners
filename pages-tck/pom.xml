@@ -36,7 +36,7 @@
         <dependency>
             <groupId>jakarta.servlet.jsp</groupId>
             <artifactId>jakarta.servlet.jsp-api</artifactId>
-            <version>${jakarta.tck.pages.version}</version>
+            <version>${jakarta.tck.servlet.jsp-api.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.tck</groupId>
