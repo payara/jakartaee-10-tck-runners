@@ -51,6 +51,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>javatest</groupId>
+            <artifactId>javatest</artifactId>
+            <version>5.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.jboss.arquillian.junit5</groupId>
             <artifactId>arquillian-junit5-container</artifactId>
             <version>${arquillian.version}</version>
