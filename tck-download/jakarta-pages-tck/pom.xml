@@ -80,9 +80,11 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
+                            <finalName>javatest</finalName>
                             <descriptors>
                                 <descriptor>assembly${file.separator}sources.xml</descriptor>
                             </descriptors>
+                            <appendAssemblyId>false</appendAssemblyId>
                         </configuration>
                     </execution>
                 </executions>
