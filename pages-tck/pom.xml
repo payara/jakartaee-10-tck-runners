@@ -63,11 +63,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>jakarta.tck</groupId>
-            <artifactId>sigtest-maven-plugin</artifactId>
-            <version>${jakarta.tck.sigtest-maven-plugin.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.jboss.arquillian.junit5</groupId>
             <artifactId>arquillian-junit5-container</artifactId>
             <scope>test</scope>
