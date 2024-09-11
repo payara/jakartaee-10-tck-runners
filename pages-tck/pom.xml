@@ -57,6 +57,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>jakarta.tck</groupId>
+            <artifactId>sigtest-maven-plugin</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>javatest</groupId>
             <artifactId>javatest</artifactId>
             <version>5.0</version>
