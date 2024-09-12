@@ -92,7 +92,10 @@
         <jakarta.tck.el.version>6.0.0</jakarta.tck.el.version>
         <jakarta.tck.websocket.version>2.2.0</jakarta.tck.websocket.version>
         <jakarta.tck.bean-validation.version>3.1.1</jakarta.tck.bean-validation.version>
-
+        <jakarta.tck.servlet.jsp-api.version>4.0.0</jakarta.tck.servlet.jsp-api.version>
+        <jakarta.tck.pages.version>4.0.0</jakarta.tck.pages.version>
+        <jakarta.tck.common.version>11.0.0-M1</jakarta.tck.common.version>
+        <jakarta.tck.signaturetest.version>11.0.0-M1</jakarta.tck.signaturetest.version>
         <cdi.api.version>4.1.0</cdi.api.version>
     </properties>
 
