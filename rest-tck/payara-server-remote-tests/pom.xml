@@ -164,7 +164,7 @@
                                 <argument>${project.basedir}/j2ee.pass</argument>
                                 <argument>create-file-user</argument>
                                 <argument>--groups</argument>
-                                <argument>staff:mgr</argument>
+                                <argument>staff:mgr:DIRECTOR</argument>
                                 <argument>j2ee</argument>
                             </arguments>
                         </configuration>
@@ -202,7 +202,7 @@
                                 <argument>${project.basedir}/javajoe.pass</argument>
                                 <argument>create-file-user</argument>
                                 <argument>--groups</argument>
-                                <argument>guest</argument>
+                                <argument>guest:OTHERROLE</argument>
                                 <argument>javajoe</argument>
                             </arguments>
                         </configuration>
