@@ -11,7 +11,7 @@ PAYARA_HOME="${1#payara.home=}"
 
 # Ensure JAVA_HOME is set
 if [ -z "$JAVA_HOME" ]; then
-    export JAVA_HOME=/usr/lib/jvm/temurin-21-jdk-arm64
+    export JAVA_HOME=/usr/lib/jvm/temurin-21-jdk-amd64
 fi
 
 # Remove target directory if it exists
