@@ -41,13 +41,12 @@
     <properties>
         <!--glassfish properties-->
         <glassfish.container.version>8.0.0-M2</glassfish.container.version>
-        <payara.home></payara.home>
         <glassfish.toplevel.dir>${payara.home}/glassfish</glassfish.toplevel.dir>
-        <glassfish.module.dir>${glassfish.toplevel.dir}/glassfish/modules</glassfish.module.dir>
+        <glassfish.module.dir>${glassfish.toplevel.dir}/modules</glassfish.module.dir>
         <exec.asadmin>${glassfish.toplevel.dir}/bin/asadmin</exec.asadmin>
 
         <!-- derby properties -->
-        <derby.zip.url>https://dlcdn.apache.org//db/derby/db-derby-10.15.2.0/db-derby-10.15.2.0-bin.zip</derby.zip.url>
+        <derby.zip.url>https://dlcdn.apache.org/db/derby/db-derby-10.15.2.0/db-derby-10.15.2.0-bin.zip</derby.zip.url>
         <db.home>${project.build.directory}/db-derby-10.15.2.0-bin</db.home>
 
         <!--tck properties-->
@@ -58,7 +57,7 @@
         <jdbc.db>derby</jdbc.db>
         <jakarta.persistence.provider>org.eclipse.persistence.jpa.PersistenceProvider</jakarta.persistence.provider>
         <jakarta.persistence.jdbc.driver>org.apache.derby.jdbc.ClientDriver</jakarta.persistence.jdbc.driver>
-        <jakarta.persistence.jdbc.url>jdbc:derby://localhost:1527/derbyDB;create=true</jakarta.persistence.jdbc.url>
+        <jakarta.persistence.jdbc.url>jdbc:derby://localhost:9092/derbyDB;create=true</jakarta.persistence.jdbc.url>
         <jakarta.persistence.jdbc.user>cts1</jakarta.persistence.jdbc.user>
         <jakarta.persistence.jdbc.password>cts1</jakarta.persistence.jdbc.password>
         <jpa.provider.implementation.specific.properties/>
@@ -294,8 +293,6 @@
                             <goal>run</goal>
                         </goals>
                     </execution>
-
-
 
                     <execution>
                         <id>initdb</id>

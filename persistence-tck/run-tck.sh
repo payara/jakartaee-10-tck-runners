@@ -36,7 +36,8 @@ bash artifact-install.sh
 # Copy the Payara profile
 cd ../../../
 cp -f payara-profile.xml target/persistence-tck/bin/pom.xml
+echo "Copied payara-profile.xml to target/persistence-tck/bin/pom.xml"
 
 # Execute TCK
-cd target/persistence-tck/bin || exit
-mvn clean install -Dpayara.home="$PAYARA_HOME"
+cd target/persistence-tck || exit
+mvn -f bin/pom.xml clean verify -P staging,full,derby,eclipselink -Dpayara.home=$PAYARA_HOME -Declipselink.version=5.0.0-B03 -Declipselink.asm.version=9.7.0 -Dtck.version=3.2.0
