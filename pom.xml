@@ -96,6 +96,7 @@
         <jakarta.tck.pages.version>4.0.0</jakarta.tck.pages.version>
         <jakarta.tck.common.version>11.0.0-M1</jakarta.tck.common.version>
         <jakarta.tck.signaturetest.version>11.0.0-M1</jakarta.tck.signaturetest.version>
+        <jakarta.tck.persistence.version>3.2.0</jakarta.tck.persistence.version>
         <cdi.api.version>4.1.0</cdi.api.version>
     </properties>
 
@@ -134,6 +135,7 @@
         <module>summarizer</module>
         <module>expression-language-tck</module>
         <module>bean-validation-tck</module>
+        <module>persistence-tck</module>
     </modules>
 
     <dependencyManagement>
