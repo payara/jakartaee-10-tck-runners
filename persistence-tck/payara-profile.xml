@@ -39,19 +39,19 @@
         </repository>
     </repositories>
     <properties>
-        <!--glassfish properties-->
-        <glassfish.container.version>8.0.0-M2</glassfish.container.version>
-        <glassfish.toplevel.dir>${payara.home}/glassfish</glassfish.toplevel.dir>
-        <glassfish.module.dir>${glassfish.toplevel.dir}/modules</glassfish.module.dir>
-        <exec.asadmin>${glassfish.toplevel.dir}/bin/asadmin</exec.asadmin>
+        <!--payara properties-->
+        <payara.version>7.2024.1.Alpha1</payara.version>
+        <payara.toplevel.dir>${payara.home}/glassfish</payara.toplevel.dir>
+        <payara.module.dir>${payara.toplevel.dir}/modules</payara.module.dir>
+        <exec.asadmin>${payara.toplevel.dir}/bin/asadmin</exec.asadmin>
 
         <!-- derby properties -->
         <derby.zip.url>https://dlcdn.apache.org/db/derby/db-derby-10.17.1.0/db-derby-10.17.1.0-bin.zip</derby.zip.url>
         <db.home>${project.build.directory}/db-derby-10.17.1.0-bin</db.home>
 
         <!--tck properties-->
-        <jpa.classes>${glassfish.module.dir}/jakarta.persistence-api.jar,${glassfish.module.dir}/org.eclipse.persistence.jpa.jar,${glassfish.module.dir}/jakarta.servlet-api.jar,${glassfish.module.dir}/jakarta.transaction-api.jar,${glassfish.module.dir}/jakarta.ejb-api.jar,${glassfish.module.dir}/org.eclipse.persistence.antlr.jar,${glassfish.module.dir}/org.eclipse.persistence.asm.jar,${glassfish.module.dir}/org.eclipse.persistence.core.jar,${glassfish.module.dir}/org.eclipse.persistence.dbws.jar,${glassfish.module.dir}/org.eclipse.persistence.jpa.jpql.jar,${glassfish.module.dir}/org.eclipse.persistence.jpa.modelgen.processor.jar,${glassfish.module.dir}/org.eclipse.persistence.moxy.jar,${glassfish.module.dir}/org.eclipse.persistence.oracle.jar,${glassfish.module.dir}/jboss-logging.jar,${glassfish.module.dir}/jakarta.el-api.jar,${glassfish.module.dir}/expressly.jar,${glassfish.module.dir}/classmate.jar,${glassfish.module.dir}/jakarta.validation-api.jar</jpa.classes>
-        <validator.classes>${glassfish.module.dir}/jakarta.validation-api.jar,${glassfish.module.dir}/hibernate-validator-cdi.jar,${glassfish.module.dir}/hibernate-validator.jar</validator.classes>
+        <jpa.classes>${payara.module.dir}/jakarta.persistence-api.jar,${payara.module.dir}/org.eclipse.persistence.jpa.jar,${payara.module.dir}/jakarta.servlet-api.jar,${payara.module.dir}/jakarta.transaction-api.jar,${payara.module.dir}/jakarta.ejb-api.jar,${payara.module.dir}/org.eclipse.persistence.antlr.jar,${payara.module.dir}/org.eclipse.persistence.asm.jar,${payara.module.dir}/org.eclipse.persistence.core.jar,${payara.module.dir}/org.eclipse.persistence.dbws.jar,${payara.module.dir}/org.eclipse.persistence.jpa.jpql.jar,${payara.module.dir}/org.eclipse.persistence.jpa.modelgen.processor.jar,${payara.module.dir}/org.eclipse.persistence.moxy.jar,${payara.module.dir}/org.eclipse.persistence.oracle.jar,${payara.module.dir}/jboss-logging.jar,${payara.module.dir}/jakarta.el-api.jar,${payara.module.dir}/expressly.jar,${payara.module.dir}/classmate.jar,${payara.module.dir}/jakarta.validation-api.jar</jpa.classes>
+        <validator.classes>${payara.module.dir}/jakarta.validation-api.jar,${payara.module.dir}/hibernate-validator-cdi.jar,${payara.module.dir}/hibernate-validator.jar</validator.classes>
         <jdbc.lib.classpath>${javadb.lib}/derbyclient.jar,${javadb.lib}/derbyshared.jar,${javadb.lib}/derbytools.jar</jdbc.lib.classpath>
         <jdbc.driver.classes>${javadb.lib}/derbyclient.jar:${javadb.lib}/derbyshared.jar:${javadb.lib}/derbytools.jar</jdbc.driver.classes>
         <jdbc.db>derby</jdbc.db>
@@ -75,7 +75,7 @@
         <arquillian.junit5.version>1.7.0.Alpha14</arquillian.junit5.version>
         <el.version>5.0.0-M1</el.version>
         <hibernate.version>8.0.1.Final</hibernate.version>
-        <javadb.lib>${glassfish.toplevel.dir}/javadb/lib</javadb.lib>
+        <javadb.lib>${payara.toplevel.dir}/javadb/lib</javadb.lib>
         <sql.directory>../sql</sql.directory>
         <persistence.api.version>3.2.0</persistence.api.version>
     </properties>
@@ -234,9 +234,9 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>org.glassfish.main.distributions</groupId>
-                                    <artifactId>${glassfish-artifact-id}</artifactId>
-                                    <version>${glassfish.container.version}</version>
+                                    <groupId>fish.payara.distributions</groupId>
+                                    <artifactId>payara</artifactId>
+                                    <version>${payara.version}</version>
                                     <type>zip</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.directory}</outputDirectory>
@@ -262,7 +262,7 @@
                                 <artifactItem>
                                     <groupId>jakarta.persistence</groupId>
                                     <artifactId>jakarta.persistence-api</artifactId>
-                                    <outputDirectory>${glassfish.module.dir}</outputDirectory>
+                                    <outputDirectory>${payara.module.dir}</outputDirectory>
                                     <overWrite>true</overWrite>
                                     <destFileName>jakarta.persistence-api.jar</destFileName>
                                 </artifactItem>
@@ -354,7 +354,7 @@
                             </additionalClasspathElements>
                             <dependenciesToScan>${project.groupId}:${tck.artifactId}</dependenciesToScan>
                             <systemPropertyVariables>
-                                <GLASSFISH_HOME>${project.build.directory}/${glassfish.toplevel.dir}</GLASSFISH_HOME>
+                                <GLASSFISH_HOME>${project.build.directory}/${payara.toplevel.dir}</GLASSFISH_HOME>
                                 <platform.mode>standalone</platform.mode>
                                 <persistence.unit.name>JPATCK</persistence.unit.name>
                                 <persistence.unit.name.2>JPATCK2</persistence.unit.name.2>
@@ -372,7 +372,7 @@
                                 <Select_Jpa_Purchase_Order>SELECT ID, TOTAL FROM PURCHASE_ORDER WHERE ID=?</Select_Jpa_Purchase_Order>
                                 <log.file.location>/tmp</log.file.location>
                                 <jdbc.db>${jdbc.db}</jdbc.db>
-                                <sigTestClasspath>${glassfish.module.dir}/jakarta.persistence-api.jar${path.separator}${project.build.directory}/jdk11-bundle/java.base${path.separator}${project.build.directory}/jdk11-bundle/java.rmi${path.separator}${project.build.directory}/jdk11-bundle/java.sql${path.separator}${project.build.directory}/jdk11-bundle/java.naming
+                                <sigTestClasspath>${payara.module.dir}/jakarta.persistence-api.jar${path.separator}${project.build.directory}/jdk11-bundle/java.base${path.separator}${project.build.directory}/jdk11-bundle/java.rmi${path.separator}${project.build.directory}/jdk11-bundle/java.sql${path.separator}${project.build.directory}/jdk11-bundle/java.naming
                                 </sigTestClasspath>
                                 <jimage.dir>${project.build.directory}/jdk11-bundle</jimage.dir>
                             </systemPropertyVariables>
@@ -392,7 +392,7 @@
                             </additionalClasspathElements>
                             <dependenciesToScan>${project.groupId}:${tck.artifactId}</dependenciesToScan>
                             <systemPropertyVariables>
-                                <GLASSFISH_HOME>${project.build.directory}/${glassfish.toplevel.dir}</GLASSFISH_HOME>
+                                <GLASSFISH_HOME>${project.build.directory}/${payara.toplevel.dir}</GLASSFISH_HOME>
                                 <platform.mode>standalone</platform.mode>
                                 <persistence.unit.name>JPATCK</persistence.unit.name>
                                 <persistence.unit.name.2>JPATCK2</persistence.unit.name.2>
@@ -516,7 +516,7 @@
                                     <goal>copy</goal>
                                 </goals>
                                 <configuration>
-                                    <outputDirectory>${glassfish.module.dir}</outputDirectory>
+                                    <outputDirectory>${payara.module.dir}</outputDirectory>
                                     <artifactItems>
                                         <artifactItem>
                                             <groupId>org.eclipse.persistence</groupId>
@@ -634,7 +634,7 @@
                                     <goal>copy</goal>
                                 </goals>
                                 <configuration>
-                                    <outputDirectory>${glassfish.module.dir}</outputDirectory>
+                                    <outputDirectory>${payara.module.dir}</outputDirectory>
                                     <artifactItems>
                                         <artifactItem>
                                             <groupId>org.hibernate.orm</groupId>
@@ -724,7 +724,7 @@
 
                         <configuration>
                             <!-- Optional, defaults to ${project.build.directory}/derby-->
-                            <derbyHome>${project.build.directory}/derby</derbyHome>
+                            <derbyHome>${project.build.directory}</derbyHome>
                             <!-- Optional, defaults to 1527 -->
                             <port>1527</port>
                             <!-- Optional, the username to use when authenticating.-->
@@ -886,7 +886,7 @@
                 </os>
             </activation>
             <properties>
-                <exec.asadmin>${glassfish.toplevel.dir}/bin/asadmin.bat</exec.asadmin>
+                <exec.asadmin>${payara.toplevel.dir}/bin/asadmin.bat</exec.asadmin>
             </properties>
         </profile>
     </profiles>
