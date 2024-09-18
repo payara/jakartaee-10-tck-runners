@@ -46,8 +46,8 @@
         <exec.asadmin>${glassfish.toplevel.dir}/bin/asadmin</exec.asadmin>
 
         <!-- derby properties -->
-        <derby.zip.url>https://dlcdn.apache.org/db/derby/db-derby-10.15.2.0/db-derby-10.15.2.0-bin.zip</derby.zip.url>
-        <db.home>${project.build.directory}/db-derby-10.15.2.0-bin</db.home>
+        <derby.zip.url>https://dlcdn.apache.org/db/derby/db-derby-10.17.1.0/db-derby-10.17.1.0-bin.zip</derby.zip.url>
+        <db.home>${project.build.directory}/db-derby-10.17.1.0-bin</db.home>
 
         <!--tck properties-->
         <jpa.classes>${glassfish.module.dir}/jakarta.persistence-api.jar,${glassfish.module.dir}/org.eclipse.persistence.jpa.jar,${glassfish.module.dir}/jakarta.servlet-api.jar,${glassfish.module.dir}/jakarta.transaction-api.jar,${glassfish.module.dir}/jakarta.ejb-api.jar,${glassfish.module.dir}/org.eclipse.persistence.antlr.jar,${glassfish.module.dir}/org.eclipse.persistence.asm.jar,${glassfish.module.dir}/org.eclipse.persistence.core.jar,${glassfish.module.dir}/org.eclipse.persistence.dbws.jar,${glassfish.module.dir}/org.eclipse.persistence.jpa.jpql.jar,${glassfish.module.dir}/org.eclipse.persistence.jpa.modelgen.processor.jar,${glassfish.module.dir}/org.eclipse.persistence.moxy.jar,${glassfish.module.dir}/org.eclipse.persistence.oracle.jar,${glassfish.module.dir}/jboss-logging.jar,${glassfish.module.dir}/jakarta.el-api.jar,${glassfish.module.dir}/expressly.jar,${glassfish.module.dir}/classmate.jar,${glassfish.module.dir}/jakarta.validation-api.jar</jpa.classes>
@@ -57,7 +57,7 @@
         <jdbc.db>derby</jdbc.db>
         <jakarta.persistence.provider>org.eclipse.persistence.jpa.PersistenceProvider</jakarta.persistence.provider>
         <jakarta.persistence.jdbc.driver>org.apache.derby.jdbc.ClientDriver</jakarta.persistence.jdbc.driver>
-        <jakarta.persistence.jdbc.url>jdbc:derby://localhost:9092/derbyDB;create=true</jakarta.persistence.jdbc.url>
+        <jakarta.persistence.jdbc.url>jdbc:derby://localhost:1527/derbyDB;create=true</jakarta.persistence.jdbc.url>
         <jakarta.persistence.jdbc.user>cts1</jakarta.persistence.jdbc.user>
         <jakarta.persistence.jdbc.password>cts1</jakarta.persistence.jdbc.password>
         <jpa.provider.implementation.specific.properties/>
@@ -275,7 +275,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
-
                     <execution>
                         <id>prepare-tck-and-payara</id>
                         <phase>pre-integration-test</phase>
@@ -700,7 +699,7 @@
         <profile>
             <id>derby</id>
             <properties>
-                <derby.jdbc.version>10.15.2.0</derby.jdbc.version>
+                <derby.jdbc.version>10.17.1.0</derby.jdbc.version>
                 <jdbc.db>derby</jdbc.db>
                 <jakarta.persistence.jdbc.driver>org.apache.derby.jdbc.ClientDriver</jakarta.persistence.jdbc.driver>
             </properties>
@@ -719,58 +718,53 @@
             <build>
                 <plugins>
                     <plugin>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <groupId>org.codehaus.mojo</groupId>
+                        <groupId>org.carlspring.maven</groupId>
+                        <artifactId>derby-maven-plugin</artifactId>
+                        <version>1.10</version>
+
+                        <configuration>
+                            <!-- Optional, defaults to ${project.build.directory}/derby-->
+                            <derbyHome>${project.build.directory}/derby</derbyHome>
+                            <!-- Optional, defaults to 1527 -->
+                            <port>1527</port>
+                            <!-- Optional, the username to use when authenticating.-->
+                            <username>derby</username>
+                            <!-- Optional, the password to use when authenticating.-->
+                            <password>derby</password>
+                            <!-- Optional, the absolute class name of the driver.-->
+                            <!--<driver></driver>-->
+                            <!-- Optional, the URL to use when connecting.-->
+                            <!--<connectionURL></connectionURL>-->
+                            <!-- Optional, the URL to use when shutting down the database.-->
+                            <connectionURLShutdown>jdbc:derby:;shutdown=true</connectionURLShutdown>
+                            <!-- Optional, whether to run Derby with debugging statements.-->
+                            <debugStatements>true</debugStatements>
+                            <!-- Whether to bypass running Derby.-->
+                            <skip>false</skip>
+                        </configuration>
+
                         <executions>
-                            <execution>
-                                <id>stop-database-init</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <configuration>
-                                    <executable>${exec.asadmin}</executable>
-                                    <arguments>
-                                        <argument>stop-database</argument>
-                                    </arguments>
-                                    <successCodes>
-                                        <successCode>0</successCode>
-                                        <successCode>1</successCode>
-                                    </successCodes>
-                                </configuration>
-                            </execution>
+                            <!-- start derby instance -->
                             <execution>
                                 <id>start-database</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
-                                    <goal>exec</goal>
+                                    <goal>start</goal>
                                 </goals>
-                                <configuration>
-                                    <executable>${exec.asadmin}</executable>
-                                    <arguments>
-                                        <argument>start-database</argument>
-                                    </arguments>
-                                </configuration>
                             </execution>
+
+                            <!-- stop derby instance -->
                             <execution>
                                 <id>stop-database-final</id>
                                 <phase>post-integration-test</phase>
                                 <goals>
-                                    <goal>exec</goal>
+                                    <goal>stop</goal>
                                 </goals>
-                                <configuration>
-                                    <executable>${exec.asadmin}</executable>
-                                    <arguments>
-                                        <argument>stop-database</argument>
-                                    </arguments>
-                                    <successCodes>
-                                        <successCode>0</successCode>
-                                        <successCode>1</successCode>
-                                    </successCodes>
-                                </configuration>
                             </execution>
+
                         </executions>
                     </plugin>
+
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId>
