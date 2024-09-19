@@ -55,11 +55,16 @@
     <name>TCK: Persistence</name>
 
     <properties>
+        <tck.root>${project.build.directory}</tck.root>
         <ant.home>${project.build.directory}${file.separator}apache-ant-${ant.version}</ant.home>
         <ant.zip.url>https://archive.apache.org/dist/ant/binaries/apache-ant-${ant.version}-bin.zip</ant.zip.url>
         <ant.executable>${ant.home}${file.separator}bin${file.separator}ant</ant.executable>
         <tck.home>${project.build.directory}${file.separator}persistence-tck</tck.home>
         <payara.home>${project.build.directory}${file.separator}payara7</payara.home>
+        <tck.home>${project.build.directory}/persistence-tck</tck.home>
+        <maven.executable>mvn</maven.executable>
+        <maven.settings.xml>${user.home}/.m2/settings.xml</maven.settings.xml>
+
     </properties>
 
     <dependencies>
@@ -137,90 +142,25 @@
                         </exclusions>
                     </dependency>
                 </dependencies>
-                <configuration>
-                    <skip>${skipTests}</skip>
-                </configuration>
                 <executions>
                     <execution>
-                        <id>prepare-tck-and-payara</id>
+                        <id>replace-with-payara-pom</id>
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>run</goal>
                         </goals>
                         <configuration>
-                            <target xmlns:if="ant:if" xmlns:unless="ant:unless">
-                                <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />
-
-                                <macrodef name="tck-setting">
-                                    <attribute name="key" /> <attribute name="value" />
-                                    <sequential>
-                                        <replaceregexp file="${tck.home}/lib/ts.jte" byline="true"
-                                                       match="@{key}=.*" replace="@{key}=@{value}" />
-                                        <replaceregexp file="${tck.home}/lib/ts.pluggability.jte" byline="true"
-                                                       match="@{key}=.*" replace="@{key}=@{value}" />
-                                    </sequential>
-                                </macrodef>
-
-
-                                <!-- Change configuration -->
-
-                                <tck-setting key="TS_HOME" value="${tck.home}"/>
-                                <tck-setting key="JAVA_HOME" value="${java.home}"/>
-                                <tck-setting key="JARPATH" value="${payara.home}/glassfish/modules"/>
-
-                                <replace file="${tck.home}/build.xml">
-                                    <replacetoken><![CDATA[<sysproperty key="testDebug" value="${tests.debug}"/>]]></replacetoken>
-                                    <replacevalue><![CDATA[<sysproperty key="testDebug" value="${tests.debug}"/>
-                                <jvmarg value="-Djavatest.security.noSecurityManager=true"/>]]></replacevalue>
-                                </replace>
-                            </target>
-                        </configuration>
-                    </execution>
-
-
-                    <execution>
-                        <id>run-tck-tests</id>
-                        <phase>integration-test</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target xmlns:if="ant:if" xmlns:unless="ant:unless">
-                                <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />
-
-                                <echo level="info" message="Start running all tests" />
-                                <exec executable="${ant.executable}" dir="${tck.home}" resultproperty="testResult">
-                                    <arg value="run" />
-                                    <arg value="run.pluggability" />
-                                    <arg value="-DfailOnError=true" />
-                                    <env key="AS_JAVA" value="${java.home}"/>
-                                    <env key="JAVA_HOME" value="${java.home}"/>
-                                    <env key="LC_ALL" value="C" />
-                                </exec>
-
-                                <if>
-                                    <not>
-                                        <equals arg1="${testResult}" arg2="0" />
-                                    </not>
-                                    <then>
-                                        <echo message="Running tests failed." />
-                                        <loadfile property="contents" srcFile="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}logs${file.separator}server.log" />
-                                        <echo message="${contents}" />
-                                    </then>
-                                </if>
-
-                                <if>
-                                    <not>
-                                        <equals arg1="${testResult}" arg2="0" />
-                                    </not>
-                                    <then>
-                                        <fail/>
-                                    </then>
-                                </if>
+                            <target>
+                                <!-- Replace file using Ant copy task -->
+                                <copy file="payara-pom.xml" tofile="${tck.home}${file.separator}bin${file.separator}pom.xml" overwrite="true" />
                             </target>
                         </configuration>
                     </execution>
                 </executions>
+
+                <configuration>
+                    <skip>${skipTests}</skip>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -236,6 +176,63 @@
             <properties>
                 <ant.executable>${ant.home}${file.separator}bin${file.separator}ant.cmd</ant.executable>
             </properties>
+        </profile>
+
+        <profile>
+            <id>payara-server-managed</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack-server</id>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <phase>pre-integration-test</phase>
+                                <configuration>
+                                    <!-- We unpack the server in the "actual" TCK -->
+                                    <skip>true</skip>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <executable>${maven.executable}</executable>
+                            <arguments>
+                                <argument>-B</argument>
+                                <argument>-e</argument>
+                                <argument>-s</argument>
+                                <argument>${maven.settings.xml}</argument>
+                                <argument>-f</argument>
+                                <argument>${project.basedir}/target/persistence-tck/bin/pom.xml</argument>
+                                <argument>clean</argument>
+                                <argument>verify</argument>
+                                <argument>-Pstaging,full,derby</argument>
+                                <argument>-Dtck.version=3.2.0</argument>
+                            </arguments>
+                            <environmentVariables>
+                                <LC_ALL>C</LC_ALL>
+                            </environmentVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 </project>
