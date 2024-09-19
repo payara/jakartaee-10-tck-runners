@@ -101,6 +101,7 @@
         <jakarta.tck.signaturetest.version>11.0.0-M1</jakarta.tck.signaturetest.version>
         <jakarta.tck.persistence.version>3.2.0</jakarta.tck.persistence.version>
         <cdi.api.version>4.1.0</cdi.api.version>
+        <jakarta.tck.servlet.version>6.1.0</jakarta.tck.servlet.version>
 
         <!-- The profile to run - acceptable parameters are 'full', 'web', and 'core' -->
         <jakarta.tck.platform>full</jakarta.tck.platform>
@@ -365,6 +366,7 @@
                                     <goal>unpack</goal>
                                 </goals>
                                 <phase>pre-integration-test</phase>
+<!--                                <inherited>false</inherited>-->
                                 <configuration>
                                     <skip>${skipTests}</skip>
                                     <artifactItems>
@@ -374,7 +376,7 @@
                                             <version>${payara.version}</version>
                                             <type>zip</type>
                                             <overWrite>true</overWrite>
-                                            <outputDirectory>${project.build.directory}</outputDirectory>
+                                            <outputDirectory>${maven.multiModuleProjectDirectory}${file.separator}target</outputDirectory>
                                         </artifactItem>
                                     </artifactItems>
                                 </configuration>

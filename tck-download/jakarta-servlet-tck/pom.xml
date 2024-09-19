@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>fish.payara.jakarta.tests.tck</groupId>
+        <artifactId>tck-download</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>jakarta-servlet-tck</artifactId>
+
+    <packaging>pom</packaging>
+
+    <name>TCK: Install Jakarta Activation TCK</name>
+
+    <properties>
+        <tck.test.servlet.file>jakarta-servlet-tck-${jakarta.tck.servlet.version}.zip</tck.test.servlet.file>
+        <tck.tests.servlet.url>https://download.eclipse.org/jakartaee/servlet/6.1/${tck.test.servlet.file}</tck.tests.servlet.url>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.googlecode.maven-download-plugin</groupId>
+                <artifactId>download-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>download-servlet-tck-zip</id>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <url>${tck.tests.servlet.url}</url>
+                            <unpack>true</unpack>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-install-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>install-servlet-tck-pom</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <file>${project.build.directory}${file.separator}servlet-tck${file.separator}artifacts${file.separator}servlet-tck-${jakarta.tck.servlet.version}.pom</file>
+                            <groupId>jakarta.tck</groupId>
+                            <artifactId>servlet-tck</artifactId>
+                            <version>${jakarta.tck.servlet.version}</version>
+                            <packaging>pom</packaging>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install-servlet-tck-runtime</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <file>${project.build.directory}${file.separator}servlet-tck${file.separator}artifacts${file.separator}servlet-tck-runtime-${jakarta.tck.servlet.version}.jar</file>
+                            <groupId>jakarta.tck</groupId>
+                            <artifactId>servlet-tck-runtime</artifactId>
+                            <version>${jakarta.tck.servlet.version}</version>
+                            <packaging>jar</packaging>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install-servlet-tck-util</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <file>${project.build.directory}${file.separator}servlet-tck${file.separator}artifacts${file.separator}servlet-tck-util-${jakarta.tck.servlet.version}.jar</file>
+                            <groupId>jakarta.tck</groupId>
+                            <artifactId>servlet-tck-util</artifactId>
+                            <version>${jakarta.tck.servlet.version}</version>
+                            <packaging>jar</packaging>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

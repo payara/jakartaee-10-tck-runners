@@ -31,290 +31,72 @@
 
     <name>TCK: Servlet</name>
 
-    <properties>
-        <servlet-tck.version>6.1.0</servlet-tck.version>
-
-<!--        <tck.home>${project.build.directory}/servlet-tck</tck.home>-->
-<!--        <tck.tests.home>${tck.home}/src/com/sun/ts/tests</tck.tests.home> -->
-
-<!--        <jacoco.includes>org/glassfish/**\:com/sun/enterprise/**</jacoco.includes>-->
-<!--        -->
-<!--        <port.admin>4848</port.admin>-->
-<!--        <port.derby>11527</port.derby>-->
-<!--        <port.http>18080</port.http>-->
-<!--        <port.https>18181</port.https>-->
-<!--        <port.jms>17676</port.jms>-->
-<!--        <port.jmx>18686</port.jmx>-->
-<!--        <port.orb>13700</port.orb>-->
-<!--        <port.orb.mutual>13920</port.orb.mutual>-->
-<!--        <port.orb.ssl>13820</port.orb.ssl>-->
-<!--        <port.harness.log>12000</port.harness.log>-->
-    </properties>
-
     <dependencies>
         <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>tck-runtime</artifactId>
-            <version>${servlet-tck.version}</version>
+            <groupId>jakarta.tck</groupId>
+            <artifactId>servlet-tck-runtime</artifactId>
+            <version>${jakarta.tck.servlet.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.tck</groupId>
+            <artifactId>servlet-tck-util</artifactId>
+            <version>${jakarta.tck.servlet.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>tck-util</artifactId>
-            <version>${servlet-tck.version}</version>
+            <groupId>org.jboss.arquillian.junit5</groupId>
+            <artifactId>arquillian-junit5-container</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Dependency for the API signature test -->
+        <dependency>
+            <groupId>jakarta.tck</groupId>
+            <artifactId>sigtest-maven-plugin</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
 
-    <profiles>
-        <profile>
-            <id>payara-server-remote</id>
-            <dependencies>
-                <dependency>
-                    <groupId>fish.payara.arquillian</groupId>
-                    <artifactId>arquillian-payara-server-remote</artifactId>
-                </dependency>
-            </dependencies>
-        </profile>
-
-        <profile>
-            <id>payara-server-managed</id>
-            <dependencies>
-                <dependency>
-                    <groupId>fish.payara.arquillian</groupId>
-                    <artifactId>arquillian-payara-server-remote</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>fish.payara.distributions</groupId>
-                    <artifactId>${payara.artifact}</artifactId>
-                    <type>zip</type>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
-
     <build>
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <configuration>
-                    <dependenciesToScan>
-                        <dependency>jakarta.tck:servlet-tck-runtime</dependency>
-                    </dependenciesToScan>
-                </configuration>
+                <executions>
+                    <execution>
+                        <id>run-servlet-tck</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                        <configuration>
+                            <dependenciesToScan>
+                                <dependency>jakarta.tck:servlet-tck-runtime</dependency>
+                            </dependenciesToScan>
+                            <includes>
+                                <include>*</include>
+                            </includes>
+                            <systemPropertyVariables>
+                                <!-- if the servlet container doesn't support optional cross context -->
+                                <servlet.tck.support.crossContext>true</servlet.tck.support.crossContext>
+                                <!-- if the servlet container doesn't support optional http2 push -->
+                                <servlet.tck.support.http2Push>true</servlet.tck.support.http2Push>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
-
-
-
-
-
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-antrun-plugin</artifactId>-->
-<!--                <version>3.1.0</version>-->
-<!--                <dependencies>-->
-<!--                    <dependency>-->
-<!--                        <groupId>org.apache.ant</groupId>-->
-<!--                        <artifactId>ant</artifactId>-->
-<!--                        <version>${ant.version}</version>-->
-<!--                    </dependency>-->
-<!--                    <dependency>-->
-<!--                        <groupId>ant-contrib</groupId>-->
-<!--                        <artifactId>ant-contrib</artifactId>-->
-<!--                        <version>1.0b3</version>-->
-<!--                        <exclusions>-->
-<!--                            <exclusion>-->
-<!--                                <groupId>ant</groupId>-->
-<!--                                <artifactId>ant</artifactId>-->
-<!--                            </exclusion>-->
-<!--                        </exclusions>-->
-<!--                    </dependency>-->
-<!--                </dependencies>-->
-<!--                <configuration>-->
-<!--                    <skip>${skipITs}</skip>-->
-<!--                </configuration>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>prepare-tck-and-payara</id>-->
-<!--                        <phase>pre-integration-test</phase>-->
-<!--                        <configuration>-->
-<!--                            <target xmlns:if="ant:if" xmlns:unless="ant:unless">-->
-<!--                                <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />-->
-<!--                                         -->
-<!--                                <macrodef name="tck-setting">-->
-<!--                                    <attribute name="key" /> <attribute name="value" />-->
-<!--                                    <sequential>-->
-<!--                                        <replaceregexp file="${tck.home}/bin/ts.jte" byline="true"-->
-<!--                                                       match="@{key}=.*" replace="@{key}=@{value}" />-->
-<!--                                    </sequential>-->
-<!--                                </macrodef>-->
-<!--                                -->
-
-<!--                                &lt;!&ndash; Change configuration &ndash;&gt;-->
-<!--                                -->
-<!--                                <tck-setting key="web.home" value="${payara.home}/glassfish"/>-->
-<!--                                <tck-setting key="webServerHost" value="localhost"/>-->
-<!--                                <tck-setting key="webServerPort" value="${port.http}"/>-->
-<!--                                <tck-setting key="securedWebServicePort" value="${port.https}"/>-->
-<!--                                -->
-<!--                                <tck-setting key="s1as.admin.port" value="${port.admin}"/>-->
-<!--                                <tck-setting key="glassfish.admin.port" value="${port.admin}"/>-->
-<!--                                <tck-setting key="orb.port" value="${port.orb}"/>-->
-<!--                                <tck-setting key="database.port" value="${port.derby}"/>-->
-<!--                                <tck-setting key="harness.log.port" value="${port.harness.log}"/>-->
-<!--                                -->
-<!--                                <tck-setting key="report.dir" value="${tck.home}/servletreport/servlet"/>-->
-<!--                                <tck-setting key="work.dir" value="${tck.home}/servletwork/servlet"/>-->
-<!--                                -->
-<!--                                <tck-setting key="impl.vi" value="glassfish"/>-->
-<!--                          -->
-<!--                                <limit maxwait="60">-->
-<!--                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">-->
-<!--                                        <arg value="delete-domain"/>-->
-<!--                                        <arg value="domain1" />-->
-<!--                                    </exec>-->
-<!--                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">-->
-<!--                                        <arg value="create-domain"/>-->
-<!--                                        <arg value="&#45;&#45;domainproperties=domain.adminPort=${port.admin}:domain.instancePort=${port.http}:http.ssl.port=${port.https}:jms.port=${port.jms}:domain.jmxPort=${port.jmx}:orb.listener.port=${port.orb}:orb.ssl.port=${port.orb.ssl}:orb.mutualauth.port=${port.orb.mutual}" />-->
-<!--                                        <arg value="&#45;&#45;user=admin" />-->
-<!--                                        <arg value="&#45;&#45;nopassword" />-->
-<!--                                        <arg value="domain1" />-->
-<!--                                    </exec>-->
-<!--                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">-->
-<!--                                        <arg value="start-domain"/>-->
-<!--                                    </exec>-->
-<!--                                    <sleep seconds="60" />-->
-<!--                                    <if>-->
-<!--                                        <isset property="jacoco.version" />-->
-<!--                                        <then>-->
-<!--                                            <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">-->
-<!--                                                <arg value="create-jvm-options" />-->
-<!--                                                <arg value="&#45;&#45;port=${port.admin}" />-->
-<!--                                                <arg value="&quot;-javaagent\:${settings.localRepository}/org/jacoco/org.jacoco.agent/${jacoco.version}/org.jacoco.agent-${jacoco.version}-runtime.jar=destfile=${project.build.directory}/jacoco-it.exec,includes=${jacoco.includes}&quot;" />-->
-<!--                                            </exec>-->
-<!--                                        </then>-->
-<!--                                    </if>-->
-<!--                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">-->
-<!--                                        <arg value="set" />-->
-<!--                                        <arg value="configs.config.server-config.network-config.protocols.protocol.http-listener-1.http.http2-push-enabled=true" />-->
-<!--                                    </exec>-->
-<!--                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">-->
-<!--                                        <arg value="stop-domain"/>-->
-<!--                                        <arg value="domain1"/>-->
-<!--                                    </exec>-->
-<!--                                </limit>-->
-<!--                                <mkdir dir="${tck.home}/servletreport"/>-->
-<!--                                <mkdir dir="${tck.home}/servletreport/servlet"/>-->
-<!--                                -->
-<!--                                <replace file="${tck.home}/bin/xml/ts.top.import.xml">-->
-<!--                                    <replacetoken><![CDATA[<jvmarg value="-Xmx512m"/>]]></replacetoken>-->
-<!--                                    <replacevalue><![CDATA[<jvmarg value="-Xmx512m"/>-->
-<!--                                <jvmarg value="-Djavatest.security.noSecurityManager=true"/>]]></replacevalue>-->
-<!--                                </replace>-->
-<!--                                -->
-<!--                                <replace file="${tck.home}/bin/xml/ts.top.import.xml" if:set="suspend-tck" >-->
-<!--                                    <replacetoken><![CDATA[<jvmarg value="-Xmx512m"/>]]></replacetoken>-->
-<!--                                    <replacevalue><![CDATA[<jvmarg value="-Xmx512m"/>-->
-<!--                                <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=9008"/>]]></replacevalue>-->
-<!--                                </replace>-->
-<!--                            </target>-->
-<!--                        </configuration>-->
-<!--                        <goals>-->
-<!--                            <goal>run</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-
-<!--                    <execution>-->
-<!--                        <id>configure-tck-tests</id>-->
-<!--                        <phase>pre-integration-test</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>run</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <target xmlns:if="ant:if" xmlns:unless="ant:unless">-->
-<!--                                <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />-->
-<!--                                -->
-<!--                                &lt;!&ndash; Start Payara Server &ndash;&gt;-->
-<!--                                <limit maxwait="20">-->
-<!--                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">-->
-<!--                                        <arg value="start-domain"/>-->
-<!--                                        <arg value="&#45;&#45;suspend" if:set="payara.suspend"/>-->
-<!--                                    </exec>-->
-<!--                                </limit>-->
-<!--								-->
-<!--                                <exec executable="${ant.home}/bin/ant" dir="${tck.home}/bin">-->
-<!--                                    <arg value="-Dutil.dir=${tck.home}"  />-->
-<!--                                    <arg value="config.security"  />-->
-<!--                                </exec>-->
-<!--                                -->
-<!--                                &lt;!&ndash; Deploy single test &ndash;&gt;-->
-<!--                                <sequential if:set="run.test" >-->
-<!--                                    <dirname property="test.dir" file="${tck.home}/src/${run.test}"/>-->
-<!--                                    <echo>Deploying from ${test.dir}</echo>-->
-<!--                                	-->
-<!--                                    <exec executable="${ant.home}/bin/ant" dir="${test.dir}">-->
-<!--                                        <arg value="deploy"  />-->
-<!--                                    </exec>-->
-<!--                                </sequential>-->
-<!--                                -->
-<!--                                &lt;!&ndash; Deploy all tests &ndash;&gt;-->
-<!--                                <sequential unless:set="run.test" >-->
-<!--                                    <exec executable="${ant.home}/bin/ant" dir="${tck.tests.home}">-->
-<!--                                        <arg value="deploy.all"  />-->
-<!--                                    </exec>-->
-<!--                                </sequential>-->
-<!--                            </target>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-
-<!--                    <execution>-->
-<!--                        <id>run-tck-tests</id>-->
-<!--                        <phase>integration-test</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>run</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <target xmlns:if="ant:if" xmlns:unless="ant:unless">-->
-<!--                                <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />-->
-
-<!--                                <echo level="info" message="Start running all tests" />-->
-<!--                                <exec executable="${ant.home}/bin/ant" dir="${tck.tests.home}" resultproperty="testResult">-->
-<!--                                    <arg value="-Dmultiple.tests=${run.test}" if:set="run.test" />-->
-<!--                                    <arg value="run.all" unless:set="run.test"/>-->
-<!--                                    <arg value="runclient" if:set="run.test" />-->
-<!--                                    <env key="LC_ALL" value="C" />-->
-<!--                                </exec>-->
-
-<!--                                <if>-->
-<!--                                    <not>-->
-<!--                                        <equals arg1="${testResult}" arg2="0" />-->
-<!--                                    </not>-->
-<!--                                    <then>-->
-<!--                                        <echo message="Running tests failed." />-->
-<!--                                        <loadfile property="contents" srcFile="${payara.home}/glassfish/domains/domain1/logs/server.log" />-->
-<!--                                        <echo message="${contents}" />-->
-<!--                                    </then>-->
-<!--                                </if>-->
-
-<!--                                <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">-->
-<!--                                    <arg value="stop-domain" />-->
-<!--                                </exec>-->
-<!--                                -->
-<!--                                <fail message="Running tests failed." status="${testResult}">-->
-<!--                                    <condition>-->
-<!--                                        <not>-->
-<!--                                            <equals arg1="${testResult}" arg2="0" />-->
-<!--                                        </not>-->
-<!--                                    </condition>-->
-<!--                                </fail>-->
-<!--                            </target>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
         </plugins>
     </build>
 </project>
