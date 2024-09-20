@@ -53,7 +53,7 @@
                 </executions>
                 <configuration>
                     <url>${tck.tests.persistence.url}</url>
-                    <unpack>false</unpack>
+                    <unpack>true</unpack>
                     <outputDirectory>${project.build.directory}</outputDirectory>
                 </configuration>
             </plugin>
@@ -61,18 +61,62 @@
                 <artifactId>maven-install-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>install-persistence-tck</id>
+                        <id>install-persistence-tck-pom</id>
                         <phase>process-resources</phase>
                         <goals>
                             <goal>install-file</goal>
                         </goals>
                         <configuration>
-                            <file>${project.build.directory}/${tck.test.persistence.file}</file>
-                            <groupId>${project.groupId}</groupId>
-                            <artifactId>${project.artifactId}</artifactId>
-                            <version>${project.version}</version>
-                            <packaging>zip</packaging>
-                            <generatePom>true</generatePom>
+                            <file>${project.build.directory}${file.separator}persistence-tck${file.separator}artifacts${file.separator}persistence-tck-${jakarta.tck.persistence.version}.pom</file>
+                            <groupId>jakarta.tck</groupId>
+                            <artifactId>persistence-tck</artifactId>
+                            <version>${jakarta.tck.persistence.version}</version>
+                            <packaging>pom</packaging>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install-persistence-tck-common</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <file>${project.build.directory}${file.separator}persistence-tck${file.separator}artifacts${file.separator}persistence-tck-common-${jakarta.tck.persistence.version}.jar</file>
+                            <groupId>jakarta.tck</groupId>
+                            <artifactId>persistence-tck-common</artifactId>
+                            <version>${jakarta.tck.persistence.version}</version>
+                            <packaging>jar</packaging>
+                            <sources>${project.build.directory}${file.separator}persistence-tck${file.separator}artifacts${file.separator}persistence-tck-common-${jakarta.tck.persistence.version}-sources.jar</sources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install-persistence-tck-spec-tests</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <file>${project.build.directory}${file.separator}persistence-tck${file.separator}artifacts${file.separator}persistence-tck-spec-tests-${jakarta.tck.persistence.version}.jar</file>
+                            <groupId>jakarta.tck</groupId>
+                            <artifactId>persistence-tck-spec-tests</artifactId>
+                            <version>${jakarta.tck.persistence.version}</version>
+                            <packaging>jar</packaging>
+                            <sources>${project.build.directory}${file.separator}persistence-tck${file.separator}artifacts${file.separator}persistence-tck-spec-tests-${jakarta.tck.persistence.version}-sources.jar</sources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>install-dbprocedures</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <file>${project.build.directory}${file.separator}persistence-tck${file.separator}artifacts${file.separator}dbprocedures-${jakarta.tck.persistence.version}.jar</file>
+                            <groupId>jakarta.tck</groupId>
+                            <artifactId>dbprocedures</artifactId>
+                            <version>${jakarta.tck.persistence.version}</version>
+                            <packaging>jar</packaging>
+                            <sources>${project.build.directory}${file.separator}persistence-tck${file.separator}artifacts${file.separator}dbprocedures-${jakarta.tck.persistence.version}-sources.jar</sources>
                         </configuration>
                     </execution>
                 </executions>

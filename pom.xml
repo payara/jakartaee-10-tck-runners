@@ -58,6 +58,7 @@
         <ant.version>1.10.14</ant.version>
         <ant.home>${project.build.directory}/apache-ant-${ant.version}</ant.home>
         <ant.zip.url>https://archive.apache.org/dist/ant/binaries/apache-ant-${ant.version}-bin.zip</ant.zip.url>
+        <ant.executable>${ant.home}${file.separator}bin${file.separator}ant</ant.executable>
 
         <payara.home>${maven.multiModuleProjectDirectory}${file.separator}target${file.separator}payara7</payara.home>
         <!-- Note that Shrinkwrap Maven resolver WILL NOT read in whatever you specify on the command line - it will ALWAYS read this as-is -->
@@ -73,6 +74,7 @@
         <maven-install-plugin.version>3.1.2</maven-install-plugin.version>
         <maven-failsafe-plugin.version>3.3.0</maven-failsafe-plugin.version>
         <maven-surefire-plugin.version>3.3.1</maven-surefire-plugin.version>
+        <maven-surefire-report-plugin.version>3.5.0</maven-surefire-report-plugin.version>
         <maven-dependency-plugin.version>3.7.1</maven-dependency-plugin.version>
         <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
@@ -243,6 +245,12 @@
                 </plugin>
 
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-report-plugin</artifactId>
+                    <version>${maven-surefire-report-plugin.version}</version>
+                </plugin>
+
+                <plugin>
                     <groupId>jakarta.tck</groupId>
                     <artifactId>sigtest-maven-plugin</artifactId>
                     <version>${jakarta.tck.sigtest-maven-plugin.version}</version>
@@ -381,6 +389,7 @@
             </activation>
             <properties>
                 <payara.asadmin>${payara.home}${file.separator}glassfish${file.separator}bin${file.separator}asadmin.bat</payara.asadmin>
+                <ant.executable>${ant.home}${file.separator}bin${file.separator}ant.cmd</ant.executable>
             </properties>
         </profile>
     </profiles>
