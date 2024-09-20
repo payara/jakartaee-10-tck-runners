@@ -65,7 +65,7 @@
         <derby.zip.url>https://dlcdn.apache.org/db/derby/db-derby-${derby.version}/db-derby-${derby.version}-bin.zip</derby.zip.url>
         <jdbc.db>derby</jdbc.db>
         <jakarta.persistence.jdbc.driver>org.apache.derby.jdbc.ClientDriver</jakarta.persistence.jdbc.driver>
-        <javadb.dir>${project.build.directory}${file.separator}db-derby-${derby.version}-bin</javadb.dir>
+        <javadb.dir>${payara.home}${file.separator}javadb</javadb.dir>
         <javadb.lib.dir>${javadb.dir}${file.separator}lib</javadb.lib.dir>
         <jdbc.lib.classpath>${javadb.lib.dir}${file.separator}derbyclient.jar,${javadb.lib.dir}${file.separator}derbyshared.jar,${javadb.lib.dir}${file.separator}derbytools.jar</jdbc.lib.classpath>
         <jdbc.driver.classes>${javadb.lib.dir}${file.separator}derbyclient.jar:${javadb.lib.dir}${file.separator}derbyshared.jar:${javadb.lib.dir}${file.separator}derbytools.jar</jdbc.driver.classes>
@@ -164,7 +164,7 @@
                         <configuration>
                             <target unless="skip.setup">
                                 <move todir="${payara.home}${file.separator}javadb">
-                                    <fileset dir="${javadb.dir}"/>
+                                    <fileset dir="${project.build.directory}${file.separator}db-derby-${derby.version}-bin"/>
                                 </move>
                                 <copy file="${payara.home}${file.separator}javadb${file.separator}lib${file.separator}derbytools.jar"
                                       todir="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}lib"/>
@@ -201,7 +201,7 @@
                         </goals>
                         <configuration>
                             <target>
-                                <exec executable="${project.build.directory}${file.separator}payara7${file.separator}javadb${file.separator}bin${file.separator}startNetworkServer"
+                                <exec executable="${javadb.dir}${file.separator}bin${file.separator}startNetworkServer${script.extension}"
                                       spawn="true"/>
                                 <echo message="Waiting 3 seconds for database in forked process to start..."/>
                                 <sleep seconds="3"/>
@@ -346,110 +346,121 @@
                             </target>
                         </configuration>
                     </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <executions>
+
                     <execution>
-                        <id>persistence-tests-1</id>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                        <configuration>
-                            <includes>
-                                <include>**/*Client*.*</include>
-                                <include>**/*JPASigTest*.*</include>
-                            </includes>
-                            <test>!**/ee/jakarta/tck/persistence/se/entityManagerFactory/Client2#createEntityManagerFactoryNoBeanValidatorTest</test>
-                            <additionalClasspathElements>
-                                <additionalClasspathElement>${jpa.classes}</additionalClasspathElement>
-                                <additionalClasspathElement>${jdbc.lib.classpath}</additionalClasspathElement>
-                                <additionalClasspathElement>${validator.classes}</additionalClasspathElement>
-                            </additionalClasspathElements>
-                            <dependenciesToScan>jakarta.tck:persistence-tck-spec-tests</dependenciesToScan>
-                            <systemPropertyVariables>
-                                <GLASSFISH_HOME>${payara.home}</GLASSFISH_HOME>
-                                <platform.mode>standalone</platform.mode>
-                                <persistence.unit.name>JPATCK</persistence.unit.name>
-                                <persistence.unit.name.2>JPATCK2</persistence.unit.name.2>
-                                <jakarta.persistence.provider>org.eclipse.persistence.jpa.PersistenceProvider</jakarta.persistence.provider>
-                                <jakarta.persistence.jdbc.driver>org.apache.derby.jdbc.ClientDriver</jakarta.persistence.jdbc.driver>
-                                <jakarta.persistence.jdbc.url>jdbc:derby://localhost:1572/derbyDB;create=true</jakarta.persistence.jdbc.url>
-                                <jakarta.persistence.jdbc.user>cts1</jakarta.persistence.jdbc.user>
-                                <jakarta.persistence.jdbc.password>cts1</jakarta.persistence.jdbc.password>
-                                <jpa.provider.implementation.specific.properties>${jpa.provider.implementation.specific.properties}</jpa.provider.implementation.specific.properties>
-                                <persistence.second.level.caching.supported>${persistence.second.level.caching.supported}</persistence.second.level.caching.supported>
-                                <vehicle>standalone</vehicle>
-                                <user.dir>/tmp</user.dir>
-                                <db.supports.sequence>${db.supports.sequence}</db.supports.sequence>
-                                <Insert_Jpa_Purchase_Order>INSERT INTO PURCHASE_ORDER(ID, TOTAL, DESCRIPTION) VALUES(?, ?, null)</Insert_Jpa_Purchase_Order>
-                                <Select_Jpa_Purchase_Order>SELECT ID, TOTAL FROM PURCHASE_ORDER WHERE ID=?</Select_Jpa_Purchase_Order>
-                                <log.file.location>/tmp</log.file.location>
-                                <jdbc.db>${jdbc.db}</jdbc.db>
-                                <sigTestClasspath>${payara.modules.dir}${file.separator}jakarta.persistence-api.jar${path.separator}${project.build.directory}${file.separator}jdk11-bundle${file.separator}java.base${path.separator}${project.build.directory}${file.separator}jdk11-bundle${file.separator}java.rmi${path.separator}${project.build.directory}${file.separator}jdk11-bundle${file.separator}java.sql${path.separator}${project.build.directory}${file.separator}jdk11-bundle${file.separator}java.naming</sigTestClasspath>
-                                <jimage.dir>${project.build.directory}${file.separator}jdk11-bundle</jimage.dir>
-                            </systemPropertyVariables>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>persistence-tests-2</id>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                        <configuration>
-                            <test>**/ee/jakarta/tck/persistence/se/entityManagerFactory/Client2#createEntityManagerFactoryNoBeanValidatorTest</test>
-                            <additionalClasspathElements>
-                                <additionalClasspathElement>${jpa.classes}</additionalClasspathElement>
-                                <additionalClasspathElement>${jdbc.lib.classpath}</additionalClasspathElement>
-                            </additionalClasspathElements>
-                            <dependenciesToScan>jakarta.tck:persistence-tck-spec-tests</dependenciesToScan>
-                            <systemPropertyVariables>
-                                <GLASSFISH_HOME>${payara.home}</GLASSFISH_HOME>
-                                <platform.mode>standalone</platform.mode>
-                                <persistence.unit.name>JPATCK</persistence.unit.name>
-                                <persistence.unit.name.2>JPATCK2</persistence.unit.name.2>
-                                <jakarta.persistence.provider>org.eclipse.persistence.jpa.PersistenceProvider</jakarta.persistence.provider>
-                                <jakarta.persistence.jdbc.driver>org.apache.derby.jdbc.ClientDriver</jakarta.persistence.jdbc.driver>
-                                <jakarta.persistence.jdbc.url>jdbc:derby://localhost:1572/derbyDB;create=true</jakarta.persistence.jdbc.url>
-                                <jakarta.persistence.jdbc.user>cts1</jakarta.persistence.jdbc.user>
-                                <jakarta.persistence.jdbc.password>cts1</jakarta.persistence.jdbc.password>
-                                <jpa.provider.implementation.specific.properties>${jpa.provider.implementation.specific.properties}</jpa.provider.implementation.specific.properties>
-                                <persistence.second.level.caching.supported>${persistence.second.level.caching.supported}</persistence.second.level.caching.supported>
-                                <vehicle>standalone</vehicle>
-                                <user.dir>/tmp</user.dir>
-                                <db.supports.sequence>${db.supports.sequence}</db.supports.sequence>
-                                <Insert_Jpa_Purchase_Order>INSERT INTO PURCHASE_ORDER(ID, TOTAL, DESCRIPTION) VALUES(?, ?, null)</Insert_Jpa_Purchase_Order>
-                                <Select_Jpa_Purchase_Order>SELECT ID, TOTAL FROM PURCHASE_ORDER WHERE ID=?</Select_Jpa_Purchase_Order>
-                                <log.file.location>/tmp</log.file.location>
-                                <jdbc.db>${jdbc.db}</jdbc.db>
-                            </systemPropertyVariables>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-report-plugin</artifactId>
-                <configuration>
-                    <linkXRef>false</linkXRef>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>generate-failsafe-html-report</id>
+                        <id>stop-database</id>
                         <phase>post-integration-test</phase>
                         <goals>
-                            <goal>failsafe-report-only</goal>
+                            <goal>run</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/test-reports</outputDirectory>
+                            <target>
+                                <exec executable="${javadb.dir}${file.separator}bin${file.separator}stopNetworkServer${script.extension}"/>
+                            </target>
                         </configuration>
                     </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+            </executions>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <executions>
+                <execution>
+                    <id>persistence-tests-1</id>
+                    <goals>
+                        <goal>integration-test</goal>
+                    </goals>
+                    <configuration>
+                        <includes>
+                            <include>**/*Client*.*</include>
+                            <include>**/*JPASigTest*.*</include>
+                        </includes>
+                        <test>!**/ee/jakarta/tck/persistence/se/entityManagerFactory/Client2#createEntityManagerFactoryNoBeanValidatorTest</test>
+                        <additionalClasspathElements>
+                            <additionalClasspathElement>${jpa.classes}</additionalClasspathElement>
+                            <additionalClasspathElement>${jdbc.lib.classpath}</additionalClasspathElement>
+                            <additionalClasspathElement>${validator.classes}</additionalClasspathElement>
+                        </additionalClasspathElements>
+                        <dependenciesToScan>jakarta.tck:persistence-tck-spec-tests</dependenciesToScan>
+                        <systemPropertyVariables>
+                            <GLASSFISH_HOME>${payara.home}</GLASSFISH_HOME>
+                            <platform.mode>standalone</platform.mode>
+                            <persistence.unit.name>JPATCK</persistence.unit.name>
+                            <persistence.unit.name.2>JPATCK2</persistence.unit.name.2>
+                            <jakarta.persistence.provider>org.eclipse.persistence.jpa.PersistenceProvider</jakarta.persistence.provider>
+                            <jakarta.persistence.jdbc.driver>org.apache.derby.jdbc.ClientDriver</jakarta.persistence.jdbc.driver>
+                            <jakarta.persistence.jdbc.url>jdbc:derby://localhost:1572/derbyDB;create=true</jakarta.persistence.jdbc.url>
+                            <jakarta.persistence.jdbc.user>cts1</jakarta.persistence.jdbc.user>
+                            <jakarta.persistence.jdbc.password>cts1</jakarta.persistence.jdbc.password>
+                            <jpa.provider.implementation.specific.properties>${jpa.provider.implementation.specific.properties}</jpa.provider.implementation.specific.properties>
+                            <persistence.second.level.caching.supported>${persistence.second.level.caching.supported}</persistence.second.level.caching.supported>
+                            <vehicle>standalone</vehicle>
+                            <user.dir>/tmp</user.dir>
+                            <db.supports.sequence>${db.supports.sequence}</db.supports.sequence>
+                            <Insert_Jpa_Purchase_Order>INSERT INTO PURCHASE_ORDER(ID, TOTAL, DESCRIPTION) VALUES(?, ?, null)</Insert_Jpa_Purchase_Order>
+                            <Select_Jpa_Purchase_Order>SELECT ID, TOTAL FROM PURCHASE_ORDER WHERE ID=?</Select_Jpa_Purchase_Order>
+                            <log.file.location>/tmp</log.file.location>
+                            <jdbc.db>${jdbc.db}</jdbc.db>
+                            <sigTestClasspath>${payara.modules.dir}${file.separator}jakarta.persistence-api.jar${path.separator}${project.build.directory}${file.separator}jdk11-bundle${file.separator}java.base${path.separator}${project.build.directory}${file.separator}jdk11-bundle${file.separator}java.rmi${path.separator}${project.build.directory}${file.separator}jdk11-bundle${file.separator}java.sql${path.separator}${project.build.directory}${file.separator}jdk11-bundle${file.separator}java.naming</sigTestClasspath>
+                            <jimage.dir>${project.build.directory}${file.separator}jdk11-bundle</jimage.dir>
+                        </systemPropertyVariables>
+                    </configuration>
+                </execution>
+                <execution>
+                    <id>persistence-tests-2</id>
+                    <goals>
+                        <goal>integration-test</goal>
+                    </goals>
+                    <configuration>
+                        <test>**/ee/jakarta/tck/persistence/se/entityManagerFactory/Client2#createEntityManagerFactoryNoBeanValidatorTest</test>
+                        <additionalClasspathElements>
+                            <additionalClasspathElement>${jpa.classes}</additionalClasspathElement>
+                            <additionalClasspathElement>${jdbc.lib.classpath}</additionalClasspathElement>
+                        </additionalClasspathElements>
+                        <dependenciesToScan>jakarta.tck:persistence-tck-spec-tests</dependenciesToScan>
+                        <systemPropertyVariables>
+                            <GLASSFISH_HOME>${payara.home}</GLASSFISH_HOME>
+                            <platform.mode>standalone</platform.mode>
+                            <persistence.unit.name>JPATCK</persistence.unit.name>
+                            <persistence.unit.name.2>JPATCK2</persistence.unit.name.2>
+                            <jakarta.persistence.provider>org.eclipse.persistence.jpa.PersistenceProvider</jakarta.persistence.provider>
+                            <jakarta.persistence.jdbc.driver>org.apache.derby.jdbc.ClientDriver</jakarta.persistence.jdbc.driver>
+                            <jakarta.persistence.jdbc.url>jdbc:derby://localhost:1572/derbyDB;create=true</jakarta.persistence.jdbc.url>
+                            <jakarta.persistence.jdbc.user>cts1</jakarta.persistence.jdbc.user>
+                            <jakarta.persistence.jdbc.password>cts1</jakarta.persistence.jdbc.password>
+                            <jpa.provider.implementation.specific.properties>${jpa.provider.implementation.specific.properties}</jpa.provider.implementation.specific.properties>
+                            <persistence.second.level.caching.supported>${persistence.second.level.caching.supported}</persistence.second.level.caching.supported>
+                            <vehicle>standalone</vehicle>
+                            <user.dir>/tmp</user.dir>
+                            <db.supports.sequence>${db.supports.sequence}</db.supports.sequence>
+                            <Insert_Jpa_Purchase_Order>INSERT INTO PURCHASE_ORDER(ID, TOTAL, DESCRIPTION) VALUES(?, ?, null)</Insert_Jpa_Purchase_Order>
+                            <Select_Jpa_Purchase_Order>SELECT ID, TOTAL FROM PURCHASE_ORDER WHERE ID=?</Select_Jpa_Purchase_Order>
+                            <log.file.location>/tmp</log.file.location>
+                            <jdbc.db>${jdbc.db}</jdbc.db>
+                        </systemPropertyVariables>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-report-plugin</artifactId>
+            <configuration>
+                <linkXRef>false</linkXRef>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>generate-failsafe-html-report</id>
+                    <phase>post-integration-test</phase>
+                    <goals>
+                        <goal>failsafe-report-only</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>${project.build.directory}/test-reports</outputDirectory>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
 </project>

@@ -63,7 +63,8 @@
         <payara.home>${maven.multiModuleProjectDirectory}${file.separator}target${file.separator}payara7</payara.home>
         <!-- Note that Shrinkwrap Maven resolver WILL NOT read in whatever you specify on the command line - it will ALWAYS read this as-is -->
         <payara.version>7.2024.1.Alpha2-SNAPSHOT</payara.version>
-        <payara.asadmin>${payara.home}${file.separator}glassfish${file.separator}bin${file.separator}asadmin</payara.asadmin>
+        <script.extension/>
+        <payara.asadmin>${payara.home}${file.separator}glassfish${file.separator}bin${file.separator}asadmin${script.extension}</payara.asadmin>
         <payara.artifact>payara</payara.artifact>
         <payara.domain>domain1</payara.domain>
         <payara.arquillian.version>4.0.alpha1</payara.arquillian.version>
@@ -388,7 +389,7 @@
                 </os>
             </activation>
             <properties>
-                <payara.asadmin>${payara.home}${file.separator}glassfish${file.separator}bin${file.separator}asadmin.bat</payara.asadmin>
+                <script.extension>.bat</script.extension>
                 <ant.executable>${ant.home}${file.separator}bin${file.separator}ant.cmd</ant.executable>
             </properties>
         </profile>
