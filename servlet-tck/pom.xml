@@ -31,6 +31,18 @@
 
     <name>TCK: Servlet</name>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>fish.payara.api</groupId>
+                <artifactId>payara-bom</artifactId>
+                <version>${payara.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>jakarta.tck</groupId>
@@ -67,6 +79,20 @@
             <artifactId>sigtest-maven-plugin</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- Bizarrely the TCK requires its own API as a dependency -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- TCK runner requires SLF4J -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.16</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -81,13 +107,12 @@
                             <goal>integration-test</goal>
                         </goals>
                         <configuration>
-                            <dependenciesToScan>
-                                <dependency>jakarta.tck:servlet-tck-runtime</dependency>
-                            </dependenciesToScan>
+                            <dependenciesToScan>jakarta.tck:servlet-tck-runtime</dependenciesToScan>
                             <includes>
                                 <include>*</include>
                             </includes>
                             <systemPropertyVariables>
+                                <payara.home>${payara.home}</payara.home>
                                 <!-- if the servlet container doesn't support optional cross context -->
                                 <servlet.tck.support.crossContext>true</servlet.tck.support.crossContext>
                                 <!-- if the servlet container doesn't support optional http2 push -->
