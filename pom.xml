@@ -366,7 +366,7 @@
                                     <goal>unpack</goal>
                                 </goals>
                                 <phase>pre-integration-test</phase>
-<!--                                <inherited>false</inherited>-->
+                                <inherited>false</inherited>
                                 <configuration>
                                     <skip>${skipTests}</skip>
                                     <artifactItems>
