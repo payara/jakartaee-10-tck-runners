@@ -388,7 +388,7 @@
                             <persistence.unit.name.2>JPATCK2</persistence.unit.name.2>
                             <jakarta.persistence.provider>org.eclipse.persistence.jpa.PersistenceProvider</jakarta.persistence.provider>
                             <jakarta.persistence.jdbc.driver>org.apache.derby.jdbc.ClientDriver</jakarta.persistence.jdbc.driver>
-                            <jakarta.persistence.jdbc.url>jdbc:derby://localhost:1572/derbyDB;create=true</jakarta.persistence.jdbc.url>
+                            <jakarta.persistence.jdbc.url>jdbc:derby://localhost:1527/derbyDB;create=true</jakarta.persistence.jdbc.url>
                             <jakarta.persistence.jdbc.user>cts1</jakarta.persistence.jdbc.user>
                             <jakarta.persistence.jdbc.password>cts1</jakarta.persistence.jdbc.password>
                             <jpa.provider.implementation.specific.properties>${jpa.provider.implementation.specific.properties}</jpa.provider.implementation.specific.properties>
@@ -424,7 +424,7 @@
                             <persistence.unit.name.2>JPATCK2</persistence.unit.name.2>
                             <jakarta.persistence.provider>org.eclipse.persistence.jpa.PersistenceProvider</jakarta.persistence.provider>
                             <jakarta.persistence.jdbc.driver>org.apache.derby.jdbc.ClientDriver</jakarta.persistence.jdbc.driver>
-                            <jakarta.persistence.jdbc.url>jdbc:derby://localhost:1572/derbyDB;create=true</jakarta.persistence.jdbc.url>
+                            <jakarta.persistence.jdbc.url>jdbc:derby://localhost:1527/derbyDB;create=true</jakarta.persistence.jdbc.url>
                             <jakarta.persistence.jdbc.user>cts1</jakarta.persistence.jdbc.user>
                             <jakarta.persistence.jdbc.password>cts1</jakarta.persistence.jdbc.password>
                             <jpa.provider.implementation.specific.properties>${jpa.provider.implementation.specific.properties}</jpa.provider.implementation.specific.properties>
