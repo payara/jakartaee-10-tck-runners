@@ -201,8 +201,7 @@
                         </goals>
                         <configuration>
                             <target>
-                                <exec executable="${javadb.dir}${file.separator}bin${file.separator}startNetworkServer${script.extension}"
-                                      spawn="true"/>
+                                <exec executable="${javadb.dir}${file.separator}bin${file.separator}startNetworkServer${script.extension}" spawn="true" dir="${javadb.dir}"/>
                                 <echo message="Waiting 3 seconds for database in forked process to start..."/>
                                 <sleep seconds="3"/>
                             </target>
