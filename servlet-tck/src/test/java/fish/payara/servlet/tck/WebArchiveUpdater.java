@@ -59,7 +59,7 @@ public class WebArchiveUpdater implements LoadableExtension {
                         && applicationArchive instanceof WebArchive webArchive) {
 
                     webArchive.addAsWebInfResource(
-                            new File("src" + File.separator + "test" + File.separator + "resources", "payara-web.xml"), "payara-web.xml")
+                                    new File("src" + File.separator + "test" + File.separator + "resources", "payara-web.xml"), "payara-web.xml")
                             .addAsLibraries(Maven.configureResolver().loadPomFromFile("pom.xml")
                                     .resolve("org.slf4j:slf4j-simple").withTransitivity().as(JavaArchive.class));
                 }
@@ -67,8 +67,6 @@ public class WebArchiveUpdater implements LoadableExtension {
 
             return descriptions;
         }
-
     }
-
 
 }

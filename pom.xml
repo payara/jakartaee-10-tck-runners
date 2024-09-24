@@ -70,7 +70,6 @@
         <payara.arquillian.version>4.0.alpha1</payara.arquillian.version>
         <skipTests>false</skipTests>
         <skipConfig>${skipTests}</skipConfig>
-        <skipUnpack>${skipTests}</skipUnpack>
 
         <!-- Build & test plugin versions -->
         <maven-install-plugin.version>3.1.2</maven-install-plugin.version>
@@ -369,7 +368,7 @@
                                 <phase>pre-integration-test</phase>
                                 <inherited>false</inherited>
                                 <configuration>
-                                    <skip>${skipUnpack}</skip>
+                                    <skip>${skipConfig}</skip>
                                     <artifactItems>
                                         <artifactItem>
                                             <groupId>fish.payara.distributions</groupId>
