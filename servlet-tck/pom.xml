@@ -103,10 +103,17 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Bizarrely the TCK requires its own API as a dependency -->
+        <!-- Bizarrely the TCK requires its own API as a dependency to run -->
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- Bizarrely the TCK requires JUnit 4 as a dependency to avoid ClassDefNotFound errors -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
