@@ -281,6 +281,7 @@
                             </includes>
                             <systemPropertyVariables>
                                 <payara.home>${payara.home}</payara.home>
+                                <arquillian.xml>${project.basedir}${file.separator}src${file.separator}test${file.separator}arquillian.xml</arquillian.xml>
                                 <!-- if the servlet container doesn't support optional cross context -->
                                 <servlet.tck.support.crossContext>true</servlet.tck.support.crossContext>
                                 <!-- if the servlet container doesn't support optional http2 push -->
