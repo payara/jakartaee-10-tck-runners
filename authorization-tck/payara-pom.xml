@@ -7,6 +7,7 @@
                 <payara.root>${maven.multiModuleProjectDirectory}/target</payara.root>
                 <payara.home>${payara.root}${file.separator}payara7</payara.home>
                 <payara.asadmin>${payara.home}/glassfish/bin/asadmin</payara.asadmin>
+                <log.file.location>${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}logs</log.file.location>
 
                 <arquillian.version>1.9.1.Final</arquillian.version>
                 <payara.arquillian.version>4.0.alpha1</payara.arquillian.version>
@@ -187,6 +188,10 @@
                                             <arg value="vendor.jakarta.security.jacc.PolicyConfigurationFactory.provider=org.glassfish.exousia.modules.def.DefaultPolicyConfigurationFactory" />
                                         </exec>
                                         <exec executable="${payara.asadmin}">
+                                            <arg value="create-system-properties" />
+                                            <arg value="log.file.location=${log.file.location}" />
+                                        </exec>
+                                        <exec executable="${payara.asadmin}">
                                             <arg value="create-file-user" />
                                             <arg value="--groups=foo:bar" />
                                             <arg value="--passwordfile=${maven.multiModuleProjectDirectory}/reza.pass" />
@@ -236,7 +241,7 @@
                         <configuration>
                             <systemPropertyVariables>
                                 <payara.home>${payara.home}</payara.home>
-                                <log.file.location>${payara.home}/glassfish/domains/domain1/logs</log.file.location>
+                                <log.file.location>${log.file.location}</log.file.location>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
