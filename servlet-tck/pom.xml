@@ -296,7 +296,7 @@
 
                                 <!-- Set the properties for the API signature test -->
                                 <jimage.dir>${project.build.directory}${file.separator}jdk-bundle</jimage.dir>
-                                <sigTestClasspath>${project.build.directory}${file.separator}jakarta.servlet-api.jar${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.base${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.rmi${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.sql${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.naming</sigTestClasspath>
+                                <sigTestClasspath>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.servlet-api.jar${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.base${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.rmi${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.sql${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.naming</sigTestClasspath>
                             </systemPropertyVariables>
                         </configuration>
                     </execution>
