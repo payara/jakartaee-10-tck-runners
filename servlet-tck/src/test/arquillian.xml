@@ -9,11 +9,7 @@
     </engine>
 
     <group qualifier="payara-server" default="true">
-        <container qualifier="http" default="true">
-            <configuration>
-                <property name="httpsPortAsDefault">false</property>
-            </configuration>
-        </container>
+        <container qualifier="http" default="true"/>
         <container qualifier="https">
             <configuration>
                 <property name="httpsPortAsDefault">true</property>

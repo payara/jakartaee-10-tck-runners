@@ -55,13 +55,12 @@ public class WebArchiveUpdater implements LoadableExtension {
             for (DeploymentDescription description : descriptions) {
                 Archive<?> applicationArchive = description.getArchive();
 
-                if ((testClass.getName().contains("ClientCertAnnoTests") || testClass.getName().contains("servletResponseTests"))
+                if ((testClass.getName().contains("ClientCertAnnoTests"))
                         && applicationArchive instanceof WebArchive webArchive) {
 
-                    webArchive.addAsWebInfResource(
-                                    new File("src" + File.separator + "test" + File.separator + "resources", "payara-web.xml"), "payara-web.xml")
-                            .addAsLibraries(Maven.configureResolver().loadPomFromFile("pom.xml")
-                                    .resolve("org.slf4j:slf4j-simple").withTransitivity().as(JavaArchive.class));
+                    webArchive.addAsWebInfResource(new File(
+                            "src" + File.separator + "test" + File.separator + "resources", "payara-web.xml"),
+                            "payara-web.xml");
                 }
             }
 
