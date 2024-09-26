@@ -59,7 +59,6 @@
         <ant.zip.url>https://archive.apache.org/dist/ant/binaries/apache-ant-${ant.version}-bin.zip</ant.zip.url>
         <ant.executable>${ant.home}${file.separator}bin${file.separator}ant</ant.executable>
         <tck.home>${project.build.directory}${file.separator}activation-tck</tck.home>
-        <payara.home>${project.build.directory}${file.separator}payara7</payara.home>
     </properties>
 
     <dependencies>
