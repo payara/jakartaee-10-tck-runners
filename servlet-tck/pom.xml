@@ -176,6 +176,7 @@
                             <noprompt>true</noprompt>
                             <trustcacerts>true</trustcacerts>
                             <verbose>true</verbose>
+                            <skip>${skipConfig}</skip>
                         </configuration>
                     </execution>
                 </executions>
@@ -192,7 +193,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <skip>${skipConfig}</skip>
+                            <skip>${skipServerStartStop}</skip>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>start-domain</argument>
@@ -255,7 +256,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <skip>${skipConfig}</skip>
+                            <skip>${skipServerStartStop}</skip>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>stop-domain</argument>

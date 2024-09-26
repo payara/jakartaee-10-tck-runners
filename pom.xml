@@ -70,6 +70,7 @@
         <payara.arquillian.version>4.0.alpha1</payara.arquillian.version>
         <skipTests>false</skipTests>
         <skipConfig>${skipTests}</skipConfig>
+        <skipServerStartStop>${skipTests}</skipServerStartStop>
 
         <!-- Build & test plugin versions -->
         <maven-install-plugin.version>3.1.2</maven-install-plugin.version>
@@ -320,6 +321,7 @@
 
             <properties>
                 <payara.server.remote/>
+                <skipServerStartStop>true</skipServerStartStop>
             </properties>
 
             <dependencies>
