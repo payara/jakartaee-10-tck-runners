@@ -1,0 +1,20 @@
+<arquillian xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns="http://jboss.org/schema/arquillian"
+            xsi:schemaLocation="http://jboss.org/schema/arquillian  https://jboss.org/schema/arquillian/arquillian_1_0.xsd">
+
+    <defaultProtocol type="Servlet 6.0"/>
+
+    <engine>
+        <property name="deploymentExportPath">target/</property>
+    </engine>
+
+    <group qualifier="payara-server" default="true">
+        <container qualifier="http" default="true"/>
+        <container qualifier="https">
+            <configuration>
+                <property name="httpsPortAsDefault">true</property>
+            </configuration>
+        </container>
+    </group>
+
+</arquillian>

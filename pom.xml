@@ -68,8 +68,9 @@
         <payara.artifact>payara</payara.artifact>
         <payara.domain>domain1</payara.domain>
         <payara.arquillian.version>4.0.alpha1</payara.arquillian.version>
-        <junit.version>5.10.3</junit.version>
         <skipTests>false</skipTests>
+        <skipConfig>${skipTests}</skipConfig>
+        <skipServerStartStop>${skipTests}</skipServerStartStop>
 
         <!-- Build & test plugin versions -->
         <maven-install-plugin.version>3.1.2</maven-install-plugin.version>
@@ -81,8 +82,8 @@
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
         <exec-maven-plugin.version>3.3.0</exec-maven-plugin.version>
         <download-maven-plugin.version>1.9.0</download-maven-plugin.version>
-        <junit.version>5.10.2</junit.version>
         <arquillian.version>1.9.1.Final</arquillian.version>
+        <junit.version>5.10.3</junit.version>
         <jimage.dir>${project.build.directory}${file.separator}jdk-bundle</jimage.dir>
         <shrinkwrap.resolver.version>3.3.0</shrinkwrap.resolver.version>
         <shrinkwrap.descriptors.version>2.0.0</shrinkwrap.descriptors.version>
@@ -101,6 +102,10 @@
         <jakarta.tck.signaturetest.version>11.0.0-M1</jakarta.tck.signaturetest.version>
         <jakarta.tck.persistence.version>3.2.0</jakarta.tck.persistence.version>
         <cdi.api.version>4.1.0</cdi.api.version>
+        <jakarta.tck.servlet.version>6.1.0</jakarta.tck.servlet.version>
+
+        <!-- The profile to run - acceptable parameters are 'full', 'web', and 'core' -->
+        <jakarta.tck.platform>full</jakarta.tck.platform>
     </properties>
 
     <repositories>
@@ -292,6 +297,7 @@
 
             <properties>
                 <payara.artifact>payara-web</payara.artifact>
+                <jakarta.tck.platform>web</jakarta.tck.platform>
             </properties>
         </profile>
         <profile>
@@ -315,6 +321,7 @@
 
             <properties>
                 <payara.server.remote/>
+                <skipServerStartStop>true</skipServerStartStop>
             </properties>
 
             <dependencies>
@@ -361,8 +368,9 @@
                                     <goal>unpack</goal>
                                 </goals>
                                 <phase>pre-integration-test</phase>
+                                <inherited>false</inherited>
                                 <configuration>
-                                    <skip>${skipTests}</skip>
+                                    <skip>${skipConfig}</skip>
                                     <artifactItems>
                                         <artifactItem>
                                             <groupId>fish.payara.distributions</groupId>
@@ -370,7 +378,7 @@
                                             <version>${payara.version}</version>
                                             <type>zip</type>
                                             <overWrite>true</overWrite>
-                                            <outputDirectory>${project.build.directory}</outputDirectory>
+                                            <outputDirectory>${maven.multiModuleProjectDirectory}${file.separator}target</outputDirectory>
                                         </artifactItem>
                                     </artifactItems>
                                 </configuration>
