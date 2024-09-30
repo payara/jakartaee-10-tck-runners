@@ -37,13 +37,13 @@
         <dependency>
             <groupId>jakarta.enterprise.concurrent</groupId>
             <artifactId>jakarta.enterprise.concurrent-tck</artifactId>
-            <version>3.1.0-M2</version>
+            <version>3.1.1</version>
         </dependency>
         <!-- APIs -->
         <dependency>
             <groupId>jakarta.enterprise.concurrent</groupId>
             <artifactId>jakarta.enterprise.concurrent-api</artifactId>
-            <version>3.1.0-M2</version>
+            <version>3.1.1</version>
         </dependency>
         <dependency>
             <groupId>jakarta.servlet</groupId>
@@ -155,7 +155,7 @@
                 <configuration>
                     <systemPropertyVariables>
                     </systemPropertyVariables>
-                    <groups>full</groups>                        <!-- Groups to include i.e. web/full -->
+                    <groups>platform</groups>                        <!-- Groups to include i.e. web/platform -->
                     <!-- For debugging, include only subset of tests: -->
                     <!-- <includes>
                         <include>ee.jakarta.tck.concurrent.spec.ManagedThreadFactory.injected.*Tests</include>
