@@ -153,6 +153,12 @@
                     </dependency>
                 </dependencies>
                 <configuration>
+                    <systemProperties>
+                        <property>
+                            <name>jimage.dir</name>
+                            <value>${project.build.outputDirectory}/jimage</value>
+                        </property>
+                    </systemProperties>
                     <systemPropertyVariables>
                     </systemPropertyVariables>
                     <groups>platform</groups>                        <!-- Groups to include i.e. web/platform -->
