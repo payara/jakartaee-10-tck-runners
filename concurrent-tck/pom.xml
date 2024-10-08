@@ -116,6 +116,8 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <!-- do not copy the TCK itself to Payara -->
+                    <excludeArtifactIds>jakarta.enterprise.concurrent-tck</excludeArtifactIds>
                     <artifactItems>
                         <artifactItem>
                             <groupId>org.apache.derby</groupId>
@@ -132,11 +134,6 @@
                             <artifactId>derbyshared</artifactId>
                             <version>10.15.2.0</version>
                         </artifactItem>
-                        <dependency>
-                                <groupId>org.netbeans.tools</groupId>
-                                <artifactId>sigtest-maven-plugin</artifactId>
-                                <version>1.6</version>
-                        </dependency>
                     </artifactItems>
                     <outputDirectory>${project.build.directory}/server-dependencies</outputDirectory>
                 </configuration>
