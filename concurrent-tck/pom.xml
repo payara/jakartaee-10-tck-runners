@@ -200,7 +200,7 @@
                     <systemProperties>
                         <property>
                             <name>jimage.dir</name>
-                            <value>${project.build.outputDirectory}/jimage</value>
+                            <value>${project.build.outputDirectory}${file.separator}jimage</value>
                         </property>
                     </systemProperties>
                     <systemPropertyVariables>
