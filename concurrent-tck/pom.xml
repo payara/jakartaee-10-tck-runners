@@ -109,6 +109,12 @@
             <groupId>org.jboss.arquillian.junit5</groupId>
             <artifactId>arquillian-junit5-container</artifactId>
         </dependency>
+        <!-- Remote Payara server - can be removed, when the Jenkins job will run the test with -Ppayara-server-remote -->
+        <dependency>
+            <groupId>fish.payara.arquillian</groupId>
+            <artifactId>arquillian-payara-server-remote</artifactId>
+            <scope>test</scope>
+        </dependency>
         
         <dependency>
             <groupId>fish.payara.arquillian</groupId>
