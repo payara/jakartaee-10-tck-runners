@@ -274,5 +274,141 @@
                 <payara.asadmin>${payara.home}/glassfish/bin/asadmin.bat</payara.asadmin>
             </properties>
         </profile>
+        <!--
+            Remote profile for rerunning tests without reapplying config -
+            this expects that the TCK has been run at least once using the payara-server-managed profile
+        -->
+        <profile>
+            <id>payara-server-remote</id>
+            <properties>
+                <payara.version>7.2024.1.Alpha2-SNAPSHOT</payara.version>
+                <payara.suspend>false</payara.suspend>
+                <payara.root>${maven.multiModuleProjectDirectory}/target</payara.root>
+                <payara.home>${payara.root}${file.separator}payara7</payara.home>
+                <payara.asadmin>${payara.home}/glassfish/bin/asadmin</payara.asadmin>
+                <log.file.location>${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}logs</log.file.location>
+
+                <arquillian.version>1.9.1.Final</arquillian.version>
+                <payara.arquillian.version>4.0.alpha1</payara.arquillian.version>
+
+                <junit.version>5.10.3</junit.version>
+
+                <sigtest.api.groupId>jakarta.authorization</sigtest.api.groupId>
+                <sigtest.api.artifactId>jakarta.authorization-vendor-api</sigtest.api.artifactId>
+                <sigtest.api.version>${payara.version}</sigtest.api.version>
+
+                <maven-install-plugin.version>3.1.2</maven-install-plugin.version>
+                <maven-failsafe-plugin.version>3.3.0</maven-failsafe-plugin.version>
+                <maven-dependency-plugin.version>3.7.1</maven-dependency-plugin.version>
+                <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
+            </properties>
+
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.junit</groupId>
+                        <artifactId>junit-bom</artifactId>
+                        <version>${junit.version}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jboss.arquillian</groupId>
+                        <artifactId>arquillian-bom</artifactId>
+                        <version>${arquillian.version}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>fish.payara.api</groupId>
+                        <artifactId>payara-bom</artifactId>
+                        <version>${payara.version}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                    <!-- Old version of junit, we need to define this when using Arquillian 1.9 or higher -->
+                    <dependency>
+                        <groupId>junit</groupId>
+                        <artifactId>junit</artifactId>
+                        <version>4.13.2</version>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+
+            <dependencies>
+                <dependency>
+                    <groupId>fish.payara.arquillian</groupId>
+                    <artifactId>arquillian-payara-server-remote</artifactId>
+                    <version>${payara.arquillian.version}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-dependency-plugin</artifactId>
+                            <version>${maven-dependency-plugin.version}</version>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-failsafe-plugin</artifactId>
+                            <version>${maven-failsafe-plugin.version}</version>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-install-plugin</artifactId>
+                            <version>${maven-install-plugin.version}</version>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-antrun-plugin</artifactId>
+                            <version>${maven-antrun-plugin.version}</version>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+
+                <plugins>
+                    <!--
+                        Installs the jakarta.authorization-api.jar from Payara on the filesystem to the
+                        coordinates expected by the signature test.
+                    -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-install-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <configuration>
+                                    <file>${payara.home}/glassfish/modules/jakarta.authorization-api.jar</file>
+                                    <groupId>${sigtest.api.groupId}</groupId>
+                                    <artifactId>${sigtest.api.artifactId}</artifactId>
+                                    <version>${sigtest.api.version}</version>
+                                    <packaging>jar</packaging>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <payara.home>${payara.home}</payara.home>
+                                <log.file.location>${log.file.location}</log.file.location>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 </project>
