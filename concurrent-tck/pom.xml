@@ -1,20 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+  Copyright (c) 2024 Payara Foundation and/or its affiliates. All rights reserved.
+
+  The contents of this file are subject to the terms of either the GNU
+  General Public License Version 2 only ("GPL") or the Common Development
+  and Distribution License("CDDL") (collectively, the "License").  You
+  may not use this file except in compliance with the License.  You can
+  obtain a copy of the License at
+  https://github.com/payara/Payara/blob/master/LICENSE.txt
+  See the License for the specific
+  language governing permissions and limitations under the License.
+
+  When distributing the software, include this License Header Notice in each
+  file and include the License file at glassfish/legal/LICENSE.txt.
+
+  GPL Classpath Exception:
+  The Payara Foundation designates this particular file as subject to the "Classpath"
+  exception as provided by the Payara Foundation in the GPL Version 2 section of the License
+  file that accompanied this code.
+
+  Modifications:
+  If applicable, add the following below the License Header, with the fields
+  enclosed by brackets [] replaced by your own identifying information:
+  "Portions Copyright [year] [name of copyright owner]"
+
+  Contributor(s):
+  If you wish your version of this file to be governed by only the CDDL or
+  only the GPL Version 2, indicate your decision by adding "[Contributor]
+  elects to include this software in this distribution under the [CDDL or GPL
+  Version 2] license."  If you don't indicate a single choice of license, a
+  recipient has the option to distribute your version of this file under
+  either the CDDL, the GPL Version 2 or to extend the choice of license to
+  its licensees as provided above.  However, if you add GPL Version 2 code
+  and therefore, elected the GPL Version 2 license, then the option applies
+  only if the new code is made subject to such option by the copyright
+  holder.
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>fish.payara.jakarta.concurrent.tck</groupId>
     <artifactId>concurrent-tck-runner</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>Jakarta Concurrency TCK Runner</name>
     <description>This pom runs the JakartaEE Concurrent TCK.</description>
 
+    <parent>
+        <groupId>fish.payara.jakarta.tests.tck</groupId>
+        <artifactId>tck</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
-        
-        <!-- Arquillian Dependencies -->
-        <payara.arquillian.container.version>3.0.alpha8</payara.arquillian.container.version>
+        <concurrent-tck-groups>platform</concurrent-tck-groups> <!-- Groups to include i.e. web/platform, given by the tck-->
+                                                
+        <!-- Library Dependencies -->
+        <jakarta.enterprise.concurrent-api>3.1.1</jakarta.enterprise.concurrent-api>
 
         <tck-suite.xml>src${file.separator}test${file.separator}resources${file.separator}tck-suite.xml</tck-suite.xml>
     </properties>
@@ -23,9 +65,9 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <version>1.8.0.Final</version>
+                <groupId>fish.payara.api</groupId>
+                <artifactId>payara-bom</artifactId>
+                <version>${payara.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -37,46 +79,43 @@
         <dependency>
             <groupId>jakarta.enterprise.concurrent</groupId>
             <artifactId>jakarta.enterprise.concurrent-tck</artifactId>
-            <version>3.1.0-M2</version>
+            <version>${jakarta.enterprise.concurrent-api}</version>
+            <scope>test</scope>
         </dependency>
         <!-- APIs -->
         <dependency>
             <groupId>jakarta.enterprise.concurrent</groupId>
             <artifactId>jakarta.enterprise.concurrent-api</artifactId>
-            <version>3.1.0-M2</version>
         </dependency>
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
-            <version>6.1.0-M2</version>
         </dependency>
         <!-- Test frameworks -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.10.2</version>
         </dependency>
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
-            <version>1.10.2</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.arquillian.junit5</groupId>
             <artifactId>arquillian-junit5-container</artifactId>
         </dependency>
-        
-        <!-- Remote Payara server -->
+        <!-- Remote Payara server - can be removed, when the Jenkins job will run the test with -Ppayara-server-remote -->
         <dependency>
             <groupId>fish.payara.arquillian</groupId>
             <artifactId>arquillian-payara-server-remote</artifactId>
-            <version>${payara.arquillian.container.version}</version>
             <scope>test</scope>
         </dependency>
+        
         <dependency>
             <groupId>fish.payara.arquillian</groupId>
-            <artifactId>payara-client-ee9</artifactId>
-            <version>${payara.arquillian.container.version}</version>
+            <artifactId>payara-client-ee11</artifactId>
+            <!-- remove when version provided by payara-bom -->
+            <version>${payara.arquillian.version}</version>
             <scope>test</scope>
         </dependency>
         
@@ -84,12 +123,10 @@
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
-            <version>4.0.2</version>
         </dependency>
         <dependency>
             <groupId>jakarta.activation</groupId>
             <artifactId>jakarta.activation-api</artifactId>
-            <version>2.1.3</version>
         </dependency>
     </dependencies>
     
@@ -98,7 +135,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.6.1</version>
                 <executions>
                     <execution>
                         <id>copy</id>
@@ -116,6 +152,9 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <!-- do not copy the TCK itself to Payara -->
+                    <excludeArtifactIds>jakarta.enterprise.concurrent-tck</excludeArtifactIds>
+                    
                     <artifactItems>
                         <artifactItem>
                             <groupId>org.apache.derby</groupId>
@@ -132,11 +171,6 @@
                             <artifactId>derbyshared</artifactId>
                             <version>10.15.2.0</version>
                         </artifactItem>
-                        <dependency>
-                                <groupId>org.netbeans.tools</groupId>
-                                <artifactId>sigtest-maven-plugin</artifactId>
-                                <version>1.6</version>
-                        </dependency>
                     </artifactItems>
                     <outputDirectory>${project.build.directory}/server-dependencies</outputDirectory>
                 </configuration>
@@ -144,21 +178,27 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.2.5</version>
+                <version>3.5.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.surefire</groupId>
                         <artifactId>surefire-junit-platform</artifactId>
-                        <version>3.2.5</version>
+                        <version>3.5.0</version>
                     </dependency>
                 </dependencies>
                 <configuration>
+                    <systemProperties>
+                        <property>
+                            <name>jimage.dir</name>
+                            <value>${project.build.outputDirectory}${file.separator}jimage</value>
+                        </property>
+                    </systemProperties>
                     <systemPropertyVariables>
                     </systemPropertyVariables>
-                    <groups>full</groups>                        <!-- Groups to include i.e. web/full -->
+                    <groups>${concurrent-tck-groups}</groups>
                     <!-- For debugging, include only subset of tests: -->
-                    <!-- <includes>
-                        <include>ee.jakarta.tck.concurrent.spec.ManagedThreadFactory.injected.*Tests</include>
+<!--                     <includes>
+                        <include>ee.jakarta.tck.concurrent.spec.signature.*Tests</include>
                     </includes> -->
                     <testSourceDirectory>${project.basedir}${file.separarator}src${file.separarator}main${file.separarator}java${file.separarator}</testSourceDirectory>
                     <dependenciesToScan>
@@ -182,6 +222,7 @@
 
             <properties>
                 <tck-suite.xml>src${file.separator}test${file.separator}resources${file.separator}tck-suite-web.xml</tck-suite.xml>
+                <concurrent-tck-groups>web</concurrent-tck-groups>
             </properties>
         </profile>
     </profiles>
