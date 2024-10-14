@@ -41,7 +41,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>fish.payara.jakarta.concurrent.tck</groupId>
     <artifactId>concurrent-tck-runner</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>Jakarta Concurrency TCK Runner</name>
@@ -58,10 +57,6 @@
                                                 
         <!-- Library Dependencies -->
         <jakarta.enterprise.concurrent-api>3.1.1</jakarta.enterprise.concurrent-api>
-        <payara.arquillian.container.version>4.0.alpha1</payara.arquillian.container.version>
-        
-        <jakarta.xml.bind-api>4.0.2</jakarta.xml.bind-api>
-        <jakarta.activation-api>2.1.3</jakarta.activation-api>
 
         <tck-suite.xml>src${file.separator}test${file.separator}resources${file.separator}tck-suite.xml</tck-suite.xml>
     </properties>
@@ -120,7 +115,7 @@
             <groupId>fish.payara.arquillian</groupId>
             <artifactId>payara-client-ee11</artifactId>
             <!-- remove when version provided by payara-bom -->
-            <version>${payara.arquillian.container.version}</version>
+            <version>${payara.arquillian.version}</version>
             <scope>test</scope>
         </dependency>
         
