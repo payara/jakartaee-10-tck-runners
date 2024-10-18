@@ -51,10 +51,8 @@
     <artifactId>core-tck</artifactId>
 
     <properties>
-        <core.profile.tck.version>10.0.0</core.profile.tck.version>
+        <core.profile.tck.version>11.0.0</core.profile.tck.version>
         <junit.version>5.8.2</junit.version>
-        <arquillian.version>1.7.0.Alpha10</arquillian.version>
-        <payara.arquillian.version>3.0.alpha6</payara.arquillian.version>
         <log4j.version>1.2.17</log4j.version>
         <resteasy.version>6.1.0.Beta2</resteasy.version>
         <weld.version>5.0.0.SP1</weld.version>
@@ -62,28 +60,9 @@
         <maven.failsafe.plugin.version>3.0.0-M6</maven.failsafe.plugin.version>
     </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <version>${arquillian.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>org.junit</groupId>
-                <artifactId>junit-bom</artifactId>
-                <version>${junit.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
         <dependency>
-            <groupId>jakarta.ee.tck.coreprofile</groupId>
+            <groupId>jakarta.tck.coreprofile</groupId>
             <artifactId>core-profile-tck-impl</artifactId>
             <version>${core.profile.tck.version}</version>
             <scope>test</scope>
@@ -111,25 +90,18 @@
             <scope>test</scope>
         </dependency>
         
-        <!-- Payara Arquillian Dependencies -->
-        <dependency>
-            <groupId>fish.payara.arquillian</groupId>
-            <artifactId>arquillian-payara-server-managed</artifactId>
-            <version>${payara.arquillian.version}</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.jboss.arquillian.junit5</groupId>
             <artifactId>arquillian-junit5-container</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- Commented out for now since Jersey Client seems to fail 
+        <!-- Commented out for now since Jersey Client seems to fail
         <dependency>
             <groupId>fish.payara.arquillian</groupId>
-            <artifactId>payara-client-ee9</artifactId>
+            <artifactId>payara-client-ee11</artifactId>
             <version>${payara.arquillian.version}</version>
             <scope>test</scope>
-        </dependency> -->
+        </dependency>-->
         <!-- Use RESTEasy for now since Jersey Client seems to fail -->
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
@@ -162,7 +134,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>${maven.enforcer.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>enforce-payara-home-is-set</id>
@@ -174,7 +145,7 @@
                                 <requireProperty>
                                     <property>payara.home</property>
                                     <message>Property "payara.home" must be set to execute this test. Please set it to
-                                        your Payara 6 Install Directory.
+                                        your Payara 7 Install Directory.
                                     </message>
                                 </requireProperty>
                             </rules>
@@ -186,7 +157,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${maven.failsafe.plugin.version}</version>
                 <configuration>
                     <argLine>
                         --add-exports=java.desktop/sun.awt=ALL-UNNAMED
@@ -207,10 +177,11 @@
                     </properties>
                     <forkMode>once</forkMode>
                     <dependenciesToScan>
-                        <dependency>jakarta.ee.tck.coreprofile:core-profile-tck-impl</dependency>
+                        <dependency>jakarta.tck.coreprofile:core-profile-tck-impl</dependency>
                     </dependenciesToScan>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     <systemPropertyVariables>
+                        <payara.home>${payara.home}</payara.home>
                         <arquillian.launch>payara-core-profile</arquillian.launch>
                     </systemPropertyVariables>
                 </configuration>
