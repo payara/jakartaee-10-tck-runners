@@ -43,6 +43,7 @@
         <module>jakarta-websocket-tck</module>
         <module>jakarta-validation-tck</module>
         <module>jakarta-persistence-tck</module>
+        <module>jakarta-core-profile-tck</module>
     </modules>
 
     <build>
