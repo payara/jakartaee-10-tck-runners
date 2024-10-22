@@ -15,30 +15,17 @@
 
     <properties>
         <payara.json-bind-api.jar>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.json.bind-api.jar</payara.json-bind-api.jar>
-        <jsonb.api.version>3.0.1</jsonb.api.version>
-        <jsonb.tck.version>3.0.0</jsonb.tck.version>
         <jimage.dir>${project.build.directory}${file.separator}jdk-bundle</jimage.dir>
     </properties>
-
-    <repositories>
-        <repository>
-            <id>payara-nexus-artifacts</id>
-            <url>https://nexus.payara.fish/repository/payara-artifacts</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>jakarta.json.bind</groupId>
-                <artifactId>jakarta.json.bind-api</artifactId>
-                <version>${jsonb.api.version}</version>
+                <groupId>fish.payara.api</groupId>
+                <artifactId>payara-bom</artifactId>
+                <version>${payara.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -48,7 +35,7 @@
         <dependency>
             <groupId>jakarta.json.bind</groupId>
             <artifactId>jakarta.json.bind-tck</artifactId>
-            <version>${jsonb.tck.version}</version>
+            <version>${jakarta.tck.jsonb.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -85,13 +72,11 @@
         <dependency>
             <groupId>fish.payara.arquillian</groupId>
             <artifactId>payara-client-ee11</artifactId>
-            <version>${payara.arquillian.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.enterprise</groupId>
             <artifactId>jakarta.enterprise.cdi-api</artifactId>
-            <version>${cdi.api.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

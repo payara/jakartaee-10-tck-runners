@@ -45,6 +45,7 @@
         <module>jakarta-persistence-tck</module>
         <module>jakarta-cdi-tck</module>
         <module>jakarta-jsonp-tck</module>
+        <module>jakarta-jsonb-tck</module>
     </modules>
 
     <build>
