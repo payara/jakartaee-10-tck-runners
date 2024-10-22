@@ -18,26 +18,24 @@
 
     <properties>
         <failsafe.plugin.jdk17.args/>
-        <jimage.dir>${project.build.directory}/jdk-bundle</jimage.dir>
+        <jimage.dir>${project.build.directory}${file.separator}jdk-bundle</jimage.dir>
         <signature.sigTestClasspath/>
-        <payara.arquillian.container.version>3.0.alpha6</payara.arquillian.container.version>
-        <payara.home></payara.home>
-        <payara.json-api.jar>${payara.home}/glassfish/modules/jakarta.json.jar</payara.json-api.jar>
+        <payara.json-api.jar>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.json.jar</payara.json-api.jar>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <version>1.7.0.Alpha10</version>
-                <scope>import</scope>
+                <groupId>fish.payara.api</groupId>
+                <artifactId>payara-bom</artifactId>
+                <version>${payara.version}</version>
                 <type>pom</type>
+                <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>jakarta.json</groupId>
                 <artifactId>jakarta.json-tck</artifactId>
-                <version>${jsonp.api.version}</version>
+                <version>${jakarta.tck.jsonp.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -49,32 +47,23 @@
         <dependency>
             <groupId>jakarta.json</groupId>
             <artifactId>jakarta.json-tck-tests</artifactId>
-            <version>${jsonp.api.version}</version>
+            <version>${jakarta.tck.jsonp.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.json</groupId>
             <artifactId>jakarta.json-tck-tests-pluggability</artifactId>
-            <version>${jsonp.api.version}</version>
+            <version>${jakarta.tck.jsonp.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.netbeans.tools</groupId>
+            <groupId>jakarta.tck</groupId>
             <artifactId>sigtest-maven-plugin</artifactId>
-            <version>1.6</version>
         </dependency>
 
-        <!-- Arquillian Remote Payara server -->
         <dependency>
             <groupId>fish.payara.arquillian</groupId>
-            <artifactId>arquillian-payara-server-remote</artifactId>
-            <version>${payara.arquillian.container.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>fish.payara.arquillian</groupId>
-            <artifactId>payara-client-ee9</artifactId>
-            <version>${payara.arquillian.container.version}</version>
+            <artifactId>payara-client-ee11</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -106,18 +95,18 @@
         </dependency>
 
         <!-- hidden runtime dependencies of arquillian container -->
-        <dependency>
-            <groupId>jakarta.enterprise</groupId>
-            <artifactId>jakarta.enterprise.cdi-api</artifactId>
-            <version>3.0.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.parsson</groupId>
-            <artifactId>parsson-media</artifactId>
-            <version>1.1.0</version>
-            <scope>test</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>jakarta.enterprise</groupId>-->
+<!--            <artifactId>jakarta.enterprise.cdi-api</artifactId>-->
+<!--            <version>3.0.0</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.eclipse.parsson</groupId>-->
+<!--            <artifactId>parsson-media</artifactId>-->
+<!--            <version>1.1.0</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
@@ -125,8 +114,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
-
                 <executions>
                     <execution>
                         <id>default-test</id>
@@ -149,7 +136,7 @@
                                 <junit.jupiter.extensions.autodetection.enabled>true</junit.jupiter.extensions.autodetection.enabled>
                                 <jimage.dir>${jimage.dir}</jimage.dir>
                                 <optional.tech.packages.to.ignore>jakarta.xml.bind</optional.tech.packages.to.ignore>
-                                <signature.sigTestClasspath>${payara.json-api.jar}${path.separator}${jimage.dir}/java.base${path.separator}${jimage.dir}/java.rmi${path.separator}${jimage.dir}/java.sql${path.separator}${jimage.dir}/java.naming</signature.sigTestClasspath>
+                                <signature.sigTestClasspath>${payara.json-api.jar}${path.separator}${jimage.dir}${file.separator}java.base${path.separator}${jimage.dir}${file.separator}java.rmi${path.separator}${jimage.dir}${file.separator}java.sql${path.separator}${jimage.dir}${file.separator}java.naming</signature.sigTestClasspath>
                             </systemPropertyVariables>
                         </configuration>
                     </execution>
