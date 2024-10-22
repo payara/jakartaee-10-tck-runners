@@ -107,6 +107,7 @@
         <jakarta.tck.concurrent.version>3.1.1</jakarta.tck.concurrent.version>
         <jakarta.tck.jsonp.version>2.1.1</jakarta.tck.jsonp.version>
         <jakarta.tck.jsonb.version>3.0.0</jakarta.tck.jsonb.version>
+        <jakarta.tck.batch.version>2.1.5</jakarta.tck.batch.version>
         
         <!-- The profile to run - acceptable parameters are 'full', 'web', and 'core' -->
         <jakarta.tck.platform>full</jakarta.tck.platform>
