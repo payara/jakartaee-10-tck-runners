@@ -101,12 +101,14 @@
         <jakarta.tck.common.version>11.0.0-M1</jakarta.tck.common.version>
         <jakarta.tck.signaturetest.version>11.0.0-M1</jakarta.tck.signaturetest.version>
         <jakarta.tck.persistence.version>3.2.0</jakarta.tck.persistence.version>
+        <jakarta.tck.cdi.version>4.1.0</jakarta.tck.cdi.version>
         <cdi.api.version>4.1.0</cdi.api.version>
         <jakarta.tck.servlet.version>6.1.0</jakarta.tck.servlet.version>
         <jakarta.tck.concurrent.version>3.1.1</jakarta.tck.concurrent.version>
         
         <!-- The profile to run - acceptable parameters are 'full', 'web', and 'core' -->
         <jakarta.tck.platform>full</jakarta.tck.platform>
+        <javaee.level>${jakarta.tck.platform}</javaee.level>
     </properties>
 
     <repositories>
