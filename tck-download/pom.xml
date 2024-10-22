@@ -47,6 +47,7 @@
         <module>jakarta-jsonp-tck</module>
         <module>jakarta-jsonb-tck</module>
         <module>jakarta-batch-tck</module>
+        <module>jakarta-concurrency-tck</module>
     </modules>
 
     <build>

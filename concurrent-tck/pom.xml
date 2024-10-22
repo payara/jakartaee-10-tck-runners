@@ -54,11 +54,11 @@
 
     <properties>
         <concurrent-tck-groups>platform</concurrent-tck-groups> <!-- Groups to include i.e. web/platform, given by the tck-->
-                                                
-        <!-- Library Dependencies -->
-        <jakarta.enterprise.concurrent-api>3.1.1</jakarta.enterprise.concurrent-api>
 
         <tck-suite.xml>src${file.separator}test${file.separator}resources${file.separator}tck-suite.xml</tck-suite.xml>
+
+        <!-- Override parent version. We require 2.3, which breaks many others -->
+        <jakarta.tck.sigtest-maven-plugin.version>2.3</jakarta.tck.sigtest-maven-plugin.version>
     </properties>
     
     <!-- The Arquillian test framework -->
@@ -79,7 +79,7 @@
         <dependency>
             <groupId>jakarta.enterprise.concurrent</groupId>
             <artifactId>jakarta.enterprise.concurrent-tck</artifactId>
-            <version>${jakarta.enterprise.concurrent-api}</version>
+            <version>${jakarta.tck.concurrency.version}</version>
             <scope>test</scope>
         </dependency>
         <!-- APIs -->
@@ -104,18 +104,10 @@
             <groupId>org.jboss.arquillian.junit5</groupId>
             <artifactId>arquillian-junit5-container</artifactId>
         </dependency>
-        <!-- Remote Payara server - can be removed, when the Jenkins job will run the test with -Ppayara-server-remote -->
-        <dependency>
-            <groupId>fish.payara.arquillian</groupId>
-            <artifactId>arquillian-payara-server-remote</artifactId>
-            <scope>test</scope>
-        </dependency>
         
         <dependency>
             <groupId>fish.payara.arquillian</groupId>
             <artifactId>payara-client-ee11</artifactId>
-            <!-- remove when version provided by payara-bom -->
-            <version>${payara.arquillian.version}</version>
             <scope>test</scope>
         </dependency>
         
@@ -159,31 +151,30 @@
                         <artifactItem>
                             <groupId>org.apache.derby</groupId>
                             <artifactId>derby</artifactId>
-                            <version>10.15.2.0</version>
+                            <version>10.17.1.0</version>
                         </artifactItem>
                         <artifactItem>
                             <groupId>org.apache.derby</groupId>
                             <artifactId>derbytools</artifactId>
-                            <version>10.15.2.0</version>
+                            <version>10.17.1.0</version>
                         </artifactItem>
                         <artifactItem>
                             <groupId>org.apache.derby</groupId>
                             <artifactId>derbyshared</artifactId>
-                            <version>10.15.2.0</version>
+                            <version>10.17.1.0</version>
                         </artifactItem>
                     </artifactItems>
-                    <outputDirectory>${project.build.directory}/server-dependencies</outputDirectory>
+                    <outputDirectory>${project.build.directory}${file.separator}server-dependencies</outputDirectory>
                 </configuration>
             </plugin>  
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.surefire</groupId>
                         <artifactId>surefire-junit-platform</artifactId>
-                        <version>3.5.0</version>
+                        <version>${maven-surefire-plugin.version}</version>
                     </dependency>
                 </dependencies>
                 <configuration>
@@ -194,6 +185,7 @@
                         </property>
                     </systemProperties>
                     <systemPropertyVariables>
+                        <payara.home>${payara.home}</payara.home>
                     </systemPropertyVariables>
                     <groups>${concurrent-tck-groups}</groups>
                     <!-- For debugging, include only subset of tests: -->
