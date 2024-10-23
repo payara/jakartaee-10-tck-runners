@@ -66,11 +66,6 @@
             <plugin>
                 <groupId>com.googlecode.maven-download-plugin</groupId>
                 <artifactId>download-maven-plugin</artifactId>
-                <configuration>
-                    <url>${tck.test.expression-language.url}</url>
-                    <unpack>true</unpack>
-                    <outputDirectory>${project.build.directory}</outputDirectory>
-                </configuration>
                 <executions>
                     <execution>
                         <id>download-expression-language-tck</id>
@@ -78,6 +73,10 @@
                             <goal>wget</goal>
                         </goals>
                         <phase>generate-resources</phase>
+                        <configuration>
+                            <url>${tck.test.expression-language.url}</url>
+                            <unpack>true</unpack>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

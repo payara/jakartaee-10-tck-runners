@@ -31,13 +31,12 @@
                         <goals>
                             <goal>wget</goal>
                         </goals>
+                        <configuration>
+                            <url>${tck.tests.jsonp.url}</url>
+                            <unpack>true</unpack>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <url>${tck.tests.jsonp.url}</url>
-                    <unpack>true</unpack>
-                    <outputDirectory>${project.build.directory}</outputDirectory>
-                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-install-plugin</artifactId>
