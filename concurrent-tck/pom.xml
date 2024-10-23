@@ -207,8 +207,7 @@
                             <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>create-jvm-options</argument>
-                                <!-- TCK seems to require both, even though opens implies exports -->
-                                <argument>--add-exports=java.base/jdk.internal.vm.annotation=ALL-UNNAMED:--add-opens=java.base/jdk.internal.vm.annotation=ALL-UNNAMED</argument>
+                                <argument>--add-opens=java.base/jdk.internal.vm.annotation=ALL-UNNAMED</argument>
                             </arguments>
                         </configuration>
                     </execution>
