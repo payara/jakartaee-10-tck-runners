@@ -13,7 +13,7 @@
 
     <packaging>pom</packaging>
 
-    <name>TCK: Install Jakarta Activation TCK</name>
+    <name>TCK: Install Jakarta Servlet TCK</name>
 
     <properties>
         <tck.test.servlet.file>jakarta-servlet-tck-${jakarta.tck.servlet.version}.zip</tck.test.servlet.file>
