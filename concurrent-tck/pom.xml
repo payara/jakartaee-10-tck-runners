@@ -57,8 +57,13 @@
 
         <tck-suite.xml>src${file.separator}test${file.separator}resources${file.separator}tck-suite.xml</tck-suite.xml>
 
-        <!-- Override parent version. We require 2.3, which breaks many others -->
+        <!-- Override parent version. We require 2.3, which breaks many other TCKs -->
         <jakarta.tck.sigtest-maven-plugin.version>2.3</jakarta.tck.sigtest-maven-plugin.version>
+
+
+        <jimage.dir>${project.build.outputDirectory}${file.separator}jimage</jimage.dir>
+        <!-- CLI override property workaround for Windows because of how the create-system-properties command parses ':' and '\' -->
+        <jimage.dir.escaped>${jimage.dir}</jimage.dir.escaped>
     </properties>
     
     <!-- The Arquillian test framework -->
@@ -70,6 +75,12 @@
                 <version>${payara.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.tck</groupId>
+                <artifactId>sigtest-maven-plugin</artifactId>
+                <version>${jakarta.tck.sigtest-maven-plugin.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -130,14 +141,14 @@
                 <executions>
                     <execution>
                         <id>copy</id>
-                        <phase>package</phase>
+                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>copy</goal>
                         </goals>
                     </execution>
                     <execution>
                         <id>copy-dependency</id>
-                        <phase>package</phase>
+                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
@@ -164,39 +175,124 @@
                             <version>10.17.1.0</version>
                         </artifactItem>
                     </artifactItems>
-                    <outputDirectory>${project.build.directory}${file.separator}server-dependencies</outputDirectory>
+                    <outputDirectory>${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}lib</outputDirectory>
                 </configuration>
-            </plugin>  
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>start-payara-server-for-config</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipServerStartStop}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>start-domain</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-jvm-options</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipConfig}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-jvm-options</argument>
+                                <!-- TCK seems to require both, even though opens implies exports -->
+                                <argument>--add-exports=java.base/jdk.internal.vm.annotation=ALL-UNNAMED:--add-opens=java.base/jdk.internal.vm.annotation=ALL-UNNAMED</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>set-jimage-dir-property</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipConfig}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-system-properties</argument>
+                                <argument>jimage.dir=${jimage.dir.escaped}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-javajoe-user</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipConfig}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>--passwordfile=${project.basedir}${file.separator}prepare-server-password</argument>
+                                <argument>create-file-user</argument>
+                                <argument>--groups=Manager</argument>
+                                <argument>--authrealmname=file</argument>
+                                <argument>javajoe</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>stop-payara-server-after-config</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipServerStartStop}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>stop-domain</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>surefire-junit-platform</artifactId>
-                        <version>${maven-surefire-plugin.version}</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <systemProperties>
-                        <property>
-                            <name>jimage.dir</name>
-                            <value>${project.build.outputDirectory}${file.separator}jimage</value>
-                        </property>
-                    </systemProperties>
-                    <systemPropertyVariables>
-                        <payara.home>${payara.home}</payara.home>
-                    </systemPropertyVariables>
-                    <groups>${concurrent-tck-groups}</groups>
-                    <!-- For debugging, include only subset of tests: -->
-<!--                     <includes>
-                        <include>ee.jakarta.tck.concurrent.spec.signature.*Tests</include>
-                    </includes> -->
-                    <testSourceDirectory>${project.basedir}${file.separarator}src${file.separarator}main${file.separarator}java${file.separarator}</testSourceDirectory>
-                    <dependenciesToScan>
-                        <dependency>jakarta.enterprise.concurrent:jakarta.enterprise.concurrent-tck</dependency>
-                    </dependenciesToScan>
-                </configuration>
+                <!-- FIXME PLEASE! Ugly workaround - failsafe seems to struggle to find the tests -->
+                <executions>
+                    <execution>
+                        <id>default-test</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>run-concurrency-tck</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <jimage.dir>${jimage.dir}</jimage.dir>
+                                <payara.home>${payara.home}</payara.home>
+                            </systemPropertyVariables>
+                            <groups>${concurrent-tck-groups}</groups>
+                            <!-- For debugging, include only subset of tests: -->
+                            <!-- <includes>
+                                <include>ee.jakarta.tck.concurrent.spec.signature.*Tests</include>
+                             </includes> -->
+                            <testSourceDirectory>${project.basedir}${file.separarator}src${file.separarator}main${file.separarator}java${file.separarator}</testSourceDirectory>
+                            <dependenciesToScan>
+                                <dependency>jakarta.enterprise.concurrent:jakarta.enterprise.concurrent-tck</dependency>
+                            </dependenciesToScan>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
