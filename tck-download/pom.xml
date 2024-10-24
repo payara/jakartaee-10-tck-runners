@@ -44,6 +44,7 @@
         <module>jakarta-validation-tck</module>
         <module>jakarta-persistence-tck</module>
         <module>jakarta-core-profile-tck</module>
+        <module>jakarta-inject-tck</module>
     </modules>
 
     <build>
