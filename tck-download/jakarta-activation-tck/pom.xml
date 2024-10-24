@@ -32,13 +32,11 @@
                         <goals>
                             <goal>wget</goal>
                         </goals>
+                        <configuration>
+                            <url>${tck.tests.activation.url}</url>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <url>${tck.tests.activation.url}</url>
-                    <unpack>false</unpack>
-                    <outputDirectory>${project.build.directory}</outputDirectory>
-                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-install-plugin</artifactId>

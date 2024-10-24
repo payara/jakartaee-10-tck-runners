@@ -29,67 +29,14 @@
     </parent>
 
     <artifactId>batch-tck</artifactId>
-    <version>1.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
     <name>Jakarta Batch TCK Runner for Payara</name>
-
-    <properties>
-        <jakarta.batch.version>2.1.5</jakarta.batch.version>
-    </properties>
 
     <modules>
         <module>sigtests</module>
         <module>apitests</module>
     </modules>
-
-    <repositories>
-        <repository>
-            <id>central</id>
-            <url>https://repo1.maven.org/maven2</url>
-        </repository>
-        <repository>
-            <id>jboss</id>
-            <url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
-        </repository>
-
-        <!-- Payara Community Repos -->
-        <repository>
-            <id>payara-nexus-artifacts</id>
-            <url>https://nexus.payara.fish/repository/payara-artifacts</url>
-        </repository>
-        <repository>
-            <id>payara-nexus-snapshots</id>
-            <url>https://nexus.payara.fish/repository/payara-snapshots</url>
-        </repository>
-
-        <!-- Payara Enterprise Repos -->
-        <repository>
-            <id>payara-nexus-enterprise-distributions</id>
-            <url>https://nexus.payara.fish/repository/payara-enterprise</url>
-        </repository>
-        <repository>
-            <id>payara-nexus-enterprise-artifacts</id>
-            <url>https://nexus.payara.fish/repository/payara-enterprise-artifacts-private</url>
-        </repository>
-        <repository>
-            <id>payara-nexus-enterprise-snapshots</id>
-            <url>https://nexus.payara.fish/repository/payara-enterprise-snapshots-private</url>
-        </repository>
-
-        <!-- Payara Release Staging Repo -->
-        <repository>
-            <id>payara-nexus-staging</id>
-            <url>https://nexus.payara.fish/repository/payara-staging</url>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>payara-nexus-artifacts</id>
-            <url>https://nexus.payara.fish/repository/payara-artifacts</url>
-        </pluginRepository>
-    </pluginRepositories>
 
     <dependencyManagement>
         <dependencies>

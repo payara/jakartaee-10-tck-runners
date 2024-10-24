@@ -1,16 +1,21 @@
 # Jakarta JSONB TCK
 
 ## Prerequisite
-To be able to run the TCK test, you **must** currently use the `payara-server-remote` profile.
+Download and install the TCK from the tck-downloads module. From the top-level directory:
+
+`mvn clean install -pl . -pl tck-download -pl tck-download/jakarta-jsonb-tck -Dpayara.version=...`
 
 ## Test Execution
 
-Ensure you have installed the parent POM:
-`mvn clean install -f ../pom.xml`
+Run maven test from the module directory using remote arquillian profile, and provide the path to payara and its version
 
-Execute the test suite, providing the path to the Payara installation for the signature test:
-`mvn clean verify -Ppayara-server-remote -Dpayara.home=[path to payara installation]`
+```
+cd jsonb-tck
+mvn clean verify -Ppayara-server-remote -Dpayara.version=... -Dpayara.home=...
+```
 
 The test requires configuring a JVM option to pass (see https://github.com/jakartaee/jsonb-api/issues/330).
 The runner will configure this for you and restart the DAS.
-If you wish to skip this config & restart (e.g. for reruns), add the following option to the above command: `-Dskip.server.config`
+
+To skip server startup and shutdown, set `-DskipServerStartStop` to true. Defaults to false.
+To skip server configuration, set to `-DskipConfig` to true. Defaults to false.
