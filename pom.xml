@@ -104,6 +104,8 @@
         <cdi.api.version>4.1.0</cdi.api.version>
         <jakarta.tck.servlet.version>6.1.0</jakarta.tck.servlet.version>
         <jakarta.tck.concurrent.version>3.1.1</jakarta.tck.concurrent.version>
+        <jakarta.tck.core-profile.version>11.0.0</jakarta.tck.core-profile.version>
+        <jakarta.tck.inject.version>2.0.2</jakarta.tck.inject.version>
         
         <!-- The profile to run - acceptable parameters are 'full', 'web', and 'core' -->
         <jakarta.tck.platform>full</jakarta.tck.platform>

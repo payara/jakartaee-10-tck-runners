@@ -1,23 +1,12 @@
 # Jakarta Core Profile TCK
 
 ## Prerequisite
-To be able to download and install the Core Profile TCK dependencies, since they're not published to Maven
+Install the Core Profile TCK dependencies via tck-download module, since the ones published to Maven Central are not allowed to be used for certification.
 
-1. Run the `download.sh` script
-2. Run the `install.sh` script
-
-If on Windows:
-
-1. Download https://download.eclipse.org/ee4j/jakartaee-tck/jakartaee10/staged/eftl/jakarta-core-profile-tck-10.0.0.zip
-2. Unzip it
-3. Install the dependencies with `mvn install -f core-profile-tck-10.0.0\artifacts\pom.xml`
+`mvn clean install -pl . -pl tck-download -pl tck-download/jakarta-jsonp-tck -pl tck-download/jakarta-jsonb-tck -pl tck-download/jakarta-rest-tck -pl tck-download/jakarta-cdi-tck -pl tck-download/jakarta-inject-tck -pl tck-download/jakarta-core-profile-tck`
 
 ## Test Execution
 
-Required property to be able to execute test
+Execute maven test with verify from the top-level directory:
 
-`payara.home` : path to payara installation
-
-Execute maven test with verify:
-
-`mvn verify -Dpayara.home=[path to payara installation]`
+`mvn clean verify -Dpayara.home=[path to payara installation] -Ppayara-server-managed -pl . -pl core-tck`
