@@ -14,7 +14,7 @@
     <name>TCK: Install Jakarta Inject TCK</name>
 
     <properties>
-        <tck.test.inject.file>jakarta-core-profile-tck-${jakarta.tck.core-profile.version}.zip</tck.test.inject.file>
+        <tck.test.inject.file>jakarta.inject-tck-${jakarta.tck.inject.version}-bin.zip</tck.test.inject.file>
         <tck.tests.inject.url>https://download.eclipse.org/jakartaee/dependency-injection/2.0/${tck.test.inject.file}</tck.tests.inject.url>
     </properties>
 
