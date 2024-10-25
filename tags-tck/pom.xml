@@ -17,8 +17,8 @@
         <tck.home>${project.build.directory}/tags-tck</tck.home>
         <tck.tests.home>${tck.home}/src/com/sun/ts/tests</tck.tests.home> 
 
-        <derby.zip.url>https://dlcdn.apache.org//db/derby/db-derby-10.15.2.0/db-derby-10.15.2.0-bin.zip</derby.zip.url>
-        <db.home>${project.build.directory}/db-derby-10.15.2.0-bin</db.home>
+        <derby.zip.url>https://dlcdn.apache.org//db/derby/db-derby-10.17.1.0/db-derby-10.17.1.0-bin.zip</derby.zip.url>
+        <db.home>${project.build.directory}/db-derby-10.17.1.0-bin</db.home>
 
         <jacoco.includes>org/glassfish/**\:com/sun/enterprise/**</jacoco.includes>
         
