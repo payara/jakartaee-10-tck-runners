@@ -36,7 +36,7 @@
         <tck.tests.home>${tck.home}/src/com/sun/ts/tests</tck.tests.home>
 
         <jacoco.includes>org/glassfish/**\:com/sun/enterprise/**</jacoco.includes>
-        
+
         <port.admin>4848</port.admin>
         <port.derby>11527</port.derby>
         <port.http>18080</port.http>
@@ -48,14 +48,8 @@
         <port.orb.ssl>13820</port.orb.ssl>
         <port.harness.log>12000</port.harness.log>
     </properties>
-    
+
     <dependencies>
-        <dependency>
-            <groupId>fish.payara.distributions</groupId>
-            <artifactId>payara</artifactId>
-            <version>${payara.version}</version>
-            <type>zip</type>
-        </dependency>
         <dependency>
             <groupId>fish.payara.jakarta.tests.tck</groupId>
             <artifactId>jakarta-authorization-tck</artifactId>
@@ -70,41 +64,28 @@
             <plugin>
                 <groupId>com.googlecode.maven-download-plugin</groupId>
                 <artifactId>download-maven-plugin</artifactId>
-                <version>1.6.8</version>
                 <executions>
                     <execution>
-                        <id>download-authorization-tck</id>
+                        <id>download-ant</id>
                         <phase>generate-resources</phase>
                         <goals>
                             <goal>wget</goal>
                         </goals>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <url>${ant.zip.url}</url>
+                            <unpack>true</unpack>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <skip>${skipITs}</skip>
-                    <url>${ant.zip.url}</url>
-                    <unpack>true</unpack>
-                    <outputDirectory>${project.build.directory}</outputDirectory>
-                </configuration>
             </plugin>
 
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <configuration>
-                    <skip>${skipITs}</skip>
+                    <skip>${skipTests}</skip>
                 </configuration>
                 <executions>
-                    <execution>
-                        <id>unpack-payara</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>unpack-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <includeArtifactIds>payara</includeArtifactIds>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                        </configuration>
-                    </execution>
                     <execution>
                         <id>unpack-tck</id>
                         <phase>pre-integration-test</phase>
@@ -122,7 +103,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>3.1.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.ant</groupId>
@@ -142,7 +122,7 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <skip>${skipITs}</skip>
+                    <skip>${skipTests}</skip>
                 </configuration>
                 <executions>
                     <execution>
@@ -155,57 +135,57 @@
 
                                 <!-- Change configuration -->
                                 <replaceregexp file="${tck.home}/bin/xml/impl/glassfish/common.xml" byline="true"
-                                    match="com.sun.enterprise.security.jacc.provider.SimplePolicyProvider"
-                                    replace="org.glassfish.exousia.modules.locked.SimplePolicyProvider" />
-                                
+                                               match="com.sun.enterprise.security.jacc.provider.SimplePolicyProvider"
+                                               replace="org.glassfish.exousia.modules.locked.SimplePolicyProvider" />
+
                                 <replaceregexp file="${tck.home}/bin/xml/impl/glassfish/common.xml" byline="true"
-                                    match="com.sun.enterprise.security.jacc.provider.SimplePolicyConfigurationFactory"
-                                    replace="org.glassfish.exousia.modules.locked.SimplePolicyConfigurationFactory" />
+                                               match="com.sun.enterprise.security.jacc.provider.SimplePolicyConfigurationFactory"
+                                               replace="org.glassfish.exousia.modules.locked.SimplePolicyConfigurationFactory" />
 
                                 <replaceregexp file="${tck.home}/bin/ts.jte" byline="true"
-                                    match="s1as\.admin\.port=.*"
-                                    replace="s1as\.admin\.port=${port.admin}" />
+                                               match="s1as\.admin\.port=.*"
+                                               replace="s1as\.admin\.port=${port.admin}" />
                                 <replaceregexp file="${tck.home}/bin/ts.jte" byline="true"
-                                    match="orb\.port=.*"
-                                    replace="orb\.port=${port.orb}" />
+                                               match="orb\.port=.*"
+                                               replace="orb\.port=${port.orb}" />
                                 <replaceregexp file="${tck.home}/bin/ts.jte" byline="true"
-                                    match="database\.port=.*"
-                                    replace="database\.port=${port.derby}" />
+                                               match="database\.port=.*"
+                                               replace="database\.port=${port.derby}" />
                                 <replaceregexp file="${tck.home}/bin/ts.jte" byline="true"
-                                    match="webServerPort=.*"
-                                    replace="webServerPort=${port.http}" />
+                                               match="webServerPort=.*"
+                                               replace="webServerPort=${port.http}" />
                                 <replaceregexp file="${tck.home}/bin/ts.jte" byline="true"
-                                    match="securedWebServicePort=.*"
-                                    replace="securedWebServicePort=${port.https}" />
+                                               match="securedWebServicePort=.*"
+                                               replace="securedWebServicePort=${port.https}" />
                                 <replaceregexp file="${tck.home}/bin/ts.jte" byline="true"
-                                    match="harness\.log\.port=.*"
-                                    replace="harness\.log\.port=${port.harness.log}" />
+                                               match="harness\.log\.port=.*"
+                                               replace="harness\.log\.port=${port.harness.log}" />
 
                                 <replaceregexp file="${tck.home}/bin/ts.jte" byline="true"
-                                    match="javaee\.level=.*"
-                                    replace="javaee\.level=full" />
+                                               match="javaee\.level=.*"
+                                               replace="javaee\.level=full" />
                                 <replaceregexp file="${tck.home}/bin/ts.jte" byline="true"
-                                    match="jacc\.home=.*"
-                                    replace="jacc\.home=${payara.home}/glassfish" />
+                                               match="jacc\.home=.*"
+                                               replace="jacc\.home=${payara.home}/glassfish" />
                                 <replaceregexp file="${tck.home}/bin/ts.jte" byline="true"
-                                    match="report\.dir=.*"
-                                    replace="report\.dir=${tck.home}/jacctckreport/jacctck" />
+                                               match="report\.dir=.*"
+                                               replace="report\.dir=${tck.home}/jacctckreport/jacctck" />
                                 <replaceregexp file="${tck.home}/bin/ts.jte" byline="true"
-                                    match="work\.dir=.*"
-                                    replace="work\.dir=${tck.home}/jacctckwork/jacctck" />
+                                               match="work\.dir=.*"
+                                               replace="work\.dir=${tck.home}/jacctckwork/jacctck" />
 
                                 <replaceregexp file="${tck.home}/bin/ts.jte" byline="true"
-                                    match="work\.dir=.*"
-                                    replace="work\.dir=${tck.home}/jacctckwork/jacctck" />
+                                               match="work\.dir=.*"
+                                               replace="work\.dir=${tck.home}/jacctckwork/jacctck" />
 
                                 <replaceregexp file="${tck.home}/bin/ts.jte" byline="true"
-                                    match="        -Djavax\.net\.ssl\.trustStore=.*"
-                                    replace="        -Djavax\.net\.ssl\.trustStore=$\\{jacc.home\\}/domains/domain1/config/cacerts\.p12 -Djavax\.net\.ssl\.trustStorePassword=changeit \\\\" />
+                                               match="        -Djavax\.net\.ssl\.trustStore=.*"
+                                               replace="        -Djavax\.net\.ssl\.trustStore=$\\{jacc.home\\}/domains/domain1/config/cacerts\.p12 -Djavax\.net\.ssl\.trustStorePassword=changeit \\\\" />
 
                                 <!-- Run just selected subset tests -->
                                 <replaceregexp file="${tck.home}/bin/build.xml" byline="true"
-                                    match="&lt;/project&gt;"
-                                    replace="&lt;property name=&quot;all.test.dir&quot; value=&quot;com/sun/ts/tests/jacc/,com/sun/ts/tests/signaturetest/jacc,com/sun/ts/tests/common/vehicle/&quot; /&gt; &lt;/project&gt;" />
+                                               match="&lt;/project&gt;"
+                                               replace="&lt;property name=&quot;all.test.dir&quot; value=&quot;com/sun/ts/tests/jacc/,com/sun/ts/tests/signaturetest/jacc,com/sun/ts/tests/common/vehicle/&quot; /&gt; &lt;/project&gt;" />
 
                                 <limit maxwait="60">
                                     <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
@@ -246,16 +226,16 @@
                                 </limit>
                                 <mkdir dir="${tck.home}/jacctckreport"/>
                                 <mkdir dir="${tck.home}/jacctckreport/jacctck"/>
-                                
+
                                 <replace file="${tck.home}/bin/xml/ts.top.import.xml">
-                                  <replacetoken><![CDATA[<jvmarg value="-Xmx512m"/>]]></replacetoken>
-                                  <replacevalue><![CDATA[<jvmarg value="-Xmx512m"/>
+                                    <replacetoken><![CDATA[<jvmarg value="-Xmx512m"/>]]></replacetoken>
+                                    <replacevalue><![CDATA[<jvmarg value="-Xmx512m"/>
                                 <jvmarg value="-Djavatest.security.noSecurityManager=true"/>]]></replacevalue>
                                 </replace>
-                                
+
                                 <replace file="${tck.home}/bin/xml/ts.top.import.xml" if:set="suspend-tck" >
-                                  <replacetoken><![CDATA[<jvmarg value="-Xmx512m"/>]]></replacetoken>
-                                  <replacevalue><![CDATA[<jvmarg value="-Xmx512m"/>
+                                    <replacetoken><![CDATA[<jvmarg value="-Xmx512m"/>]]></replacetoken>
+                                    <replacevalue><![CDATA[<jvmarg value="-Xmx512m"/>
                                 <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=9008"/>]]></replacevalue>
                                 </replace>
                             </target>
@@ -280,20 +260,20 @@
                                         <arg value="start-domain"/>
                                     </exec>
                                 </limit>
-                                <exec executable="${ant.home}/bin/ant" dir="${tck.home}/bin">
+                                <exec executable="${ant.executable}" dir="${tck.home}/bin">
                                     <arg value="config.vi" />
                                     <env key="tck.home" value="${tck.home}"/>
                                 </exec>
-                                <exec executable="${ant.home}/bin/ant" dir="${tck.home}/bin">
+                                <exec executable="${ant.executable}" dir="${tck.home}/bin">
                                     <arg value="enable.jacc"  />
                                     <env key="tck.home" value="${tck.home}"/>
                                 </exec>
-                                
+
                                 <sequential if:set="payara.suspend">
-	                                <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
-	                                    <arg value="stop-domain" />
-	                                </exec>
-	                                <echo message="Starting GlassFish in suspended mode, waiting on port 9009" />
+                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
+                                        <arg value="stop-domain" />
+                                    </exec>
+                                    <echo message="Starting GlassFish in suspended mode, waiting on port 9009" />
                                     <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                         <arg value="start-domain"/>
                                         <arg value="--suspend" if:set="payara.suspend"/>
@@ -303,7 +283,7 @@
                         </configuration>
                     </execution>
 
-                     <execution>
+                    <execution>
                         <id>run-tck-tests</id>
                         <phase>integration-test</phase>
                         <goals>
@@ -315,7 +295,7 @@
                                          classpathref="maven.plugin.classpath" />
 
                                 <echo level="info" message="Start running all tests" />
-                                <exec executable="${ant.home}/bin/ant" dir="${tck.tests.home}" resultproperty="testResult">
+                                <exec executable="${ant.executable}" dir="${tck.tests.home}" resultproperty="testResult">
                                     <arg value="-Dmultiple.tests=${run.test}" if:set="run.test" />
                                     <arg value="deploy"/>
                                     <arg value="run.all" unless:set="run.test"/>
@@ -337,7 +317,7 @@
                                 <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                     <arg value="stop-domain" />
                                 </exec>
-                                
+
                                 <fail message="Running tests failed." status="${testResult}">
                                     <condition>
                                         <not>

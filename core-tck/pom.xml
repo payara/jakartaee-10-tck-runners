@@ -51,45 +51,14 @@
     <artifactId>core-tck</artifactId>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-
-        <core.profile.tck.version>10.0.0</core.profile.tck.version>
-        <junit.version>5.8.2</junit.version>
-        <arquillian.version>1.7.0.Alpha10</arquillian.version>
-        <payara.arquillian.version>3.0.alpha6</payara.arquillian.version>
-        <log4j.version>1.2.17</log4j.version>
-        <resteasy.version>6.1.0.Beta2</resteasy.version>
-        <weld.version>5.0.0.SP1</weld.version>
-        <maven.enforcer.plugin.version>3.0.0</maven.enforcer.plugin.version>
-        <maven.failsafe.plugin.version>3.0.0-M6</maven.failsafe.plugin.version>
+        <resteasy.version>6.2.10.Final</resteasy.version>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <version>${arquillian.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>org.junit</groupId>
-                <artifactId>junit-bom</artifactId>
-                <version>${junit.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
         <dependency>
             <groupId>jakarta.ee.tck.coreprofile</groupId>
             <artifactId>core-profile-tck-impl</artifactId>
-            <version>${core.profile.tck.version}</version>
+            <version>${jakarta.tck.core-profile.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -114,14 +83,7 @@
             <artifactId>junit-platform-reporting</artifactId>
             <scope>test</scope>
         </dependency>
-        
-        <!-- Payara Arquillian Dependencies -->
-        <dependency>
-            <groupId>fish.payara.arquillian</groupId>
-            <artifactId>arquillian-payara-server-managed</artifactId>
-            <version>${payara.arquillian.version}</version>
-            <scope>test</scope>
-        </dependency>
+
         <dependency>
             <groupId>org.jboss.arquillian.junit5</groupId>
             <artifactId>arquillian-junit5-container</artifactId>
@@ -166,7 +128,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>${maven.enforcer.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>enforce-payara-home-is-set</id>
@@ -190,7 +151,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${maven.failsafe.plugin.version}</version>
                 <configuration>
                     <argLine>
                         --add-exports=java.desktop/sun.awt=ALL-UNNAMED
@@ -215,6 +175,7 @@
                     </dependenciesToScan>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     <systemPropertyVariables>
+                        <payara.home>${payara.home}</payara.home>
                         <arquillian.launch>payara-core-profile</arquillian.launch>
                     </systemPropertyVariables>
                 </configuration>

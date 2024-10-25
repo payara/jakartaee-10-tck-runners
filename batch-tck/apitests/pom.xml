@@ -39,9 +39,8 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
 
         <!-- Used to help determine sh vs. bat -->
         <script.ext/>
-        <payara.executable>${payara.home}${file.separator}glassfish${file.separator}bin${file.separator}asadmin${script.ext}</payara.executable>
 
-        <slf4j.version>1.7.30</slf4j.version>
+        <slf4j.version>2.0.16</slf4j.version>
     </properties>
 
     <dependencies>
@@ -51,24 +50,24 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
             <groupId>jakarta.batch</groupId>
             <artifactId>com.ibm.jbatch.tck</artifactId>
             <scope>test</scope>
-            <version>${jakarta.batch.version}</version>
+            <version>${jakarta.tck.batch.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.batch</groupId>
             <artifactId>com.ibm.jbatch.tck.appbean</artifactId>
             <scope>test</scope>
-            <version>${jakarta.batch.version}</version>
+            <version>${jakarta.tck.batch.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.batch</groupId>
             <artifactId>com.ibm.jbatch.tck.spi</artifactId>
             <scope>test</scope>
-            <version>${jakarta.batch.version}</version>
+            <version>${jakarta.tck.batch.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.batch</groupId>
             <artifactId>jakarta.batch.arquillian.extension</artifactId>
-            <version>${jakarta.batch.version}</version>
+            <version>${jakarta.tck.batch.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.arquillian.container</groupId>
@@ -88,7 +87,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
             <groupId>jakarta.batch</groupId>
             <artifactId>jakarta.batch.reporting</artifactId>
             <scope>test</scope>
-            <version>${jakarta.batch.version}</version>
+            <version>${jakarta.tck.batch.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -124,7 +123,6 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
             <plugin>
                 <groupId>com.googlecode.maven-download-plugin</groupId>
                 <artifactId>download-maven-plugin</artifactId>
-                <version>${download.maven.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>download-derby</id>
@@ -133,7 +131,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                             <goal>wget</goal>
                         </goals>
                         <configuration>
-                            <skip>${skipITs}</skip>
+                            <skip>${skipTests}</skip>
                             <url>${derby.zip.url}</url>
                             <unpack>true</unpack>
                             <outputDirectory>${project.build.directory}</outputDirectory>
@@ -145,7 +143,6 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>${maven.antrun.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>copy-arquillian-config</id>
@@ -154,7 +151,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                             <goal>run</goal>
                         </goals>
                         <configuration>
-                            <skip>${skipITs}</skip>
+                            <skip>${skipTests}</skip>
                             <target>
                                 <copy file="${project.basedir}${file.separator}src${file.separator}test${file.separator}resources${file.separator}arquillian.xml"
                                       todir="${project.build.directory}${file.separator}test-classes"
@@ -170,7 +167,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                             <goal>run</goal>
                         </goals>
                         <configuration>
-                            <skip>${skipITs}</skip>
+                            <skip>${skipTests}</skip>
                             <target unless="skip.setup">
                                 <move todir="${payara.db.home}">
                                     <fileset dir="${db.download.location}" />
@@ -189,9 +186,9 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                             <goal>run</goal>
                         </goals>
                         <configuration>
-                            <skip>${skipITs}</skip>
+                            <skip>${skipTests}</skip>
                             <target if="payara.server.managed" unless="skip.setup">
-                                <exec executable="${payara.executable}">
+                                <exec executable="${payara.asadmin}">
                                     <arg value="start-domain" />
                                 </exec>
                             </target>
@@ -205,7 +202,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                             <goal>run</goal>
                         </goals>
                         <configuration>
-                            <skip>${skipITs}</skip>
+                            <skip>${skipTests}</skip>
                             <target>
                                 <exec executable="${payara.db.home}${file.separator}bin${file.separator}startNetworkServer${script.ext}" spawn="true" dir="${payara.db.home}"/>
                                 <echo message="Waiting 3 seconds for database in forked process to start..."/>
@@ -221,7 +218,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                             <goal>run</goal>
                         </goals>
                         <configuration>
-                            <skip>${skipITs}</skip>
+                            <skip>${skipTests}</skip>
                             <target>
                                 <exec executable="${payara.db.home}${file.separator}bin${file.separator}ij${script.ext}" dir="${payara.db.home}">
                                     <arg value="${basedir}${file.separator}src${file.separator}test${file.separator}resources${file.separator}derby.ddl.jbatch-tck.sql" />
@@ -237,9 +234,9 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                             <goal>run</goal>
                         </goals>
                         <configuration>
-                            <skip>${skipITs}</skip>
+                            <skip>${skipTests}</skip>
                             <target unless="skip.setup">
-                                <exec executable="${payara.executable}">
+                                <exec executable="${payara.asadmin}">
                                     <arg value="create-jdbc-connection-pool" />
                                     <arg value="--datasourceClassname=org.apache.derby.jdbc.ClientDataSource40" />
                                     <arg value="--resType=javax.sql.DataSource" />
@@ -257,9 +254,9 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                             <goal>run</goal>
                         </goals>
                         <configuration>
-                            <skip>${skipITs}</skip>
+                            <skip>${skipTests}</skip>
                             <target unless="skip.setup">
-                                <exec executable="${payara.executable}">
+                                <exec executable="${payara.asadmin}">
                                     <arg value="create-jdbc-resource" />
                                     <arg value="--poolName=batchtck" />
                                     <arg value="jdbc/orderDB" />
@@ -275,9 +272,9 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                             <goal>run</goal>
                         </goals>
                         <configuration>
-                            <skip>${skipITs}</skip>
+                            <skip>${skipTests}</skip>
                             <target if="payara.server.managed" unless="skip.setup">
-                                <exec executable="${payara.executable}">
+                                <exec executable="${payara.asadmin}">
                                     <arg value="stop-domain" />
                                 </exec>
                             </target>
@@ -290,9 +287,9 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                             <goal>run</goal>
                         </goals>
                         <configuration>
-                            <skip>${skipITs}</skip>
+                            <skip>${skipTests}</skip>
                             <target if="payara.server.remote" unless="skip.setup">
-                                <exec executable="${payara.executable}">
+                                <exec executable="${payara.asadmin}">
                                     <arg value="restart-domain" />
                                 </exec>
                             </target>
@@ -306,7 +303,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                             <goal>run</goal>
                         </goals>
                         <configuration>
-                            <skip>${skipITs}</skip>
+                            <skip>${skipTests}</skip>
                             <target>
                                 <exec executable="${payara.db.home}${file.separator}bin${file.separator}stopNetworkServer${script.ext}" dir="${payara.db.home}"/>
                             </target>
@@ -318,7 +315,6 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>${maven.dependency.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>unpack-tck</id>
@@ -342,7 +338,6 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${maven.failsafe.plugin.version}</version>
                 <configuration>
                     <failIfNoTests>false</failIfNoTests>
                     <systemPropertyVariables>
@@ -372,7 +367,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                             </systemPropertyVariables>
                         </configuration>
                     </execution>
-		    <execution>
+                    <execution>
                         <id>ee-core-suite-web</id>
                         <goals>
                             <goal>integration-test</goal>
@@ -407,7 +402,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                             </systemPropertyVariables>
                         </configuration>
                     </execution>
-		    <execution>
+                    <execution>
                         <id>appjoboperator-suite-web</id>
                         <goals>
                             <goal>integration-test</goal>
@@ -423,6 +418,13 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                                 <arquillian.extensions.jakarta.batch.appbean>true</arquillian.extensions.jakarta.batch.appbean>
                             </systemPropertyVariables>
                         </configuration>
+                    </execution>
+                    <execution>
+                        <id>verify</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

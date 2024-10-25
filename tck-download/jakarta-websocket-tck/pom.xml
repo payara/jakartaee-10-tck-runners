@@ -14,11 +14,11 @@
     https://www.gnu.org/software/classpath/license.html.
 
     SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
-
 -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
 >
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -32,7 +32,7 @@
     <name>TCK: Install Jakarta Websocket TCK</name>
 
     <properties>
-    	<tck.test.websocket.file>jakarta-websocket-tck-2.1.0.zip</tck.test.websocket.file>
+        <tck.test.websocket.file>jakarta-websocket-tck-${jakarta.tck.websocket.version}.zip</tck.test.websocket.file>
         <tck.test.websocket.url>https://download.eclipse.org/jakartaee/websocket/2.1/${tck.test.websocket.file}</tck.test.websocket.url>
     </properties>
 
@@ -43,24 +43,22 @@
                 <artifactId>download-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>download-servlet-tck</id>
+                        <id>download-websocket-tck</id>
                         <phase>generate-resources</phase>
                         <goals>
                             <goal>wget</goal>
                         </goals>
+                        <configuration>
+                            <url>${tck.test.websocket.url}</url>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <url>${tck.test.websocket.url}</url>
-                    <unpack>false</unpack>
-                    <outputDirectory>${project.build.directory}</outputDirectory>
-                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-install-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>install-servlet-tck</id>
+                        <id>install-websocket-tck</id>
                         <phase>process-resources</phase>
                         <goals>
                             <goal>install-file</goal>
@@ -71,7 +69,6 @@
                             <artifactId>${project.artifactId}</artifactId>
                             <version>${project.version}</version>
                             <packaging>zip</packaging>
-                            <generatePom>true</generatePom>
                         </configuration>
                     </execution>
                 </executions>

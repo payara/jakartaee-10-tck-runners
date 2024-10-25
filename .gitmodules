@@ -6,3 +6,6 @@
 	path = cdi-tck/cditck-porting
 	url = https://github.com/payara/cditck-porting
 	branch = EE10
+[submodule "cdi-tck/glassfish-cdi-porting-tck"]
+	path = cdi-tck/glassfish-cdi-porting-tck
+	url = https://github.com/eclipse-ee4j/glassfish-cdi-porting-tck

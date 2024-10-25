@@ -33,7 +33,7 @@
     <name>TCK: Install Jakarta Authorization TCK</name>
 
     <properties>
-        <tck.test.authorization.file>jakarta-authorization-tck-2.1.0.zip</tck.test.authorization.file>
+        <tck.test.authorization.file>jakarta-authorization-tck-${jakarta-authorization-tck.version}.zip</tck.test.authorization.file>
         <tck.tests.authorization.url>https://download.eclipse.org/jakartaee/authorization/2.1/${tck.test.authorization.file}</tck.tests.authorization.url>
     </properties>
 
@@ -49,13 +49,11 @@
                         <goals>
                             <goal>wget</goal>
                         </goals>
+                        <configuration>
+                            <url>${tck.tests.authorization.url}</url>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <url>${tck.tests.authorization.url}</url>
-                    <unpack>false</unpack>
-                    <outputDirectory>${project.build.directory}</outputDirectory>
-                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-install-plugin</artifactId>

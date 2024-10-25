@@ -18,59 +18,32 @@
         <dependency>
             <groupId>jakarta.json</groupId>
             <artifactId>jakarta.json-tck-common</artifactId>
-            <version>${jsonp.api.version}</version>
+            <version>${jakarta.tck.jsonp.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.json</groupId>
             <artifactId>jakarta.json-tck-tests-pluggability</artifactId>
-            <version>${jsonp.api.version}</version>
+            <version>${jakarta.tck.jsonp.version}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>jakarta.json</groupId>
-                    <artifactId>jakarta.json-api</artifactId>
+                    <groupId>org.junit.jupiter</groupId>
+                    <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.netbeans.tools</groupId>
-            <artifactId>sigtest-maven-plugin</artifactId>
-            <version>1.6</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>unpack</id>
-                        <phase>generate-test-resources</phase>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>fish.payara.distributions</groupId>
-                                    <artifactId>${payara.artifact}</artifactId>
-                                    <version>${payara.version}</version>
-                                    <type>zip</type>
-                                    <overWrite>false</overWrite>
-                                    <outputDirectory>${project.build.directory}</outputDirectory>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
                 <configuration>
                     <reuseForks>false</reuseForks>
                     <trimStackTrace>false</trimStackTrace>
@@ -78,14 +51,13 @@
                     <testFailureIgnore>true</testFailureIgnore>
                     <dependenciesToScan>jakarta.json:jakarta.json-tck-tests-pluggability</dependenciesToScan>
                     <additionalClasspathElements>
-                        <additionalClasspathElement>${project.build.directory}/payara6/glassfish/modules/jakarta.json.jar</additionalClasspathElement>
-                        <additionalClasspathElement>${project.build.directory}/payara6/glassfish/modules/parsson.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.json.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}parsson.jar</additionalClasspathElement>
                     </additionalClasspathElements>
                 </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>3.0.0-M5</version>
                 <executions>
                     <execution>
                         <id>post-unit-test</id>

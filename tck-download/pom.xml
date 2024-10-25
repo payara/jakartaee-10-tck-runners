@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (c) 2021, 2022 Contributors to the Eclipse Foundation. All rights reserved.
+    Copyright (c) 2021, 2024 Contributors to the Eclipse Foundation. All rights reserved.
 
     This program and the accompanying materials are made available under the
     terms of the Eclipse Public License v. 2.0, which is available at
@@ -33,11 +33,18 @@
 
     <modules>
         <module>jakarta-authorization-tck</module>
-        <module>jakarta-servlet-tck</module>
         <module>jakarta-pages-tck</module>
+        <module>jakarta-rest-tck</module>
+        <module>jakarta-servlet-tck</module>
         <module>jakarta-tags-tck</module>
         <module>jakarta-websocket-tck</module>
-        <module>jakarta-rest-tck</module>
+        <module>jakarta-cdi-tck</module>
+        <module>jakarta-jsonp-tck</module>
+        <module>jakarta-jsonb-tck</module>
+        <module>jakarta-batch-tck</module>
+        <module>jakarta-concurrency-tck</module>
+        <module>jakarta-core-profile-tck</module>
+        <module>jakarta-inject-tck</module>
     </modules>
 
     <build>

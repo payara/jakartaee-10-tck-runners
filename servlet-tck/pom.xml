@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (c) 2021, 2022 Contributors to the Eclipse Foundation. All rights reserved.
+    Copyright (c) 2021, 2024 Contributors to the Eclipse Foundation. All rights reserved.
 
     This program and the accompanying materials are made available under the
     terms of the Eclipse Public License v. 2.0, which is available at
@@ -27,35 +27,23 @@
     </parent>
 
     <artifactId>servlet-tck-runner</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
-    <name>TCK: servlet</name>
+    <name>TCK: Servlet</name>
 
-    <properties>
-        <tck.home>${project.build.directory}/servlet-tck</tck.home>
-        <tck.tests.home>${tck.home}/src/com/sun/ts/tests</tck.tests.home> 
-
-        <jacoco.includes>org/glassfish/**\:com/sun/enterprise/**</jacoco.includes>
-        
-        <port.admin>4848</port.admin>
-        <port.derby>11527</port.derby>
-        <port.http>18080</port.http>
-        <port.https>18181</port.https>
-        <port.jms>17676</port.jms>
-        <port.jmx>18686</port.jmx>
-        <port.orb>13700</port.orb>
-        <port.orb.mutual>13920</port.orb.mutual>
-        <port.orb.ssl>13820</port.orb.ssl>
-        <port.harness.log>12000</port.harness.log>
-    </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>fish.payara.api</groupId>
+                <artifactId>payara-bom</artifactId>
+                <version>${payara.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
-        <dependency>
-            <groupId>fish.payara.distributions</groupId>
-            <artifactId>${payara.artifact}</artifactId>
-            <version>${payara.version}</version>
-            <type>zip</type>
-        </dependency>
         <dependency>
             <groupId>fish.payara.jakarta.tests.tck</groupId>
             <artifactId>jakarta-servlet-tck</artifactId>
@@ -67,10 +55,20 @@
 
     <build>
         <plugins>
+            <!-- We don't need to cache this -->
+            <plugin>
+                <artifactId>maven-install-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-install</id>
+                        <phase>disabled</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>com.googlecode.maven-download-plugin</groupId>
                 <artifactId>download-maven-plugin</artifactId>
-                <version>1.6.8</version>
                 <executions>
                     <execution>
                         <id>download-ant</id>
@@ -78,33 +76,21 @@
                         <goals>
                             <goal>wget</goal>
                         </goals>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <url>${ant.zip.url}</url>
+                            <unpack>true</unpack>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <skip>${skipITs}</skip>
-                    <url>${ant.zip.url}</url>
-                    <unpack>true</unpack>
-                    <outputDirectory>${project.build.directory}</outputDirectory>
-                </configuration>
             </plugin>
 
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <configuration>
-                    <skip>${skipITs}</skip>
+                    <skip>${skipTests}</skip>
                 </configuration>
                 <executions>
-                    <execution>
-                        <id>unpack-payara</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>unpack-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <includeArtifactIds>${payara.artifact}</includeArtifactIds>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                        </configuration>
-                    </execution>
                     <execution>
                         <id>unpack-tck</id>
                         <phase>pre-integration-test</phase>
@@ -122,7 +108,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>3.1.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.ant</groupId>
@@ -142,7 +127,7 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <skip>${skipITs}</skip>
+                    <skip>${skipTests}</skip>
                 </configuration>
                 <executions>
                     <execution>
@@ -151,7 +136,7 @@
                         <configuration>
                             <target xmlns:if="ant:if" xmlns:unless="ant:unless">
                                 <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />
-                                         
+
                                 <macrodef name="tck-setting">
                                     <attribute name="key" /> <attribute name="value" />
                                     <sequential>
@@ -159,26 +144,26 @@
                                                        match="@{key}=.*" replace="@{key}=@{value}" />
                                     </sequential>
                                 </macrodef>
-                                
+
 
                                 <!-- Change configuration -->
-                                
+
                                 <tck-setting key="web.home" value="${payara.home}/glassfish"/>
                                 <tck-setting key="webServerHost" value="localhost"/>
                                 <tck-setting key="webServerPort" value="${port.http}"/>
                                 <tck-setting key="securedWebServicePort" value="${port.https}"/>
-                                
+
                                 <tck-setting key="s1as.admin.port" value="${port.admin}"/>
                                 <tck-setting key="glassfish.admin.port" value="${port.admin}"/>
                                 <tck-setting key="orb.port" value="${port.orb}"/>
                                 <tck-setting key="database.port" value="${port.derby}"/>
                                 <tck-setting key="harness.log.port" value="${port.harness.log}"/>
-                                
+
                                 <tck-setting key="report.dir" value="${tck.home}/servletreport/servlet"/>
                                 <tck-setting key="work.dir" value="${tck.home}/servletwork/servlet"/>
-                                
+
                                 <tck-setting key="impl.vi" value="glassfish"/>
-                          
+
                                 <limit maxwait="60">
                                     <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                         <arg value="delete-domain"/>
@@ -216,13 +201,13 @@
                                 </limit>
                                 <mkdir dir="${tck.home}/servletreport"/>
                                 <mkdir dir="${tck.home}/servletreport/servlet"/>
-                                
+
                                 <replace file="${tck.home}/bin/xml/ts.top.import.xml">
                                     <replacetoken><![CDATA[<jvmarg value="-Xmx512m"/>]]></replacetoken>
                                     <replacevalue><![CDATA[<jvmarg value="-Xmx512m"/>
                                 <jvmarg value="-Djavatest.security.noSecurityManager=true"/>]]></replacevalue>
                                 </replace>
-                                
+
                                 <replace file="${tck.home}/bin/xml/ts.top.import.xml" if:set="suspend-tck" >
                                     <replacetoken><![CDATA[<jvmarg value="-Xmx512m"/>]]></replacetoken>
                                     <replacevalue><![CDATA[<jvmarg value="-Xmx512m"/>
@@ -244,7 +229,7 @@
                         <configuration>
                             <target xmlns:if="ant:if" xmlns:unless="ant:unless">
                                 <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />
-                                
+
                                 <!-- Start Payara Server -->
                                 <limit maxwait="20">
                                     <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
@@ -252,22 +237,22 @@
                                         <arg value="--suspend" if:set="payara.suspend"/>
                                     </exec>
                                 </limit>
-								
+
                                 <exec executable="${ant.home}/bin/ant" dir="${tck.home}/bin">
                                     <arg value="-Dutil.dir=${tck.home}"  />
                                     <arg value="config.security"  />
                                 </exec>
-                                
+
                                 <!-- Deploy single test -->
                                 <sequential if:set="run.test" >
                                     <dirname property="test.dir" file="${tck.home}/src/${run.test}"/>
                                     <echo>Deploying from ${test.dir}</echo>
-                                	
+
                                     <exec executable="${ant.home}/bin/ant" dir="${test.dir}">
                                         <arg value="deploy"  />
                                     </exec>
                                 </sequential>
-                                
+
                                 <!-- Deploy all tests -->
                                 <sequential unless:set="run.test" >
                                     <exec executable="${ant.home}/bin/ant" dir="${tck.tests.home}">
@@ -310,7 +295,7 @@
                                 <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                     <arg value="stop-domain" />
                                 </exec>
-                                
+
                                 <fail message="Running tests failed." status="${testResult}">
                                     <condition>
                                         <not>

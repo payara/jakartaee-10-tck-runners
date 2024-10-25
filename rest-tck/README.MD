@@ -7,17 +7,21 @@ Comprised of two modules:
 
 ## Prerequisities
 
-* Install TCK artifact in local Maven repository by running `mvn install` in `/tck-download/jakarta-rest-tck`.
+Download and install the TCK from the tck-downloads module. From the top-level directory:
 
-## Additional properties
-
-`payara.home`:
-path to payara installation, so that SigTest can verify jar files statically
+`mvn clean install -pl . -pl tck-download -pl tck-download/jakarta-rest-tck -Dpayara.version=...`
 
 ## Running
 
 ### Main TCK
-Run `mvn verify -Dpayara.home=/path/to/payara`
+**(Make sure the Payara server up and running)**
+
+Run maven test from the module directory using remote arquillian profile, and provide the path to payara and its version
+
+```
+cd rest-tck
+mvn clean verify -Dpayara.version=... -Dpayara.home=...
+```
 
 ### SE Tests
 * Make sure you don't have a running server

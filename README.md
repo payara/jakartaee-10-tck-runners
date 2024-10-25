@@ -1,14 +1,6 @@
 # jakartaee-10-tck-runners
 
-## Jakarta JSON Processing
+Payara runners for the standalone Jakarta EE TCKs.
+See individual module READMEs for details, but general usage is:
 
-### Prerequisites
-To be able to run the TCK test, you need to setup remote Payara Server in order to run the Arquillian against the container
-
-### Test Executions
-**(Make sure the Payara server up and running)**
-
-Run maven test from jsonp-tck module
-    
-    cd jsonp-tck
-    mvn test
+`mvn clean verify -Dpayara.version=${payaraVersion} -Ppayara-server-managed -pl . -pl tck-download -pl tck-download/${tckToRun} -pl ${tckToRun}`
