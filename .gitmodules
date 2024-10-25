@@ -1,0 +1,11 @@
+[submodule "cdi-tck/glassfish-cdi-porting-tck"]
+	path = cdi-tck/glassfish-cdi-porting-tck
+	url = https://github.com/eclipse-ee4j/glassfish-cdi-porting-tck
+[submodule "cdi-tck/cditck-porting"]
+	path = cdi-tck/cditck-porting
+	url = https://github.com/payara/cditck-porting
+	branch = EE10
+[submodule "inject-tck/ditck-porting"]
+	path = inject-tck/ditck-porting
+	url = https://github.com/payara/ditck-porting
+	branch = EE10
