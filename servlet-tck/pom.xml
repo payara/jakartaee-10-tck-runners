@@ -27,9 +27,27 @@
     </parent>
 
     <artifactId>servlet-tck-runner</artifactId>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <name>TCK: Servlet</name>
+
+    <properties>
+        <tck.home>${project.build.directory}/servlet-tck</tck.home>
+        <tck.tests.home>${tck.home}/src/com/sun/ts/tests</tck.tests.home>
+
+        <jacoco.includes>org/glassfish/**\:com/sun/enterprise/**</jacoco.includes>
+
+        <port.admin>4848</port.admin>
+        <port.derby>11527</port.derby>
+        <port.http>18080</port.http>
+        <port.https>18181</port.https>
+        <port.jms>17676</port.jms>
+        <port.jmx>18686</port.jmx>
+        <port.orb>13700</port.orb>
+        <port.orb.mutual>13920</port.orb.mutual>
+        <port.orb.ssl>13820</port.orb.ssl>
+        <port.harness.log>12000</port.harness.log>
+    </properties>
 
     <dependencyManagement>
         <dependencies>
