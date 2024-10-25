@@ -1,0 +1,8 @@
+[submodule "inject-tck/ditck-porting"]
+	path = inject-tck/ditck-porting
+	url = https://github.com/payara/ditck-porting
+	branch = EE11
+[submodule "cdi-tck/cditck-porting"]
+	path = cdi-tck/cditck-porting
+	url = https://github.com/payara/cditck-porting
+	branch = EE11
