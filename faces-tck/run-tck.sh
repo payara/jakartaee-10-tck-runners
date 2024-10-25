@@ -19,4 +19,4 @@ cp pom.xml-tck target/faces-tck-4.0.3/tck/pom.xml
 # change usage of glassfish with payara
 cp pom.xml-old-tck-run target/faces-tck-4.0.3/tck/old-tck/run/pom.xml
 #mvn verify -P payara-ci-remote,\!glassfish-ci-managed -Dglassfish.version=6.2022.1.Alpha5-SNAPSHOT -f target/faces-tck-4.0.3/tck/pom.xml -pl old-tck -amd
-mvn verify -P payara-ci-remote,\!glassfish-ci-managed -Dglassfish.version=6.2022.1.Alpha4 -f target/faces-tck-4.0.3/tck/pom.xml
+mvn verify -P payara-ci-remote,\!glassfish-ci-managed -Dglassfish.version= -f target/faces-tck-4.0.3/tck/pom.xml
