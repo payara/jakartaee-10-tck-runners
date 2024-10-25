@@ -61,6 +61,7 @@
             <version>${jakarta.tck.core-profile.version}</version>
             <scope>test</scope>
         </dependency>
+        <!-- TODO: Review whether or not we need these or if our standalone runners are sufficient for Core Profile certification -->
 <!--        <dependency>-->
 <!--            <groupId>jakarta.tck.coreprofile</groupId>-->
 <!--            <artifactId>core-tck-jsonp-extension</artifactId>-->
