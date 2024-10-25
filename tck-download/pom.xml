@@ -48,6 +48,8 @@
         <module>jakarta-jsonb-tck</module>
         <module>jakarta-batch-tck</module>
         <module>jakarta-concurrency-tck</module>
+        <module>jakarta-core-profile-tck</module>
+        <module>jakarta-inject-tck</module>
     </modules>
 
     <build>
