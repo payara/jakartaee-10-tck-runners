@@ -13,7 +13,7 @@
 
     <packaging>pom</packaging>
 
-    <name>TCK: Install Jakarta Activation TCK</name>
+    <name>TCK: Install Jakarta Servlet TCK</name>
 
     <properties>
         <tck.test.servlet.file>jakarta-servlet-tck-${jakarta.tck.servlet.version}.zip</tck.test.servlet.file>
@@ -35,7 +35,6 @@
                         <configuration>
                             <url>${tck.tests.servlet.url}</url>
                             <unpack>true</unpack>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>

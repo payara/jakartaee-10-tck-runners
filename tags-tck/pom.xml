@@ -17,8 +17,8 @@
         <tck.home>${project.build.directory}/tags-tck</tck.home>
         <tck.tests.home>${tck.home}/src/com/sun/ts/tests</tck.tests.home> 
 
-        <derby.zip.url>https://dlcdn.apache.org//db/derby/db-derby-10.15.2.0/db-derby-10.15.2.0-bin.zip</derby.zip.url>
-        <db.home>${project.build.directory}/db-derby-10.15.2.0-bin</db.home>
+        <derby.zip.url>https://dlcdn.apache.org//db/derby/db-derby-10.17.1.0/db-derby-10.17.1.0-bin.zip</derby.zip.url>
+        <db.home>${project.build.directory}/db-derby-10.17.1.0-bin</db.home>
 
         <jacoco.includes>org/glassfish/**\:com/sun/enterprise/**</jacoco.includes>
         
@@ -36,12 +36,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>fish.payara.distributions</groupId>
-            <artifactId>${payara.artifact}</artifactId>
-            <version>${payara.version}</version>
-            <type>zip</type>
-        </dependency>
-        <dependency>
             <groupId>fish.payara.jakarta.tests.tck</groupId>
             <artifactId>jakarta-tags-tck</artifactId>
             <version>${project.version}</version>
@@ -55,7 +49,6 @@
             <plugin>
                 <groupId>com.googlecode.maven-download-plugin</groupId>
                 <artifactId>download-maven-plugin</artifactId>
-                <version>1.6.8</version>
                 <executions>
                     <execution>
                         <id>download-ant</id>
@@ -64,7 +57,7 @@
                             <goal>wget</goal>
                         </goals>
                         <configuration>
-                            <skip>${skipITs}</skip>
+                            <skip>${skipTests}</skip>
                             <url>${ant.zip.url}</url>
                             <unpack>true</unpack>
                             <outputDirectory>${project.build.directory}</outputDirectory>
@@ -77,7 +70,7 @@
                             <goal>wget</goal>
                         </goals>
                         <configuration>
-                            <skip>${skipITs}</skip>
+                            <skip>${skipTests}</skip>
                             <url>${derby.zip.url}</url>
                             <unpack>true</unpack>
                             <outputDirectory>${project.build.directory}</outputDirectory>
@@ -90,20 +83,9 @@
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <configuration>
-                    <skip>${skipITs}</skip>
+                    <skip>${skipTests}</skip>
                 </configuration>
                 <executions>
-                    <execution>
-                        <id>unpack-payara</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>unpack-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <includeArtifactIds>${payara.artifact}</includeArtifactIds>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                        </configuration>
-                    </execution>
                     <execution>
                         <id>unpack-tck</id>
                         <phase>pre-integration-test</phase>
@@ -121,7 +103,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>3.1.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.ant</groupId>
@@ -141,7 +122,7 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <skip>${skipITs}</skip>
+                    <skip>${skipTests}</skip>
                 </configuration>
                 <executions>
                     <execution>
