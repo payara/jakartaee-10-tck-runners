@@ -22,84 +22,21 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>fish.payara.jakarta.tests.tck</groupId>
+    <parent>
+        <groupId>fish.payara.jakarta.tests.tck</groupId>
+        <artifactId>tck</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
     <artifactId>batch-tck</artifactId>
-    <version>1.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
     <name>Jakarta Batch TCK Runner for Payara</name>
-
-    <properties>
-        <jakarta.batch.version>2.1.1</jakarta.batch.version>
-
-        <!-- Note that Shrinkwrap Maven resolver WILL NOT read in whatever you specify on the command line - it will ALWAYS read this -->
-        <!-- DO NOT COMMIT A VERSION HERE! -->
-        <payara.version></payara.version>
-        <payara.artifact>payara</payara.artifact>
-        <payara.home>${project.build.directory}${file.separator}payara6</payara.home>
-
-        <payara.arquillian.version>3.0.alpha6</payara.arquillian.version>
-        <arquillian.version>1.7.0.Alpha10</arquillian.version>
-        <junit.version>5.8.2</junit.version>
-
-        <download.maven.plugin.version>1.6.8</download.maven.plugin.version>
-        <maven.dependency.plugin.version>3.3.0</maven.dependency.plugin.version>
-        <maven.failsafe.plugin.version>3.0.0-M7</maven.failsafe.plugin.version>
-        <maven.antrun.plugin.version>3.1.0</maven.antrun.plugin.version>
-    </properties>
 
     <modules>
         <module>sigtests</module>
         <module>apitests</module>
     </modules>
-
-    <repositories>
-        <repository>
-            <id>central</id>
-            <url>https://repo1.maven.org/maven2</url>
-        </repository>
-        <repository>
-            <id>jboss</id>
-            <url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
-        </repository>
-
-        <!-- Payara Community Repos -->
-        <repository>
-            <id>payara-nexus-artifacts</id>
-            <url>https://nexus.payara.fish/repository/payara-artifacts</url>
-        </repository>
-        <repository>
-            <id>payara-nexus-snapshots</id>
-            <url>https://nexus.payara.fish/repository/payara-snapshots</url>
-        </repository>
-
-        <!-- Payara Enterprise Repos -->
-        <repository>
-            <id>payara-nexus-enterprise-distributions</id>
-            <url>https://nexus.payara.fish/repository/payara-enterprise</url>
-        </repository>
-        <repository>
-            <id>payara-nexus-enterprise-artifacts</id>
-            <url>https://nexus.payara.fish/repository/payara-enterprise-artifacts-private</url>
-        </repository>
-        <repository>
-            <id>payara-nexus-enterprise-snapshots</id>
-            <url>https://nexus.payara.fish/repository/payara-enterprise-snapshots-private</url>
-        </repository>
-
-        <!-- Payara Release Staging Repo -->
-        <repository>
-            <id>payara-nexus-staging</id>
-            <url>https://nexus.payara.fish/repository/payara-staging</url>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>payara-nexus-artifacts</id>
-            <url>https://nexus.payara.fish/repository/payara-artifacts</url>
-        </pluginRepository>
-    </pluginRepositories>
 
     <dependencyManagement>
         <dependencies>
@@ -110,94 +47,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
-            <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <version>${arquillian.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.junit</groupId>
-                <artifactId>junit-bom</artifactId>
-                <version>${junit.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
-    <profiles>
-        <profile>
-            <id>payara-server-remote</id>
-
-            <properties>
-                <payara.server.remote/>
-            </properties>
-
-            <dependencies>
-                <dependency>
-                    <groupId>fish.payara.arquillian</groupId>
-                    <artifactId>arquillian-payara-server-remote</artifactId>
-                    <version>${payara.arquillian.version}</version>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-
-        <profile>
-            <id>payara-server-managed</id>
-            <activation>
-                <property>
-                    <name>!payara.server.remote</name>
-                </property>
-            </activation>
-
-            <properties>
-                <payara.server.managed/>
-            </properties>
-
-            <dependencies>
-                <dependency>
-                    <groupId>fish.payara.arquillian</groupId>
-                    <artifactId>arquillian-payara-server-managed</artifactId>
-                    <version>${payara.arquillian.version}</version>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>unpack-payara</id>
-                                <phase>generate-test-resources</phase>
-                                <goals>
-                                    <goal>unpack</goal>
-                                </goals>
-                                <configuration>
-                                    <skip>!${skipITs}</skip>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>fish.payara.distributions</groupId>
-                                            <artifactId>${payara.artifact}</artifactId>
-                                            <version>${payara.version}</version>
-                                            <type>zip</type>
-                                            <overWrite>false</overWrite>
-                                            <outputDirectory>${project.build.directory}</outputDirectory>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 </project>

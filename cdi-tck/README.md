@@ -1,8 +1,26 @@
-# How to Run
-1. Build https://github.com/eclipse-ee4j/glassfish-cdi-porting-tck
-2. Ensure that `payara.home` is set - Maven will add the "${payara.home}/glassfish" for you so don't include that final bit.
-3. Make sure M2_HOME is set.
-4. Make sure MAVEN_HOME is set.
-5. Make sure ANT_HOME is set.
-6. Decide which level of TCK you want to run by defining javaee.level as 'core', 'web', or 'full' (default is full).
-6. Run `mvn clean verify -Dpayara.home=x -Djavaee.level=y`
+# Jakarta CDI TCK
+
+## Prerequisite
+Download and install the TCK from the tck-downloads module. From the top-level directory:
+
+`mvn clean install -pl . -pl tck-download -pl tck-download/jakarta-cdi-tck -Dpayara.version=...`
+
+Ensure the `M2_HOME`, `MAVEN_HOME`, and `ANT_HOME` environment variables are set.
+
+Initialise the porting submodules:
+
+`git submodule update --init`
+
+Build the glassfish porting:
+
+`mvn clean install -f cdi-tck/glassfish-cdi-porting-tck`
+
+## Test Execution
+
+Run maven test from the module directory using managed arquillian profile
+
+```
+mvn clean verify -Ppayara-server-managed -Dpayara.version=... -pl . -pl cdi-tck
+```
+
+To run only the Core Profile parts, add `-Djavaee.level=core` to the above command.

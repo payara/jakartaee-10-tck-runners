@@ -18,13 +18,13 @@
         <dependency>
             <groupId>jakarta.json</groupId>
             <artifactId>jakarta.json-tck-common</artifactId>
-            <version>${jsonp.api.version}</version>
+            <version>${jakarta.tck.jsonp.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.json</groupId>
             <artifactId>jakarta.json-tck-tests</artifactId>
-            <version>${jsonp.api.version}</version>
+            <version>${jakarta.tck.jsonp.version}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -34,43 +34,20 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.netbeans.tools</groupId>
             <artifactId>sigtest-maven-plugin</artifactId>
-            <version>1.6</version>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>unpack</id>
-                        <phase>generate-test-resources</phase>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>fish.payara.distributions</groupId>
-                                    <artifactId>${payara.artifact}</artifactId>
-                                    <version>${payara.version}</version>
-                                    <type>zip</type>
-                                    <overWrite>false</overWrite>
-                                    <outputDirectory>${project.build.directory}</outputDirectory>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
                 <configuration>
                     <reuseForks>false</reuseForks>
                     <trimStackTrace>false</trimStackTrace>
@@ -78,12 +55,12 @@
                     <testFailureIgnore>true</testFailureIgnore>
                     <dependenciesToScan>jakarta.json:jakarta.json-tck-tests</dependenciesToScan>
                     <systemPropertyVariables>
-                        <jimage.dir>${project.build.directory}/jdk-bundle</jimage.dir>
-                        <signature.sigTestClasspath>${project.build.directory}/payara6/glassfish/modules/jakarta.json.jar:${project.build.directory}/jdk-bundle/java.base:${project.build.directory}/jdk-bundle/java.rmi:${project.build.directory}/jdk-bundle/java.sql:${project.build.directory}/jdk-bundle/java.naming</signature.sigTestClasspath>
+                        <jimage.dir>${project.build.directory}${file.separator}jdk-bundle</jimage.dir>
+                        <signature.sigTestClasspath>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.json.jar${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.base${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.rmi${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.sql${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.naming</signature.sigTestClasspath>
                     </systemPropertyVariables>
                     <additionalClasspathElements>
-                        <additionalClasspathElement>${project.build.directory}/payara6/glassfish/modules/jakarta.json.jar</additionalClasspathElement>
-                        <additionalClasspathElement>${project.build.directory}/payara6/glassfish/modules/parsson.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.json.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}parsson.jar</additionalClasspathElement>
                     </additionalClasspathElements>
                 </configuration>
             </plugin>

@@ -2,7 +2,7 @@
 <!--
   DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-  Copyright (c) 2022 Payara Foundation and/or its affiliates. All rights reserved.
+  Copyright (c) 2022-2024 Payara Foundation and/or its affiliates. All rights reserved.
 
   The contents of this file are subject to the terms of either the GNU
   General Public License Version 2 only ("GPL") or the Common Development
@@ -47,22 +47,72 @@
     <packaging>pom</packaging>
     
     <properties>
-        <ant.version>1.10.12</ant.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.release>11</maven.compiler.release>
+
+        <jdk.version>11</jdk.version>
+
+        <ant.version>1.10.14</ant.version>
         <ant.home>${project.build.directory}/apache-ant-${ant.version}</ant.home>
         <ant.zip.url>https://archive.apache.org/dist/ant/binaries/apache-ant-${ant.version}-bin.zip</ant.zip.url>
+        <ant.executable>${ant.home}${file.separator}bin${file.separator}ant</ant.executable>
 
-        <payara.home>${project.build.directory}/payara6</payara.home>
-        <payara.version>6.2023.3-SNAPSHOT</payara.version>
-        <payara.asadmin>${payara.home}/glassfish/bin/asadmin</payara.asadmin>
+        <payara.home>${maven.multiModuleProjectDirectory}${file.separator}target${file.separator}payara6</payara.home>
+        <!-- Note that Shrinkwrap Maven resolver WILL NOT read in whatever you specify on the command line - it will ALWAYS read this as-is -->
+        <payara.version>6.2024.11-SNAPSHOT</payara.version>
+        <script.extension/>
+        <payara.asadmin>${payara.home}${file.separator}glassfish${file.separator}bin${file.separator}asadmin${script.extension}</payara.asadmin>
         <payara.artifact>payara</payara.artifact>
+        <payara.domain>domain1</payara.domain>
+        <payara.arquillian.version>3.1</payara.arquillian.version>
+        <skipTests>false</skipTests>
+        <skipConfig>${skipTests}</skipConfig>
+        <skipServerStartStop>${skipTests}</skipServerStartStop>
 
-        <arquillian.version>1.7.0.Alpha10</arquillian.version>
+        <!-- Build & test plugin versions -->
+        <maven-install-plugin.version>3.1.2</maven-install-plugin.version>
+        <maven-failsafe-plugin.version>3.3.0</maven-failsafe-plugin.version>
+        <maven-surefire-plugin.version>3.3.1</maven-surefire-plugin.version>
+        <maven-surefire-report-plugin.version>3.5.0</maven-surefire-report-plugin.version>
+        <maven-dependency-plugin.version>3.7.1</maven-dependency-plugin.version>
+        <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
+        <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
+        <exec-maven-plugin.version>3.3.0</exec-maven-plugin.version>
+        <download-maven-plugin.version>1.9.0</download-maven-plugin.version>
+        <arquillian.version>1.9.1.Final</arquillian.version>
+        <junit.version>5.10.3</junit.version>
+        <jimage.dir>${project.build.directory}${file.separator}jdk-bundle</jimage.dir>
+        <shrinkwrap.resolver.version>3.3.0</shrinkwrap.resolver.version>
+        <shrinkwrap.descriptors.version>2.0.0</shrinkwrap.descriptors.version>
+        <sigtest-maven-plugin.version>1.6</sigtest-maven-plugin.version>
+
+        <!-- Jakarta EE versions -->
+        <jakarta-authorization-tck.version>2.1.0</jakarta-authorization-tck.version>
+        <jakarta-rest-tck.version>3.1.5</jakarta-rest-tck.version>
+        <jakarta.tck.websocket.version>2.1.0</jakarta.tck.websocket.version>
+        <jakarta.tck.pages.version>3.1.0</jakarta.tck.pages.version>
+        <jakarta.tck.cdi.version>4.0.6</jakarta.tck.cdi.version>
+        <cdi.api.version>4.0.1</cdi.api.version>
+        <jakarta.tck.servlet.version>6.0.2</jakarta.tck.servlet.version>
+        <jakarta.tck.concurrency.version>3.0.2</jakarta.tck.concurrency.version>
+        <jakarta.tck.jsonp.version>2.1.1</jakarta.tck.jsonp.version>
+        <jakarta.tck.jsonb.version>3.0.0</jakarta.tck.jsonb.version>
+        <jakarta.tck.batch.version>2.1.5</jakarta.tck.batch.version>
+        <jakarta.tck.core-profile.version>10.0.3</jakarta.tck.core-profile.version>
+        <jakarta.tck.inject.version>2.0.2</jakarta.tck.inject.version>
+        
+        <!-- The profile to run - acceptable parameters are 'full', 'web', and 'core' -->
+        <jakarta.tck.platform>full</jakarta.tck.platform>
+        <javaee.level>${jakarta.tck.platform}</javaee.level>
     </properties>
 
     <repositories>
         <repository>
             <id>payara-nexus-artifacts</id>
-            <url>https://nexus.payara.fish/repository/payara-artifacts</url>
+            <url>https://nexus.dev.payara.fish/repository/payara-artifacts</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -73,9 +123,10 @@
     </repositories>
 
     <modules>
+        <!-- 'tck-download' module at the top to ensure it resolves first -->
+        <module>tck-download</module>
         <module>authorization-tck</module>
-        <!-- Ignore for now since this module, by design, doesn't have payara.version set - see comment in batch-tck/pom.xml for reason (shrinkwrap maven resolver limitation) -->
-        <!-- <module>batch-tck</module> -->
+        <module>batch-tck</module>
         <module>cdi-langmodel-tck</module>
         <module>cdi-tck</module>
         <module>concurrent-tck</module>
@@ -87,10 +138,151 @@
         <module>rest-tck</module>
         <module>servlet-tck</module>
         <module>tags-tck</module>
-        <module>tck-download</module>
         <module>websocket-tck</module>
-        <module>tck-summarizer</module>
+        <module>summarizer</module>
     </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>${arquillian.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.shrinkwrap.resolver</groupId>
+                <artifactId>shrinkwrap-resolver-bom</artifactId>
+                <version>${shrinkwrap.resolver.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.shrinkwrap.descriptors</groupId>
+                <artifactId>shrinkwrap-descriptors-bom</artifactId>
+                <version>${shrinkwrap.descriptors.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.netbeans.tools</groupId>
+                <artifactId>sigtest-maven-plugin</artifactId>
+                <version>${sigtest-maven-plugin.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>fish.payara.distributions</groupId>
+                <artifactId>payara</artifactId>
+                <version>${payara.version}</version>
+                <type>zip</type>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>fish.payara.distributions</groupId>
+                <artifactId>payara-web</artifactId>
+                <version>${payara.version}</version>
+                <type>zip</type>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>${maven-dependency-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${maven-failsafe-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>${maven-install-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.googlecode.maven-download-plugin</groupId>
+                    <artifactId>download-maven-plugin</artifactId>
+                    <version>${download-maven-plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>${exec-maven-plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>${maven-enforcer-plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>${maven-antrun-plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-report-plugin</artifactId>
+                    <version>${maven-surefire-report-plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.netbeans.tools</groupId>
+                    <artifactId>sigtest-maven-plugin</artifactId>
+                    <version>${sigtest-maven-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>enforce-versions</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>[${jdk.version},)</version>
+                                    <message>You need at least JDK11</message>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
     <profiles>
         <profile>
@@ -101,6 +293,108 @@
 
             <properties>
                 <payara.artifact>payara-web</payara.artifact>
+                <jakarta.tck.platform>web</jakarta.tck.platform>
+            </properties>
+        </profile>
+        <profile>
+            <id>jakarta-staging</id>
+            <repositories>
+                <repository>
+                    <id>jakarta-releases</id>
+                    <url>https://jakarta.oss.sonatype.org/content/groups/staging/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+        </profile>
+
+        <profile>
+            <id>payara-server-remote</id>
+
+            <properties>
+                <payara.server.remote/>
+                <skipServerStartStop>true</skipServerStartStop>
+            </properties>
+
+            <dependencies>
+                <dependency>
+                    <groupId>fish.payara.arquillian</groupId>
+                    <artifactId>arquillian-payara-server-remote</artifactId>
+                    <version>${payara.arquillian.version}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>payara-server-managed</id>
+
+            <properties>
+                <payara.server.managed/>
+            </properties>
+
+            <dependencies>
+                <dependency>
+                    <groupId>fish.payara.distributions</groupId>
+                    <artifactId>${payara.artifact}</artifactId>
+                    <type>zip</type>
+                </dependency>
+
+                <dependency>
+                    <groupId>fish.payara.arquillian</groupId>
+                    <artifactId>arquillian-payara-server-managed</artifactId>
+                    <version>${payara.arquillian.version}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack-server</id>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <phase>pre-integration-test</phase>
+                                <inherited>false</inherited>
+                                <configuration>
+                                    <skip>${skipConfig}</skip>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>fish.payara.distributions</groupId>
+                                            <artifactId>${payara.artifact}</artifactId>
+                                            <version>${payara.version}</version>
+                                            <type>zip</type>
+                                            <overWrite>true</overWrite>
+                                            <outputDirectory>${maven.multiModuleProjectDirectory}${file.separator}target</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+            <properties>
+                <script.extension>.bat</script.extension>
+                <ant.executable>${ant.home}${file.separator}bin${file.separator}ant.cmd</ant.executable>
             </properties>
         </profile>
     </profiles>

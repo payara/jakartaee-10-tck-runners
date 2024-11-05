@@ -32,7 +32,7 @@
     <name>TCK: Install Jakarta pages TCK</name>
 
     <properties>
-    	<tck.test.pages.file>jakarta-pages-tck-3.1.0.zip</tck.test.pages.file>
+    	<tck.test.pages.file>jakarta-pages-tck-${jakarta.tck.pages.version}.zip</tck.test.pages.file>
         <tck.test.pages.url>https://download.eclipse.org/jakartaee/pages/3.1/${tck.test.pages.file}</tck.test.pages.url>
     </properties>
 
@@ -48,13 +48,11 @@
                         <goals>
                             <goal>wget</goal>
                         </goals>
+                        <configuration>
+                            <url>${tck.test.pages.url}</url>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <url>${tck.test.pages.url}</url>
-                    <unpack>false</unpack>
-                    <outputDirectory>${project.build.directory}</outputDirectory>
-                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-install-plugin</artifactId>
@@ -71,7 +69,6 @@
                             <artifactId>${project.artifactId}</artifactId>
                             <version>${project.version}</version>
                             <packaging>zip</packaging>
-                            <generatePom>true</generatePom>
                         </configuration>
                     </execution>
                 </executions>

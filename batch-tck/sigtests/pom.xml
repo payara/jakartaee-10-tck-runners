@@ -10,16 +10,11 @@
 
     <artifactId>batch-tck.sig-tests</artifactId>
 
-    <properties>
-        <sigtest.maven.plugin.version>1.6</sigtest.maven.plugin.version>
-    </properties>
-
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>${maven.dependency.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>unpack-sigfiles</id>
@@ -32,7 +27,7 @@
                                 <artifactItem>
                                     <groupId>jakarta.batch</groupId>
                                     <artifactId>com.ibm.jbatch.tck</artifactId>
-                                    <version>${jakarta.batch.version}</version>
+                                    <version>${jakarta.tck.batch.version}</version>
                                 </artifactItem>
                             </artifactItems>
                             <includes>sigtest/*</includes>
@@ -43,7 +38,6 @@
             </plugin>
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>${maven.antrun.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>expand-payara-modules</id>
@@ -66,7 +60,6 @@
             <plugin>
                 <groupId>org.netbeans.tools</groupId>
                 <artifactId>sigtest-maven-plugin</artifactId>
-                <version>${sigtest.maven.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>sigtest</id>

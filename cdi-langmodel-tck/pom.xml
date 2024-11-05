@@ -14,14 +14,7 @@
     <description>This pom runs the JakartaEE CDI langmodel TCK.</description>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <maven.compiler.release>11</maven.compiler.release>
-        <cdi.tck.version>4.0.6</cdi.tck.version>
-        <cdi.api.version>4.0.1</cdi.api.version>
-        <weld.version>5.0.0.SP2</weld.version>
-        <arquillian.version>1.7.0.Alpha10</arquillian.version>
-        <payara.arquillian.version>3.0.alpha6</payara.arquillian.version>
+        <weld.version>5.0.1.Final</weld.version>
     </properties>
 
     <dependencies>
@@ -33,7 +26,7 @@
         <dependency>
             <groupId>jakarta.enterprise</groupId>
             <artifactId>cdi-tck-lang-model</artifactId>
-            <version>${cdi.tck.version}</version>
+            <version>${jakarta.tck.cdi.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -55,14 +48,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>fish.payara.arquillian</groupId>
-            <artifactId>arquillian-payara-server-managed</artifactId>
-            <version>${payara.arquillian.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.jboss.arquillian.protocol</groupId>
-            <artifactId>arquillian-protocol-servlet-jakarta</artifactId>
+            <artifactId>arquillian-protocol-servlet</artifactId>
             <version>${arquillian.version}</version>
             <scope>test</scope>
         </dependency>
@@ -73,7 +60,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.3.0</version>
                 <executions>
                     <execution>
                         <id>copy</id>
@@ -98,23 +84,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>3.1.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.ant</groupId>
                         <artifactId>ant</artifactId>
-                        <version>1.10.12</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>ant-contrib</groupId>
-                        <artifactId>ant-contrib</artifactId>
-                        <version>1.0b3</version>
-                        <exclusions>
-                            <exclusion>
-                                <groupId>ant</groupId>
-                                <artifactId>ant</artifactId>
-                            </exclusion>
-                        </exclusions>
+                        <version>${ant.version}</version>
                     </dependency>
                 </dependencies>
                 <executions>
@@ -122,7 +96,7 @@
                         <phase>generate-test-resources</phase>
                         <configuration>
                             <target name="enabling assertions">
-                                <property name="domain.file" value="${payara.home}/glassfish/domains/domain1/config/domain.xml"/>
+                                <property name="domain.file" value="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}config${file.separator}domain.xml"/>
                                 <echo message="domain file: ${domain.file}"/>
                                 <replace file="${domain.file}">
                                     <replacetoken><![CDATA[</java-config>]]></replacetoken>
@@ -135,6 +109,16 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <payara.home>${payara.home}</payara.home>
+                    </systemPropertyVariables>
+                </configuration>
             </plugin>
         </plugins>
     </build>

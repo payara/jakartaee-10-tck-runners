@@ -1,48 +1,14 @@
 # Concurrent 3.0
 
-### Prerequisities
+## Running
 
-run
+Run from the top-level directory:
 
-    mvn clean dependency:copy
-    mvn dependency:copy-dependencies
-
-* it downloads all server dependencies to target/server-dependencies
-
-Copy the files to Payara:
-
-	cp target/server-dependencies/* ${PAYARA}/glassfish/domains/domain1/lib
-
-Prepare password file for account javajoe/javajoe/role=Manager. File`prepare-server-password` contains row:
-
-	AS_ADMIN_USERPASSWORD=javajoe
-
-Go to Payara and start the server
-
-	./asadmin start-domain
-
-Create required resources:
-
-    echo "Setting file user javajoe"
-    ./asadmin --passwordfile=prepare-server-password create-file-user --groups=Manager --authrealmname=file javajoe
-    echo "Setting system property jimage.dir", needed for SignatureTestServlet
-    ./asadmin create-system-properties jimage.dir=/tmp
-    echo "Setting allow setAccessible, needed for SignatureTestServlet"
-    ./asadmin create-jvm-options "--add-exports=java.base/jdk.internal.vm.annotation=ALL-UNNAMED"
-    ./asadmin create-jvm-options "--add-opens=java.base/jdk.internal.vm.annotation=ALL-UNNAMED"
-    echo "Setup phase done, stopping Payara"
-    ./asadmin stop-domain
-
-Temporal fix for unknown tag 18: copy default-web.xml to domains/domain1/config
-This sets suppressSmap to false, e.g. smap is not generated. Once Payara will use newer Tomcat, it will be fixed
-and this temporal fix can be removed.
-
-### Running
-
-Run maven test in the TCK Runner directory
-
-    mvn test
+`mvn clean verify -Ppayara-server-managed -Dpayara.version=... -pl . -pl tck-download -pl tck-download/jakarta-concurrency-tck -pl concurrent-tck`
 
 For running against Payara Web Profile, activate the `web` profile
 
-    mvn test -Pweb
+If intending to run against a remote server (`-Ppayara-server-remote`), then you must provide the `-Dpayara.home` property.
+
+To skip server startup and shutdown, set `-DskipServerStartStop` to true. Defaults to true for remote profile, false otherwise.
+To skip server configuration, set to `-DskipConfig` to true. Defaults to false.

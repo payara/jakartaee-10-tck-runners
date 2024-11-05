@@ -12,11 +12,7 @@
     <artifactId>cdi-tck</artifactId>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <payara.home></payara.home>
-        <porting.home>${basedir}/cditck-porting</porting.home>
-        <javaee.level>full</javaee.level>
+        <porting.home>${basedir}${file.separator}cditck-porting</porting.home>
     </properties>
 
     <build>
@@ -24,7 +20,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>3.0.0</version>
                 <executions>
                     <execution>
                         <id>run-tck</id>
@@ -34,30 +29,17 @@
                         </goals>
                         <configuration>
                             <target>
-                                <property name="glassfish.home" value="${payara.home}/glassfish" location="${porting.home}/build.properties"/>
-                                <echo>glassfish.home set to ${payara.home}/glassfish</echo>
-                                <property name="porting.home" value="${porting.home}" location="${porting.home}/build.properties"/>
+                                <property name="glassfish.home" value="${payara.home}${file.separator}glassfish" location="${porting.home}${file.separator}build.properties"/>
+                                <echo>glassfish.home set to ${payara.home}${file.separator}glassfish</echo>
+                                <property name="porting.home" value="${porting.home}" location="${porting.home}${file.separator}build.properties"/>
                                 <echo>porting.home set to ${porting.home}</echo>
-                                <property name="javaee.level" value="${javaee.level}" location="${porting.home}/build.properties"/>
+                                <property name="javaee.level" value="${javaee.level}" location="${porting.home}${file.separator}build.properties"/>
                                 <echo>javaee.level set to ${javaee.level}</echo>
                                 <ant antfile="build.xml" target="test" dir="cditck-porting"/>
                             </target>
                         </configuration>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>ant-contrib</groupId>
-                        <artifactId>ant-contrib</artifactId>
-                        <version>1.0b3</version>
-                        <exclusions>
-                            <exclusion>
-                                <groupId>ant</groupId>
-                                <artifactId>ant</artifactId>
-                            </exclusion>
-                        </exclusions>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>

@@ -17,11 +17,7 @@
     <description>This pom runs the JakartaEE JSON Processing TCK.</description>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <jsonp.api.version>2.1.1</jsonp.api.version>
-
+        <skip.surefire.report>true</skip.surefire.report>
     </properties>
 
     <modules>
@@ -29,19 +25,5 @@
         <module>glassfish-runner</module>
         <module>glassfish-runner-pluggability</module>
     </modules>
-
-    <!-- needed for servlet 6.0, concurrent 3.0 -->
-    <repositories>
-        <repository>
-            <id>payara-nexus-artifacts</id>
-            <url>https://nexus.payara.fish/repository/payara-artifacts</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 
 </project>
