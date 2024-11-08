@@ -15,7 +15,7 @@ fi
 # Cleanup
 rm -f $PORTING/latest-glassfish.zip
 rm -rf $PORTING/dist/
-rm -rf $PORTING/payara6
+rm -rf $PORTING/payara7
 
 cd $PORTING
 
@@ -27,7 +27,7 @@ if [ ! -f $BUNDLES/jakarta.inject-tck.zip ]; then
   wget https://download.eclipse.org/ee4j/cdi/inject/2.0/jakarta.inject-tck-2.0.2-bin.zip -O $BUNDLES/jakarta.inject-tck.zip
 fi
 if [ ! -f $BUNDLES/jsr299-tck.zip ]; then
-  wget https://download.eclipse.org/ee4j/cdi/4.0/cdi-tck-4.0.13-dist.zip -O $BUNDLES/jsr299-tck.zip
+  wget https://download.eclipse.org/ee4j/cdi/4.1/cdi-tck-4.1.0-dist.zip -O $BUNDLES/jsr299-tck.zip
 fi
 
 unzip -o ${SCRIPTPATH}/bundles/payara.zip -d ${WORKSPACE}
@@ -56,11 +56,17 @@ else
   exit 1
 fi
 
-# Install the porting lib
-cd ${WORKSPACE}/cdi-tck-4.0.13/weld/porting-package-lib
-mvn --global-settings ${WORKSPACE}/settings.xml clean install
+# Download and install Weld porting libs
+echo "+++ Downloading CDI TCK porting libs +++"
+#cd ${WORKSPACE}/cdi-tck-4.1.0/weld/porting-package-lib
+#mvn --global-settings ${WORKSPACE}/settings.xml clean install
+#
+#
+mkdir ${WORKSPACE}/cdi-tck-4.1.0/weld/porting-package-lib
+cp ${SCRIPTPATH}/get-dependencies.xml ${WORKSPACE}/cdi-tck-4.1.0/weld/porting-package-lib/pom.xml
+mvn --global-settings ${WORKSPACE}/settings.xml clean install -f ${WORKSPACE}/cdi-tck-4.1.0/weld/porting-package-lib/pom.xml
 echo "+++ Installed CDI TCK porting libs"
-ls target/dependency
+ls ${WORKSPACE}/cdi-tck-4.1.0/weld/porting-package-lib/target/dependency
 
 #Edit test properties
 export TS_HOME=${WORKSPACE}/330-tck-glassfish-porting
@@ -68,7 +74,7 @@ export REPORT=${WORKSPACE}/330tck-report
 sed -i "s#tck.home=.*#tck.home=${WORKSPACE}/jakarta.inject-tck-2.0.2#g" ${TS_HOME}/build.properties
 sed -i "s#porting.home=.*#porting.home=${TS_HOME}#g" ${TS_HOME}/build.properties
 sed -i "s#glassfish.home=.*#glassfish.home=${WORKSPACE}/payara7/glassfish#g" ${TS_HOME}/build.properties
-sed -i "s#299.tck.home=.*#299.tck.home=${WORKSPACE}/cdi-tck-4.0.13#g" ${TS_HOME}/build.properties
+sed -i "s#299.tck.home=.*#299.tck.home=${WORKSPACE}/cdi-tck-4.1.0#g" ${TS_HOME}/build.properties
 sed -i "s#report.dir=.*#report.dir=${REPORT}#g" ${TS_HOME}/build.properties
 
 #### End of adapted from ditck-porting/docker/build_ditck.sh and ditck-porting/docker/run_ditck.sh ###
