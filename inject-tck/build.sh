@@ -9,7 +9,7 @@ if [ ! -d ditck-porting ]; then
    git clone https://github.com/payara/ditck-porting
    cd $PORTING
    git fetch origin
-   git checkout EE10
+   git checkout EE11
 fi
 
 # Cleanup
