@@ -110,6 +110,7 @@
         <jakarta.tck.batch.version>2.1.5</jakarta.tck.batch.version>
         <jakarta.tck.core-profile.version>11.0.0</jakarta.tck.core-profile.version>
         <jakarta.tck.inject.version>2.0.2</jakarta.tck.inject.version>
+        <jakarta-authentication-tck.version>3.1.0</jakarta-authentication-tck.version>
         
         <!-- The profile to run - acceptable parameters are 'full', 'web', and 'core' -->
         <jakarta.tck.platform>full</jakarta.tck.platform>
@@ -134,6 +135,7 @@
         <module>tck-download</module>
         <module>activation-tck</module>
         <module>annotations-tck</module>
+        <module>authentication-tck</module>
         <module>authorization-tck</module>
         <module>batch-tck</module>
         <module>cdi-langmodel-tck</module>

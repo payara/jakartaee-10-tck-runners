@@ -1,0 +1,1 @@
+(Get-Content .\target\authentication-tck-3.1.0\tck\pom.xml).replace('<id>custom</id>', ('<id>custom</id>' + (Get-Content .\payara-profile.xml))) | Set-Content .\target\authentication-tck-3.1.0\tck\pom.xml

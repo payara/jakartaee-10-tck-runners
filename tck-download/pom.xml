@@ -50,6 +50,7 @@
         <module>jakarta-concurrency-tck</module>
         <module>jakarta-core-profile-tck</module>
         <module>jakarta-inject-tck</module>
+        <module>jakarta-authentication-tck</module>
     </modules>
 
     <build>

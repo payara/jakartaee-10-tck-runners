@@ -3,9 +3,13 @@
             </activation>
             <properties>
                 <payara.root>${maven.multiModuleProjectDirectory}/target</payara.root>
-                <payara.version>6.2022.1.Alpha5-SNAPSHOT</payara.version>
+                <payara.version>7.2024.1.Alpha2-SNAPSHOT</payara.version>
                 <payara.artifact>payara</payara.artifact>
-                <payara.arquillian.container.version>3.0.alpha6</payara.arquillian.container.version>
+                <payara.arquillian.container.version>4.0.alpha1</payara.arquillian.container.version>
+
+                <sigtest.api.groupId>jakarta.authentication</sigtest.api.groupId>
+                <sigtest.api.artifactId>jakarta.authentication-vendor-api</sigtest.api.artifactId>
+                <sigtest.api.version>${payara.version}</sigtest.api.version>
             </properties>
             <dependencies>
                 <dependency>
@@ -16,7 +20,7 @@
                 </dependency>
                 <dependency>
                     <groupId>fish.payara.arquillian</groupId>
-                    <artifactId>payara-client-ee9</artifactId>
+                    <artifactId>payara-client-ee11</artifactId>
                     <scope>test</scope>
                     <version>${payara.arquillian.container.version}</version>
                 </dependency>
@@ -55,7 +59,7 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <systemPropertyVariables>
-                                <payara.home>${payara.root}/payara6</payara.home>
+                                <payara.home>${payara.root}/payara7</payara.home>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
