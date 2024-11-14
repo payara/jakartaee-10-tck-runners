@@ -189,6 +189,8 @@
                                         <argument>-Dpayara.version=${payara.version}</argument>
                                         <argument>-Dpayara.artifact=${payara.artifact}</argument>
                                         <argument>-Dpayara.arquillian.container.version=${payara.arquillian.version}</argument>
+                                        <argument>-Dmaven-surefire-plugin.version=${maven-surefire-plugin.version}</argument>
+                                        <argument>-Dmaven-install-plugin.version=${maven-install-plugin.version}</argument>
                                         <argument>-Pcustom,!glassfish-ci-managed</argument>
                                         <argument>-fae</argument>
                                     </arguments>
