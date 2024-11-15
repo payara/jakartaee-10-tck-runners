@@ -194,6 +194,58 @@
                     </plugin>
                 </plugins>
             </build>
+            <repositories>
+                <repository>
+                    <id>payara-nexus-artifacts</id>
+                    <url>https://nexus.dev.payara.fish/repository/payara-artifacts</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>payara-nexus-snapshots</id>
+                    <url>https://nexus.dev.payara.fish/repository/payara-snapshots</url>
+                    <releases>
+                        <enabled>false</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>payara-nexus-enterprise-artifacts</id>
+                    <url>https://nexus.dev.payara.fish/repository/payara-enterprise-artifacts-private</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>payara-nexus-enterprise-snapshots</id>
+                    <url>https://nexus.dev.payara.fish/repository/payara-enterprise-snapshots-private</url>
+                    <releases>
+                        <enabled>false</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>payara-nexus-enterprise-distributions</id>
+                    <url>https://nexus.dev.payara.fish/repository/payara-enterprise</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
         </profile>
         <profile>
             <id>payara-server-remote</id>
@@ -298,6 +350,58 @@
                     </plugin>
                 </plugins>
             </build>
+            <repositories>
+                <repository>
+                    <id>payara-nexus-artifacts</id>
+                    <url>https://nexus.dev.payara.fish/repository/payara-artifacts</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>payara-nexus-snapshots</id>
+                    <url>https://nexus.dev.payara.fish/repository/payara-snapshots</url>
+                    <releases>
+                        <enabled>false</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>payara-nexus-enterprise-artifacts</id>
+                    <url>https://nexus.dev.payara.fish/repository/payara-enterprise-artifacts-private</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>payara-nexus-enterprise-snapshots</id>
+                    <url>https://nexus.dev.payara.fish/repository/payara-enterprise-snapshots-private</url>
+                    <releases>
+                        <enabled>false</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>payara-nexus-enterprise-distributions</id>
+                    <url>https://nexus.dev.payara.fish/repository/payara-enterprise</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
         </profile>
         <profile>
             <id>windows</id>
