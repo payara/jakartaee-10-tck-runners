@@ -39,6 +39,14 @@
                     <scope>test</scope>
                     <version>${payara.arquillian.container.version}</version>
                 </dependency>
+
+                <!-- For the unit tests in /spi/ to be able to instantiate vendor AuthConfigFactory -->
+                <dependency>
+                    <groupId>org.glassfish.epicyro</groupId>
+                    <artifactId>epicyro</artifactId>
+                    <version>${epicyro.version}</version>
+                    <scope>test</scope>
+                </dependency>
             </dependencies>
 
             <build>
@@ -216,6 +224,14 @@
                     <artifactId>payara-client-ee11</artifactId>
                     <scope>test</scope>
                     <version>${payara.arquillian.container.version}</version>
+                </dependency>
+
+                <!-- For the unit tests in /spi/ to be able to instantiate vendor AuthConfigFactory -->
+                <dependency>
+                    <groupId>org.glassfish.epicyro</groupId>
+                    <artifactId>epicyro</artifactId>
+                    <version>${epicyro.version}</version>
+                    <scope>test</scope>
                 </dependency>
             </dependencies>
             <build>
