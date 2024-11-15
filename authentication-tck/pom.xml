@@ -195,7 +195,6 @@
                                         <argument>verify</argument>
                                         <argument>-Dpayara.version=${payara.version}</argument>
                                         <argument>-Dpayara.artifact=${payara.artifact}</argument>
-                                        <argument>-Dpayara.arquillian.container.version=${payara.arquillian.version}</argument>
                                         <argument>-Dmaven-surefire-plugin.version=${maven-surefire-plugin.version}</argument>
                                         <argument>-Dmaven-install-plugin.version=${maven-install-plugin.version}</argument>
                                         <argument>-Dprovider.configuration.file=${tck.root}${file.separator}authentication-tck-${jakarta-authentication-tck.version}${file.separator}tck${file.separator}spi${file.separator}common${file.separator}ProviderConfiguration.xml</argument>
@@ -242,7 +241,6 @@
                                         <argument>verify</argument>
                                         <argument>-Dpayara.version=${payara.version}</argument>
                                         <argument>-Dpayara.home=${payara.home}</argument>
-                                        <argument>-Dpayara.arquillian.container.version=${payara.arquillian.version}</argument>
                                         <argument>-Dmaven-surefire-plugin.version=${maven-surefire-plugin.version}</argument>
                                         <argument>-Dmaven-install-plugin.version=${maven-install-plugin.version}</argument>
                                         <argument>-Dprovider.configuration.file=${tck.root}${file.separator}authentication-tck-${jakarta-authentication-tck.version}${file.separator}tck${file.separator}spi${file.separator}common${file.separator}ProviderConfiguration.xml</argument>
