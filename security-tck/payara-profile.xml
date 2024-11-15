@@ -629,10 +629,7 @@
                 </plugins>
             </build>
         </profile>
-        
-        
-        
-        
+                
         <!-- ### Payara ### -->
         
         <profile>
@@ -640,8 +637,9 @@
             
             <properties>
                 <payara.root>${maven.multiModuleProjectDirectory}/target</payara.root>
-                <payara.version>7.2024.1.Alpha2-SNAPSHOT</payara.version>
+                <payara.version>7.2024.1.Alpha3-SNAPSHOT</payara.version>
                 <payara.arquillian.container.version>4.0.alpha1</payara.arquillian.container.version>
+                <payara.artifact>payara</payara.artifact>
                 
                 <sigtest.api.groupId>jakarta.security</sigtest.api.groupId>
                 <sigtest.api.artifactId>jakarta.security-vendor-api</sigtest.api.artifactId>
@@ -699,6 +697,26 @@
                                             <outputDirectory>${payara.root}</outputDirectory>
                                         </artifactItem>
                                     </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-install-plugin</artifactId>
+                        <version>3.1.2</version>
+                        <executions>
+                            <execution>
+                                <id>unpack</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>install-file</goal>
+                                </goals>
+                                <configuration>
+                                    <file>${payara.root}/payara7/glassfish/modules/jakarta.security.enterprise-api.jar</file>
+                                    <groupId>${sigtest.api.groupId}</groupId>
+                                    <artifactId>${sigtest.api.artifactId}</artifactId>
+                                    <version>${sigtest.api.version}</version>
+                                    <packaging>jar</packaging>
                                 </configuration>
                             </execution>
                         </executions>
