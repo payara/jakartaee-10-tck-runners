@@ -105,6 +105,7 @@
                                 <goals>
                                     <goal>exec</goal>
                                 </goals>
+                                <inherited>false</inherited>
                                 <configuration>
                                     <skip>${skipServerStartStop}</skip>
                                     <executable>${payara.asadmin}</executable>
@@ -119,6 +120,7 @@
                                 <goals>
                                     <goal>exec</goal>
                                 </goals>
+                                <inherited>false</inherited>
                                 <configuration>
                                     <skip>${skipConfig}</skip>
                                     <executable>${payara.asadmin}</executable>
@@ -134,6 +136,7 @@
                                 <goals>
                                     <goal>exec</goal>
                                 </goals>
+                                <inherited>false</inherited>
                                 <configuration>
                                     <skip>${skipServerStartStop}</skip>
                                     <executable>${payara.asadmin}</executable>
