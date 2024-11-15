@@ -11,6 +11,8 @@
                 <payara.version>7.2024.1.Alpha3-SNAPSHOT</payara.version>
                 <payara.artifact>payara</payara.artifact>
 
+                <epicyro.version>3.1.0</epicyro.version>
+
                 <maven-install-plugin.version>3.1.2</maven-install-plugin.version>
                 <maven-surefire-plugin.version>3.3.1</maven-surefire-plugin.version>
                 <exec-maven-plugin.version>3.3.0</exec-maven-plugin.version>
@@ -204,6 +206,8 @@
                 <skipServerStartStop>${skipTests}</skipServerStartStop>
 
                 <payara.version>7.2024.1.Alpha3-SNAPSHOT</payara.version>
+
+                <epicyro.version>3.1.0</epicyro.version>
 
                 <maven-install-plugin.version>3.1.2</maven-install-plugin.version>
                 <maven-surefire-plugin.version>3.3.1</maven-surefire-plugin.version>

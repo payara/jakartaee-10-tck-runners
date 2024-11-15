@@ -61,6 +61,8 @@
         <maven.settings.xml>${user.home}${file.separator}.m2${file.separator}settings.xml</maven.settings.xml>
         <maven.executable>${env.MAVEN_HOME}${file.separator}bin${file.separator}mvn</maven.executable>
 
+        <epicyro.version>3.1.0</epicyro.version>
+
         <scriptExecutor>bash</scriptExecutor>
         <scriptExtension>sh</scriptExtension>
         <replaceScript>${basedir}${file.separator}replaceScript.${scriptExtension}</replaceScript>
@@ -197,6 +199,7 @@
                                         <argument>-Dpayara.artifact=${payara.artifact}</argument>
                                         <argument>-Dmaven-surefire-plugin.version=${maven-surefire-plugin.version}</argument>
                                         <argument>-Dmaven-install-plugin.version=${maven-install-plugin.version}</argument>
+                                        <argument>-Depicyro.version=${epicyro.version}</argument>
                                         <argument>-Dprovider.configuration.file=${tck.root}${file.separator}authentication-tck-${jakarta-authentication-tck.version}${file.separator}tck${file.separator}spi${file.separator}common${file.separator}ProviderConfiguration.xml</argument>
                                         <argument>-Dexec-maven-plugin.version=3.3.0</argument>
                                         <argument>-Ppayara-server-managed,!glassfish-ci-managed</argument>
@@ -243,6 +246,7 @@
                                         <argument>-Dpayara.home=${payara.home}</argument>
                                         <argument>-Dmaven-surefire-plugin.version=${maven-surefire-plugin.version}</argument>
                                         <argument>-Dmaven-install-plugin.version=${maven-install-plugin.version}</argument>
+                                        <argument>-Depicyro.version=${epicyro.version}</argument>
                                         <argument>-Dprovider.configuration.file=${tck.root}${file.separator}authentication-tck-${jakarta-authentication-tck.version}${file.separator}tck${file.separator}spi${file.separator}common${file.separator}ProviderConfiguration.xml</argument>
                                         <argument>-Ppayara-server-remote,!glassfish-ci-managed</argument>
                                         <argument>-fae</argument>
