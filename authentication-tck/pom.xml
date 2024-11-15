@@ -62,7 +62,8 @@
         <maven.executable>${env.MAVEN_HOME}${file.separator}bin${file.separator}mvn</maven.executable>
 
         <scriptExecutor>bash</scriptExecutor>
-        <replaceScript>${basedir}${file.separator}replaceCustomProfile.sh</replaceScript>
+        <scriptExtension>sh</scriptExtension>
+        <replaceScript>${basedir}${file.separator}replaceScript.${scriptExtension}</replaceScript>
     </properties>
 
     <dependencies>
@@ -111,6 +112,24 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>replace-custom-profile-in-tck-pom</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <executable>${scriptExecutor}</executable>
+                            <commandlineArgs>${replaceScript}</commandlineArgs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -125,7 +144,7 @@
             <properties>
                 <maven.executable>${env.MAVEN_HOME}${file.separator}bin${file.separator}mvn.cmd</maven.executable>
                 <scriptExecutor>powershell.exe</scriptExecutor>
-                <replaceScript>${basedir}${file.separator}replaceCustomProfile.ps1</replaceScript>
+                <scriptExtension>ps1</scriptExtension>
             </properties>
         </profile>
 
@@ -157,17 +176,52 @@
                         <artifactId>exec-maven-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>replace-custom-profile-in-tck-pom</id>
-                                <phase>pre-integration-test</phase>
+                                <id>run-authentication-tck</id>
+                                <phase>integration-test</phase>
                                 <goals>
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
                                     <skip>${skipTests}</skip>
-                                    <executable>${scriptExecutor}</executable>
-                                    <commandlineArgs>${replaceScript}</commandlineArgs>
+                                    <executable>${maven.executable}</executable>
+                                    <arguments>
+                                        <argument>-B</argument>
+                                        <argument>-e</argument>
+                                        <argument>-s</argument>
+                                        <argument>${maven.settings.xml}</argument>
+                                        <argument>-f</argument>
+                                        <argument>${tck.root}/authentication-tck-${jakarta-authentication-tck.version}${file.separator}tck${file.separator}pom.xml</argument>
+                                        <argument>clean</argument>
+                                        <argument>verify</argument>
+                                        <argument>-Dpayara.version=${payara.version}</argument>
+                                        <argument>-Dpayara.artifact=${payara.artifact}</argument>
+                                        <argument>-Dpayara.arquillian.container.version=${payara.arquillian.version}</argument>
+                                        <argument>-Dmaven-surefire-plugin.version=${maven-surefire-plugin.version}</argument>
+                                        <argument>-Dmaven-install-plugin.version=${maven-install-plugin.version}</argument>
+                                        <argument>-Dprovider.configuration.file=${tck.root}${file.separator}authentication-tck-${jakarta-authentication-tck.version}${file.separator}tck${file.separator}spi${file.separator}common${file.separator}ProviderConfiguration.xml</argument>
+                                        <argument>-Dexec-maven-plugin.version=3.3.0</argument>
+                                        <argument>-Ppayara-server-managed,!glassfish-ci-managed</argument>
+                                        <argument>-fae</argument>
+                                    </arguments>
+                                    <environmentVariables>
+                                        <LC_ALL>C</LC_ALL>
+                                    </environmentVariables>
                                 </configuration>
                             </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>payara-server-remote</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
                             <execution>
                                 <id>run-authentication-tck</id>
                                 <phase>integration-test</phase>
@@ -183,15 +237,16 @@
                                         <argument>-s</argument>
                                         <argument>${maven.settings.xml}</argument>
                                         <argument>-f</argument>
-                                        <argument>${tck.root}/authentication-tck-${jakarta-authentication-tck.version}/tck/pom.xml</argument>
+                                        <argument>${tck.root}${file.separator}authentication-tck-${jakarta-authentication-tck.version}${file.separator}tck${file.separator}pom.xml</argument>
                                         <argument>clean</argument>
                                         <argument>verify</argument>
                                         <argument>-Dpayara.version=${payara.version}</argument>
-                                        <argument>-Dpayara.artifact=${payara.artifact}</argument>
+                                        <argument>-Dpayara.home=${payara.home}</argument>
                                         <argument>-Dpayara.arquillian.container.version=${payara.arquillian.version}</argument>
                                         <argument>-Dmaven-surefire-plugin.version=${maven-surefire-plugin.version}</argument>
                                         <argument>-Dmaven-install-plugin.version=${maven-install-plugin.version}</argument>
-                                        <argument>-Pcustom,!glassfish-ci-managed</argument>
+                                        <argument>-Dprovider.configuration.file=${tck.root}${file.separator}authentication-tck-${jakarta-authentication-tck.version}${file.separator}tck${file.separator}spi${file.separator}common${file.separator}ProviderConfiguration.xml</argument>
+                                        <argument>-Ppayara-server-remote,!glassfish-ci-managed</argument>
                                         <argument>-fae</argument>
                                     </arguments>
                                     <environmentVariables>
@@ -203,11 +258,6 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile>
-
-        <!-- Not yet supported - managed only for now -->
-        <profile>
-            <id>payara-server-remote</id>
         </profile>
     </profiles>
 </project>
