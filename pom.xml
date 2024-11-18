@@ -64,6 +64,9 @@
         <!-- Note that Shrinkwrap Maven resolver WILL NOT read in whatever you specify on the command line - it will ALWAYS read this as-is -->
         <payara.version>7.2024.1.Alpha2-SNAPSHOT</payara.version>
         <script.extension/>
+        <executable.extension/>
+        <root.tmp.directory/>
+        <path.separator>:</path.separator>
         <payara.asadmin>${payara.home}${file.separator}glassfish${file.separator}bin${file.separator}asadmin${script.extension}</payara.asadmin>
         <payara.artifact>payara</payara.artifact>
         <payara.domain>domain1</payara.domain>
@@ -87,6 +90,7 @@
         <jimage.dir>${project.build.directory}${file.separator}jdk-bundle</jimage.dir>
         <shrinkwrap.resolver.version>3.3.0</shrinkwrap.resolver.version>
         <shrinkwrap.descriptors.version>2.0.0</shrinkwrap.descriptors.version>
+        <jakarta.tck.arquillian.version>11.0.0-SNAPSHOT</jakarta.tck.arquillian.version>
 
         <!-- Jakarta EE versions -->
         <jakarta-annotations-tck.version>3.0.0</jakarta-annotations-tck.version>
@@ -110,6 +114,7 @@
         <jakarta.tck.batch.version>2.1.5</jakarta.tck.batch.version>
         <jakarta.tck.core-profile.version>11.0.0</jakarta.tck.core-profile.version>
         <jakarta.tck.inject.version>2.0.2</jakarta.tck.inject.version>
+        <jakarta.tck.messaging.version>11.0.0-SNAPSHOT</jakarta.tck.messaging.version>
         
         <!-- The profile to run - acceptable parameters are 'full', 'web', and 'core' -->
         <jakarta.tck.platform>full</jakarta.tck.platform>
@@ -126,6 +131,10 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
+        </repository>
+        <repository>
+            <id>jakarta-snapshots</id>
+            <url>https://jakarta.oss.sonatype.org/content/repositories/staging/</url>
         </repository>
     </repositories>
 
@@ -152,6 +161,8 @@
         <module>expression-language-tck</module>
         <module>bean-validation-tck</module>
         <module>persistence-tck</module>
+        <module>messaging-tck</module>
+        <module>messaging-platform-tck</module>
     </modules>
 
     <dependencyManagement>
@@ -405,6 +416,9 @@
                 </os>
             </activation>
             <properties>
+                <path.separator>;</path.separator>
+                <root.tmp.directory>C:</root.tmp.directory>
+                <executable.extension>.exe</executable.extension>
                 <script.extension>.bat</script.extension>
                 <ant.executable>${ant.home}${file.separator}bin${file.separator}ant.cmd</ant.executable>
             </properties>
