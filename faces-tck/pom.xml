@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (c) 2021, 2024 Contributors to the Eclipse Foundation. All rights reserved.
+    Portions Copyright 2024 Payara Foundation and/or its affiliates
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Public License v. 2.0, which is available at
+    http://www.eclipse.org/legal/epl-2.0.
+
+    This Source Code may also be made available under the following Secondary
+    Licenses when the conditions for such availability set forth in the
+    Eclipse Public License v. 2.0 are satisfied: GNU General Public License,
+    version 2 with the GNU Classpath Exception, which is available at
+    https://www.gnu.org/software/classpath/license.html.
+
+    SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
+
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>fish.payara.jakarta.tests.tck</groupId>
+        <artifactId>tck</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>payara-external-tck-faces</artifactId>
+    <name>TCK: Faces</name>
+
+    <description>This verifies the compliance of Payara using the Jakarta Faces standalone TCK</description>
+
+    <properties>
+        <faces.version>4.1.1</faces.version>
+        <tck.root>${project.build.directory}</tck.root>
+        <mojarra.version>4.1.2</mojarra.version>
+        <maven.executable>${maven.home}/bin/mvn</maven.executable>
+        <maven.settings.xml>${user.home}/.m2/settings.xml</maven.settings.xml>
+        <maven.exec.params>-B -e -s ${maven.settings.xml} -f ${tck.root}/faces-tck-${faces.version}/tck/pom.xml</maven.exec.params>
+        <maven.exec.projects></maven.exec.projects>
+        <maven.exec.goals>clean install</maven.exec.goals>
+        <maven.exec.basic.options>-Ppayara-ci-remote -P!glassfish-ci-managed -Dpayara.version=${payara.version} -Dmojarra.version=${mojarra.version} -Dfaces.version=${faces.version} -Dglassfish.version=8.0.0  -Dsigtest.api.groupId=org.glassfish -Dsigtest.api.artifactId=jakarta.faces -Dsigtest.api.version=4.1.1 -Dmojarra.noupdate</maven.exec.basic.options>
+        <maven.exec.options></maven.exec.options>
+        
+        <!--<maven.exec.skipping>-Dtest.selenium=false -pl !org.eclipse.ee4j.tck.faces.old-tck-selenium:ajax,!org.eclipse.ee4j.tck.faces.old-tck-selenium:commandLink,!org.eclipse.ee4j.tck.faces.old-tck-selenium:protectedViews</maven.exec.skipping>--> <!-- these options should be removed for the final version -->
+        <!-- if doing selenium tests (-Dtest.selenium=true) and your system Chrome is old, use -Dchrome.binary=/path/to/your/chrome -->
+        <maven.exec.skipping>-Dtest.selenium=false -Dtck.old.skip=tru -pl !:old-faces-tck-parent,!:old-tck-build,!:old-tck-run,!org.eclipse.ee4j.tck.faces.old-tck-selenium:ajax,!org.eclipse.ee4j.tck.faces.old-tck-selenium:ajax,!:commandLink,!:protectedViews</maven.exec.skipping>
+        <!-- selenium tests fail with All Providers for type class java.net.URL returned a null value: [org.jboss.arquillian.container.test.impl.enricher.resource.URLResourceProvider@8851ce1] -->
+        <!-- part of the old tests is AJAX, which doesn't run -->
+        
+        <maven.exec.cmdline>${maven.exec.params} ${maven.exec.projects} ${maven.exec.goals} ${maven.exec.basic.options} ${maven.exec.options} ${maven.exec.skipping}</maven.exec.cmdline>
+    </properties>
+
+    <dependencies>
+        <dependency>
+	    <groupId>fish.payara.jakarta.tests.tck</groupId>
+            <artifactId>jakarta-faces-tck</artifactId>
+            <type>zip</type>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>fish.payara.jakarta.tests.tck</groupId>
+                                    <artifactId>jakarta-faces-tck</artifactId>
+                                    <type>zip</type>
+                                    <version>${project.version}</version>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${tck.root}</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>replace-glassfish-hardcoded-exec</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <echo>Replacing Glassfish hardcoded control with Payara</echo>
+                                <copy file="pom.xml-old-tck-run"
+                                    tofile="${project.build.directory}/faces-tck-${faces.version}/tck/old-tck/run/pom.xml" 
+                                    overwrite="true" />
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <executable>${maven.executable}</executable>
+                    <commandlineArgs>${maven.exec.cmdline}</commandlineArgs>
+                    <environmentVariables>
+                        <LC_ALL>C</LC_ALL>
+                    </environmentVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    
+    <profiles>
+        
+        <profile>
+            <!-- Skip old tests with '-DskipOld'.-->
+            <id>skipOld</id>
+            <activation>
+              <property>
+                <name>skipOld</name>
+              </property>
+            </activation>
+            <properties>
+                <maven.exec.projects>-pl -:old-faces-tck-parent,-:old-tck-build,-:old-tck-run -Dtck.old.skip=true</maven.exec.projects>
+            </properties>
+        </profile>
+        
+        
+        <profile>
+            <!-- Skip new tests with '-DskipNew'.-->
+            <id>skipNew</id>
+            <activation>
+              <property>
+                <name>skipNew</name>
+              </property>
+            </activation>
+            <properties>
+                <maven.exec.projects>-pl :old-faces-tck-parent,:old-tck-build,:old-tck-run</maven.exec.projects>
+            </properties>
+        </profile>
+    </profiles>
+</project>
