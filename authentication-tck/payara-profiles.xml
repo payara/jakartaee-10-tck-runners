@@ -183,6 +183,9 @@
                             </execution>
                         </executions>
                         <configuration>
+                            <additionalClasspathElements>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}webservices.security.jar</additionalClasspathElement>
+                            </additionalClasspathElements>
                             <systemPropertyVariables>
                                 <payara.home>${payara.home}</payara.home>
                                 <provider.configuration.file>${provider.configuration.file}</provider.configuration.file>
@@ -339,6 +342,9 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <version>${maven-surefire-plugin.version}</version>
                         <configuration>
+                            <additionalClasspathElements>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}webservices.security.jar</additionalClasspathElement>
+                            </additionalClasspathElements>
                             <systemPropertyVariables>
                                 <payara.home>${payara.home}</payara.home>
                                 <provider.configuration.file>${provider.configuration.file}</provider.configuration.file>
