@@ -24,7 +24,8 @@
                 <!-- Properties expected by the TCK -->
                 <provider.configuration.file>${maven.multiModuleProjectDirectory}${file.separator}spi${file.separator}common${file.separator}ProviderConfiguration.xml</provider.configuration.file>
                 <log.file.location>${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}logs</log.file.location>
-                <vendor.authconfig.factory>org.glassfish.epicyro.config.factory.file.AuthConfigFileFactory</vendor.authconfig.factory>
+                <!-- We will presumably switch to org.glassfish.epicyro.config.factory.file.AuthConfigFileFactory once we have integrated with Epicyro -->
+                <vendor.authconfig.factory>com.sun.jaspic.config.factory.AuthConfigFileFactory</vendor.authconfig.factory>
                 <logical.hostname.servlet>server</logical.hostname.servlet>
             </properties>
             <dependencyManagement>
@@ -275,7 +276,8 @@
                 <!-- Properties expected by the TCK -->
                 <provider.configuration.file>${maven.multiModuleProjectDirectory}${file.separator}spi${file.separator}common${file.separator}ProviderConfiguration.xml</provider.configuration.file>
                 <log.file.location>${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}logs</log.file.location>
-                <vendor.authconfig.factory>org.glassfish.epicyro.config.factory.file.AuthConfigFileFactory</vendor.authconfig.factory>
+                <!-- We will presumably switch to org.glassfish.epicyro.config.factory.file.AuthConfigFileFactory once we have integrated with Epicyro -->
+                <vendor.authconfig.factory>com.sun.jaspic.config.factory.AuthConfigFileFactory</vendor.authconfig.factory>
                 <logical.hostname.servlet>server</logical.hostname.servlet>
             </properties>
             <dependencyManagement>
