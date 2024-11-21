@@ -11,6 +11,7 @@
                 <payara.version>7.2024.1.Alpha3-SNAPSHOT</payara.version>
                 <payara.artifact>payara</payara.artifact>
 
+                <!-- Remove this version once Epicyro is integrated and defined in Payara-BOM -->
                 <epicyro.version>3.1.0</epicyro.version>
 
                 <maven-install-plugin.version>3.1.2</maven-install-plugin.version>
@@ -55,6 +56,7 @@
                 <dependency>
                     <groupId>org.glassfish.epicyro</groupId>
                     <artifactId>epicyro</artifactId>
+                    <!-- Remove once Epicyro is integrated and defined in Payara-BOM -->
                     <version>${epicyro.version}</version>
                     <scope>test</scope>
                 </dependency>
@@ -263,6 +265,7 @@
 
                 <payara.version>7.2024.1.Alpha3-SNAPSHOT</payara.version>
 
+                <!-- Remove this version once Epicyro is integrated and defined in Payara-BOM -->
                 <epicyro.version>3.1.0</epicyro.version>
 
                 <maven-install-plugin.version>3.1.2</maven-install-plugin.version>
@@ -307,6 +310,7 @@
                 <dependency>
                     <groupId>org.glassfish.epicyro</groupId>
                     <artifactId>epicyro</artifactId>
+                    <!-- Remove this version once Epicyro is integrated and defined in Payara-BOM -->
                     <version>${epicyro.version}</version>
                     <scope>test</scope>
                 </dependency>
