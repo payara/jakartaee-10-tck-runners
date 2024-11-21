@@ -173,19 +173,6 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <version>${maven-surefire-plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <id>default-test</id>
-                                <phase>none</phase>
-                            </execution>
-                            <execution>
-                                <id>run-test-in-integration-phase</id>
-                                <phase>integration-test</phase>
-                                <goals>
-                                    <goal>test</goal>
-                                </goals>
-                            </execution>
-                        </executions>
                         <configuration>
                             <additionalClasspathElements>
                                 <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}webservices.security.jar</additionalClasspathElement>
