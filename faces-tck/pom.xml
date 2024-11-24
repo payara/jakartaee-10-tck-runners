@@ -47,9 +47,9 @@
         <maven.exec.basic.options>-Ppayara-ci-remote -P!glassfish-ci-managed -Dpayara.version=${payara.version} -Dfaces.version=${faces.version} -Dsigtest.api.groupId=org.glassfish -Dsigtest.api.artifactId=jakarta.faces -Dsigtest.api.version=${sigtest.api.version} -Dpayara.arquillian.container.version=${payara.arquillian.container.version} -Dpayara.arquillian.container.artifact=${payara.arquillian.container.artifact}</maven.exec.basic.options>
         <maven.exec.options></maven.exec.options>
         
-        <!--<maven.exec.skipping>-Dtest.selenium=false -pl !org.eclipse.ee4j.tck.faces.old-tck-selenium:ajax,!org.eclipse.ee4j.tck.faces.old-tck-selenium:commandLink,!org.eclipse.ee4j.tck.faces.old-tck-selenium:protectedViews</maven.exec.skipping>--> <!-- these options should be removed for the final version -->
+        <maven.exec.skipping></maven.exec.skipping> <!-- these options should be removed for the final version -->
         <!-- if doing selenium tests (-Dtest.selenium=true) and your system Chrome is old, use -Dchrome.binary=/path/to/your/chrome -->
-        <maven.exec.skipping>-Dtest.selenium=false -Dtck.old.skip=true -pl !:old-faces-tck-parent,!:old-tck-build,!:old-tck-run,!org.eclipse.ee4j.tck.faces.old-tck-selenium:ajax,!org.eclipse.ee4j.tck.faces.old-tck-selenium:ajax,!:commandLink,!:protectedViews</maven.exec.skipping>
+        <!--<maven.exec.skipping>-Dtest.selenium=false -Dtck.old.skip=true -pl !:old-faces-tck-parent,!:old-tck-build,!:old-tck-run,!org.eclipse.ee4j.tck.faces.old-tck-selenium:ajax,!org.eclipse.ee4j.tck.faces.old-tck-selenium:ajax,!:commandLink,!:protectedViews</maven.exec.skipping> -->
         <!-- selenium tests fail with All Providers for type class java.net.URL returned a null value: [org.jboss.arquillian.container.test.impl.enricher.resource.URLResourceProvider@8851ce1] -->
         <!-- part of the old tests is AJAX, which doesn't run -->
         
