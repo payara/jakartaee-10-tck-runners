@@ -33,6 +33,9 @@
     <description>This verifies the compliance of Payara using the Jakarta Faces standalone TCK</description>
 
     <properties>
+        <payara.arquillian.container.version>4.0.alpha2</payara.arquillian.container.version>
+        <payara.arquillian.container.artifact>payara-client-ee11</payara.arquillian.container.artifact>
+
         <faces.version>4.1.1</faces.version>
         <tck.root>${project.build.directory}</tck.root>
         <sigtest.api.version>4.1.1</sigtest.api.version> <!-- version of org.glassfish:jakarta.faces used in Payara -->
@@ -41,7 +44,7 @@
         <maven.exec.params>-B -e -s ${maven.settings.xml} -f ${tck.root}/faces-tck-${faces.version}/tck/pom.xml</maven.exec.params>
         <maven.exec.projects></maven.exec.projects>
         <maven.exec.goals>clean install</maven.exec.goals>
-        <maven.exec.basic.options>-Ppayara-ci-remote -P!glassfish-ci-managed -Dpayara.version=${payara.version} -Dfaces.version=${faces.version} -Dsigtest.api.groupId=org.glassfish -Dsigtest.api.artifactId=jakarta.faces -Dsigtest.api.version=${sigtest.api.version}</maven.exec.basic.options>
+        <maven.exec.basic.options>-Ppayara-ci-remote -P!glassfish-ci-managed -Dpayara.version=${payara.version} -Dfaces.version=${faces.version} -Dsigtest.api.groupId=org.glassfish -Dsigtest.api.artifactId=jakarta.faces -Dsigtest.api.version=${sigtest.api.version} -Dpayara.arquillian.container.version=${payara.arquillian.container.version} -Dpayara.arquillian.container.artifact=${payara.arquillian.container.artifact}</maven.exec.basic.options>
         <maven.exec.options></maven.exec.options>
         
         <!--<maven.exec.skipping>-Dtest.selenium=false -pl !org.eclipse.ee4j.tck.faces.old-tck-selenium:ajax,!org.eclipse.ee4j.tck.faces.old-tck-selenium:commandLink,!org.eclipse.ee4j.tck.faces.old-tck-selenium:protectedViews</maven.exec.skipping>--> <!-- these options should be removed for the final version -->
@@ -102,6 +105,10 @@
                                 <echo>Replacing Glassfish hardcoded control with Payara</echo>
                                 <copy file="pom.xml-old-tck-run"
                                     tofile="${project.build.directory}/faces-tck-${faces.version}/tck/old-tck/run/pom.xml" 
+                                    overwrite="true" />
+                                <echo>Replacing Arquillian client with EE11 version</echo>
+                                <copy file="pom.xml-tck"
+                                    tofile="${project.build.directory}/faces-tck-${faces.version}/tck/pom.xml" 
                                     overwrite="true" />
                             </target>
                         </configuration>
