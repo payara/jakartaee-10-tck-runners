@@ -9,3 +9,4 @@ target/
 /xml-ws-tck/xml-ws-tck/
 /xml-ws-tck/jakarta-xml-ws-tck-*.zip
 core-tck/bundles/*
+mail-platform-tck/jakartaeetck/tmp/
