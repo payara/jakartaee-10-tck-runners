@@ -150,6 +150,7 @@
         <module>cdi-tck</module>
         <module>concurrent-tck</module>
         <module>core-tck</module>
+        <module>faces-tck</module>
         <module>inject-tck</module>
         <module>jsonb-tck</module>
         <module>jsonp-tck</module>
