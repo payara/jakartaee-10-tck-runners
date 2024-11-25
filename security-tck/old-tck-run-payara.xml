@@ -21,10 +21,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-		<groupId>org.eclipse.ee4j.security.tck</groupId>
-		<artifactId>old-security-tck-parent</artifactId>
-		<version>3.0.0</version>
-	</parent>
+        <groupId>org.eclipse.ee4j.security.tck</groupId>
+        <artifactId>old-security-tck-parent</artifactId>
+        <version>4.0.0</version>
+    </parent>
 
     <artifactId>glassfish-external-tck-security</artifactId>
     <packaging>pom</packaging>
@@ -360,7 +360,6 @@
         </profile>
 
         <!-- ### Payara ### -->
-
         <profile>
             <id>payara-ci-managed</id>
             <activation>
@@ -368,10 +367,10 @@
             </activation>
 
             <properties>
-                <glassfish.home>${project.build.directory}/payara6</glassfish.home>
+                <glassfish.home>${project.build.directory}/payara7</glassfish.home>
                 <glassfish.asadmin>${glassfish.home}/glassfish/bin/asadmin</glassfish.asadmin>
 
-                <payara.home>${project.build.directory}/payara6</payara.home>
+                <payara.home>${project.build.directory}/payara7</payara.home>
                 <payara.asadmin>${payara.home}/glassfish/bin/asadmin</payara.asadmin>
 
                 <payara.db.home>${payara.home}${file.separator}javadb</payara.db.home>
