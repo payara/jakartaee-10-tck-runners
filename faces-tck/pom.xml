@@ -121,15 +121,15 @@
                         <goals>
                             <goal>exec</goal>
                         </goals>
+                        <configuration>
+                            <executable>${maven.executable}</executable>
+                            <commandlineArgs>${maven.exec.cmdline}</commandlineArgs>
+                            <environmentVariables>
+                                <LC_ALL>C</LC_ALL>
+                            </environmentVariables>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <executable>${maven.executable}</executable>
-                    <commandlineArgs>${maven.exec.cmdline}</commandlineArgs>
-                    <environmentVariables>
-                        <LC_ALL>C</LC_ALL>
-                    </environmentVariables>
-                </configuration>
             </plugin>
         </plugins>
     </build>
