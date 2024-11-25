@@ -62,7 +62,7 @@
 
         <payara.home>${maven.multiModuleProjectDirectory}${file.separator}target${file.separator}payara7</payara.home>
         <!-- Note that Shrinkwrap Maven resolver WILL NOT read in whatever you specify on the command line - it will ALWAYS read this as-is -->
-        <payara.version>7.2024.1.Alpha2-SNAPSHOT</payara.version>
+        <payara.version>7.2024.1.Alpha3-SNAPSHOT</payara.version>
         <script.extension/>
         <executable.extension/>
         <root.tmp.directory/>
@@ -95,6 +95,7 @@
         <!-- Jakarta EE versions -->
         <jakarta-annotations-tck.version>3.0.0</jakarta-annotations-tck.version>
         <jakarta-authorization-tck.version>3.0.0</jakarta-authorization-tck.version>
+        <jakarta-mail-platform-tck.version>2.1.0</jakarta-mail-platform-tck.version>
         <jakarta-rest-tck.version>4.0.0</jakarta-rest-tck.version>
         <jakarta.tck.sigtest-maven-plugin.version>2.2</jakarta.tck.sigtest-maven-plugin.version>
         <jakarta.tck.el.version>6.0.0</jakarta.tck.el.version>
@@ -163,6 +164,7 @@
         <module>persistence-tck</module>
         <module>messaging-tck</module>
         <module>messaging-platform-tck</module>
+        <module>mail-platform-tck</module>
     </modules>
 
     <dependencyManagement>
