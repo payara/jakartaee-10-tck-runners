@@ -829,21 +829,21 @@ mvn clean install -pl :old-tck-run -Dglassfish.suspend
 
             <properties>
                 <!-- Arquillian Dependencies -->
-                <payara.arquillian.container.version>3.0.alpha8</payara.arquillian.container.version>
+                <payara.arquillian.version>4.0.alpha2</payara.arquillian.version>
             </properties>
 
             <dependencies>
                 <dependency>
                     <groupId>fish.payara.arquillian</groupId>
                     <artifactId>arquillian-payara-server-remote</artifactId>
-                    <version>${payara.arquillian.container.version}</version>
+                    <version>${payara.arquillian.version}</version>
                     <scope>test</scope>
                 </dependency>
                 <dependency>
                     <groupId>fish.payara.arquillian</groupId>
-                    <artifactId>${payara.arquillian.container.artifact}</artifactId>
+                    <artifactId>payara-client-ee11</artifactId>
                     <scope>test</scope>
-                    <version>${payara.arquillian.container.version}</version>
+                    <version>${payara.arquillian.version}</version>
                 </dependency>
                 <!-- 
                 Solution for 
