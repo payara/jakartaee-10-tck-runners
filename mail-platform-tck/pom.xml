@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>mail-tck</artifactId>
+    <artifactId>mail-platform-tck</artifactId>
 
     <properties>
         <mail.from>user01@james.local</mail.from>
@@ -32,6 +32,9 @@
         </destinationURL>
         <jakarta.tck.version>11.0.0-M1</jakarta.tck.version>
         <jakarta.tck.arquillian.version>1.0.0-M17</jakarta.tck.arquillian.version>
+        <shrinkwrap-api.version>1.2.6</shrinkwrap-api.version>
+        <angus-mail.version>2.0.3</angus-mail.version>
+        <jakarta.mail-api.version>2.1.3</jakarta.mail-api.version>
     </properties>
 
     <dependencyManagement>
@@ -78,18 +81,18 @@
         </dependency>
         <dependency>
             <groupId>fish.payara.jakarta.tests.tck</groupId>
-            <artifactId>jakarta-mail-tck</artifactId>
+            <artifactId>jakarta-mail-platform-tck</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>jakarta.mail</groupId>
             <artifactId>jakarta.mail-api</artifactId>
-            <version>2.1.3</version>
+            <version>${jakarta.mail-api.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.angus</groupId>
             <artifactId>angus-mail</artifactId>
-            <version>2.0.3</version>
+            <version>${angus-mail.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.arquillian.container</groupId>
@@ -135,7 +138,7 @@
         <dependency>
             <groupId>org.jboss.shrinkwrap</groupId>
             <artifactId>shrinkwrap-api</artifactId>
-            <version>1.2.6</version>
+            <version>${shrinkwrap-api.version}</version>
         </dependency>
     </dependencies>
 
@@ -298,7 +301,7 @@
                             <goal>verify</goal>
                         </goals>
                         <configuration>
-                            <dependenciesToScan>fish.payara.jakarta.tests.tck:jakarta-mail-tck</dependenciesToScan>
+                            <dependenciesToScan>fish.payara.jakarta.tests.tck:jakarta-mail-platform-tck</dependenciesToScan>
                             <includes>
                                 <include>**/*EJB*.*</include>
                                 <include>**/*AppClient*.*</include>
@@ -332,7 +335,7 @@
                             <goal>verify</goal>
                         </goals>
                         <configuration>
-                            <dependenciesToScan>fish.payara.jakarta.tests.tck:jakarta-mail-tck</dependenciesToScan>
+                            <dependenciesToScan>fish.payara.jakarta.tests.tck:jakarta-mail-platform-tck</dependenciesToScan>
                             <includes>
                                 <include>**/*JSP*.*</include>
                                 <include>**/*Servlet*.*</include>

@@ -95,7 +95,7 @@
         <!-- Jakarta EE versions -->
         <jakarta-annotations-tck.version>3.0.0</jakarta-annotations-tck.version>
         <jakarta-authorization-tck.version>3.0.0</jakarta-authorization-tck.version>
-        <jakarta-mail-tck.version>2.1.0</jakarta-mail-tck.version>
+        <jakarta-mail-platform-tck.version>2.1.0</jakarta-mail-platform-tck.version>
         <jakarta-rest-tck.version>4.0.0</jakarta-rest-tck.version>
         <jakarta.tck.sigtest-maven-plugin.version>2.2</jakarta.tck.sigtest-maven-plugin.version>
         <jakarta.tck.el.version>6.0.0</jakarta.tck.el.version>
@@ -164,7 +164,7 @@
         <module>persistence-tck</module>
         <module>messaging-tck</module>
         <module>messaging-platform-tck</module>
-        <module>mail-tck</module>
+        <module>mail-platform-tck</module>
     </modules>
 
     <dependencyManagement>

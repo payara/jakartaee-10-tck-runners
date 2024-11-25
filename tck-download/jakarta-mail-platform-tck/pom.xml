@@ -27,13 +27,13 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>jakarta-mail-tck</artifactId>
+    <artifactId>jakarta-mail-platform-tck</artifactId>
     <packaging>pom</packaging>
 
     <name>TCK: Install Jakarta Mail TCK</name>
 
     <properties>
-        <tck.test.mail.file>jakarta-mail-tck-${jakarta-mail-tck.version}.zip</tck.test.mail.file>
+        <tck.test.mail.file>jakarta-mail-platform-tck-${jakarta-mail-platform-tck.version}.zip</tck.test.mail.file>
     </properties>
 
     <build>
@@ -42,7 +42,7 @@
                 <artifactId>maven-install-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>install-mail-tck</id>
+                        <id>install-mail-platform-tck</id>
                         <phase>process-resources</phase>
                         <goals>
                             <goal>install-file</goal>
