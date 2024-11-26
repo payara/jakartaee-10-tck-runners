@@ -64,6 +64,9 @@
         <!-- Note that Shrinkwrap Maven resolver WILL NOT read in whatever you specify on the command line - it will ALWAYS read this as-is -->
         <payara.version>7.2024.1.Alpha3-SNAPSHOT</payara.version>
         <script.extension/>
+        <executable.extension/>
+        <root.tmp.directory/>
+        <path.separator>:</path.separator>
         <payara.asadmin>${payara.home}${file.separator}glassfish${file.separator}bin${file.separator}asadmin${script.extension}</payara.asadmin>
         <payara.artifact>payara</payara.artifact>
         <payara.domain>domain1</payara.domain>
@@ -87,10 +90,12 @@
         <jimage.dir>${project.build.directory}${file.separator}jdk-bundle</jimage.dir>
         <shrinkwrap.resolver.version>3.3.0</shrinkwrap.resolver.version>
         <shrinkwrap.descriptors.version>2.0.0</shrinkwrap.descriptors.version>
+        <jakarta.tck.arquillian.version>11.0.0-SNAPSHOT</jakarta.tck.arquillian.version>
 
         <!-- Jakarta EE versions -->
         <jakarta-annotations-tck.version>3.0.0</jakarta-annotations-tck.version>
         <jakarta-authorization-tck.version>3.0.0</jakarta-authorization-tck.version>
+        <jakarta-mail-platform-tck.version>2.1.0</jakarta-mail-platform-tck.version>
         <jakarta-rest-tck.version>4.0.0</jakarta-rest-tck.version>
         <jakarta.tck.sigtest-maven-plugin.version>2.2</jakarta.tck.sigtest-maven-plugin.version>
         <jakarta.tck.el.version>6.0.0</jakarta.tck.el.version>
@@ -111,6 +116,7 @@
         <jakarta.tck.core-profile.version>11.0.0</jakarta.tck.core-profile.version>
         <jakarta.tck.inject.version>2.0.2</jakarta.tck.inject.version>
         <jakarta-authentication-tck.version>3.1.0</jakarta-authentication-tck.version>
+        <jakarta.tck.messaging.version>11.0.0-SNAPSHOT</jakarta.tck.messaging.version>
         
         <!-- The profile to run - acceptable parameters are 'full', 'web', and 'core' -->
         <jakarta.tck.platform>full</jakarta.tck.platform>
@@ -182,6 +188,7 @@
         <module>cdi-tck</module>
         <module>concurrent-tck</module>
         <module>core-tck</module>
+        <module>faces-tck</module>
         <module>inject-tck</module>
         <module>jsonb-tck</module>
         <module>jsonp-tck</module>
@@ -194,6 +201,9 @@
         <module>expression-language-tck</module>
         <module>bean-validation-tck</module>
         <module>persistence-tck</module>
+        <module>messaging-tck</module>
+        <module>messaging-platform-tck</module>
+        <module>mail-platform-tck</module>
     </modules>
 
     <dependencyManagement>
@@ -447,6 +457,9 @@
                 </os>
             </activation>
             <properties>
+                <path.separator>;</path.separator>
+                <root.tmp.directory>C:</root.tmp.directory>
+                <executable.extension>.exe</executable.extension>
                 <script.extension>.bat</script.extension>
                 <ant.executable>${ant.home}${file.separator}bin${file.separator}ant.cmd</ant.executable>
             </properties>
