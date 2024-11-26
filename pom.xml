@@ -70,7 +70,7 @@
         <payara.asadmin>${payara.home}${file.separator}glassfish${file.separator}bin${file.separator}asadmin${script.extension}</payara.asadmin>
         <payara.artifact>payara</payara.artifact>
         <payara.domain>domain1</payara.domain>
-        <payara.arquillian.version>4.0.alpha1</payara.arquillian.version>
+        <payara.arquillian.version>4.0.alpha2</payara.arquillian.version>
         <skipTests>false</skipTests>
         <skipConfig>${skipTests}</skipConfig>
         <skipServerStartStop>${skipTests}</skipServerStartStop>
