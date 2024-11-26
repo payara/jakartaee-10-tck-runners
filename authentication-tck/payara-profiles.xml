@@ -52,14 +52,15 @@
                     <scope>test</scope>
                 </dependency>
 
-                <!-- For the unit tests in /spi/ to be able to instantiate vendor AuthConfigFactory -->
-                <dependency>
-                    <groupId>org.glassfish.epicyro</groupId>
-                    <artifactId>epicyro</artifactId>
-                    <!-- Remove once Epicyro is integrated and defined in Payara-BOM -->
-                    <version>${epicyro.version}</version>
-                    <scope>test</scope>
-                </dependency>
+                <!-- Uncomment this dependency once we are actually using Epicyro in Payara -->
+<!--                &lt;!&ndash; For the unit tests in /spi/ to be able to instantiate vendor AuthConfigFactory &ndash;&gt;-->
+<!--                <dependency>-->
+<!--                    <groupId>org.glassfish.epicyro</groupId>-->
+<!--                    <artifactId>epicyro</artifactId>-->
+<!--                    &lt;!&ndash; Remove once Epicyro is integrated and defined in Payara-BOM &ndash;&gt;-->
+<!--                    <version>${epicyro.version}</version>-->
+<!--                    <scope>test</scope>-->
+<!--                </dependency>-->
             </dependencies>
 
             <build>
@@ -294,14 +295,15 @@
                     <scope>test</scope>
                 </dependency>
 
-                <!-- For the unit tests in /spi/ to be able to instantiate vendor AuthConfigFactory -->
-                <dependency>
-                    <groupId>org.glassfish.epicyro</groupId>
-                    <artifactId>epicyro</artifactId>
-                    <!-- Remove this version once Epicyro is integrated and defined in Payara-BOM -->
-                    <version>${epicyro.version}</version>
-                    <scope>test</scope>
-                </dependency>
+                <!-- Uncomment this dependency once we are actually using Epicyro in Payara -->
+<!--                &lt;!&ndash; For the unit tests in /spi/ to be able to instantiate vendor AuthConfigFactory &ndash;&gt;-->
+<!--                <dependency>-->
+<!--                    <groupId>org.glassfish.epicyro</groupId>-->
+<!--                    <artifactId>epicyro</artifactId>-->
+<!--                    &lt;!&ndash; Remove this version once Epicyro is integrated and defined in Payara-BOM &ndash;&gt;-->
+<!--                    <version>${epicyro.version}</version>-->
+<!--                    <scope>test</scope>-->
+<!--                </dependency>-->
             </dependencies>
             <build>
                 <plugins>
