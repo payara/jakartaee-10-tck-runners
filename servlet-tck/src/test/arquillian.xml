@@ -12,7 +12,7 @@
         <container qualifier="http" default="true"/>
         <container qualifier="https">
             <configuration>
-                <property name="httpsPortAsDefault">true</property>
+                <property name="httpsEnabled">true</property>
             </configuration>
         </container>
     </group>
