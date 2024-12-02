@@ -11,9 +11,6 @@
                 <payara.version>7.2024.1.Alpha3-SNAPSHOT</payara.version>
                 <payara.artifact>payara</payara.artifact>
 
-                <!-- Remove this version once Epicyro is integrated and defined in Payara-BOM -->
-                <epicyro.version>3.1.0</epicyro.version>
-
                 <maven-install-plugin.version>3.1.2</maven-install-plugin.version>
                 <maven-surefire-plugin.version>3.3.1</maven-surefire-plugin.version>
                 <exec-maven-plugin.version>3.3.0</exec-maven-plugin.version>
@@ -25,8 +22,7 @@
                 <!-- Properties expected by the TCK -->
                 <provider.configuration.file>${maven.multiModuleProjectDirectory}${file.separator}spi${file.separator}common${file.separator}ProviderConfiguration.xml</provider.configuration.file>
                 <log.file.location>${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}logs</log.file.location>
-                <!-- We will presumably switch to org.glassfish.epicyro.config.factory.file.AuthConfigFileFactory once we have integrated with Epicyro -->
-                <vendor.authconfig.factory>com.sun.jaspic.config.factory.AuthConfigFileFactory</vendor.authconfig.factory>
+                <vendor.authconfig.factory>org.glassfish.epicyro.config.factory.file.AuthConfigFileFactory</vendor.authconfig.factory>
                 <logical.hostname.servlet>server</logical.hostname.servlet>
             </properties>
             <dependencyManagement>
@@ -52,15 +48,12 @@
                     <scope>test</scope>
                 </dependency>
 
-                <!-- Uncomment this dependency once we are actually using Epicyro in Payara -->
-<!--                &lt;!&ndash; For the unit tests in /spi/ to be able to instantiate vendor AuthConfigFactory &ndash;&gt;-->
-<!--                <dependency>-->
-<!--                    <groupId>org.glassfish.epicyro</groupId>-->
-<!--                    <artifactId>epicyro</artifactId>-->
-<!--                    &lt;!&ndash; Remove once Epicyro is integrated and defined in Payara-BOM &ndash;&gt;-->
-<!--                    <version>${epicyro.version}</version>-->
-<!--                    <scope>test</scope>-->
-<!--                </dependency>-->
+                <!-- For the unit tests in /spi/ to be able to instantiate vendor AuthConfigFactory -->
+                <dependency>
+                    <groupId>org.glassfish.epicyro</groupId>
+                    <artifactId>epicyro</artifactId>
+                    <scope>test</scope>
+                </dependency>
             </dependencies>
 
             <build>
@@ -254,9 +247,6 @@
 
                 <payara.version>7.2024.1.Alpha3-SNAPSHOT</payara.version>
 
-                <!-- Remove this version once Epicyro is integrated and defined in Payara-BOM -->
-                <epicyro.version>3.1.0</epicyro.version>
-
                 <maven-install-plugin.version>3.1.2</maven-install-plugin.version>
                 <maven-surefire-plugin.version>3.3.1</maven-surefire-plugin.version>
                 <exec-maven-plugin.version>3.3.0</exec-maven-plugin.version>
@@ -268,8 +258,7 @@
                 <!-- Properties expected by the TCK -->
                 <provider.configuration.file>${maven.multiModuleProjectDirectory}${file.separator}spi${file.separator}common${file.separator}ProviderConfiguration.xml</provider.configuration.file>
                 <log.file.location>${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}logs</log.file.location>
-                <!-- We will presumably switch to org.glassfish.epicyro.config.factory.file.AuthConfigFileFactory once we have integrated with Epicyro -->
-                <vendor.authconfig.factory>com.sun.jaspic.config.factory.AuthConfigFileFactory</vendor.authconfig.factory>
+                <vendor.authconfig.factory>org.glassfish.epicyro.config.factory.file.AuthConfigFileFactory</vendor.authconfig.factory>
                 <logical.hostname.servlet>server</logical.hostname.servlet>
             </properties>
             <dependencyManagement>
@@ -295,15 +284,12 @@
                     <scope>test</scope>
                 </dependency>
 
-                <!-- Uncomment this dependency once we are actually using Epicyro in Payara -->
-<!--                &lt;!&ndash; For the unit tests in /spi/ to be able to instantiate vendor AuthConfigFactory &ndash;&gt;-->
-<!--                <dependency>-->
-<!--                    <groupId>org.glassfish.epicyro</groupId>-->
-<!--                    <artifactId>epicyro</artifactId>-->
-<!--                    &lt;!&ndash; Remove this version once Epicyro is integrated and defined in Payara-BOM &ndash;&gt;-->
-<!--                    <version>${epicyro.version}</version>-->
-<!--                    <scope>test</scope>-->
-<!--                </dependency>-->
+                <!-- For the unit tests in /spi/ to be able to instantiate vendor AuthConfigFactory -->
+                <dependency>
+                    <groupId>org.glassfish.epicyro</groupId>
+                    <artifactId>epicyro</artifactId>
+                    <scope>test</scope>
+                </dependency>
             </dependencies>
             <build>
                 <plugins>
