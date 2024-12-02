@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+  Copyright (c) 2024 Payara Foundation and/or its affiliates. All rights reserved.
+
+  The contents of this file are subject to the terms of either the GNU
+  General Public License Version 2 only ("GPL") or the Common Development
+  and Distribution License("CDDL") (collectively, the "License").  You
+  may not use this file except in compliance with the License.  You can
+  obtain a copy of the License at
+  https://github.com/payara/Payara/blob/master/LICENSE.txt
+  See the License for the specific
+  language governing permissions and limitations under the License.
+
+  When distributing the software, include this License Header Notice in each
+  file and include the License file at glassfish/legal/LICENSE.txt.
+
+  GPL Classpath Exception:
+  The Payara Foundation designates this particular file as subject to the "Classpath"
+  exception as provided by the Payara Foundation in the GPL Version 2 section of the License
+  file that accompanied this code.
+
+  Modifications:
+  If applicable, add the following below the License Header, with the fields
+  enclosed by brackets [] replaced by your own identifying information:
+  "Portions Copyright [year] [name of copyright owner]"
+
+  Contributor(s):
+  If you wish your version of this file to be governed by only the CDDL or
+  only the GPL Version 2, indicate your decision by adding "[Contributor]
+  elects to include this software in this distribution under the [CDDL or GPL
+  Version 2] license."  If you don't indicate a single choice of license, a
+  recipient has the option to distribute your version of this file under
+  either the CDDL, the GPL Version 2 or to extend the choice of license to
+  its licensees as provided above.  However, if you add GPL Version 2 code
+  and therefore, elected the GPL Version 2 license, then the option applies
+  only if the new code is made subject to such option by the copyright
+  holder.
+
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>fish.payara.jakarta.tests.tck</groupId>
+        <artifactId>tck</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>authentication-tck</artifactId>
+    <packaging>pom</packaging>
+
+    <name>TCK: Authentication</name>
+
+
+    <properties>
+        <tck.root>${project.build.directory}</tck.root>
+        <maven.settings.xml>${user.home}${file.separator}.m2${file.separator}settings.xml</maven.settings.xml>
+        <maven.executable>${env.MAVEN_HOME}${file.separator}bin${file.separator}mvn</maven.executable>
+
+        <epicyro.version>3.1.0</epicyro.version>
+
+        <scriptExecutor>bash</scriptExecutor>
+        <scriptExtension>sh</scriptExtension>
+        <replaceScript>${basedir}${file.separator}replaceScript.${scriptExtension}</replaceScript>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>fish.payara.jakarta.tests.tck</groupId>
+            <artifactId>jakarta-authentication-tck</artifactId>
+            <version>${project.version}</version>
+            <type>zip</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-install-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-install</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-tck</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>fish.payara.jakarta.tests.tck</groupId>
+                                    <artifactId>jakarta-authentication-tck</artifactId>
+                                    <type>zip</type>
+                                    <version>${project.version}</version>
+                                    <overWrite>false</overWrite>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>replace-custom-profile-in-tck-pom</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <executable>${scriptExecutor}</executable>
+                            <commandlineArgs>${replaceScript}</commandlineArgs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+            <properties>
+                <maven.executable>${env.MAVEN_HOME}${file.separator}bin${file.separator}mvn.cmd</maven.executable>
+                <scriptExecutor>powershell.exe</scriptExecutor>
+                <scriptExtension>ps1</scriptExtension>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>payara-server-managed</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack-server</id>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <phase>pre-integration-test</phase>
+                                <configuration>
+                                    <!-- We unpack the server in the "actual" TCK -->
+                                    <skip>true</skip>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>run-authentication-tck</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${skipTests}</skip>
+                                    <executable>${maven.executable}</executable>
+                                    <arguments>
+                                        <argument>-B</argument>
+                                        <argument>-e</argument>
+                                        <argument>-s</argument>
+                                        <argument>${maven.settings.xml}</argument>
+                                        <argument>-f</argument>
+                                        <argument>${tck.root}/authentication-tck-${jakarta-authentication-tck.version}${file.separator}tck${file.separator}pom.xml</argument>
+                                        <argument>clean</argument>
+                                        <argument>verify</argument>
+                                        <argument>-Dpayara.version=${payara.version}</argument>
+                                        <argument>-Dpayara.artifact=${payara.artifact}</argument>
+                                        <argument>-Dmaven-surefire-plugin.version=${maven-surefire-plugin.version}</argument>
+                                        <argument>-Dmaven-install-plugin.version=${maven-install-plugin.version}</argument>
+                                        <argument>-Depicyro.version=${epicyro.version}</argument>
+                                        <argument>-Dprovider.configuration.file=${tck.root}${file.separator}authentication-tck-${jakarta-authentication-tck.version}${file.separator}tck${file.separator}spi${file.separator}common${file.separator}ProviderConfiguration.xml</argument>
+                                        <argument>-Dexec-maven-plugin.version=3.3.0</argument>
+                                        <argument>-Ppayara-server-managed,!glassfish-ci-managed</argument>
+                                        <argument>-fae</argument>
+                                    </arguments>
+                                    <environmentVariables>
+                                        <LC_ALL>C</LC_ALL>
+                                    </environmentVariables>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>payara-server-remote</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>run-authentication-tck</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${skipTests}</skip>
+                                    <executable>${maven.executable}</executable>
+                                    <arguments>
+                                        <argument>-B</argument>
+                                        <argument>-e</argument>
+                                        <argument>-s</argument>
+                                        <argument>${maven.settings.xml}</argument>
+                                        <argument>-f</argument>
+                                        <argument>${tck.root}${file.separator}authentication-tck-${jakarta-authentication-tck.version}${file.separator}tck${file.separator}pom.xml</argument>
+                                        <argument>clean</argument>
+                                        <argument>verify</argument>
+                                        <argument>-Dpayara.version=${payara.version}</argument>
+                                        <argument>-Dpayara.home=${payara.home}</argument>
+                                        <argument>-Dmaven-surefire-plugin.version=${maven-surefire-plugin.version}</argument>
+                                        <argument>-Dmaven-install-plugin.version=${maven-install-plugin.version}</argument>
+                                        <argument>-Depicyro.version=${epicyro.version}</argument>
+                                        <argument>-Dprovider.configuration.file=${tck.root}${file.separator}authentication-tck-${jakarta-authentication-tck.version}${file.separator}tck${file.separator}spi${file.separator}common${file.separator}ProviderConfiguration.xml</argument>
+                                        <argument>-Ppayara-server-remote,!glassfish-ci-managed</argument>
+                                        <argument>-fae</argument>
+                                    </arguments>
+                                    <environmentVariables>
+                                        <LC_ALL>C</LC_ALL>
+                                    </environmentVariables>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
