@@ -107,6 +107,10 @@
                                 <copy file="pom.xml-tck"
                                     tofile="${project.build.directory}/faces-tck-${faces.version}/tck/pom.xml" 
                                     overwrite="true" />
+                                <echo>Upgrade Selenium libs to latest Chrome</echo>
+                                <copy file="pom.xml-tck-util"
+                                    tofile="${project.build.directory}/faces-tck-${faces.version}/tck/util/pom.xml" 
+                                    overwrite="true" />
                             </target>
                         </configuration>
                     </execution>
