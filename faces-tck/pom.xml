@@ -40,8 +40,8 @@
         <maven.settings.xml>${user.home}/.m2/settings.xml</maven.settings.xml>
         <maven.exec.params>-B -e -s ${maven.settings.xml} -f ${tck.root}/faces-tck-${faces.version}/tck/pom.xml</maven.exec.params>
         <maven.exec.projects></maven.exec.projects>
-        <maven.exec.goals>clean install</maven.exec.goals>
         <maven.exec.basic.options>-Ppayara-ci-remote -P!glassfish-ci-managed -Dpayara.version=${payara.version} -Dfaces.version=${faces.version} -Dsigtest.api.groupId=org.glassfish -Dsigtest.api.artifactId=jakarta.faces -Dsigtest.api.version=${sigtest.api.version} -Dpayara.arquillian.version=${payara.arquillian.version}</maven.exec.basic.options>
+        <maven.exec.goals>clean install</maven.exec.goals>
         <maven.exec.options></maven.exec.options>
         
         <maven.exec.skipping></maven.exec.skipping> <!-- these options should be removed for the final version -->
@@ -107,7 +107,38 @@
                                 <copy file="pom.xml-tck"
                                     tofile="${project.build.directory}/faces-tck-${faces.version}/tck/pom.xml" 
                                     overwrite="true" />
+                                <echo>Upgrade Selenium libs to latest Chrome</echo>
+                                <copy file="pom.xml-tck-util"
+                                    tofile="${project.build.directory}/faces-tck-${faces.version}/tck/util/pom.xml" 
+                                    overwrite="true" />
                             </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>1.5.3</version>
+                <executions>
+                    <execution>
+                        <id>replace-selenium-driver-version</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                        <configuration>
+                            <ignoreMissingFile>false</ignoreMissingFile>
+                            <includes>
+                                <include>${project.build.directory}/faces-tck-${faces.version}/tck/util/src/main/java/ee/jakarta/tck/faces/test/util/selenium/ChromeDevtoolsDriver.java</include>
+                            </includes>
+                            <replacements>
+                                <replacement>
+                                    <!-- replace with the used version of Chrome! -->
+                                    <token>devtools.v124.network</token>
+                                    <value>devtools.v131.network</value>
+                                </replacement>
+                            </replacements>
                         </configuration>
                     </execution>
                 </executions>
