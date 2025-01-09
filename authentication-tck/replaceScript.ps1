@@ -10,4 +10,4 @@
 Set-Content .\target\authentication-tck-3.1.0\tck\spi\soap\src\main\resources\META-INF\services\com.sun.xml.ws.assembler.metro.dev.ClientPipelineHook "com.sun.enterprise.security.webservices.ClientPipeCreator"
 
 # Spi/servlet unit tests leave a log file locked, blocking the next tests to progress
-Copy-Item -Path .\tck-to-replace\spi\servlet\src\test\java\ee\jakarta\tck\authentication\test\basic\ServletUnitTest.java -Destination .\target\authentication-tck-3.1.0\tck\spi\servlet\test\java\ee\jakarta\tck\authentication\test\basic\ServletUnitTest.java -force
+Copy-Item -Path .\tck-to-replace\spi\servlet\src\test\java\ee\jakarta\tck\authentication\test\basic\ServletUnitTest.java -Destination .\target\authentication-tck-3.1.0\tck\spi\servlet\src\test\java\ee\jakarta\tck\authentication\test\basic\ServletUnitTest.java -force

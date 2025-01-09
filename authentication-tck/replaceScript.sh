@@ -6,4 +6,4 @@ sed -i -e "/<\/profiles>/r payara-profiles.xml" -e "/<\/profiles>/d" target/auth
 echo "com.sun.enterprise.security.webservices.ClientPipeCreator" > target/authentication-tck-3.1.0/tck/spi/soap/src/main/resources/META-INF/services/com.sun.xml.ws.assembler.metro.dev.ClientPipelineHook
 
 # Spi/servlet unit tests leave a log file locked, blocking the next tests to progress
-cp ./tck-to-replace/spi/servlet/src/test/java/ee/jakarta/tck/authentication/test/basic/ServletUnitTest.java ./target/authentication-tck-3.1.0/tck/spi?servlet/test/java/ee/jakarta/tck/authentication/test/basic/ServletUnitTest.java -force
+cp ./tck-to-replace/spi/servlet/src/test/java/ee/jakarta/tck/authentication/test/basic/ServletUnitTest.java ./target/authentication-tck-3.1.0/tck/spi/servlet/src/test/java/ee/jakarta/tck/authentication/test/basic/ServletUnitTest.java
