@@ -52,6 +52,7 @@
                 <dependency>
                     <groupId>org.glassfish.epicyro</groupId>
                     <artifactId>epicyro</artifactId>
+                    <version>${epicyro.version}</version>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
@@ -83,7 +84,7 @@
                                 </configuration>
                             </execution>
                         </executions>
-                    </plugin>
+                    </plugin>  
                     <!--
                         Installs the jakarta.authentication-api.jar from Payara on the filesystem to the
                         coordinates expected by the signature test.
@@ -288,6 +289,7 @@
                 <dependency>
                     <groupId>org.glassfish.epicyro</groupId>
                     <artifactId>epicyro</artifactId>
+                    <version>${epicyro.version}</version>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
