@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -14,33 +15,52 @@
     <name>TCK: tags</name>
 
     <properties>
-        <tck.home>${project.build.directory}/tags-tck</tck.home>
-        <tck.tests.home>${tck.home}/src/com/sun/ts/tests</tck.tests.home> 
-
         <derby.zip.url>https://dlcdn.apache.org//db/derby/db-derby-10.17.1.0/db-derby-10.17.1.0-bin.zip</derby.zip.url>
         <db.home>${project.build.directory}/db-derby-10.17.1.0-bin</db.home>
-
-        <jacoco.includes>org/glassfish/**\:com/sun/enterprise/**</jacoco.includes>
-        
-        <port.admin>4848</port.admin>
-        <port.derby>11527</port.derby>
-        <port.http>18080</port.http>
-        <port.https>18181</port.https>
-        <port.jms>17676</port.jms>
-        <port.jmx>18686</port.jmx>
-        <port.orb>13700</port.orb>
-        <port.orb.mutual>13920</port.orb.mutual>
-        <port.orb.ssl>13820</port.orb.ssl>
-        <port.harness.log>12000</port.harness.log>
+        <jakarta.platform.version>11.0.0-M4</jakarta.platform.version>
+        <jakarta.common.version>11.0.0-M2</jakarta.common.version>
+        <payara.toplevel.dir>payara7</payara.toplevel.dir>
+        <jdbc.classpath>${payara.home}${file.separator}javadb${file.separator}lib${file.separator}derbyclient.jar:${payara.home}${file.separator}javadb${file.separator}lib${file.separator}derbyshared.jar:${payara.home}${file.separator}javadb${file.separator}lib${file.separator}derbytools.jar</jdbc.classpath>
+        <db.delimiter>;</db.delimiter>
+        <db.name>derby</db.name>
+        <jstl.db.driver>org.apache.derby.jdbc.ClientDriver</jstl.db.driver>
+        <jstl.db.name>derbyDB</jstl.db.name>
+        <jstl.db.password>cts1</jstl.db.password>
+        <jstl.db.port>1527</jstl.db.port>
+        <jstl.db.server>localhost</jstl.db.server>
+        <jstl.db.url>jdbc:derby://${jstl.db.server}:${jstl.db.port}/${jstl.db.name};create=true</jstl.db.url>
+        <jstl.db.user>cts1</jstl.db.user>
     </properties>
 
     <dependencies>
         <dependency>
+            <groupId>jakarta.tck</groupId>
+            <artifactId>common</artifactId>
+            <version>${jakarta.common.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>${jakarta.platform.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>fish.payara.jakarta.tests.tck</groupId>
             <artifactId>jakarta-tags-tck</artifactId>
             <version>${project.version}</version>
-            <type>zip</type>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.junit5</groupId>
+            <artifactId>arquillian-junit5-container</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-container-test-spi</artifactId>
         </dependency>
     </dependencies>
 
@@ -50,19 +70,6 @@
                 <groupId>com.googlecode.maven-download-plugin</groupId>
                 <artifactId>download-maven-plugin</artifactId>
                 <executions>
-                    <execution>
-                        <id>download-ant</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${skipTests}</skip>
-                            <url>${ant.zip.url}</url>
-                            <unpack>true</unpack>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                        </configuration>
-                    </execution>
                     <execution>
                         <id>download-derby</id>
                         <phase>generate-resources</phase>
@@ -77,259 +84,185 @@
                         </configuration>
                     </execution>
                 </executions>
-                
-            </plugin>
 
+            </plugin>
             <plugin>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <configuration>
-                    <skip>${skipTests}</skip>
-                </configuration>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>unpack-tck</id>
+                        <id>start-payara-server-for-config</id>
                         <phase>pre-integration-test</phase>
                         <goals>
-                            <goal>unpack-dependencies</goal>
+                            <goal>exec</goal>
                         </goals>
+                        <inherited>false</inherited>
                         <configuration>
-                            <includeArtifactIds>jakarta-tags-tck</includeArtifactIds>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
+                            <skip>${skipServerStartStop}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>start-domain</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-jvm-option-1</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <inherited>false</inherited>
+                        <configuration>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-jvm-options</argument>
+                                <argument>-Djavax.xml.accessExternalStylesheet=all</argument>
+                            </arguments>
+                            <successCodes>
+                                <successCode>0</successCode>
+                                <successCode>1</successCode>
+                            </successCodes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-jvm-option-2</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <inherited>false</inherited>
+                        <configuration>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-jvm-options</argument>
+                                <argument>-Djavax.xml.accessExternalSchema=all</argument>
+                            </arguments>
+                            <successCodes>
+                                <successCode>0</successCode>
+                                <successCode>1</successCode>
+                            </successCodes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-jvm-option-3</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <inherited>false</inherited>
+                        <configuration>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-jvm-options</argument>
+                                <argument>-Djavax.xml.accessExternalDTD=file,http</argument>
+                            </arguments>
+                            <successCodes>
+                                <successCode>0</successCode>
+                                <successCode>1</successCode>
+                            </successCodes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>stop-payara-server-after-config</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <inherited>false</inherited>
+                        <configuration>
+                            <skip>${skipServerStartStop}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>stop-domain</argument>
+                            </arguments>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.ant</groupId>
-                        <artifactId>ant</artifactId>
-                        <version>${ant.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>ant-contrib</groupId>
-                        <artifactId>ant-contrib</artifactId>
-                        <version>1.0b3</version>
-                        <exclusions>
-                            <exclusion>
-                                <groupId>ant</groupId>
-                                <artifactId>ant</artifactId>
-                            </exclusion>
-                        </exclusions>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <skip>${skipTests}</skip>
-                </configuration>
                 <executions>
                     <execution>
-                        <id>prepare-tck-and-payara</id>
-                        <phase>pre-integration-test</phase>
+                        <id>start-database</id>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <phase>package</phase>
                         <configuration>
-                            <target xmlns:if="ant:if" xmlns:unless="ant:unless">
-                                <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />
-            
-                                <echo level="info" message="Start building all tests ${tck.home}" />
-                                <exec executable="${ant.home}/bin/ant" dir="${tck.home}/bin">
-                                    <arg value="build.all.tests"/>
-                                </exec>
-                                <macrodef name="tck-setting">
-                                    <attribute name="key" /> 
-                                    <attribute name="value" />
-                                    <sequential>
-                                        <replaceregexp file="${tck.home}/bin/ts.jte" byline="true"
-                                                       match="@{key}=.*" replace="@{key}=@{value}" />
-                                    </sequential>
-                                </macrodef>
-
-                                <!-- Change configuration -->
-                                <tck-setting key="jstl.db.port" value="1527"/>
-                                <tck-setting key="jstl.db.server" value="localhost"/>
-                                <tck-setting key="jstl.db.name" value="derbyDB"/>
-                                <tck-setting key="jstl.db.driver" value="org.apache.derby.jdbc.ClientDriver"/>
-                                <tck-setting key="jstl.db.user" value="cts1"/>
-                                <tck-setting key="jstl.db.password" value="cts1"/>
-                                <tck-setting key="jstl.db.url" value="jdbc:derby://${jstl.db.server}:${jstl.db.port}/${jstl.db.name};create=true"/>
-
-                                <tck-setting key="webServerHome" value="${payara.home}/glassfish"/>
-                                <tck-setting key="webServerHost" value="localhost"/>
-                                <tck-setting key="webServerPort" value="${port.http}"/>
-                                <tck-setting key="securedWebServicePort" value="${port.https}"/>
-                                <tck-setting key="s1as.admin.port" value="${port.admin}"/>
-                                <tck-setting key="glassfish.admin.port" value="${port.admin}"/>
-                                <tck-setting key="orb.port" value="${port.orb}"/>
-                                <tck-setting key="database.port" value="${port.derby}"/>
-                                <tck-setting key="harness.log.port" value="${port.harness.log}"/>
-                                
-                                <tck-setting key="report.dir" value="${tck.home}/tagsreport/tags"/>
-                                <tck-setting key="work.dir" value="${tck.home}/tagswork/tags"/>
-                                
-                                <tck-setting key="impl.vi" value="glassfish"/>
-                                <tck-setting key="impl.vi.deploy.dir" value="${webServerHome}/domains/domain1/autodeploy"/>
-                                <tck-setting key="impl.deploy.timeout.multiplier" value="30"/>
-                                
-                                <tck-setting key="jspservlet.classes" value="${webServerHome}/modules/jakarta.servlet-api.jar${pathsep}${webServerHome}/modules/wasp.jar${pathsep}${webServerHome}/modules/jakarta.servlet.jsp-api.jar${pathsep}${webServerHome}/modules/jakarta.el.jar${pathsep}${webServerHome}/modules/jakarta.el-api.jar"/>
-                                <tck-setting key="jstl.classes" value="${webServerHome}/modules/jakarta.servlet.jsp.jstl.jar${pathsep}${webServerHome}/modules/jakarta.servlet.jsp.jstl-api.jar"/>
-                          
-                                <limit maxwait="60">
-                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
-                                        <arg value="delete-domain"/>
-                                        <arg value="domain1" />
-                                    </exec>
-                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
-                                        <arg value="create-domain"/>
-                                        <arg value="--domainproperties=domain.adminPort=${port.admin}:domain.instancePort=${port.http}:http.ssl.port=${port.https}:jms.port=${port.jms}:domain.jmxPort=${port.jmx}:orb.listener.port=${port.orb}:orb.ssl.port=${port.orb.ssl}:orb.mutualauth.port=${port.orb.mutual}" />
-                                        <arg value="--user=admin" />
-                                        <arg value="--nopassword" />
-                                        <arg value="domain1" />
-                                    </exec>
-                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
-                                        <arg value="start-domain"/>
-                                    </exec>
-
-                                    <if>
-                                        <isset property="jacoco.version" />
-                                        <then>
-                                            <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
-                                                <arg value="create-jvm-options" />
-                                                <arg value="--port=${port.admin}" />
-                                                <arg value="&quot;-javaagent\:${settings.localRepository}/org/jacoco/org.jacoco.agent/${jacoco.version}/org.jacoco.agent-${jacoco.version}-runtime.jar=destfile=${project.build.directory}/jacoco-it.exec,includes=${jacoco.includes}&quot;" />
-                                            </exec>
-                                        </then>
-                                    </if>
-                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
-                                        <arg value="create-jvm-options" />
-                                        <arg value="-Djavax.xml.accessExternalStylesheet=all" />
-                                    </exec>
-                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
-                                        <arg value="create-jvm-options" />
-                                        <arg value="-Djavax.xml.accessExternalDTD=file,http" />
-                                    </exec>
-                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
-                                        <arg value="stop-domain"/>
-                                        <arg value="domain1"/>
-                                    </exec>
-                                </limit>
-                                <mkdir dir="${tck.home}/tagsreport"/>
-                                <mkdir dir="${tck.home}/tagsreport/tags"/>
-                                
-                                <move todir="${payara.home}/javadb">
+                            <skip>${skipTests}</skip>
+                            <target>
+                                <move todir="${payara.home}${file.separator}javadb">
                                     <fileset dir="${db.home}" />
                                 </move>
-                                <copy file="${payara.home}/javadb/lib/derbytools.jar" todir="${payara.home}/glassfish/domains/domain1/lib"/>
-                                <copy file="${payara.home}/javadb/lib/derbyclient.jar" todir="${payara.home}/glassfish/domains/domain1/lib"/>
-                                <copy file="${payara.home}/javadb/lib/derbyshared.jar" todir="${payara.home}/glassfish/domains/domain1/lib"/>
-                                
-                                <replace file="${tck.home}/bin/xml/ts.top.import.xml">
-                                    <replacetoken><![CDATA[<jvmarg value="-Xmx512m"/>]]></replacetoken>
-                                    <replacevalue><![CDATA[<jvmarg value="-Xmx512m"/>
-                                <jvmarg value="-Djavatest.security.noSecurityManager=true"/>]]></replacevalue>
-                                </replace>
-                                
-                                <replace file="${tck.home}/bin/xml/ts.top.import.xml" if:set="suspend-tck" >
-                                    <replacetoken><![CDATA[<jvmarg value="-Xmx512m"/>]]></replacetoken>
-                                    <replacevalue><![CDATA[<jvmarg value="-Xmx512m"/>
-                                <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=9008"/>]]></replacevalue>
-                                </replace>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-
-                    <execution>
-                        <id>configure-tck-tests</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target xmlns:if="ant:if" xmlns:unless="ant:unless">
-                                <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />
-                                <limit maxwait="20">
-                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
-                                        <arg value="start-domain"/>
-                                        <arg value="--suspend" if:set="payara.suspend"/>
-                                    </exec>
-                                </limit>
-                                
-                                <!-- Deploy single test -->
-                                <sequential if:set="run.test" >
-                                        
-                                    <exec executable="${payara.home}/javadb/bin/startNetworkServer" dir="${tck.tests.home}" spawn="true" >
-                                        <arg value="-noSecurityManager" />
-                                    </exec>
-                                    
-                                    <exec executable="${ant.home}/bin/ant" dir="${tck.home}/bin">
-                                        <arg value="init.javadb"  />
-                                    </exec>
-                                    
-                                    <dirname property="test.dir" file="${tck.home}/src/${run.test}"/>
-                                        
-                                    <echo>Deploying from ${test.dir}</echo>
-                                    <exec executable="${ant.home}/bin/ant" dir="${test.dir}">
-                                        <arg value="deploy"  />
-                                    </exec>
-                                </sequential>
-                                
-                                <!-- Deploy all tests -->
-                                <sequential unless:set="run.test" >
-                                    
-                                    <exec executable="${payara.home}/javadb/bin/startNetworkServer" dir="${tck.tests.home}" spawn="true" >
-                                        <arg value="-noSecurityManager" />
-                                    </exec>
-                                    
-                                    <exec executable="${ant.home}/bin/ant" dir="${tck.home}/bin">
-                                        <arg value="init.javadb"  />
-                                    </exec>
-                                        
-                                    <exec executable="${ant.home}/bin/ant" dir="${tck.tests.home}">
-                                        <arg value="deploy.all"  />
-                                    </exec>
-                                </sequential>
+                                <exec executable="${payara.home}${file.separator}javadb${file.separator}bin${file.separator}startNetworkServer" dir="${project.build.directory}" spawn="true" >
+                                    <arg value="-noSecurityManager" />
+                                </exec>
                             </target>
                         </configuration>
                     </execution>
-
                     <execution>
-                        <id>run-tck-tests</id>
+                        <id>initialise-database</id>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
                         <phase>integration-test</phase>
+
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <target>
+                                <copy file="${payara.home}${file.separator}javadb${file.separator}lib${file.separator}derbytools.jar" todir="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}lib"/>
+                                <copy file="${payara.home}${file.separator}javadb${file.separator}lib${file.separator}derbyclient.jar" todir="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}lib"/>
+                                <copy file="${payara.home}${file.separator}javadb${file.separator}lib${file.separator}derbyshared.jar" todir="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}lib"/>
+
+                                <sql autocommit="true" classpath="${jdbc.classpath}" delimiter="${db.delimiter}" driver="${jstl.db.driver}" onerror="continue" password="${jstl.db.password}" url="${jstl.db.url}" userid="${jstl.db.user}">
+                                    <transaction src="${project.build.directory}${file.separator}..${file.separator}sql${file.separator}${db.name}${file.separator}${db.name}.ddl.jstl.sql"/>
+                                </sql>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>stop-database</id>
                         <goals>
                             <goal>run</goal>
                         </goals>
+                        <phase>post-integration-test</phase>
                         <configuration>
-                            <target xmlns:if="ant:if" xmlns:unless="ant:unless">
-                                <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />
-
-                                <echo level="info" message="Start running all tests" />
-                                <exec executable="${ant.home}/bin/ant" dir="${tck.tests.home}" resultproperty="testResult">
-                                    <arg value="-Dmultiple.tests=${run.test}" if:set="run.test" />
-                                    <arg value="run.all" unless:set="run.test"/>
-                                    <arg value="runclient" if:set="run.test" />
-                                    <env key="LC_ALL" value="C" />
-                                </exec>
-
-                                <if>
-                                    <not>
-                                        <equals arg1="${testResult}" arg2="0" />
-                                    </not>
-                                    <then>
-                                        <echo message="Running tests failed." />
-                                        <loadfile property="contents" srcFile="${payara.home}/glassfish/domains/domain1/logs/server.log" />
-                                        <echo message="${contents}" />
-                                    </then>
-                                </if>
-
-                                <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
-                                    <arg value="stop-domain" />
-                                </exec>
-
-                                <exec executable="${payara.home}/javadb/bin/stopNetworkServer" dir="${tck.tests.home}" ></exec>
+                            <skip>${skipTests}</skip>
+                            <target>
+                                <exec executable="${payara.home}${file.separator}javadb${file.separator}bin${file.separator}stopNetworkServer" dir="${project.build.directory}" />
                             </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>tests</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <dependenciesToScan>fish.payara.jakarta.tests.tck:jakarta-tags-tck</dependenciesToScan>
+                            <systemPropertyVariables>
+                                <payara.home>${payara.home}</payara.home>
+                                <impl.vi>payara</impl.vi>
+                                <impl.vi.deploy.dir>${payara.home}${file.separator}domains${file.separator}domain1${file.separator}autodeploy</impl.vi.deploy.dir>
+                                <junit.log.traceflag>true</junit.log.traceflag>
+                                <jstl.db.name>derbyDB</jstl.db.name>
+                                <jstl.db.server>localhost</jstl.db.server>
+                                <jstl.db.port>1527</jstl.db.port>
+                                <jstl.db.url>jdbc:derby://${jstl.db.server}:${jstl.db.port}/${jstl.db.name};create=true</jstl.db.url>
+                                <jstl.db.driver>org.apache.derby.jdbc.ClientDriver</jstl.db.driver>
+                                <jstl.db.user>cts1</jstl.db.user>
+                                <jstl.db.password>cts1</jstl.db.password>
+                                <harness.log.traceflag>true</harness.log.traceflag>
+                                <cts.harness.debug>true</cts.harness.debug>
+                            </systemPropertyVariables>
                         </configuration>
                     </execution>
                 </executions>
