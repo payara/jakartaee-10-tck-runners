@@ -149,7 +149,7 @@
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
-                                    <includes>certificates${file.separator}cts_cert,certificates${file.separator}clientcert.p12</includes>
+                                    <includes>certificates${file.separator}cts_cert,certificates${file.separator}clientcert.jks,certificates${file.separator}clientcert.p12</includes>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
@@ -163,6 +163,22 @@
                 <version>1.7</version>
                 <executions>
                     <execution>
+                        <id>convert-jks-to-pkcs12</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>importKeystore</goal>
+                        </goals>
+                        <configuration>
+                            <srckeystore>${project.build.testOutputDirectory}/certificates/clientcert.jks</srckeystore>
+                            <destkeystore>${project.build.testOutputDirectory}/certificates/clientcert.p12</destkeystore>
+                            <srcstoretype>JKS</srcstoretype>
+                            <deststoretype>PKCS12</deststoretype>
+                            <srcstorepass>changeit</srcstorepass>
+                            <deststorepass>changeit</deststorepass>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>add-to-payara</id>
                         <phase>process-test-resources</phase>
                         <goals>
                             <goal>importCertificate</goal>
@@ -289,9 +305,12 @@
                                 <servlet.tck.support.http2Push>true</servlet.tck.support.http2Push>
 
                                 <javax.net.ssl.keyStore>${project.build.testOutputDirectory}${file.separator}certificates${file.separator}clientcert.p12</javax.net.ssl.keyStore>
+                                <javax.net.ssl.keyStoreType>pkcs12</javax.net.ssl.keyStoreType>
                                 <javax.net.ssl.keyStorePassword>changeit</javax.net.ssl.keyStorePassword>
                                 <javax.net.ssl.trustStore>${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}config${file.separator}cacerts.p12</javax.net.ssl.trustStore>
-
+                                <javax.net.ssl.trustStoreType>pkcs12</javax.net.ssl.trustStoreType>
+                                <javax.net.ssl.trustStorePassword>changeit</javax.net.ssl.trustStorePassword>
+                                <jdk.tls.client.protocols>TLSv1.2</jdk.tls.client.protocols>
                                 <!-- Print the content of the deployed archives -->
                                 <servlet.tck.archive.print>true</servlet.tck.archive.print>
 
