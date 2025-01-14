@@ -179,6 +179,7 @@
                                 <log.file.location>${log.file.location}</log.file.location>
                                 <logical.hostname.servlet>${logical.hostname.servlet}</logical.hostname.servlet>
                             </systemPropertyVariables>
+                            <runOrder>alphabetical</runOrder>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -336,6 +337,7 @@
                                 <log.file.location>${log.file.location}</log.file.location>
                                 <logical.hostname.servlet>${logical.hostname.servlet}</logical.hostname.servlet>
                             </systemPropertyVariables>
+                            <runOrder>alphabetical</runOrder>
                         </configuration>
                     </plugin>
                 </plugins>
