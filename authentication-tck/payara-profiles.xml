@@ -52,7 +52,6 @@
                 <dependency>
                     <groupId>org.glassfish.epicyro</groupId>
                     <artifactId>epicyro</artifactId>
-                    <version>${epicyro.version}</version>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
@@ -290,7 +289,6 @@
                 <dependency>
                     <groupId>org.glassfish.epicyro</groupId>
                     <artifactId>epicyro</artifactId>
-                    <version>${epicyro.version}</version>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
