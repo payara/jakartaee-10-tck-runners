@@ -83,7 +83,7 @@
                                 </configuration>
                             </execution>
                         </executions>
-                    </plugin>
+                    </plugin>  
                     <!--
                         Installs the jakarta.authentication-api.jar from Payara on the filesystem to the
                         coordinates expected by the signature test.
@@ -178,6 +178,7 @@
                                 <log.file.location>${log.file.location}</log.file.location>
                                 <logical.hostname.servlet>${logical.hostname.servlet}</logical.hostname.servlet>
                             </systemPropertyVariables>
+                            <runOrder>alphabetical</runOrder>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -334,6 +335,7 @@
                                 <log.file.location>${log.file.location}</log.file.location>
                                 <logical.hostname.servlet>${logical.hostname.servlet}</logical.hostname.servlet>
                             </systemPropertyVariables>
+                            <runOrder>alphabetical</runOrder>
                         </configuration>
                     </plugin>
                 </plugins>
