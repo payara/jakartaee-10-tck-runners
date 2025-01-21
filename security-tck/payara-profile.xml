@@ -638,7 +638,7 @@
             <properties>
                 <payara.root>${maven.multiModuleProjectDirectory}/target</payara.root>
                 <payara.version>7.2024.1.Alpha3-SNAPSHOT</payara.version>
-                <payara.arquillian.container.version>4.0.alpha1</payara.arquillian.container.version>
+                <payara.arquillian.container.version>4.0.alpha2</payara.arquillian.container.version>
                 <payara.artifact>payara</payara.artifact>
                 
                 <sigtest.api.groupId>jakarta.security</sigtest.api.groupId>
