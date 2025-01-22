@@ -32,9 +32,10 @@
     <name>Old Jakarta Security TCK - run</name>
 
     <properties>
-    	<ant.version>1.10.12</ant.version>
+    	<ant.version>1.10.15</ant.version>
         <ant.home>${project.build.directory}/apache-ant-${ant.version}</ant.home>
         <ant.zip.url>https://archive.apache.org/dist/ant/binaries/apache-ant-${ant.version}-bin.zip</ant.zip.url>
+        <download.maven.plugin>1.13.0</download.maven.plugin>
         
         <tck.home>${project.build.directory}/security-tck</tck.home>
         <tck.tests.home>${tck.home}/src/com/sun/ts/tests</tck.tests.home>
@@ -72,7 +73,7 @@
             <plugin>
                 <groupId>com.googlecode.maven-download-plugin</groupId>
                 <artifactId>download-maven-plugin</artifactId>
-                <version>1.6.8</version>
+                <version>${download.maven.plugin}</version>
                 <executions>
                     <execution>
                         <id>download-ant</id>
@@ -375,7 +376,7 @@
 
                 <payara.db.home>${payara.home}${file.separator}javadb</payara.db.home>
 
-                <derby.version>10.15.2.0</derby.version>
+                <derby.version>10.17.1.0</derby.version>
                 <derby.zip.url>https://dlcdn.apache.org//db/derby/db-derby-${derby.version}/db-derby-${derby.version}-bin.zip</derby.zip.url>
                 <db.download.location>${project.build.directory}${file.separator}db-derby-${derby.version}-bin</db.download.location>
             </properties>
@@ -395,7 +396,7 @@
                     <plugin>
                         <groupId>com.googlecode.maven-download-plugin</groupId>
                         <artifactId>download-maven-plugin</artifactId>
-                        <version>1.6.8</version>
+                        <version>${download.maven.plugin}</version>
                         <executions>
                             <execution>
                                 <id>download-derby</id>
