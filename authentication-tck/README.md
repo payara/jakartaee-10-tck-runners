@@ -44,3 +44,7 @@ The following will get around this for the terminal session:
 ```
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 ```
+
+## Running on MacOS
+As MacOS ships with FreeBSD sed instead of GNU sed, you may need to edit the `replaceScript.sh` file with the following `sed -i '' -e ...` 
+**Note the `''`**
