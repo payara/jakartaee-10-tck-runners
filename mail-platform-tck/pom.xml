@@ -226,6 +226,32 @@
                         </configuration>
                     </execution>
                     <execution>
+                        <id>1-populate-mailbox</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <phase>pre-integration-test</phase>
+                        <configuration>
+                            <mainClass>com.sun.ts.tests.javamail.ee.util.fpopulate</mainClass>
+                            <arguments>
+                                <argument>-s</argument>
+                                <argument>${mailboxFolder1}</argument>
+                                <argument>-d</argument>
+                                <argument>${destinationURL}</argument>
+                                <argument>-user</argument>
+                                <argument>${javamail.username}</argument>
+                                <argument>-password</argument>
+                                <argument>${javamail.password}</argument>
+                                <argument>-host</argument>
+                                <argument>${javamail.server}</argument>
+                                <argument>-port</argument>
+                                <argument>${imap.port}</argument>
+                                <argument>-protocol</argument>
+                                <argument>${javamail.protocol}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>91-create-mail-resource</id>
                         <goals>
                             <goal>exec</goal>
@@ -259,38 +285,6 @@
                                 <argument>stop-domain</argument>
                             </arguments>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <configuration>
-                    <mainClass>com.sun.ts.tests.javamail.ee.util.fpopulate</mainClass>
-                    <arguments>
-                        <argument>-s</argument>
-                        <argument>${mailboxFolder1}</argument>
-                        <argument>-d</argument>
-                        <argument>${destinationURL}</argument>
-                        <argument>-user</argument>
-                        <argument>${javamail.username}</argument>
-                        <argument>-password</argument>
-                        <argument>${javamail.password}</argument>
-                        <argument>-host</argument>
-                        <argument>${javamail.server}</argument>
-                        <argument>-port</argument>
-                        <argument>${imap.port}</argument>
-                        <argument>-protocol</argument>
-                        <argument>${javamail.protocol}</argument>
-                    </arguments>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>1-populate-mailbox</id>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                        <phase>pre-integration-test</phase>
                     </execution>
                 </executions>
             </plugin>
