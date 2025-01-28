@@ -117,6 +117,7 @@
         <jakarta.tck.inject.version>2.0.2</jakarta.tck.inject.version>
         <jakarta-authentication-tck.version>3.1.0</jakarta-authentication-tck.version>
         <jakarta.tck.messaging.version>11.0.0-SNAPSHOT</jakarta.tck.messaging.version>
+        <jakarta.tck.data.version>1.0.1</jakarta.tck.data.version>
         
         <!-- The profile to run - acceptable parameters are 'full', 'web', and 'core' -->
         <jakarta.tck.platform>full</jakarta.tck.platform>
@@ -204,6 +205,7 @@
         <module>messaging-tck</module>
         <module>messaging-platform-tck</module>
         <module>mail-platform-tck</module>
+        <module>data-tck</module>
     </modules>
 
     <dependencyManagement>
