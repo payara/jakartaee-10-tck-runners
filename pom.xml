@@ -62,7 +62,7 @@
 
         <payara.home>${maven.multiModuleProjectDirectory}${file.separator}target${file.separator}payara7</payara.home>
         <!-- Note that Shrinkwrap Maven resolver WILL NOT read in whatever you specify on the command line - it will ALWAYS read this as-is -->
-        <payara.version>7.2024.1.Alpha3-SNAPSHOT</payara.version>
+        <payara.version>7.2025.1.Alpha1-SNAPSHOT</payara.version>
         <script.extension/>
         <executable.extension/>
         <root.tmp.directory/>
