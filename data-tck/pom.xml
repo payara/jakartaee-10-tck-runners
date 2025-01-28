@@ -201,4 +201,13 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>payara-server-remote</id>
+            <properties>
+                <skipConfig>true</skipConfig>
+            </properties>
+        </profile>
+    </profiles>
 </project>
