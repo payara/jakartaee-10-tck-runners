@@ -74,6 +74,8 @@
         <dependency>
             <groupId>jakarta.tck</groupId>
             <artifactId>sigtest-maven-plugin</artifactId>
+            <!-- Override version inherited from parent - doesn't seem to pass using 2.3 -->
+            <version>2.2</version>
         </dependency>
 
         <!-- Dependency added to ensure it resolves in the correct order -->
