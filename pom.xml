@@ -55,14 +55,14 @@
 
         <jdk.version>21</jdk.version>
 
-        <ant.version>1.10.14</ant.version>
+        <ant.version>1.10.15</ant.version>
         <ant.home>${project.build.directory}/apache-ant-${ant.version}</ant.home>
         <ant.zip.url>https://archive.apache.org/dist/ant/binaries/apache-ant-${ant.version}-bin.zip</ant.zip.url>
         <ant.executable>${ant.home}${file.separator}bin${file.separator}ant</ant.executable>
 
         <payara.home>${maven.multiModuleProjectDirectory}${file.separator}target${file.separator}payara7</payara.home>
         <!-- Note that Shrinkwrap Maven resolver WILL NOT read in whatever you specify on the command line - it will ALWAYS read this as-is -->
-        <payara.version>7.2024.1.Alpha3-SNAPSHOT</payara.version>
+        <payara.version>7.2025.1.Alpha1-SNAPSHOT</payara.version>
         <script.extension/>
         <executable.extension/>
         <root.tmp.directory/>
@@ -85,8 +85,8 @@
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
         <exec-maven-plugin.version>3.3.0</exec-maven-plugin.version>
         <download-maven-plugin.version>1.9.0</download-maven-plugin.version>
-        <arquillian.version>1.9.1.Final</arquillian.version>
-        <junit.version>5.10.3</junit.version>
+        <arquillian.version>1.9.3.Final</arquillian.version>
+        <junit.version>5.11.4</junit.version>
         <jimage.dir>${project.build.directory}${file.separator}jdk-bundle</jimage.dir>
         <shrinkwrap.resolver.version>3.3.0</shrinkwrap.resolver.version>
         <shrinkwrap.descriptors.version>2.0.0</shrinkwrap.descriptors.version>
@@ -97,7 +97,7 @@
         <jakarta-authorization-tck.version>3.0.0</jakarta-authorization-tck.version>
         <jakarta-mail-platform-tck.version>2.1.0</jakarta-mail-platform-tck.version>
         <jakarta-rest-tck.version>4.0.0</jakarta-rest-tck.version>
-        <jakarta.tck.sigtest-maven-plugin.version>2.2</jakarta.tck.sigtest-maven-plugin.version>
+        <jakarta.tck.sigtest-maven-plugin.version>2.3</jakarta.tck.sigtest-maven-plugin.version>
         <jakarta.tck.el.version>6.0.0</jakarta.tck.el.version>
         <jakarta.tck.websocket.version>2.2.0</jakarta.tck.websocket.version>
         <jakarta.tck.bean-validation.version>3.1.1</jakarta.tck.bean-validation.version>
@@ -117,6 +117,7 @@
         <jakarta.tck.inject.version>2.0.2</jakarta.tck.inject.version>
         <jakarta-authentication-tck.version>3.1.0</jakarta-authentication-tck.version>
         <jakarta.tck.messaging.version>11.0.0-SNAPSHOT</jakarta.tck.messaging.version>
+        <jakarta.tck.data.version>1.0.1</jakarta.tck.data.version>
         
         <!-- The profile to run - acceptable parameters are 'full', 'web', and 'core' -->
         <jakarta.tck.platform>full</jakarta.tck.platform>
@@ -204,6 +205,7 @@
         <module>messaging-tck</module>
         <module>messaging-platform-tck</module>
         <module>mail-platform-tck</module>
+        <module>data-tck</module>
     </modules>
 
     <dependencyManagement>

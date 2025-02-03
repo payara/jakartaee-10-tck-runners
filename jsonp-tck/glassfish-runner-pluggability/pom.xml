@@ -48,7 +48,6 @@
                     <reuseForks>false</reuseForks>
                     <trimStackTrace>false</trimStackTrace>
                     <failIfNoTests>true</failIfNoTests>
-                    <testFailureIgnore>true</testFailureIgnore>
                     <dependenciesToScan>jakarta.json:jakarta.json-tck-tests-pluggability</dependenciesToScan>
                     <additionalClasspathElements>
                         <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.json.jar</additionalClasspathElement>

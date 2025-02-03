@@ -41,6 +41,8 @@
         <dependency>
             <groupId>jakarta.tck</groupId>
             <artifactId>sigtest-maven-plugin</artifactId>
+            <!-- Override version inherited from parent - doesn't seem to pass using 2.3 -->
+            <version>2.2</version>
         </dependency>
     </dependencies>
 
@@ -52,7 +54,6 @@
                     <reuseForks>false</reuseForks>
                     <trimStackTrace>false</trimStackTrace>
                     <failIfNoTests>true</failIfNoTests>
-                    <testFailureIgnore>true</testFailureIgnore>
                     <dependenciesToScan>jakarta.json:jakarta.json-tck-tests</dependenciesToScan>
                     <systemPropertyVariables>
                         <jimage.dir>${project.build.directory}${file.separator}jdk-bundle</jimage.dir>
