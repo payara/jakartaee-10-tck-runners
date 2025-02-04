@@ -1,22 +1,6 @@
 # Jakarta Faces TCK
 
-## Prerequisite
-Set `JAVA_HOME` to Java 21.
+We have two ways of running the Faces TCK: Docker or locally
+These are separated into the two modules: `faces-tck-docker-runner` and `faces-tck-runner` respectively
 
-Install the Faces TCK dependencies via tck-download module. Execute from the root directory of TCK runners:
-
-```
-mvn clean install -pl .,:tck-download,:jakarta-faces-tck
-```
-
-## Test Execution
-
-Currently, *only remote testing* is supported.
-
-Run Payara 7 with default setup (with ports 4848 and 8080).
-
-Execute maven test with verify from the this directory:
-
-```
-mvn clean verify
-```
+The two extra POMs in this directory, `pom.xml-old-tck-run` and `pom.xml-tck` are used by these modules to replace the poms provided by the TCK

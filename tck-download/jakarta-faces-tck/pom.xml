@@ -33,7 +33,7 @@
     <name>TCK: Install Jakarta Faces TCK</name>
     
     <properties>
-        <tck.test.faces.file>jakarta-faces-tck-4.1.1.zip</tck.test.faces.file>
+        <tck.test.faces.file>jakarta-faces-tck-${jakarta.tck.faces.version}.zip</tck.test.faces.file>
         <tck.test.faces.url>https://download.eclipse.org/jakartaee/faces/4.1/${tck.test.faces.file}</tck.test.faces.url>
     </properties>
 

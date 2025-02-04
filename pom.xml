@@ -2,7 +2,7 @@
 <!--
   DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-  Copyright (c) 2022-2024 Payara Foundation and/or its affiliates. All rights reserved.
+  Copyright (c) 2022-2025 Payara Foundation and/or its affiliates. All rights reserved.
 
   The contents of this file are subject to the terms of either the GNU
   General Public License Version 2 only ("GPL") or the Common Development
@@ -118,6 +118,8 @@
         <jakarta-authentication-tck.version>3.1.0</jakarta-authentication-tck.version>
         <jakarta.tck.messaging.version>11.0.0-SNAPSHOT</jakarta.tck.messaging.version>
         <jakarta.tck.data.version>1.0.1</jakarta.tck.data.version>
+        <!-- If updating this Faces TCK version - please also update the replacement poms we use under faces-tck -->
+        <jakarta.tck.faces.version>4.1.1</jakarta.tck.faces.version>
         
         <!-- The profile to run - acceptable parameters are 'full', 'web', and 'core' -->
         <jakarta.tck.platform>full</jakarta.tck.platform>

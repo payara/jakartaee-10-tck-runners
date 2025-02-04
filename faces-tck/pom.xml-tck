@@ -100,7 +100,7 @@ mvn clean install -pl :old-tck-run -Dglassfish.suspend
         <skipTests>false</skipTests>
         <test.selenium>true</test.selenium>
         
-        <faces.version>4.1.0-SNAPSHOT</faces.version>
+        <faces.version>4.1.1</faces.version>
         
         <!-- 
             Set to the actual Faces API the implementation being tested is using.
@@ -504,8 +504,8 @@ mvn clean install -pl :old-tck-run -Dglassfish.suspend
                 <sigtest.api.artifactId>jakarta.faces</sigtest.api.artifactId>
                 <sigtest.api.version>${mojarra.version}</sigtest.api.version>
 
-                <!-- Verhicle used for testing the Mojarra version -->
-                <glassfish.version>8.0.0-M6</glassfish.version>
+                <!-- Vehicle used for testing the Mojarra version -->
+                <glassfish.version>8.0.0-M9</glassfish.version>
                 <glassfish.root>${maven.multiModuleProjectDirectory}/target</glassfish.root>
                 <glassfish.home>${glassfish.root}/glassfish8</glassfish.home>
             </properties>
@@ -828,6 +828,22 @@ mvn clean install -pl :old-tck-run -Dglassfish.suspend
             </activation>
 
             <properties>
+                <!-- Explicit version of Mojarra to test -->
+                <!-- Ideally we should somehow get this from the Payara BOM -->
+                <mojarra.version>4.1.2</mojarra.version>
+
+                <!--
+                    Exact artefact used by Payara that holds the API classes.
+                    This is used by the signature test in module /faces-signaturetest
+                -->
+                <sigtest.api.groupId>org.glassfish</sigtest.api.groupId>
+                <sigtest.api.artifactId>jakarta.faces</sigtest.api.artifactId>
+                <sigtest.api.version>${mojarra.version}</sigtest.api.version>
+
+                <!-- Vehicle used for testing the Mojarra version -->
+                <payara.version>7.2024.1.Alpha3</payara.version>
+                <payara.artifact>payara</payara.artifact>
+
                 <!-- Arquillian Dependencies -->
                 <payara.arquillian.version>4.0.alpha2</payara.arquillian.version>
             </properties>
@@ -845,10 +861,10 @@ mvn clean install -pl :old-tck-run -Dglassfish.suspend
                     <scope>test</scope>
                     <version>${payara.arquillian.version}</version>
                 </dependency>
-                <!-- 
-                Solution for 
-                WARNING: A class jakarta.activation.DataSource for a default provider MessageBodyWriter<jakarta.activation.DataSource> was not found. The provider is not available.
-                fish.payara.arquillian.shaded.glassfish.jersey.message.internal.MessagingBinders$EnabledProvidersBinder bindToBinder
+                <!--
+                    Solution for
+                    WARNING: A class jakarta.activation.DataSource for a default provider MessageBodyWriter<jakarta.activation.DataSource> was not found. The provider is not available.
+                    fish.payara.arquillian.shaded.glassfish.jersey.message.internal.MessagingBinders$EnabledProvidersBinder bindToBinder
                 -->
                 <!--<dependency>
                     <groupId>jakarta.activation</groupId>
@@ -856,6 +872,103 @@ mvn clean install -pl :old-tck-run -Dglassfish.suspend
                     <version>2.0.1</version>
                 </dependency>-->
             </dependencies>
+        </profile>
+
+        <profile>
+            <id>payara-ci-managed</id>
+
+            <properties>
+                <!-- Explicit version of Mojarra to test -->
+                <!-- Ideally we should somehow get this from the Payara BOM -->
+                <mojarra.version>4.1.2</mojarra.version>
+
+                <!--
+                    Exact artefact used by Payara that holds the API classes.
+                    This is used by the signature test in module /faces-signaturetest
+                -->
+                <sigtest.api.groupId>org.glassfish</sigtest.api.groupId>
+                <sigtest.api.artifactId>jakarta.faces</sigtest.api.artifactId>
+                <sigtest.api.version>${mojarra.version}</sigtest.api.version>
+
+                <!-- Vehicle used for testing the Mojarra version -->
+                <payara.version>7.2024.1.Alpha3</payara.version>
+                <payara.root>${maven.multiModuleProjectDirectory}/target</payara.root>
+                <payara.home>${payara.root}/payara7</payara.home>
+                <payara.artifact>payara</payara.artifact>
+            </properties>
+
+            <dependencies>
+                <!-- The actual Arquillian connector -->
+                <dependency>
+                    <groupId>fish.payara.arquillian</groupId>
+                    <artifactId>arquillian-payara-server-managed</artifactId>
+                    <version>4.0.alpha2</version>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>21</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>unpack</id>
+                                <phase>process-test-classes</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${payara.root}</outputDirectory>
+                                    <markersDirectory>${payara.root}/dependency-maven-plugin-markers</markersDirectory>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>fish.payara.distributions</groupId>
+                                            <artifactId>${payara.artifact}</artifactId>
+                                            <version>${payara.version}</version>
+                                            <type>zip</type>
+                                            <overWrite>false</overWrite>
+                                            <outputDirectory>${payara.root}</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <payara.home>${payara.root}/payara7</payara.home>
+                                <test.selenium>${test.selenium}</test.selenium>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>web</id>
+            <properties>
+                <payara.artifact>payara-web</payara.artifact>
+            </properties>
         </profile>
     </profiles>
 </project>
