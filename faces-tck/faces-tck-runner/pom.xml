@@ -78,6 +78,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${skipTests}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>fish.payara.jakarta.tests.tck</groupId>
@@ -102,6 +103,7 @@
                             <goal>run</goal>
                         </goals>
                         <configuration>
+                            <skip>${skipTests}</skip>
                             <target>
                                 <echo>Replacing Glassfish hardcoded control with Payara</echo>
                                 <copy file="..${file.separator}pom.xml-old-tck-run"
@@ -125,11 +127,28 @@
                             <goal>run</goal>
                         </goals>
                         <configuration>
+                            <skip>${skipTests}</skip>
                             <target>
-                                <echo>Updating payara.version property value from expected default of 7.2024.1.Alpha3 in ${project.build.directory}${file.separator}faces-tck${file.separator}tck${file.separator}pom.xml</echo>
+                                <echo>Updating payara.version property value from expected default of 7.2024.1.Alpha3 in ${project.build.directory}${file.separator}faces-tck-${jakarta.tck.faces.version}${file.separator}tck${file.separator}pom.xml</echo>
                                 <replace token = "payara.version>7.2024.1.Alpha3" value = "payara.version>${payara.version}" dir = "${project.build.directory}${file.separator}faces-tck-${jakarta.tck.faces.version}${file.separator}tck">
                                     <include name = "pom.xml"/>
                                 </replace>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-summariser-script</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <target>
+                                <echo>Copying ..${file.separator}summary-tck.sh to ${project.build.directory}${file.separator}faces-tck-${jakarta.tck.faces.version}${file.separator}tck${file.separator}summary-tck.sh</echo>
+                                <copy file="..${file.separator}summary-tck.sh"
+                                      tofile="${project.build.directory}${file.separator}faces-tck-${jakarta.tck.faces.version}${file.separator}tck${file.separator}summary-tck.sh"
+                                      overwrite="true" />
                             </target>
                         </configuration>
                     </execution>
@@ -147,6 +166,7 @@
                             <goal>replace</goal>
                         </goals>
                         <configuration>
+                            <skip>${skipTests}</skip>
                             <ignoreMissingFile>false</ignoreMissingFile>
                             <includes>
                                 <include>${project.build.directory}/faces-tck-${jakarta.tck.faces.version}/tck/util/src/main/java/ee/jakarta/tck/faces/test/util/selenium/ChromeDevtoolsDriver.java</include>
@@ -167,16 +187,47 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <phase>pre-integration-test</phase>
+                        <id>run-faces-tck</id>
+                        <phase>integration-test</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                         <configuration>
+                            <skip>${skipTests}</skip>
                             <executable>${maven.executable}</executable>
                             <commandlineArgs>${maven.exec.cmdline}</commandlineArgs>
                             <environmentVariables>
                                 <LC_ALL>C</LC_ALL>
                             </environmentVariables>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>run-summary-tck.sh-script</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <executable>bash</executable>
+                            <commandlineArgs>${project.build.directory}${file.separator}faces-tck-${jakarta.tck.faces.version}${file.separator}tck${file.separator}summary-tck.sh</commandlineArgs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>verify-failsafe-summary-custom.xml</id>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                        <phase>verify</phase>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <summaryFile>${project.build.directory}${file.separator}faces-tck-${jakarta.tck.faces.version}${file.separator}tck${file.separator}target${file.separator}failsafe-summary-custom.xml</summaryFile>
                         </configuration>
                     </execution>
                 </executions>

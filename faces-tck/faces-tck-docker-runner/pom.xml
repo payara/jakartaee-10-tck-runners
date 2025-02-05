@@ -40,6 +40,7 @@
 
         <skipDockerBuild>${skipTests}</skipDockerBuild>
         <docker.image.pull.policy>IfNotPresent</docker.image.pull.policy>
+        <skipDockerCleanup>${skipTests}</skipDockerCleanup>
     </properties>
 
     <dependencies>
@@ -147,6 +148,56 @@
                             </target>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>copy-summariser-script</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipDockerBuild}</skip>
+                            <target>
+                                <echo>Copying ..${file.separator}summary-tck.sh to ${project.build.directory}${file.separator}faces-tck${file.separator}tck${file.separator}summary-tck.sh</echo>
+                                <copy file="..${file.separator}summary-tck.sh"
+                                      tofile="${project.build.directory}${file.separator}faces-tck${file.separator}tck${file.separator}summary-tck.sh"
+                                      overwrite="true" />
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-entrypoint-script</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipDockerBuild}</skip>
+                            <target>
+                                <echo>Copying src${file.separator}main${file.separator}docker${file.separator}run-tck.sh to ${project.build.directory}${file.separator}faces-tck${file.separator}tck${file.separator}run-tck.sh</echo>
+                                <copy file="src${file.separator}main${file.separator}docker${file.separator}run-tck.sh"
+                                      tofile="${project.build.directory}${file.separator}faces-tck${file.separator}tck${file.separator}run-tck.sh"
+                                      overwrite="true" />
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>verify-old-tck-summary.txt</id>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <phase>verify</phase>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <target>
+                                <echo>Checking if ${project.build.directory}${file.separator}old-tck-summary.txt contains failures or errors</echo>
+                                <fail message = "old-tck-summary.txt contains 'Failed.'!">
+                                    <condition>
+                                        <resourcecontains resource="${project.build.directory}${file.separator}old-tck-summary.txt" substring="Failed."/>
+                                    </condition>
+                                </fail>
+                            </target>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -187,24 +238,115 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>run-faces-tck</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>integration-test</phase>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <executable>docker</executable>
+                            <commandlineArgs>run --name faces-tck-runner --init payara/faces-tck-runner</commandlineArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>collect-failsafe-summary-custom.xml</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <executable>docker</executable>
+                            <commandlineArgs>cp faces-tck-runner:/opt/faces-tck/tck/target/failsafe-summary-custom.xml ${project.build.directory}${file.separator}failsafe-summary-custom.xml</commandlineArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>collect-old-tck-summary.txt</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <executable>docker</executable>
+                            <commandlineArgs>cp faces-tck-runner:/opt/faces-tck/tck/old-tck/run/target/faces-tck/facesreport/faces/text/summary.txt ${project.build.directory}${file.separator}old-tck-summary.txt</commandlineArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>collect-payara-logs</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <executable>docker</executable>
+                            <commandlineArgs>cp faces-tck-runner:/opt/faces-tck/tck/target/payara-logs.zip ${project.build.directory}${file.separator}payara-logs.zip</commandlineArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>collect-payara-logs-old-tck</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <executable>docker</executable>
+                            <commandlineArgs>cp faces-tck-runner:/opt/faces-tck/target/payara-logs-old-tck.zip ${project.build.directory}${file.separator}payara-logs-old-tck.zip</commandlineArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>remove-faces-tck-runner-container</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
+                        <configuration>
+                            <skip>${skipDockerCleanup}</skip>
+                            <executable>docker</executable>
+                            <commandlineArgs>container rm faces-tck-runner</commandlineArgs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>verify-failsafe-summary-custom.xml</id>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                        <phase>verify</phase>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <summaryFile>${project.build.directory}${file.separator}failsafe-summary-custom.xml</summaryFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
     <profiles>
         <profile>
-            <id>web</id>
-            <properties>
-                <additionalProfiles>,web</additionalProfiles>
-            </properties>
-        </profile>
-
-        <profile>
             <id>use-saved-basic-ubuntu-chrome-image</id>
 
             <properties>
-                <docker.image.download.url>https://c2b2-my.sharepoint.com/:u:/g/personal/andrew_pielage_payara_fish/EcuVIzm0HjVKjDWlgahvbosBVAaQjoW3KvYj6cXcQ9LLyA?download=1</docker.image.download.url>
+                <!-- Backup saved to SharePoint for now under Payara/Engineering/Testing - this URL is set to expire and will need regenerating or replacing with a better solution -->
+                <docker.image.download.url>https://c2b2.sharepoint.com/:u:/g/Payara/EeXj4-rX-BtFiXbZvkiYVzsBOnc_G68yfQ-OGc4iFanI7g?download=1</docker.image.download.url>
                 <docker.image.tar.name>basic-ubuntu-chrome.tar</docker.image.tar.name>
                 <docker.image.pull.policy>Never</docker.image.pull.policy>
+                <skipDockerImageDownload>${skipDockerBuild}</skipDockerImageDownload>
             </properties>
 
             <build>
@@ -220,7 +362,7 @@
                                     <goal>wget</goal>
                                 </goals>
                                 <configuration>
-                                    <skip>${skipDockerBuild}</skip>
+                                    <skip>${skipDockerImageDownload}</skip>
                                     <url>${docker.image.download.url}</url>
                                     <unpack>false</unpack>
                                     <outputDirectory>${project.build.directory}</outputDirectory>

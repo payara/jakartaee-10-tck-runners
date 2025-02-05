@@ -13,22 +13,24 @@ Create the Docker image, specifying whether you intend to test against Platform 
 
 ```
 # Platform
-mvn clean install -Dpayara.version=${payara.version} -pl . -pl faces-tck -pl faces-tck-docker-runner
+mvn clean install -Dpayara.version=${payara.version} -pl . -pl faces-tck -pl faces-tck-docker-runner -DskipTests=true
 
 # Web Profile
-mvn clean install -Dpayara.version=${payara.version} -pl . -pl faces-tck -pl faces-tck-docker-runner -Pweb
+mvn clean install -Dpayara.version=${payara.version} -pl . -pl faces-tck -pl faces-tck-docker-runner -DskipTests=true -Pweb
 ```
 
 ## Test Execution
 
-Run the Docker image: `docker container run --name wibbles payara/faces-tck-runner`
+The Docker image will be run as a part of the Maven build.
+
+Run the Docker image: `docker container run --name wibbles --init -it payara/faces-tck-runner -DskipDockerBuild=true`
 NOTE: The Docker image is only intended to be run against the profile it was built for (Platform or Web Profile).
+
+The container will be deleted after the run completes (assuming no prior steps fail).
+If you do not wish for this to happen, add `-DskipDockerCleanup=true`
 
 If you wish to log in to the container for whatever reason:
 ```
-# If you want to create a brand new container and log in
-docker container run --name wibbles -it payara/faces-tck-runner
-
-# If you want to login to a pre-existing container
-docker container start -ia wibbles
+# To create a brand new container and log in
+docker container run --name wibbles --entrypoint /bin/bash --init -it  payara/faces-tck-runner
 ```
