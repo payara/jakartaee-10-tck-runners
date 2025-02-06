@@ -35,8 +35,8 @@
     <description>This verifies the compliance of Payara using the Jakarta Faces standalone TCK within a Docker container, to avoid issues caused with the selenium tests and more recent versions of Chrome</description>
 
     <properties>
-        <!-- Additional profiles that should be appended to the default Docker CMD, beginning with a comma e.g. ",wibbles,wobbles" -->
-        <additionalProfiles></additionalProfiles>
+        <!-- This is the maven command which the run-tck.sh script will execute within the container - -->
+        <maven.command>mvn help:active-profiles clean verify -Ppayara-ci-managed -Dtck.mode=platform -Dpayara.artifact=${payara.artifact}</maven.command>
 
         <skipDockerBuild>${skipTests}</skipDockerBuild>
         <docker.image.pull.policy>IfNotPresent</docker.image.pull.policy>
@@ -343,6 +343,7 @@
 
             <properties>
                 <!-- Backup saved to SharePoint for now under Payara/Engineering/Testing - this URL is set to expire and will need regenerating or replacing with a better solution -->
+                <!-- This backup exists as a fallback in case the eclipsecbijenkins/basic-ubuntu-chrome Docker image disappears or is otherwise updated and breaks our runner -->
                 <docker.image.download.url>https://c2b2.sharepoint.com/:u:/g/Payara/EeXj4-rX-BtFiXbZvkiYVzsBOnc_G68yfQ-OGc4iFanI7g?download=1</docker.image.download.url>
                 <docker.image.tar.name>basic-ubuntu-chrome.tar</docker.image.tar.name>
                 <docker.image.pull.policy>Never</docker.image.pull.policy>

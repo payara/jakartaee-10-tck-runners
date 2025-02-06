@@ -26,4 +26,4 @@ RUN mvn install:install-file -DgroupId=fish.payara.distributions -DartifactId=@p
 WORKDIR /opt/faces-tck/tck
 
 ENTRYPOINT ["/opt/faces-tck/tck/run-tck.sh"]
-CMD ["-Dpayara.artifact=@payara.artifact@"]
+CMD ["@maven.command@"]

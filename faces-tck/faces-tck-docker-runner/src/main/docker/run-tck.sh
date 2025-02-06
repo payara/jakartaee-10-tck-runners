@@ -40,13 +40,19 @@
 set -e
 
 # Run Maven command, adding all of our input parameters
-mvn help:active-profiles clean verify -Ppayara-ci-managed -Dtck.mode=platform $@
+$@
 
 # Run our summary script for the "new" TCK
+echo "Generating aggregate failsafe report for the \"new\" TCK modules"
 ./summary-tck.sh
 
 # Collect and tar "new" TCK server logs
-zip -j -r target/payara-logs.zip target/payara7/glassfish/domains/domain1/logs
+echo "Zipping the Payara logs for the \"new\" TCK"
+zip -jvr target/payara-logs.zip target/payara7/glassfish/domains/domain1/logs
 
 # Collect and tar "old" TCK server logs
-zip -j -r target/payara-logs-old-tck.zip old-tck/run/target/payara7/glassfish/domains/domain1/logs
+echo "Zipping the Payara logs for the \"old\" TCK"
+zip -jvr target/payara-logs-old-tck.zip old-tck/run/target/payara7/glassfish/domains/domain1/logs
+
+echo "### DEBUG ### Echoing contents of the target directory ### DEBUG ###"
+ls target
