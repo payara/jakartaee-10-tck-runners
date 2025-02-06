@@ -299,7 +299,7 @@
                         <configuration>
                             <skip>${skipTests}</skip>
                             <executable>docker</executable>
-                            <commandlineArgs>cp faces-tck-runner:/opt/faces-tck/target/payara-logs-old-tck.zip ${project.build.directory}${file.separator}payara-logs-old-tck.zip</commandlineArgs>
+                            <commandlineArgs>cp faces-tck-runner:/opt/faces-tck/tck/target/payara-logs-old-tck.zip ${project.build.directory}${file.separator}payara-logs-old-tck.zip</commandlineArgs>
                         </configuration>
                     </execution>
                     <execution>
