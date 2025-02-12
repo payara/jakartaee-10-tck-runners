@@ -2,7 +2,7 @@
 <!--
 
     Copyright (c) 2021, 2022 Contributors to the Eclipse Foundation. All rights reserved.
-    Portions Copyright 2024 Payara Foundation and/or its affiliates
+    Portions Copyright 2024, 2025 Payara Foundation and/or its affiliates
 
     This program and the accompanying materials are made available under the
     terms of the Eclipse Public License v. 2.0, which is available at
@@ -42,8 +42,8 @@
         <tck.mode>standalone</tck.mode>
         <tck.old.skip>${skipITs}</tck.old.skip>
          
-        <glassfish.home>${project.build.directory}/payara7</glassfish.home>
-        <glassfish.asadmin>${glassfish.home}/glassfish/bin/asadmin</glassfish.asadmin>
+        <payara.home>${project.build.directory}/payara7</payara.home>
+        <payara.asadmin>${payara.home}/glassfish/bin/asadmin</payara.asadmin>
        
         <jacoco.includes>org/glassfish/**\:com/sun/enterprise/**</jacoco.includes>
         
@@ -62,7 +62,7 @@
     <dependencies>
         <dependency>
             <groupId>fish.payara.distributions</groupId>
-            <artifactId>payara</artifactId>
+            <artifactId>${payara.artifact}</artifactId>
             <version>${payara.version}</version>
             <type>zip</type>
             <scope>test</scope>
@@ -112,7 +112,7 @@
                             <goal>unpack-dependencies</goal>
                         </goals>
                         <configuration>
-                            <includeArtifactIds>payara</includeArtifactIds>
+                            <includeArtifactIds>${payara.artifact}</includeArtifactIds>
                             <outputDirectory>${project.build.directory}</outputDirectory>
                         </configuration>
                     </execution>
@@ -234,8 +234,8 @@
 
                                 <!-- Change configuration -->
                                 
-                                <tck-setting key="web.home" value="${glassfish.home}/glassfish"/>
-                                <tck-setting key="webServerHome" value="${glassfish.home}/glassfish"/>
+                                <tck-setting key="web.home" value="${payara.home}/glassfish"/>
+                                <tck-setting key="webServerHome" value="${payara.home}/glassfish"/>
                                 <tck-setting key="webServerHost" value="localhost"/>
                                 <tck-setting key="webServerPort" value="${port.http}"/>
                                 
@@ -256,32 +256,32 @@
                                 <tck-setting key="jsf.classes" value="${webServerHome}/modules/cdi-api.jar;${webServerHome}/modules/jakarta.servlet.jsp.jstl-api.jar;${webServerHome}/modules/jakarta.inject.jar;${webServerHome}/modules/jakarta.faces.jar;${webServerHome}/modules/jakarta.servlet.jsp-api.jar;${webServerHome}/modules/jakarta.servlet-api.jar;${webServerHome}/modules/expressly.jar"/>
 
                                 <limit maxwait="60">
-                                    <exec executable="${glassfish.asadmin}" dir="${glassfish.home}/glassfish/bin" failonerror="true">
+                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin" failonerror="true">
                                         <arg value="delete-domain"/>
                                         <arg value="domain1" />
                                     </exec>
-                                    <exec executable="${glassfish.asadmin}" dir="${glassfish.home}/glassfish/bin" failonerror="true">
+                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin" failonerror="true">
                                         <arg value="create-domain"/>
                                         <arg value="--domainproperties=domain.adminPort=${port.admin}:domain.instancePort=${port.http}:http.ssl.port=${port.https}:jms.port=${port.jms}:domain.jmxPort=${port.jmx}:orb.listener.port=${port.orb}:orb.ssl.port=${port.orb.ssl}:orb.mutualauth.port=${port.orb.mutual}" />
                                         <arg value="--user=admin" />
                                         <arg value="--nopassword" />
                                         <arg value="domain1" />
                                     </exec>
-                                    <exec executable="${glassfish.asadmin}" dir="${glassfish.home}/glassfish/bin" failonerror="true">
+                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin" failonerror="true">
                                         <arg value="start-domain"/>
                                     </exec>
 
                                     <if>
                                         <isset property="jacoco.version" />
                                         <then>
-                                            <exec executable="${glassfish.asadmin}" dir="${glassfish.home}/glassfish/bin">
+                                            <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                                 <arg value="create-jvm-options" />
                                                 <arg value="--port=${port.admin}" />
                                                 <arg value="&quot;-javaagent\:${settings.localRepository}/org/jacoco/org.jacoco.agent/${jacoco.version}/org.jacoco.agent-${jacoco.version}-runtime.jar=destfile=${project.build.directory}/jacoco-it.exec,includes=${jacoco.includes}&quot;" />
                                             </exec>
                                         </then>
                                     </if>
-                                    <exec executable="${glassfish.asadmin}" dir="${glassfish.home}/glassfish/bin" failonerror="true">
+                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin" failonerror="true">
                                         <arg value="stop-domain"/>
                                         <arg value="domain1"/>
                                     </exec>
@@ -310,12 +310,12 @@
                         </goals>
                         <configuration>
                             <target xmlns:if="ant:if" xmlns:unless="ant:unless">
-                                <replace file="${glassfish.home}/glassfish/domains/domain1/config/domain.xml" 
+                                <replace file="${payara.home}/glassfish/domains/domain1/config/domain.xml"
                                     token="-Xmx512m" value="-Xmx1024m" />
                                 <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />
                                 
                                 <limit maxwait="300">
-                                    <exec executable="${glassfish.asadmin}" dir="${glassfish.home}/glassfish/bin" failonerror="true">
+                                    <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin" failonerror="true">
                                         <arg value="start-domain"/>
                                         <arg value="--suspend" if:set="glassfish.suspend"/>
                                     </exec>
@@ -368,12 +368,12 @@
                                     </not>
                                     <then>
                                         <echo message="Running tests failed." />
-                                        <loadfile property="contents" srcFile="${glassfish.home}/glassfish/domains/domain1/logs/server.log" />
+                                        <loadfile property="contents" srcFile="${payara.home}/glassfish/domains/domain1/logs/server.log" />
                                         <echo message="${contents}" />
                                     </then>
                                 </if>
 
-                                <exec executable="${glassfish.asadmin}" dir="${glassfish.home}/glassfish/bin">
+                                <exec executable="${payara.asadmin}" dir="${payara.home}/glassfish/bin">
                                     <arg value="stop-domain" />
                                 </exec>
                                 

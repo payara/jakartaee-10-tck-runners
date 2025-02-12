@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (c) 2021, 2024 Contributors to the Eclipse Foundation. All rights reserved.
+    Portions Copyright 2025 Payara Foundation and/or its affiliates
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Public License v. 2.0, which is available at
+    http://www.eclipse.org/legal/epl-2.0.
+
+    This Source Code may also be made available under the following Secondary
+    Licenses when the conditions for such availability set forth in the
+    Eclipse Public License v. 2.0 are satisfied: GNU General Public License,
+    version 2 with the GNU Classpath Exception, which is available at
+    https://www.gnu.org/software/classpath/license.html.
+
+    SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
+
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>fish.payara.jakarta.tests.tck</groupId>
+        <artifactId>faces-tck-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>faces-tck-runner</artifactId>
+    <name>TCK: Faces</name>
+    <packaging>pom</packaging>
+
+    <description>This verifies the compliance of Payara using the Jakarta Faces standalone TCK</description>
+
+    <properties>
+        <tck.root>${project.build.directory}</tck.root>
+        <sigtest.api.version>${jakarta.tck.faces.version}</sigtest.api.version> <!-- version of org.glassfish:jakarta.faces used in Payara -->
+<!--        <maven.executable>${maven.home}/bin/mvn${script.extension}</maven.executable>-->
+        <maven.executable>mvn</maven.executable>
+        <maven.settings.xml>${user.home}/.m2/settings.xml</maven.settings.xml>
+        <maven.exec.params>-B -e -s ${maven.settings.xml} -f ${tck.root}/faces-tck-${jakarta.tck.faces.version}/tck/pom.xml</maven.exec.params>
+        <maven.exec.projects></maven.exec.projects>
+        <!-- Additional profiles that should be appended to the default exec maven profiles, beginning with a comma e.g. ",wibbles,wobbles" -->
+        <additional.profiles></additional.profiles>
+        <payara.arquillian.profile>payara-ci-managed</payara.arquillian.profile>
+        <maven.exec.basic.options>-P!glassfish-ci-managed,${payara.arquillian.profile}${additional.profiles} -Dpayara.arquillian.version=${payara.arquillian.version}</maven.exec.basic.options>
+        <maven.exec.goals>help:active-profiles clean install</maven.exec.goals>
+        <maven.exec.options></maven.exec.options>
+        
+        <maven.exec.skipping></maven.exec.skipping> <!-- these options should be removed for the final version -->
+        <!-- if doing selenium tests (-Dtest.selenium=true) and your system Chrome is old, use -Dchrome.binary=/path/to/your/chrome -->
+        <!--<maven.exec.skipping>-Dtest.selenium=false -Dtck.old.skip=true -pl !:old-faces-tck-parent,!:old-tck-build,!:old-tck-run,!org.eclipse.ee4j.tck.faces.old-tck-selenium:ajax,!org.eclipse.ee4j.tck.faces.old-tck-selenium:ajax,!:commandLink,!:protectedViews</maven.exec.skipping> -->
+        <!-- selenium tests fail with All Providers for type class java.net.URL returned a null value: [org.jboss.arquillian.container.test.impl.enricher.resource.URLResourceProvider@8851ce1] -->
+        <!-- part of the old tests is AJAX, which doesn't run -->
+        
+        <maven.exec.cmdline>${maven.exec.params} ${maven.exec.projects} ${maven.exec.goals} ${maven.exec.basic.options} ${maven.exec.options} ${maven.exec.skipping}</maven.exec.cmdline>
+    </properties>
+
+    <dependencies>
+        <dependency>
+	    <groupId>fish.payara.jakarta.tests.tck</groupId>
+            <artifactId>jakarta-faces-tck</artifactId>
+            <type>zip</type>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>fish.payara.jakarta.tests.tck</groupId>
+                                    <artifactId>jakarta-faces-tck</artifactId>
+                                    <type>zip</type>
+                                    <version>${project.version}</version>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${tck.root}</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>replace-glassfish-hardcoded-exec</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <target>
+                                <echo>Replacing Glassfish hardcoded control with Payara</echo>
+                                <copy file="..${file.separator}pom.xml-old-tck-run"
+                                    tofile="${project.build.directory}/faces-tck-${jakarta.tck.faces.version}/tck/old-tck/run/pom.xml"
+                                    overwrite="true" />
+                                <echo>Replacing Arquillian client with EE11 version</echo>
+                                <copy file="..${file.separator}pom.xml-tck"
+                                    tofile="${project.build.directory}/faces-tck-${jakarta.tck.faces.version}/tck/pom.xml"
+                                    overwrite="true" />
+                                <echo>Upgrade Selenium libs to latest Chrome</echo>
+                                <copy file="pom.xml-tck-util"
+                                    tofile="${project.build.directory}/faces-tck-${jakarta.tck.faces.version}/tck/util/pom.xml"
+                                    overwrite="true" />
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>update-payara-version</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <target>
+                                <echo>Updating payara.version property value from expected default of 7.2024.1.Alpha3 in ${project.build.directory}${file.separator}faces-tck-${jakarta.tck.faces.version}${file.separator}tck${file.separator}pom.xml</echo>
+                                <replace token = "payara.version>7.2024.1.Alpha3" value = "payara.version>${payara.version}" dir = "${project.build.directory}${file.separator}faces-tck-${jakarta.tck.faces.version}${file.separator}tck">
+                                    <include name = "pom.xml"/>
+                                </replace>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-summariser-script</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <target>
+                                <echo>Copying ..${file.separator}summary-tck.sh to ${project.build.directory}${file.separator}faces-tck-${jakarta.tck.faces.version}${file.separator}tck${file.separator}summary-tck.sh</echo>
+                                <copy file="..${file.separator}summary-tck.sh"
+                                      tofile="${project.build.directory}${file.separator}faces-tck-${jakarta.tck.faces.version}${file.separator}tck${file.separator}summary-tck.sh"
+                                      overwrite="true" />
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>1.5.3</version>
+                <executions>
+                    <execution>
+                        <id>replace-selenium-driver-version</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <ignoreMissingFile>false</ignoreMissingFile>
+                            <includes>
+                                <include>${project.build.directory}/faces-tck-${jakarta.tck.faces.version}/tck/util/src/main/java/ee/jakarta/tck/faces/test/util/selenium/ChromeDevtoolsDriver.java</include>
+                            </includes>
+                            <replacements>
+                                <replacement>
+                                    <!-- replace with the used version of Chrome! -->
+                                    <token>devtools.v124.network</token>
+                                    <value>devtools.v131.network</value>
+                                </replacement>
+                            </replacements>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>run-faces-tck</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <executable>${maven.executable}</executable>
+                            <commandlineArgs>${maven.exec.cmdline}</commandlineArgs>
+                            <environmentVariables>
+                                <LC_ALL>C</LC_ALL>
+                            </environmentVariables>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>run-summary-tck.sh-script</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <executable>bash</executable>
+                            <commandlineArgs>${project.build.directory}${file.separator}faces-tck-${jakarta.tck.faces.version}${file.separator}tck${file.separator}summary-tck.sh</commandlineArgs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>verify-failsafe-summary-custom.xml</id>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                        <phase>verify</phase>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <summaryFile>${project.build.directory}${file.separator}faces-tck-${jakarta.tck.faces.version}${file.separator}tck${file.separator}target${file.separator}failsafe-summary-custom.xml</summaryFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    
+    <profiles>
+        
+        <profile>
+            <!-- Skip old tests with '-DskipOld'.-->
+            <id>skipOld</id>
+            <activation>
+              <property>
+                <name>skipOld</name>
+              </property>
+            </activation>
+            <properties>
+                <maven.exec.projects>-pl -:old-faces-tck-parent,-:old-tck-build,-:old-tck-run -Dtck.old.skip=true</maven.exec.projects>
+            </properties>
+        </profile>
+        
+        
+        <profile>
+            <!-- Skip new tests with '-DskipNew'.-->
+            <id>skipNew</id>
+            <activation>
+              <property>
+                <name>skipNew</name>
+              </property>
+            </activation>
+            <properties>
+                <maven.exec.projects>-pl :old-faces-tck-parent,:old-tck-build,:old-tck-run</maven.exec.projects>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>web</id>
+            <properties>
+                <additional.profiles>,web</additional.profiles>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>payara-server-remote</id>
+            <properties>
+                <payara.arquillian.profile>payara-ci-remote</payara.arquillian.profile>
+            </properties>
+        </profile>
+    </profiles>
+</project>

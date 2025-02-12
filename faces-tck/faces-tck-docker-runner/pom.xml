@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (c) 2021, 2024 Contributors to the Eclipse Foundation. All rights reserved.
+    Portions Copyright 2025 Payara Foundation and/or its affiliates
+
+    This program and the accompanying materials are made available under the
+    terms of the Eclipse Public License v. 2.0, which is available at
+    http://www.eclipse.org/legal/epl-2.0.
+
+    This Source Code may also be made available under the following Secondary
+    Licenses when the conditions for such availability set forth in the
+    Eclipse Public License v. 2.0 are satisfied: GNU General Public License,
+    version 2 with the GNU Classpath Exception, which is available at
+    https://www.gnu.org/software/classpath/license.html.
+
+    SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
+
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>fish.payara.jakarta.tests.tck</groupId>
+        <artifactId>faces-tck-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>faces-tck-docker-runner</artifactId>
+    <name>TCK: Faces (Docker)</name>
+
+    <packaging>pom</packaging>
+
+    <description>This verifies the compliance of Payara using the Jakarta Faces standalone TCK within a Docker container, to avoid issues caused with the selenium tests and more recent versions of Chrome</description>
+
+    <properties>
+        <!-- This is the maven command which the run-tck.sh script will execute within the container - -->
+        <maven.command>mvn help:active-profiles clean verify -Ppayara-ci-managed -Dtck.mode=platform -Dpayara.artifact=${payara.artifact}</maven.command>
+
+        <skipDockerBuild>${skipTests}</skipDockerBuild>
+        <docker.image.pull.policy>IfNotPresent</docker.image.pull.policy>
+        <skipDockerCleanup>${skipTests}</skipDockerCleanup>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>fish.payara.jakarta.tests.tck</groupId>
+            <artifactId>jakarta-faces-tck</artifactId>
+            <type>zip</type>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>fish.payara.distributions</groupId>
+            <artifactId>${payara.artifact}</artifactId>
+            <type>zip</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipDockerBuild}</skip>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>fish.payara.jakarta.tests.tck</groupId>
+                                    <artifactId>jakarta-faces-tck</artifactId>
+                                    <type>zip</type>
+                                    <version>${project.version}</version>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${project.build.directory}</outputDirectory>
+                                    <fileMappers>
+                                        <org.codehaus.plexus.components.io.filemappers.RegExpFileMapper>
+                                            <pattern>^\Qfaces-tck-${jakarta.tck.faces.version}/\E</pattern>
+                                            <replacement>./faces-tck/</replacement>
+                                        </org.codehaus.plexus.components.io.filemappers.RegExpFileMapper>
+                                    </fileMappers>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-payara</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipDockerBuild}</skip>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>fish.payara.distributions</groupId>
+                                    <artifactId>${payara.artifact}</artifactId>
+                                    <type>zip</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}${file.separator}payara</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>replace-tck-poms</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipDockerBuild}</skip>
+                            <target>
+                                <echo>Replacing faces-tck${file.separator}tck${file.separator}old-tck${file.separator}run${file.separator}pom.xml</echo>
+                                <copy file="..${file.separator}pom.xml-old-tck-run"
+                                      tofile="${project.build.directory}${file.separator}faces-tck${file.separator}tck${file.separator}old-tck${file.separator}run${file.separator}pom.xml"
+                                      overwrite="true" />
+                                <echo>Replacing faces-tck${file.separator}tck${file.separator}pom.xml</echo>
+                                <copy file="..${file.separator}pom.xml-tck"
+                                      tofile="${project.build.directory}${file.separator}faces-tck${file.separator}tck${file.separator}pom.xml"
+                                      overwrite="true" />
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>update-payara-version</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipDockerBuild}</skip>
+                            <target>
+                                <echo>Updating payara.version property value from expected default of 7.2024.1.Alpha3 in ${project.build.directory}${file.separator}faces-tck${file.separator}tck${file.separator}pom.xml</echo>
+                                <replace token = "payara.version>7.2024.1.Alpha3" value = "payara.version>${payara.version}" dir = "${project.build.directory}${file.separator}faces-tck${file.separator}tck">
+                                    <include name = "pom.xml"/>
+                                </replace>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-summariser-script</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipDockerBuild}</skip>
+                            <target>
+                                <echo>Copying ..${file.separator}summary-tck.sh to ${project.build.directory}${file.separator}faces-tck${file.separator}tck${file.separator}summary-tck.sh</echo>
+                                <copy file="..${file.separator}summary-tck.sh"
+                                      tofile="${project.build.directory}${file.separator}faces-tck${file.separator}tck${file.separator}summary-tck.sh"
+                                      overwrite="true" />
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-entrypoint-script</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipDockerBuild}</skip>
+                            <target>
+                                <echo>Copying src${file.separator}main${file.separator}docker${file.separator}run-tck.sh to ${project.build.directory}${file.separator}faces-tck${file.separator}tck${file.separator}run-tck.sh</echo>
+                                <copy file="src${file.separator}main${file.separator}docker${file.separator}run-tck.sh"
+                                      tofile="${project.build.directory}${file.separator}faces-tck${file.separator}tck${file.separator}run-tck.sh"
+                                      overwrite="true" />
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>verify-old-tck-summary.txt</id>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <phase>verify</phase>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <target>
+                                <echo>Checking if ${project.build.directory}${file.separator}old-tck-summary.txt contains failures or errors</echo>
+                                <fail message = "old-tck-summary.txt contains 'Failed.'!">
+                                    <condition>
+                                        <resourcecontains resource="${project.build.directory}${file.separator}old-tck-summary.txt" substring="Failed."/>
+                                    </condition>
+                                </fail>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.45.1</version>
+                <executions>
+                    <execution>
+                        <id>build-docker-image</id>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <skip>${skipDockerBuild}</skip>
+                            <images>
+                                <image>
+                                    <name>payara/faces-tck-runner</name>
+                                    <build>
+                                        <!-- On Windows with default setting ${*}, $PATH would get filtered as well -->
+                                        <filter>@</filter>
+                                        <tags>
+                                            <tag>${jakarta.tck.faces.version}</tag>
+                                        </tags>
+                                        <cleanup>none</cleanup>
+                                        <dockerFile>Dockerfile</dockerFile>
+                                        <assembly>
+                                            <mode>tar</mode>
+                                            <descriptor>assembly.xml</descriptor>
+                                            <tarLongFileMode>gnu</tarLongFileMode>
+                                        </assembly>
+                                        <imagePullPolicy>${docker.image.pull.policy}</imagePullPolicy>
+                                    </build>
+                                </image>
+                            </images>
+                            <verbose>true</verbose>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>run-faces-tck</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>integration-test</phase>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <executable>docker</executable>
+                            <commandlineArgs>run --name faces-tck-runner --init payara/faces-tck-runner</commandlineArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>collect-failsafe-summary-custom.xml</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <executable>docker</executable>
+                            <commandlineArgs>cp faces-tck-runner:/opt/faces-tck/tck/target/failsafe-summary-custom.xml ${project.build.directory}${file.separator}failsafe-summary-custom.xml</commandlineArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>collect-old-tck-summary.txt</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <executable>docker</executable>
+                            <commandlineArgs>cp faces-tck-runner:/opt/faces-tck/tck/old-tck/run/target/faces-tck/facesreport/faces/text/summary.txt ${project.build.directory}${file.separator}old-tck-summary.txt</commandlineArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>collect-payara-logs</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <executable>docker</executable>
+                            <commandlineArgs>cp faces-tck-runner:/opt/faces-tck/tck/target/payara-logs.zip ${project.build.directory}${file.separator}payara-logs.zip</commandlineArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>collect-payara-logs-old-tck</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <executable>docker</executable>
+                            <commandlineArgs>cp faces-tck-runner:/opt/faces-tck/tck/target/payara-logs-old-tck.zip ${project.build.directory}${file.separator}payara-logs-old-tck.zip</commandlineArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>remove-faces-tck-runner-container</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
+                        <configuration>
+                            <skip>${skipDockerCleanup}</skip>
+                            <executable>docker</executable>
+                            <commandlineArgs>container rm faces-tck-runner</commandlineArgs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>verify-failsafe-summary-custom.xml</id>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                        <phase>verify</phase>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <summaryFile>${project.build.directory}${file.separator}failsafe-summary-custom.xml</summaryFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>use-saved-basic-ubuntu-chrome-image</id>
+
+            <properties>
+                <!-- Backup saved to SharePoint for now under Payara/Engineering/Testing - this URL is set to expire and will need regenerating or replacing with a better solution -->
+                <!-- This backup exists as a fallback in case the eclipsecbijenkins/basic-ubuntu-chrome Docker image disappears or is otherwise updated and breaks our runner -->
+                <docker.image.download.url>https://c2b2.sharepoint.com/:u:/g/Payara/EeXj4-rX-BtFiXbZvkiYVzsBOnc_G68yfQ-OGc4iFanI7g?download=1</docker.image.download.url>
+                <docker.image.tar.name>basic-ubuntu-chrome.tar</docker.image.tar.name>
+                <docker.image.pull.policy>Never</docker.image.pull.policy>
+                <skipDockerImageDownload>${skipDockerBuild}</skipDockerImageDownload>
+            </properties>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.googlecode.maven-download-plugin</groupId>
+                        <artifactId>download-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>download-basic-ubuntu-chrome-tar</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>wget</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${skipDockerImageDownload}</skip>
+                                    <url>${docker.image.download.url}</url>
+                                    <unpack>false</unpack>
+                                    <outputDirectory>${project.build.directory}</outputDirectory>
+                                    <outputFileName>${docker.image.tar.name}</outputFileName>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>import-basic-ubuntu-chrome-image-tar</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <phase>prepare-package</phase>
+                                <configuration>
+                                    <skip>${skipDockerBuild}</skip>
+                                    <executable>docker</executable>
+                                    <commandlineArgs>image load --input ${project.build.directory}${file.separator}basic-ubuntu-chrome.tar</commandlineArgs>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

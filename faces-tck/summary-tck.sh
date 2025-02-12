@@ -4,7 +4,7 @@
 rdom () { local IFS=\> ; read -d \< E C ;}
 
 #Find every failsafe-summary.xml in the child folders and list them in a file 
-find target/faces-tck*/tck -iname 'failsafe-summary.xml' -type f > summarylist.txt
+find ${0%/*} -iname 'failsafe-summary.xml' -type f > target/summarylist.txt
 COMPLETED=0
 ERRORS=0
 FAILURES=0
@@ -25,17 +25,17 @@ do
             SKIPPED=$(($SKIPPED + $C))
         fi
     done < $File
-done < summarylist.txt
+done < ${0%/*}/target/summarylist.txt
 
 #Create a specific failsafe-summary-custom.xml to aggregate the results in one file
-echo '<?xml version="1.0" encoding="UTF-8"?>' > failsafe-summary-custom.xml
-echo '<failsafe-summary xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/failsafe-summary.xsd" result="254" timeout="false">' >> failsafe-summary-custom.xml
-echo '    <completed>'$COMPLETED'</completed>'  >> failsafe-summary-custom.xml
-echo '    <errors>'$ERRORS'</errors>' >> failsafe-summary-custom.xml
-echo '    <failures>'$FAILURES'</failures>' >> failsafe-summary-custom.xml
-echo '    <skipped>'$SKIPPED'</skipped>' >> failsafe-summary-custom.xml
-echo '    <failureMessage xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>' >> failsafe-summary-custom.xml
-echo '</failsafe-summary>' >> failsafe-summary-custom.xml
+echo '<?xml version="1.0" encoding="UTF-8"?>' > ${0%/*}/target/failsafe-summary-custom.xml
+echo '<failsafe-summary xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/failsafe-summary.xsd" result="254" timeout="false">' >> ${0%/*}/target/failsafe-summary-custom.xml
+echo '    <completed>'$COMPLETED'</completed>'  >> ${0%/*}/target/failsafe-summary-custom.xml
+echo '    <errors>'$ERRORS'</errors>' >> ${0%/*}/target/failsafe-summary-custom.xml
+echo '    <failures>'$FAILURES'</failures>' >> ${0%/*}/target/failsafe-summary-custom.xml
+echo '    <skipped>'$SKIPPED'</skipped>' >> ${0%/*}/target/failsafe-summary-custom.xml
+echo '    <failureMessage xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>' >> ${0%/*}/target/failsafe-summary-custom.xml
+echo '</failsafe-summary>' >> ${0%/*}/target/failsafe-summary-custom.xml
 
 #Clean the list of files
-rm summarylist.txt
+rm ${0%/*}/target/summarylist.txt
