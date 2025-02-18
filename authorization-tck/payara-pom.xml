@@ -184,11 +184,11 @@
                                 <configuration>
                                     <target>
                                         <exec executable="${payara.asadmin}">
-                                            <arg value="create-system-properties" />
+                                            <arg value="create-system-property" />
                                             <arg value="vendor.jakarta.security.jacc.PolicyConfigurationFactory.provider=org.glassfish.exousia.modules.def.DefaultPolicyConfigurationFactory" />
                                         </exec>
                                         <exec executable="${payara.asadmin}">
-                                            <arg value="create-system-properties" />
+                                            <arg value="create-system-property" />
                                             <arg value="log.file.location=${log.file.location}" />
                                         </exec>
                                         <exec executable="${payara.asadmin}">

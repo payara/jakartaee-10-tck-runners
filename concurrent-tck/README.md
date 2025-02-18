@@ -13,10 +13,5 @@ If intending to run against a remote server (`-Ppayara-server-remote`), then you
 To skip server startup and shutdown, set `-DskipServerStartStop` to true. Defaults to true for remote profile, false otherwise.
 To skip server configuration, set to `-DskipConfig` to true. Defaults to false.
 
-If running on Windows, due to how the `create-system-properties` command parses ':' and '\' there is a property 
-provided for you to provide double-escapes via the CLI. 
-Example:
-`mvn clean verify -Ppayara-server-managed -Dpayara.version=... -Djiamge.dir.escaped=D\:\\Git\\JakartaEE10-TCK-Runners\\concurrent-tck\\target\\classes\\jimage -pl . -pl tck-download -pl tck-download/jakarta-concurrency-tck -pl concurrent-tck`
-
 To debug a single test, specify the name of the test using surefire syntax e.g. `-Dtest=SignatureTests#testSignatures`
 https://maven.apache.org/surefire/maven-surefire-plugin/examples/single-test.html

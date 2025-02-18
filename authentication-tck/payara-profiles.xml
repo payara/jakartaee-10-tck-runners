@@ -130,8 +130,9 @@
                                     </arguments>
                                 </configuration>
                             </execution>
+                            <!-- Use singular create-system-property command to allow this to work on Windows - the asadmin separator of : doesn't play well with Windows paths -->
                             <execution>
-                                <id>create-expected-tck-properties</id>
+                                <id>create-expected-tck-property-j2eelogin.name</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
                                     <goal>exec</goal>
@@ -141,8 +142,72 @@
                                     <skip>${skipConfig}</skip>
                                     <executable>${payara.asadmin}</executable>
                                     <arguments>
-                                        <argument>create-system-properties</argument>
-                                        <argument>j2eelogin.name=j2ee:j2eelogin.password=j2ee:provider.configuration.file=${provider.configuration.file}:vendor.authconfig.factory=${vendor.authconfig.factory}:log.file.location=${log.file.location}</argument>
+                                        <argument>create-system-property</argument>
+                                        <argument>j2eelogin.name=j2ee</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>create-expected-tck-property-j2eelogin.password</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <inherited>false</inherited>
+                                <configuration>
+                                    <skip>${skipConfig}</skip>
+                                    <executable>${payara.asadmin}</executable>
+                                    <arguments>
+                                        <argument>create-system-property</argument>
+                                        <argument>j2eelogin.password=j2ee</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>create-expected-tck-propertt-provider.configuration.file</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <inherited>false</inherited>
+                                <configuration>
+                                    <skip>${skipConfig}</skip>
+                                    <executable>${payara.asadmin}</executable>
+                                    <arguments>
+                                        <argument>create-system-property</argument>
+                                        <argument>provider.configuration.file=${provider.configuration.file}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>create-expected-tck-property-vendor.authconfig.factory</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <inherited>false</inherited>
+                                <configuration>
+                                    <skip>${skipConfig}</skip>
+                                    <executable>${payara.asadmin}</executable>
+                                    <arguments>
+                                        <argument>create-system-property</argument>
+                                        <argument>vendor.authconfig.factory=${vendor.authconfig.factory}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>create-expected-tck-property-log.file.location</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <inherited>false</inherited>
+                                <configuration>
+                                    <skip>${skipConfig}</skip>
+                                    <executable>${payara.asadmin}</executable>
+                                    <arguments>
+                                        <argument>create-system-property</argument>
+                                        <argument>log.file.location=${log.file.location}</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
