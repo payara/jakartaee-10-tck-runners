@@ -22,10 +22,10 @@ echo "Starting Payara for setup"
 echo "Setting file user javajoe"
 ./asadmin --passwordfile=prepare-server-password create-file-user --groups=Manager --authrealmname=file javajoe
 echo "Setting system property jimage.dir", needed for SignatureTestServlet
-./asadmin create-system-properties jimage.dir=/tmp
+./asadmin create-system-property jimage.dir=/tmp
 echo "Setting allow setAccessible, needed for SignatureTestServlet"
-./asadmin create-jvm-options "--add-exports=java.base/jdk.internal.vm.annotation=ALL-UNNAMED"
-./asadmin create-jvm-options "--add-opens=java.base/jdk.internal.vm.annotation=ALL-UNNAMED"
+./asadmin create-jvm-option "--add-exports=java.base/jdk.internal.vm.annotation=ALL-UNNAMED"
+./asadmin create-jvm-option "--add-opens=java.base/jdk.internal.vm.annotation=ALL-UNNAMED"
 echo "Setup phase done, stopping Payara"
 ./asadmin stop-domain
 popd

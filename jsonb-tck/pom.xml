@@ -98,7 +98,7 @@
                         <configuration>
                             <target unless="${skipConfig}">
                                 <exec executable="${payara.asadmin}">
-                                    <arg value="create-jvm-options" />
+                                    <arg value="create-jvm-option" />
                                     <arg value="-Djava.locale.providers=COMPAT" />
                                 </exec>
                             </target>
