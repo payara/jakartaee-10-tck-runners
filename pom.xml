@@ -90,7 +90,7 @@
         <jimage.dir>${project.build.directory}${file.separator}jdk-bundle</jimage.dir>
         <shrinkwrap.resolver.version>3.3.0</shrinkwrap.resolver.version>
         <shrinkwrap.descriptors.version>2.0.0</shrinkwrap.descriptors.version>
-        <jakarta.tck.arquillian.version>11.0.0-SNAPSHOT</jakarta.tck.arquillian.version>
+        <jakarta.tck.arquillian.version>11.0.0-RC1</jakarta.tck.arquillian.version>
 
         <!-- Jakarta EE versions -->
         <jakarta-annotations-tck.version>3.0.0</jakarta-annotations-tck.version>
@@ -103,7 +103,7 @@
         <jakarta.tck.bean-validation.version>3.1.1</jakarta.tck.bean-validation.version>
         <jakarta.tck.servlet.jsp-api.version>4.0.0</jakarta.tck.servlet.jsp-api.version>
         <jakarta.tck.pages.version>4.0.0</jakarta.tck.pages.version>
-        <jakarta.tck.common.version>11.0.0-M1</jakarta.tck.common.version>
+        <jakarta.tck.common.version>11.0.0-RC4</jakarta.tck.common.version>
         <jakarta.tck.signaturetest.version>11.0.0-M1</jakarta.tck.signaturetest.version>
         <jakarta.tck.persistence.version>3.2.0</jakarta.tck.persistence.version>
         <jakarta.tck.cdi.version>4.1.0</jakarta.tck.cdi.version>

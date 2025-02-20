@@ -2,7 +2,7 @@
 <!--
   DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-  Copyright (c) 2024 Payara Foundation and/or its affiliates. All rights reserved.
+  Copyright (c) 2024-2025 Payara Foundation and/or its affiliates. All rights reserved.
 
   The contents of this file are subject to the terms of either the GNU
   General Public License Version 2 only ("GPL") or the Common Development
@@ -114,47 +114,101 @@
         <ri.home>${payara.home}${file.separator}mq</ri.home>
         <s1as.imqbin.loc>${javaee.home}${file.separator}..${file.separator}mq${file.separator}bin</s1as.imqbin.loc>
         <sql.directory>.${file.separator}sql</sql.directory>
-        <ts.home>.${file.separator}jakartaeetck${file.separator}</ts.home>
+        <ts.home>.${file.separator}jakartaeetck</ts.home>
         <user1>cts1</user1>
         <user2>cts1</user2>
         <derby.version>10.17.1.0</derby.version>
         <derby.zip.url>https://dlcdn.apache.org/db/derby/db-derby-${derby.version}/db-derby-${derby.version}-bin.zip</derby.zip.url>
         <imq.varhome>${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}imq</imq.varhome>
+        <jakarta.tck.common.version>11.0.0-RC5</jakarta.tck.common.version>
+        <dbprocedures.version>3.2.1-SNAPSHOT</dbprocedures.version>
     </properties>
 
     <dependencies>
         <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>jakarta.tck</groupId>
-            <artifactId>jms</artifactId>
+            <artifactId>jms-platform-tck</artifactId>
             <version>${jakarta.tck.messaging.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-container-test-spi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-container-spi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.core</groupId>
+            <artifactId>arquillian-core-spi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.test</groupId>
+            <artifactId>arquillian-test-impl-base</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.junit5</groupId>
+            <artifactId>arquillian-junit5-container</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.junit5</groupId>
+            <artifactId>arquillian-junit5-core</artifactId>
         </dependency>
         <dependency>
             <groupId>jakarta.tck.arquillian</groupId>
             <artifactId>arquillian-protocol-appclient</artifactId>
             <version>${jakarta.tck.arquillian.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.jboss.arquillian.*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.jboss.shrinkwrap.*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-api-maven</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-spi-maven</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>jakarta.tck.arquillian</groupId>
             <artifactId>arquillian-protocol-javatest</artifactId>
             <version>${jakarta.tck.arquillian.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>org.jboss.arquillian.*</groupId>
-                    <artifactId>*</artifactId>
+                    <groupId>org.jboss.shrinkwrap.resolver</groupId>
+                    <artifactId>shrinkwrap-resolver-api</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.jboss.shrinkwrap.*</groupId>
-                    <artifactId>*</artifactId>
+                    <groupId>org.jboss.shrinkwrap.resolver</groupId>
+                    <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.shrinkwrap.resolver</groupId>
+                    <artifactId>shrinkwrap-resolver-api-maven</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.shrinkwrap.resolver</groupId>
+                    <artifactId>shrinkwrap-resolver-spi-maven</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -162,46 +216,16 @@
             <groupId>jakarta.tck.arquillian</groupId>
             <artifactId>arquillian-protocol-common</artifactId>
             <version>${jakarta.tck.arquillian.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.jboss.arquillian.*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.jboss.shrinkwrap.*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>jakarta.tck.arquillian</groupId>
             <artifactId>arquillian-protocol-lib</artifactId>
             <version>${jakarta.tck.arquillian.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.jboss.arquillian.*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.jboss.shrinkwrap.*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>jakarta.tck.arquillian</groupId>
             <artifactId>tck-porting-lib</artifactId>
             <version>${jakarta.tck.arquillian.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.jboss.arquillian.*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.jboss.shrinkwrap.*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>jakarta.tck</groupId>
@@ -210,18 +234,8 @@
         </dependency>
         <dependency>
             <groupId>jakarta.tck</groupId>
-            <artifactId>libutil</artifactId>
-            <version>${jakarta.tck.common.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.tck</groupId>
-            <artifactId>runtime</artifactId>
-            <version>${jakarta.tck.common.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.tck</groupId>
             <artifactId>dbprocedures</artifactId>
-            <version>${jakarta.tck.persistence.version}</version>
+            <version>${dbprocedures.version}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -238,11 +252,6 @@
         <dependency>
             <groupId>org.apache.derby</groupId>
             <artifactId>derbytools</artifactId>
-            <version>${derby.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.derby</groupId>
-            <artifactId>derbyshared</artifactId>
             <version>${derby.version}</version>
         </dependency>
     </dependencies>
@@ -276,25 +285,6 @@
                 <version>3.6.1</version>
                 <executions>
                     <execution>
-                        <id>001-unpack</id>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                        <phase>generate-resources</phase>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>fish.payara.distributions</groupId>
-                                    <artifactId>${payara.artifact}</artifactId>
-                                    <version>${payara.version}</version>
-                                    <type>zip</type>
-                                    <overWrite>false</overWrite>
-                                    <outputDirectory>${project.build.directory}</outputDirectory>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>003-copy-protocol-lib</id>
                         <goals>
                             <goal>copy</goal>
@@ -324,13 +314,6 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>jakarta.tck</groupId>
-                                    <artifactId>libutil</artifactId>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}${file.separator}lib</outputDirectory>
-                                    <destFileName>libutil.jar</destFileName>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>jakarta.tck</groupId>
                                     <artifactId>common</artifactId>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.directory}${file.separator}lib</outputDirectory>
@@ -345,14 +328,7 @@
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>jakarta.tck</groupId>
-                                    <artifactId>runtime</artifactId>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}${file.separator}lib</outputDirectory>
-                                    <destFileName>runtime.jar</destFileName>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>jakarta.tck</groupId>
-                                    <artifactId>jms</artifactId>
+                                    <artifactId>jms-platform-tck</artifactId>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.directory}${file.separator}lib</outputDirectory>
                                     <destFileName>jms-tck.jar</destFileName>
@@ -370,13 +346,6 @@
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${glassfish.lib.dir}</outputDirectory>
                                     <destFileName>derbytools.jar</destFileName>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.apache.derby</groupId>
-                                    <artifactId>derbyshared</artifactId>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${glassfish.lib.dir}</outputDirectory>
-                                    <destFileName>derbyshared.jar</destFileName>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>jakarta.tck.arquillian</groupId>
@@ -400,7 +369,7 @@
                                 <artifactItem>
                                     <groupId>jakarta.tck</groupId>
                                     <artifactId>dbprocedures</artifactId>
-                                    <version>${jakarta.tck.persistence.version}</version>
+                                    <version>${dbprocedures.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${javadb.lib}</outputDirectory>
@@ -458,9 +427,9 @@
                             <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>--host</argument>
-                                <argument>localhost</argument>
+                                <argument>${derby.server}</argument>
                                 <argument>--user</argument>
-                                <argument>admin</argument>
+                                <argument>${admin.user}</argument>
                                 <argument>--passwordfile</argument>
                                 <argument>${project.basedir}${file.separator}j2ee.pass</argument>
                                 <argument>--interactive=false</argument>
@@ -767,14 +736,13 @@
                                 <additionalClasspathElement>${payara.home}${file.separator}mq${file.separator}lib${file.separator}imq.jar</additionalClasspathElement>
                                 <additionalClasspathElement>${payara.home}${file.separator}mq${file.separator}lib${file.separator}jms.jar</additionalClasspathElement>
                                 <additionalClasspathElement>${payara.home}${file.separator}mq${file.separator}lib${file.separator}fscontext.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${project.build.directory}${file.separator}lib${file.separator}runtime.jar</additionalClasspathElement>
                             </additionalClasspathElements>
                             <includes>
                                 <include>com/sun/ts/tests/jms/**/*Test*.java</include>
                             </includes>
                             <!-- Select the @Tag("tck-appclient") tests -->
                             <groups>tck-appclient</groups>
-                            <dependenciesToScan>jakarta.tck:jms</dependenciesToScan>
+                            <dependenciesToScan>jakarta.tck:jms-platform-tck</dependenciesToScan>
                             <systemPropertyVariables>
                                 <PAYARA_HOME>${payara.home}</PAYARA_HOME>
                                 <payara.home>${payara.home}</payara.home>
@@ -798,6 +766,7 @@
                                 <java.io.tmpdir>${root.tmp.directory}${file.separator}tmp</java.io.tmpdir>
                                 <project.basedir>${project.basedir}</project.basedir>
                                 <arquillian.xml>appclient-arquillian.xml</arquillian.xml>
+                                <ts.home>${ts.home}</ts.home>
                             </systemPropertyVariables>
                             <environmentVariables>
                                 <PAYARA_HOME>${payara.home}</PAYARA_HOME>
