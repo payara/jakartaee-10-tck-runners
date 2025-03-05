@@ -637,7 +637,7 @@
             
             <properties>
                 <payara.root>${maven.multiModuleProjectDirectory}/target</payara.root>
-                <payara.version>7.2024.1.Alpha3-SNAPSHOT</payara.version>
+                <payara.version>7.2025.1.Alpha1-SNAPSHOT</payara.version>
                 <payara.arquillian.container.version>4.0.alpha2</payara.arquillian.container.version>
                 <payara.artifact>payara</payara.artifact>
                 
