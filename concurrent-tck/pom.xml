@@ -62,8 +62,6 @@
 
 
         <jimage.dir>${project.build.outputDirectory}${file.separator}jimage</jimage.dir>
-        <!-- CLI override property workaround for Windows because of how the create-system-properties command parses ':' and '\' -->
-        <jimage.dir.escaped>${jimage.dir}</jimage.dir.escaped>
     </properties>
     
     <!-- The Arquillian test framework -->
@@ -197,7 +195,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>create-jvm-options</id>
+                        <id>create-jvm-option</id>
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>exec</goal>
@@ -206,7 +204,7 @@
                             <skip>${skipConfig}</skip>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
-                                <argument>create-jvm-options</argument>
+                                <argument>create-jvm-option</argument>
                                 <argument>--add-opens=java.base/jdk.internal.vm.annotation=ALL-UNNAMED</argument>
                             </arguments>
                         </configuration>
@@ -221,8 +219,8 @@
                             <skip>${skipConfig}</skip>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
-                                <argument>create-system-properties</argument>
-                                <argument>jimage.dir=${jimage.dir.escaped}</argument>
+                                <argument>create-system-property</argument>
+                                <argument>jimage.dir=${jimage.dir}</argument>
                             </arguments>
                         </configuration>
                     </execution>

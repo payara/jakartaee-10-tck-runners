@@ -8,8 +8,7 @@ From the top-level directory: `mvn clean install -pl . -pl tck-download -pl tck-
 ## Test Execution
 
 ### Managed Server Profile
-NOTE: The payara-server-managed doesn't work on Windows. 
-The `create-system-properties` asadmin command doesn't play well with Windows.
+NOTE: The payara-server-managed doesn't work on Windows.
 
 To execute the full TCK against a managed Payara Server, run from the module directory, replacing the payara.version property.
 

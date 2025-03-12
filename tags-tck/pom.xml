@@ -115,7 +115,7 @@
                         <configuration>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
-                                <argument>create-jvm-options</argument>
+                                <argument>create-jvm-option</argument>
                                 <argument>-Djavax.xml.accessExternalStylesheet=all</argument>
                             </arguments>
                             <successCodes>
@@ -134,7 +134,7 @@
                         <configuration>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
-                                <argument>create-jvm-options</argument>
+                                <argument>create-jvm-option</argument>
                                 <argument>-Djavax.xml.accessExternalSchema=all</argument>
                             </arguments>
                             <successCodes>
@@ -153,7 +153,7 @@
                         <configuration>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
-                                <argument>create-jvm-options</argument>
+                                <argument>create-jvm-option</argument>
                                 <argument>-Djavax.xml.accessExternalDTD=file,http</argument>
                             </arguments>
                             <successCodes>

@@ -148,7 +148,7 @@
                             <skip>${skipConfig}</skip>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
-                                <argument>create-jvm-options</argument>
+                                <argument>create-jvm-option</argument>
                                 <argument>--add-opens=java.base/jdk.internal.vm.annotation=ALL-UNNAMED</argument>
                             </arguments>
                         </configuration>
