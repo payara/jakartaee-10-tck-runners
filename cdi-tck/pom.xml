@@ -36,6 +36,17 @@
                                 <property name="javaee.level" value="${javaee.level}" location="${porting.home}${file.separator}build.properties"/>
                                 <echo>javaee.level set to ${javaee.level}</echo>
                                 <ant antfile="build.xml" target="test" dir="cditck-porting"/>
+
+                                <loadfile property="test.output" srcFile="${porting.home}${file.separator}glassfish-tck-runner${file.separator}target${file.separator}surefire-reports${file.separator}TestSuite.txt"/>
+
+                                <fail message="Tests failed! Check TestSuite.txt">
+                                    <condition>
+                                        <or>
+                                            <contains string="${test.output}" substring="FAILURE!"/>
+                                        </or>
+                                    </condition>
+                                </fail>
+
                             </target>
                         </configuration>
                     </execution>
