@@ -103,7 +103,7 @@
         <jakarta.tck.bean-validation.version>3.1.1</jakarta.tck.bean-validation.version>
         <jakarta.tck.servlet.jsp-api.version>4.0.0</jakarta.tck.servlet.jsp-api.version>
         <jakarta.tck.pages.version>4.0.0</jakarta.tck.pages.version>
-        <jakarta.tck.common.version>11.0.0-RC4</jakarta.tck.common.version>
+        <jakarta.tck.common.version>11.0.0-RC7</jakarta.tck.common.version>
         <jakarta.tck.signaturetest.version>11.0.0-M1</jakarta.tck.signaturetest.version>
         <jakarta.tck.persistence.version>3.2.0</jakarta.tck.persistence.version>
         <jakarta.tck.cdi.version>4.1.0</jakarta.tck.cdi.version>
@@ -116,7 +116,7 @@
         <jakarta.tck.core-profile.version>11.0.0</jakarta.tck.core-profile.version>
         <jakarta.tck.inject.version>2.0.2</jakarta.tck.inject.version>
         <jakarta-authentication-tck.version>3.1.0</jakarta-authentication-tck.version>
-        <jakarta.tck.messaging.version>11.0.0-M7</jakarta.tck.messaging.version>
+        <jakarta.tck.messaging.version>11.0.0-M14</jakarta.tck.messaging.version>
         <jakarta.tck.data.version>1.0.1</jakarta.tck.data.version>
         <!-- If updating this Faces TCK version - please also update the replacement poms we use under faces-tck -->
         <jakarta.tck.faces.version>4.1.1</jakarta.tck.faces.version>
