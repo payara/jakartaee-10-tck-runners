@@ -120,7 +120,6 @@
         <derby.version>10.17.1.0</derby.version>
         <derby.zip.url>https://dlcdn.apache.org/db/derby/db-derby-${derby.version}/db-derby-${derby.version}-bin.zip</derby.zip.url>
         <imq.varhome>${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}imq</imq.varhome>
-        <jakarta.tck.common.version>11.0.0-RC5</jakarta.tck.common.version>
         <dbprocedures.version>3.2.1-SNAPSHOT</dbprocedures.version>
     </properties>
 
@@ -796,23 +795,10 @@
                             </includes>
                             <!-- Select the @Tag("tck-javatest") tests -->
                             <groups>tck-javatest</groups>
-                            <dependenciesToScan>jakarta.tck:jms</dependenciesToScan>
+                            <dependenciesToScan>jakarta.tck:jms-platform-tck</dependenciesToScan>
                             <systemPropertyVariables>
                                 <PAYARA_HOME>${payara.home}</PAYARA_HOME>
                                 <payara.home>${payara.home}</payara.home>
-                                <payara.postBootCommands>create-file-user --groups staff:mgr:DIRECTOR --passwordfile ${project.build.directory}/../j2ee.pass j2ee
-                                    create-file-user --groups guest:OTHERROLE --passwordfile ${project.build.directory}/../javajoe.pass javajoe
-                                    set server-config.network-config.protocols.protocol.http-listener-1.http.trace-enabled=true
-                                    create-jms-resource --restype jakarta.jms.Queue --property imqDestinationName=myQueue MY_QUEUE
-                                    create-jms-resource --restype jakarta.jms.Topic --property imqDestinationName=myTopic MY_TOPIC
-                                    create-jdbc-connection-pool --restype javax.sql.DataSource --datasourceclassname org.apache.derby.jdbc.ClientDataSource --property DatabaseName=derbyDB:serverName=localhost:PortNumber=1527:User=cts1:Password=cts1 --steadypoolsize 32 --maxpoolsize 64 cts-derby-pool
-                                    create-jdbc-resource --connectionpoolid cts-derby-pool jdbc/DB1
-                                    create-jms-resource --restype jakarta.jms.QueueConnectionFactory jms/QueueConnectionFactory
-                                    create-jms-resource --restype jakarta.jms.TopicConnectionFactory jms/TopicConnectionFactory
-                                    create-jms-resource --restype jakarta.jms.ConnectionFactory --property name=cFactory jms/ConnectionFactory
-                                    list-jdbc-connection-pools
-                                    list-jdbc-resources
-                                    list-file-users</payara.postBootCommands>
                                 <junit.log.traceflag>true</junit.log.traceflag>
                                 <harness.log.traceflag>true</harness.log.traceflag>
                                 <cts.harness.debug>true</cts.harness.debug>
