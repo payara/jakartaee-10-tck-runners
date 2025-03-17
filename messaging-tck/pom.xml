@@ -75,7 +75,6 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>${junit.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.tck</groupId>
@@ -85,17 +84,15 @@
         <dependency>
             <groupId>jakarta.tck</groupId>
             <artifactId>jms-tck</artifactId>
-            <version>11.0.0-payara</version>
+            <version>${jms-tck.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.arquillian.junit5</groupId>
             <artifactId>arquillian-junit5-container</artifactId>
-            <version>${arquillian.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.arquillian.junit5</groupId>
             <artifactId>arquillian-junit5-core</artifactId>
-            <version>${arquillian.version}</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.hk2</groupId>
@@ -290,7 +287,6 @@
             </plugin>
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.5.2</version>
                 <executions>
                     <execution>
                         <id>gf-tests</id>

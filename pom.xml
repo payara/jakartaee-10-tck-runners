@@ -120,7 +120,8 @@
         <jakarta.tck.data.version>1.0.1</jakarta.tck.data.version>
         <!-- If updating this Faces TCK version - please also update the replacement poms we use under faces-tck -->
         <jakarta.tck.faces.version>4.1.1</jakarta.tck.faces.version>
-        
+        <jms-tck.version>11.0.0-payara</jms-tck.version>
+
         <!-- The profile to run - acceptable parameters are 'full', 'web', and 'core' -->
         <jakarta.tck.platform>full</jakarta.tck.platform>
         <javaee.level>${jakarta.tck.platform}</javaee.level>

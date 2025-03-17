@@ -26,7 +26,7 @@
                         <configuration>
                             <groupId>jakarta.tck</groupId>
                             <artifactId>jms-tck</artifactId>
-                            <version>11.0.0-payara</version>
+                            <version>${jms-tck.version}</version>
                             <packaging>jar</packaging>
                             <file>jms-tck-11.0.0-SNAPSHOT.jar</file>
                             <generatePom>true</generatePom>
