@@ -109,6 +109,22 @@
                 <version>3.0.0</version>
                 <executions>
                     <execution>
+                        <id>init</id>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <phase>pre-integration-test</phase>
+                        <configuration>
+                            <target>
+                                <delete failonerror="false" file="${admin.pass.file}"/>
+                                <delete dir="${jndi.fs.dir}" failonerror="false"/>
+                                <mkdir dir="${jndi.fs.dir}"/>
+                                <echo message="Echoing: imq.imqcmd.password=${admin.pass} &gt;${admin.pass.file}"/>
+                                <echo file="${admin.pass.file}" message="imq.imqcmd.password=${admin.pass}"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>startbkr</id>
                         <phase>pre-integration-test</phase>
                         <goals>
