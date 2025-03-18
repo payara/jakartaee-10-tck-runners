@@ -92,7 +92,7 @@
         <jimage.dir>${project.build.directory}${file.separator}jdk-bundle</jimage.dir>
         <shrinkwrap.resolver.version>3.3.0</shrinkwrap.resolver.version>
         <shrinkwrap.descriptors.version>2.0.0</shrinkwrap.descriptors.version>
-        <jakarta.tck.arquillian.version>11.0.0-RC1</jakarta.tck.arquillian.version>
+        <jakarta.tck.arquillian.version>11.0.0</jakarta.tck.arquillian.version>
 
         <!-- Jakarta EE versions -->
         <jakarta-annotations-tck.version>3.0.0</jakarta-annotations-tck.version>
@@ -371,7 +371,7 @@
             <id>jakarta-staging</id>
             <repositories>
                 <repository>
-                    <id>jakarta-releases</id>
+                    <id>jakarta-staging</id>
                     <url>https://jakarta.oss.sonatype.org/content/groups/staging/</url>
                     <releases>
                         <enabled>true</enabled>
@@ -381,6 +381,18 @@
                     </snapshots>
                 </repository>
             </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>jakarta-staging</id>
+                    <url>https://jakarta.oss.sonatype.org/content/groups/staging/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </pluginRepository>
+            </pluginRepositories>
         </profile>
 
         <profile>
