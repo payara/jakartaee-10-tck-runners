@@ -293,8 +293,8 @@
                             <additionalClasspathElements>
                                 <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}angus-mail.jar</additionalClasspathElement>
                                 <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.mail-api.jar</additionalClasspathElement>
-<!--                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}mail-connector.jar</additionalClasspathElement>-->
-<!--                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}mail-runtime.jar</additionalClasspathElement>-->
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}javamail-connector.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}javamail-runtime.jar</additionalClasspathElement>
                                 <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}glassfish-naming.jar</additionalClasspathElement>
                             </additionalClasspathElements>
                             <systemPropertyVariables>
@@ -321,8 +321,8 @@
                             <additionalClasspathElements>
                                 <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}angus-mail.jar</additionalClasspathElement>
                                 <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.mail-api.jar</additionalClasspathElement>
-<!--                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}mail-connector.jar</additionalClasspathElement>-->
-<!--                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}mail-runtime.jar</additionalClasspathElement>-->
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}javamail-connector.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}javamail-runtime.jar</additionalClasspathElement>
                                 <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}glassfish-naming.jar</additionalClasspathElement>
                             </additionalClasspathElements>
                             <systemPropertyVariables>
