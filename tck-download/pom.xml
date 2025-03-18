@@ -52,7 +52,7 @@
         <module>jakarta-core-profile-tck</module>
         <module>jakarta-inject-tck</module>
         <module>jakarta-authentication-tck</module>
-        <module>jakarta-mail-platform-tck</module>
+        <module>jakarta-platform-tck</module>
         <module>jakarta-data-tck</module>
     </modules>
 
