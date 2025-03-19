@@ -75,7 +75,6 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>${junit.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.tck</groupId>
@@ -85,17 +84,15 @@
         <dependency>
             <groupId>jakarta.tck</groupId>
             <artifactId>jms-tck</artifactId>
-            <version>${jakarta.tck.messaging.version}</version>
+            <version>${jms-tck.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.arquillian.junit5</groupId>
             <artifactId>arquillian-junit5-container</artifactId>
-            <version>${arquillian.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.arquillian.junit5</groupId>
             <artifactId>arquillian-junit5-core</artifactId>
-            <version>${arquillian.version}</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.hk2</groupId>
@@ -108,41 +105,15 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>unpack</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>fish.payara.distributions</groupId>
-                                    <artifactId>${payara.artifact}</artifactId>
-                                    <version>${payara.version}</version>
-                                    <type>zip</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}</outputDirectory>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>3.0.0</version>
                 <executions>
                     <execution>
                         <id>init</id>
-                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>run</goal>
                         </goals>
+                        <phase>pre-integration-test</phase>
                         <configuration>
                             <target>
                                 <delete failonerror="false" file="${admin.pass.file}"/>
@@ -150,39 +121,6 @@
                                 <mkdir dir="${jndi.fs.dir}"/>
                                 <echo message="Echoing: imq.imqcmd.password=${admin.pass} &gt;${admin.pass.file}"/>
                                 <echo file="${admin.pass.file}" message="imq.imqcmd.password=${admin.pass}"/>
-                            </target>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>initServer</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <echo message="Starting server."/>
-                                <exec executable="${payara.asadmin}">
-                                    <arg line="start-domain"/>
-                                </exec>
-                            </target>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>encodeAdminPassword</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <echo message="Encode admin password in JMS RI or OpenMQ via (imqusermgr) ......"/>
-                                <exec executable="${exec.imqusermgr}">
-                                    <env key="IMQ_JAVAHOME" value="${java.home}"/>
-                                    <arg line="${exec.imqusermgr.part2}"/>
-                                    <arg line="encode -f -src ${admin.pass.file} -target ${admin.pass.file.encoded}"/>
-                                </exec>
-                                <move file="${admin.pass.file.encoded}" overwrite="true" tofile="${admin.pass.file}"/>
                             </target>
                         </configuration>
                     </execution>
@@ -364,160 +302,7 @@
                 </executions>
             </plugin>
             <plugin>
-                <artifactId>exec-maven-plugin</artifactId>
-                <groupId>org.codehaus.mojo</groupId>
-                <executions>
-                    <execution>
-                        <id>StopDomain1</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${payara.asadmin}</executable>
-                            <arguments>
-                                <argument>stop-domain</argument>
-                            </arguments>
-                            <successCodes>
-                                <successCode>0</successCode>
-                                <successCode>1</successCode>
-                            </successCodes>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>StartDomain1</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${payara.asadmin}</executable>
-                            <arguments>
-                                <argument>start-domain</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>Enable Trace requests</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${payara.asadmin}</executable>
-                            <arguments>
-                                <argument>set</argument>
-                                <argument>server-config.network-config.protocols.protocol.http-listener-1.http.trace-enabled=true</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>Delete User j2ee</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${payara.asadmin}</executable>
-                            <arguments>
-                                <argument>--passwordfile</argument>
-                                <argument>${project.basedir}/j2ee.pass</argument>
-                                <argument>delete-file-user</argument>
-                                <argument>j2ee</argument>
-                            </arguments>
-                            <successCodes>
-                                <successCode>0</successCode>
-                                <successCode>1</successCode>
-                            </successCodes>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>Add User j2ee</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${payara.asadmin}</executable>
-                            <arguments>
-                                <argument>--passwordfile</argument>
-                                <argument>${project.basedir}/j2ee.pass</argument>
-                                <argument>create-file-user</argument>
-                                <argument>--groups</argument>
-                                <argument>staff:mgr</argument>
-                                <argument>j2ee</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>Delete User javajoe</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${payara.asadmin}</executable>
-                            <arguments>
-                                <argument>--passwordfile</argument>
-                                <argument>${project.basedir}/javajoe.pass</argument>
-                                <argument>delete-file-user</argument>
-                                <argument>javajoe</argument>
-                            </arguments>
-                            <successCodes>
-                                <successCode>0</successCode>
-                                <successCode>1</successCode>
-                            </successCodes>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>Add User javajoe</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${payara.asadmin}</executable>
-                            <arguments>
-                                <argument>--passwordfile</argument>
-                                <argument>${project.basedir}/javajoe.pass</argument>
-                                <argument>create-file-user</argument>
-                                <argument>--groups</argument>
-                                <argument>guest</argument>
-                                <argument>javajoe</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>list users</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${payara.asadmin}</executable>
-                            <arguments>
-                                <argument>list-file-users</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>StopDomain</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${payara.asadmin}</executable>
-                            <arguments>
-                                <argument>stop-domain</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.0.0-M5</version>
                 <executions>
                     <execution>
                         <id>gf-tests</id>
@@ -540,8 +325,6 @@
                             </additionalClasspathElements>
                             <dependenciesToScan>jakarta.tck:jms-tck</dependenciesToScan>
                             <systemPropertyVariables>
-                                <PAYARA_HOME>${payara.home}</PAYARA_HOME>
-                                <payara.home>${payara.home}</payara.home>
                                 <user>j2ee</user>
                                 <password>j2ee</password>
                                 <authuser>javajoe</authuser>

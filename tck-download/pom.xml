@@ -54,6 +54,7 @@
         <module>jakarta-authentication-tck</module>
         <module>jakarta-mail-platform-tck</module>
         <module>jakarta-data-tck</module>
+        <module>jakarta-jms-tck</module>
     </modules>
 
     <build>
