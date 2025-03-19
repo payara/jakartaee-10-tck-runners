@@ -21,6 +21,7 @@
         <!-- Weld uses 2 versions numbers. Some artefact use one version, other the second. -->
         <weld.version>6.0.1.Final</weld.version>
         <weld.version2>6.0.Final</weld.version2>
+        <shrinkwrap.version>2.0.0</shrinkwrap.version>
     </properties>
 
     <dependencyManagement>
@@ -40,7 +41,7 @@
             <dependency>
                 <groupId>org.jboss.shrinkwrap.descriptors</groupId>
                 <artifactId>shrinkwrap-descriptors-impl-javaee</artifactId>
-                <version>2.0.0</version>
+                <version>${shrinkwrap.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -62,50 +63,50 @@
         <dependency>
             <groupId>jakarta.el</groupId>
             <artifactId>jakarta.el-api</artifactId>
-            <version>6.0.0</version>
+            <version>${jakarta.tck.el.version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>jakarta.faces</groupId>
             <artifactId>jakarta.faces-api</artifactId>
-            <version>4.1.2</version>
+            <version>${jakarta.tck.faces.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
-            <version>6.1.0</version>
+            <version>${jakarta.tck.servlet.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.jms</groupId>
             <artifactId>jakarta.jms-api</artifactId>
-            <version>3.1.0</version>
+            <version>${jakarta.tck.jms.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.transaction</groupId>
             <artifactId>jakarta.transaction-api</artifactId>
-            <version>2.0.1</version>
+            <version>${jakarta.tck.transaction.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.resource</groupId>
             <artifactId>jakarta.resource-api</artifactId>
-            <version>2.1.0</version>
+            <version>${jakarta.tck.resource.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.servlet.jsp</groupId>
             <artifactId>jakarta.servlet.jsp-api</artifactId>
-            <version>4.0.0</version>
+            <version>${jakarta.tck.servlet.jsp-api.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.ws.rs</groupId>
             <artifactId>jakarta.ws.rs-api</artifactId>
-            <version>4.0.0</version>
+            <version>${jakarta.tck.ws.rs.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -188,7 +189,7 @@
         <dependency>
             <groupId>org.glassfish.expressly</groupId>
             <artifactId>expressly</artifactId>
-            <version>6.0.0-M1</version>
+            <version>${jakarta.tck.expressly.version}</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -201,13 +202,13 @@
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
+            <version>${jakarta.tck.commons-lang.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
 		    <groupId>org.htmlunit</groupId>
     		<artifactId>htmlunit</artifactId>
-    		<version>4.9.0</version>
+    		<version>${jakarta.tck.htmlunit.version}</version>
     		<scope>test</scope>
 		</dependency>
         
@@ -221,7 +222,7 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>7.9.0</version>
+            <version>${jakarta.tck.testng.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -234,14 +235,11 @@
             <artifactId>shrinkwrap-descriptors-impl-javaee</artifactId>
             <scope>test</scope>
         </dependency>
-        <!--
-            The Arquillian connector that starts GlassFish and deploys archives to it.
-        -->
+
         <dependency>
-            <groupId>org.omnifaces.arquillian</groupId>
-            <artifactId>arquillian-glassfish-server-managed</artifactId>
-            <version>1.7</version>
-            <scope>test</scope>
+            <groupId>fish.payara.arquillian</groupId>
+            <artifactId>arquillian-payara-server-managed</artifactId>
+            <version>${payara.arquillian.version}</version>
         </dependency>
     </dependencies>
 
@@ -249,7 +247,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.13.0</version>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <!-- Disable annotation processor for test sources -->
                     <testCompilerArgument>-proc:none</testCompilerArgument>
@@ -328,7 +326,7 @@
                         </goals>
                         <phase>pre-integration-test</phase>
                         <configuration>
-                            <markersDirectory>${glassfish.root}/dependency-maven-plugin-markers</markersDirectory>
+                            <markersDirectory>${payara.root}/dependency-maven-plugin-markers</markersDirectory>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>fish.payara.distributions</groupId>
@@ -384,7 +382,7 @@
                             
                             <!-- System Properties -->
                             <systemPropertyVariables>
-                                <glassfish.home>${payara.root}/payara7</glassfish.home>
+                                <glassfish.home>${payara.home}</glassfish.home>
                                 <glassfish.enableDerby>true</glassfish.enableDerby>
                                 <glassfish.maxHeapSize>2048m</glassfish.maxHeapSize>
                                 <glassfish.enableAssertions>:org.jboss.cdi.tck...</glassfish.enableAssertions>
