@@ -58,8 +58,6 @@
 
     <properties>
         <tck.root>${project.build.directory}</tck.root>
-        <maven.settings.xml>${user.home}${file.separator}.m2${file.separator}settings.xml</maven.settings.xml>
-        <maven.executable>${env.MAVEN_HOME}${file.separator}bin${file.separator}mvn</maven.executable>
 
         <epicyro.version>3.1.0</epicyro.version>
 
@@ -144,7 +142,6 @@
                 </os>
             </activation>
             <properties>
-                <maven.executable>${env.MAVEN_HOME}${file.separator}bin${file.separator}mvn.cmd</maven.executable>
                 <scriptExecutor>powershell.exe</scriptExecutor>
                 <scriptExtension>ps1</scriptExtension>
             </properties>
