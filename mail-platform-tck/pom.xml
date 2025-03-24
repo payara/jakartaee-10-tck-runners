@@ -30,10 +30,6 @@
         <mail.user>user01</mail.user>
         <mailboxFolder1>${project.basedir}${file.separator}mailboxes</mailboxFolder1>
         <smtp.port>1025</smtp.port>
-
-        <scriptExecutor>bash</scriptExecutor>
-        <scriptExtension>sh</scriptExtension>
-        <startMailsServerScript>${basedir}${file.separator}startMailServer.${scriptExtension}</startMailsServerScript>
     </properties>
 
     <dependencyManagement>
