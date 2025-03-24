@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>fish.payara.jakarta.tests.tck</groupId>
+        <artifactId>tck-download</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>jakarta-platform-tck</artifactId>
+    <packaging>pom</packaging>
+    <name>TCK: Install Jakarta Platform TCK</name>
+
+    <properties>
+        <tck.test.platform.file>jakartaeetck-${jakarta.tck.platform.version}-dist.zip</tck.test.platform.file>
+        <!-- Once released, get rid of the staging url and use the proper one -->
+        <tck.tests.platform.url>https://download.eclipse.org/ee4j/jakartaee-tck/jakartaee11/staged/eftl/${tck.test.platform.file}</tck.tests.platform.url>
+        <!--<tck.tests.platform.url>https://download.eclipse.org/jakartaee/platform/11.0/${tck.test.platform.file}</tck.tests.platform.url>-->
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.googlecode.maven-download-plugin</groupId>
+                <artifactId>download-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>download-platform-tck-zip</id>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <url>${tck.tests.platform.url}</url>
+                            <unpack>true</unpack>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Install all the individual TCK artefacts -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>execute-maven-install-on-platform-tck-artifacts-pom</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${maven.executable}</executable>
+                            <arguments>
+                                <argument>-B</argument>
+                                <argument>-e</argument>
+                                <argument>-s</argument>
+                                <argument>${maven.settings.xml}</argument>
+                                <argument>-f</argument>
+                                <argument>${project.build.directory}${file.separator}jakartaeetck${file.separator}artifacts${file.separator}pom.xml</argument>
+                                <argument>install</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
