@@ -47,6 +47,7 @@
         <module>jakarta-cdi-tck</module>
         <module>jakarta-jsonp-tck</module>
         <module>jakarta-jsonb-tck</module>
+        <module>jakarta-jsonb-platform-extra-tck</module>
         <module>jakarta-batch-tck</module>
         <module>jakarta-concurrency-tck</module>
         <module>jakarta-core-profile-tck</module>
@@ -54,7 +55,6 @@
         <module>jakarta-authentication-tck</module>
         <module>jakarta-platform-tck</module>
         <module>jakarta-data-tck</module>
-        <module>jakarta-jms-tck</module>
     </modules>
 
     <build>
