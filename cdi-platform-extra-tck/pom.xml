@@ -13,31 +13,11 @@
 
     <properties>
         <cdi.tck-4-1.version>4.1.0</cdi.tck-4-1.version>
-        <!-- The CDI EE Platform Integration TCK Version -->
-        <tck.version>11.0.0</tck.version>
-        
+
         <maven.build.cache.enabled>false</maven.build.cache.enabled>
 
-        <!-- Weld uses 2 versions numbers. Some artefact use one version, other the second. -->
-        <weld.version>6.0.1.Final</weld.version>
-        <weld.version2>6.0.Final</weld.version2>
         <shrinkwrap.version>2.0.0</shrinkwrap.version>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>jakarta.enterprise</groupId>
-                <artifactId>jakarta.enterprise.cdi-api</artifactId>
-                <version>${cdi.api.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.shrinkwrap.descriptors</groupId>
-                <artifactId>shrinkwrap-descriptors-impl-javaee</artifactId>
-                <version>${shrinkwrap.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
 
@@ -50,50 +30,42 @@
         <dependency>
             <groupId>jakarta.enterprise</groupId>
             <artifactId>jakarta.enterprise.cdi-el-api</artifactId>
-            <version>${cdi.api.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.el</groupId>
             <artifactId>jakarta.el-api</artifactId>
-            <version>${jakarta.tck.el.version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>jakarta.faces</groupId>
             <artifactId>jakarta.faces-api</artifactId>
-            <version>${jakarta.tck.faces.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
-            <version>${jakarta.tck.servlet.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.jms</groupId>
             <artifactId>jakarta.jms-api</artifactId>
-            <version>${jakarta.tck.jms.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.transaction</groupId>
             <artifactId>jakarta.transaction-api</artifactId>
-            <version>${jakarta.tck.transaction.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.resource</groupId>
             <artifactId>jakarta.resource-api</artifactId>
-            <version>${jakarta.tck.resource.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.servlet.jsp</groupId>
             <artifactId>jakarta.servlet.jsp-api</artifactId>
-            <version>${jakarta.tck.servlet.jsp-api.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -107,7 +79,6 @@
         <dependency>
             <groupId>org.jboss.weld</groupId>
             <artifactId>weld-api</artifactId>
-            <version>${weld.version2}</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -119,7 +90,6 @@
         <dependency>
             <groupId>org.jboss.weld</groupId>
             <artifactId>weld-spi</artifactId>
-            <version>${weld.version2}</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -131,7 +101,6 @@
         <dependency>
             <groupId>org.jboss.weld</groupId>
             <artifactId>weld-core-impl</artifactId>
-            <version>${weld.version}</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -143,7 +112,6 @@
         <dependency>
             <groupId>org.jboss.weld.module</groupId>
             <artifactId>weld-web</artifactId>
-            <version>${weld.version}</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -175,7 +143,7 @@
         <dependency>
             <groupId>jakarta.tck</groupId>
             <artifactId>cdi-tck-ee-impl</artifactId>
-            <version>${tck.version}</version>
+            <version>${jakarta.tck.platform.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -209,7 +177,6 @@
         <dependency>
             <groupId>org.jboss.weld</groupId>
             <artifactId>weld-lite-extension-translator</artifactId>
-            <version>${weld.version}</version>
         </dependency>
 
         <dependency>
@@ -273,7 +240,7 @@
                                 <artifactItem>
                                     <groupId>jakarta.tck</groupId>
                                     <artifactId>cdi-tck-ee-impl</artifactId>
-                                    <version>${tck.version}</version>
+                                    <version>${jakarta.tck.platform.version}</version>
                                     <overWrite>false</overWrite>
                                 </artifactItem>
                             </artifactItems>
