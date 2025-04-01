@@ -30,7 +30,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    
+
     <dependencies>
 
         <!-- Jakarta EE APIs -->
@@ -294,7 +294,6 @@
                     <dependency>
                         <groupId>org.apache.maven.surefire</groupId>
                         <artifactId>surefire-testng</artifactId>
-                        <version>3.5.2</version>
                     </dependency>
                 </dependencies>
                 <executions>
