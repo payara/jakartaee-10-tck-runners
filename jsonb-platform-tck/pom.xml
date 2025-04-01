@@ -13,28 +13,16 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.release>21</maven.compiler.release>
-    
-        <glassfish.home>${payara.home}</glassfish.home>
-        <glassfish.lib.dir>${glassfish.home}/glassfish/lib</glassfish.lib.dir>
-
+        <payara.home>${payara.home}</payara.home>
+        <payara.lib.dir>${payara.home}${file.separator}glassfish${file.separator}lib</payara.lib.dir>
         <jakarta.tck.arquillian.version>11.0.0</jakarta.tck.arquillian.version>
         <jakarta.tck.common.version>11.0.0</jakarta.tck.common.version>
-        <ts.home>/jakartaeetck</ts.home>
+        <ts.home>${project.basedir}${file.separator}jakartaeetck</ts.home>
         <skipServerStartStop>false</skipServerStartStop>
     </properties>
     
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.junit</groupId>
-                <artifactId>junit-bom</artifactId>
-                <version>${junit.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
             <dependency>
                 <groupId>fish.payara.api</groupId>
                 <artifactId>payara-bom</artifactId>
@@ -66,7 +54,7 @@
         <dependency>
             <groupId>jakarta.tck</groupId>
             <artifactId>jsonb-platform-tck</artifactId>
-            <version>${jakarta.tck.jsonb.extra.version}</version>
+            <version>${jakarta.tck.platform.version}</version>
         </dependency>
     
         <!-- Jakarta TCK tools dependencies -->
@@ -185,13 +173,11 @@
                 </configuration>
             </plugin>
 
-
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.5.0</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <glassfish.home>${project.build.directory}/${glassfish.toplevel.dir}</glassfish.home>
+                        <payara.home>${payara.home}</payara.home>
                         <junit.log.traceflag>true</junit.log.traceflag>
                         <harness.log.traceflag>true</harness.log.traceflag>
                         <cts.harness.debug>true</cts.harness.debug>
@@ -237,19 +223,8 @@
 
     <profiles>
         <profile>
-            <id>full</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <glassfish-artifact-id>glassfish</glassfish-artifact-id>
-                <javatest-testGroups>tck-javatest</javatest-testGroups>
-            </properties>
-        </profile>
-        <profile>
             <id>web</id>
             <properties>
-                <glassfish-artifact-id>web</glassfish-artifact-id>
                 <javatest-testGroups>web</javatest-testGroups>
             </properties>
         </profile>
@@ -268,7 +243,6 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-dependency-plugin</artifactId>
-                        <version>3.6.1</version>
                         <executions>
                             <execution>
                                 <id>04-copy-lib</id>
@@ -343,22 +317,20 @@
                                 </goals>
                                 <configuration>
                                     <additionalClasspathElements>
-                                        <additionalClasspathElement>${project.build.directory}/${glassfish.toplevel.dir}/glassfish/modules/yasson.jar</additionalClasspathElement>
-                                        <additionalClasspathElement>${project.build.directory}/${glassfish.toplevel.dir}/glassfish/modules/parsson.jar</additionalClasspathElement>
+                                        <additionalClasspathElement>${project.build.directory}${file.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}yasson.jar</additionalClasspathElement>
+                                        <additionalClasspathElement>${project.build.directory}${file.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}parsson.jar</additionalClasspathElement>
                                     </additionalClasspathElements>
                                     <includes>
                                         <include>com/sun/ts/tests/jsonb/cdi/**/*Ejb*.java</include>
                                     </includes>
                                     <!-- Select the @Tag("tck-appclient") tests -->
                                     <groups>tck-appclient</groups>
-                                    <dependenciesToScan>jakarta.tck:${tck.artifactId}</dependenciesToScan>
-                                    <systemPropertyVariables>
-                                        <glassfish.home>${project.build.directory}/${glassfish.toplevel.dir}</glassfish.home>
+                                    <dependenciesToScan>jakarta.tck:jsonb-platform-tck</dependenciesToScan>                                    <systemPropertyVariables>
+                                        <payara.home>${payara.home}</payara.home>
                                         <junit.log.traceflag>true</junit.log.traceflag>
                                         <harness.log.traceflag>true</harness.log.traceflag>
                                         <cts.harness.debug>true</cts.harness.debug>
-                                        <java.io.tmpdir>/tmp</java.io.tmpdir>
-                                        <project.basedir>${project.basedir}</project.basedir>
+                                        <java.io.tmpdir>${project.build.directory}${file.separator}tmp</java.io.tmpdir>                                        <project.basedir>${project.basedir}</project.basedir>
                                         <arquillian.xml>appclient-arquillian.xml</arquillian.xml>
                                     </systemPropertyVariables>
                                 </configuration>
@@ -371,8 +343,8 @@
                                 </goals>
                                 <configuration>
                                     <additionalClasspathElements>
-                                        <additionalClasspathElement>${project.build.directory}/${glassfish.toplevel.dir}/glassfish/modules/yasson.jar</additionalClasspathElement>
-                                        <additionalClasspathElement>${project.build.directory}/${glassfish.toplevel.dir}/glassfish/modules/parsson.jar</additionalClasspathElement>
+                                        <additionalClasspathElement>${project.build.directory}${file.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}yasson.jar</additionalClasspathElement>
+                                        <additionalClasspathElement>${project.build.directory}${file.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}parsson.jar</additionalClasspathElement>
                                     </additionalClasspathElements>
                                     <includes>
                                         <include>com/sun/ts/tests/jsonb/pluggability/jsonbprovidertests/*Appclient*.java</include>
@@ -380,9 +352,9 @@
                                     </includes>
                                     <!-- Select the @Tag("tck-appclient") tests -->
                                     <groups>tck-appclient</groups>
-                                    <dependenciesToScan>jakarta.tck:${tck.artifactId}</dependenciesToScan>
+                                    <dependenciesToScan>jakarta.tck:jsonb-platform-tck</dependenciesToScan>
                                     <systemPropertyVariables>
-                                        <glassfish.home>${project.build.directory}/${glassfish.toplevel.dir}</glassfish.home>
+                                        <payara.home>${payara.home}</payara.home>
                                         <junit.log.traceflag>true</junit.log.traceflag>
                                         <harness.log.traceflag>true</harness.log.traceflag>
                                         <cts.harness.debug>true</cts.harness.debug>
