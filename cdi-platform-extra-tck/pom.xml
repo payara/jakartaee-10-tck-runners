@@ -32,13 +32,6 @@
                 <version>${cdi.api.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <version>${arquillian.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
                 <groupId>org.jboss.shrinkwrap.descriptors</groupId>
                 <artifactId>shrinkwrap-descriptors-impl-javaee</artifactId>
                 <version>${shrinkwrap.version}</version>
@@ -100,7 +93,6 @@
         <dependency>
             <groupId>jakarta.servlet.jsp</groupId>
             <artifactId>jakarta.servlet.jsp-api</artifactId>
-            <version>${jakarta.tck.servlet.jsp-api.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -235,12 +227,6 @@
             <artifactId>shrinkwrap-descriptors-impl-javaee</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>fish.payara.arquillian</groupId>
-            <artifactId>arquillian-payara-server-managed</artifactId>
-            <version>${payara.arquillian.version}</version>
-        </dependency>
     </dependencies>
 
     <build>
@@ -318,27 +304,6 @@
                             </artifactItems>
                         </configuration>
                     </execution>
-
-                    <execution>
-                        <id>unpack-payara</id>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                        <phase>pre-integration-test</phase>
-                        <configuration>
-                            <markersDirectory>${payara.root}/dependency-maven-plugin-markers</markersDirectory>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>fish.payara.distributions</groupId>
-                                    <artifactId>${payara.artifact}</artifactId>
-                                    <version>${payara.version}</version>
-                                    <type>zip</type>
-                                    <overWrite>false</overWrite>
-                                    <outputDirectory>${payara.root}</outputDirectory>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
 
@@ -349,7 +314,6 @@
                     <dependency>
                         <groupId>org.apache.maven.surefire</groupId>
                         <artifactId>surefire-testng</artifactId>
-                        <version>3.5.2</version>
                     </dependency>
                 </dependencies>
                 <executions>
@@ -386,19 +350,19 @@
                                 <glassfish.enableDerby>true</glassfish.enableDerby>
                                 <glassfish.maxHeapSize>2048m</glassfish.maxHeapSize>
                                 <glassfish.enableAssertions>:org.jboss.cdi.tck...</glassfish.enableAssertions>
-                                <glassfish.systemProperties>
+                                <payara.systemProperties>
                                     cdiTckExcludeDummy=true
                                     glassfish.servlet.loadAllOnStartup=true
-                                </glassfish.systemProperties>
-                                <glassfish.postBootCommands>
+                                </payara.systemProperties>
+                                <payara.postBootCommands>
                                     create-jms-resource --restype jakarta.jms.Queue --property Name=queue_test queue_test
                                     create-jms-resource --restype jakarta.jms.Topic --property Name=topic_test topic_test
                                     set configs.config.server-config.cdi-service.enable-implicit-cdi=true
                                     create-file-user --groups student --passwordfile ${project.build.directory}/test-classes/password.txt student
                                     create-file-user --groups printer --passwordfile ${project.build.directory}/test-classes/password.txt printer
                                     create-file-user --groups student:alarm --passwordfile ${project.build.directory}/test-classes/password.txt alarm
-                                </glassfish.postBootCommands>
-                                
+                                </payara.postBootCommands>
+
                                 <libPath>${project.build.outputDirectory}</libPath>
                                 <org.jboss.cdi.tck.libraryDirectory>${project.build.directory}/dependency/lib</org.jboss.cdi.tck.libraryDirectory>
                                 <debugMode>true</debugMode>
@@ -432,20 +396,9 @@
 
     <profiles>
         <profile>
-            <id>full</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <excluded.groups>se</excluded.groups>
-                <glassfish-artifact-id>payara</glassfish-artifact-id>
-            </properties>
-        </profile>
-        <profile>
             <id>web</id>
             <properties>
                 <excluded.groups>javaee-full,se</excluded.groups>
-                <glassfish-artifact-id>web</glassfish-artifact-id>
             </properties>
         </profile>
     </profiles>
