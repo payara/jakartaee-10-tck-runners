@@ -8,7 +8,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>jsonb-platform-tck</artifactId>
+    <artifactId>jsonb-platform-tck-runner</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
 
