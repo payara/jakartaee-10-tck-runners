@@ -360,7 +360,7 @@
                             <goal>verify</goal>
                         </goals>
                         <configuration>
-                            <argLine>-Xmx768m</argLine>
+                            <argLine>-Xmx2048m</argLine>
                             <!-- Surefire / TestNG Properties -->
                             <!-- The suite, the exclude and the test dependencies together determine which tests are being run -->
                             <suiteXmlFiles>
