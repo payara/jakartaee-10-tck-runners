@@ -12,12 +12,9 @@
     <artifactId>mail-platform-tck</artifactId>
 
     <properties>
-        <mail.from>user01@james.local</mail.from>
-        <mail.host>localhost</mail.host>
-        <mail.password>1234</mail.password>
-        <mail.user>user01</mail.user>
-        <smtp.port>1025</smtp.port>
-        <jndiName>mail/Session</jndiName>
+        <destinationURL>imap://${escaped.javamail.username}:${javamail.password}@${javamail.server}:${imap.port}</destinationURL>
+        <escaped.javamail.username>user01%40james.local</escaped.javamail.username>
+
         <imap.port>1143</imap.port>
         <javamail.mailbox>test1</javamail.mailbox>
         <!-- mail connection properties -->
@@ -26,24 +23,17 @@
         <javamail.root.path></javamail.root.path>
         <javamail.server>localhost</javamail.server>
         <javamail.username>user01@james.local</javamail.username>
-        <mailboxFolder1>${project.build.directory}/../mailboxes</mailboxFolder1>
-        <escaped.javamail.username>user01%40james.local</escaped.javamail.username>
-        <destinationURL>imap://${escaped.javamail.username}:${javamail.password}@${javamail.server}:${imap.port}
-        </destinationURL>
-        <jakarta.tck.version>11.0.0-M1</jakarta.tck.version>
-        <jakarta.tck.arquillian.version>1.0.0-M17</jakarta.tck.arquillian.version>
-        <shrinkwrap-api.version>1.2.6</shrinkwrap-api.version>
+        <jndiName>mail/Session</jndiName>
+        <mail.from>user01@james.local</mail.from>
+        <mail.host>localhost</mail.host>
+        <mail.password>1234</mail.password>
+        <mail.user>user01</mail.user>
+        <mailboxFolder1>${project.basedir}${file.separator}mailboxes</mailboxFolder1>
+        <smtp.port>1025</smtp.port>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.junit</groupId>
-                <artifactId>junit-bom</artifactId>
-                <version>5.9.1</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
             <dependency>
                 <groupId>fish.payara.api</groupId>
                 <artifactId>payara-bom</artifactId>
@@ -51,52 +41,66 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>jakarta.tck</groupId>
+                <artifactId>artifacts-bom</artifactId>
+                <version>${jakarta.tck.platform.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
+    <!-- These are REQUIRED here - shrinkwrap will not resolve them via the jakarta-staging profile -->
+    <repositories>
+        <repository>
+            <id>jakarta-staging</id>
+            <url>https://jakarta.oss.sonatype.org/content/groups/staging/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>jakarta-staging</id>
+            <url>https://jakarta.oss.sonatype.org/content/groups/staging/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
     <dependencies>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.tck.arquillian</groupId>
-            <artifactId>arquillian-protocol-lib</artifactId>
-            <version>${jakarta.tck.arquillian.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.tck</groupId>
-            <artifactId>libutil</artifactId>
-            <version>${jakarta.tck.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.tck.arquillian</groupId>
-            <artifactId>tck-porting-lib</artifactId>
-            <version>${jakarta.tck.arquillian.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.tck</groupId>
-            <artifactId>runtime</artifactId>
-            <version>${jakarta.tck.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.tck</groupId>
-            <artifactId>common</artifactId>
-            <version>${jakarta.tck.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>fish.payara.jakarta.tests.tck</groupId>
-            <artifactId>jakarta-mail-platform-tck</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
         <dependency>
             <groupId>jakarta.mail</groupId>
             <artifactId>jakarta.mail-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.tck</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.tck</groupId>
+            <artifactId>javamail</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.eclipse.angus</groupId>
             <artifactId>angus-mail</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.jboss.arquillian.container</groupId>
             <artifactId>arquillian-container-test-spi</artifactId>
@@ -114,17 +118,23 @@
         <dependency>
             <groupId>jakarta.tck.arquillian</groupId>
             <artifactId>arquillian-protocol-appclient</artifactId>
-            <version>${jakarta.tck.arquillian.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.tck.arquillian</groupId>
             <artifactId>arquillian-protocol-common</artifactId>
-            <version>${jakarta.tck.arquillian.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.tck.arquillian</groupId>
             <artifactId>arquillian-protocol-javatest</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.tck.arquillian</groupId>
+            <artifactId>arquillian-protocol-lib</artifactId>
             <version>${jakarta.tck.arquillian.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.tck.arquillian</groupId>
+            <artifactId>tck-porting-lib</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jboss.arquillian.container</groupId>
@@ -141,17 +151,36 @@
         <dependency>
             <groupId>org.jboss.shrinkwrap</groupId>
             <artifactId>shrinkwrap-api</artifactId>
-            <version>${shrinkwrap-api.version}</version>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>enforce-os</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireOS>
+                                    <family>unix</family>
+                                    <message>You cannot run this TCK on Windows</message>
+                                </requireOS>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>2-copy-lib</id>
+                        <id>copy-lib</id>
                         <goals>
                             <goal>copy</goal>
                         </goals>
@@ -162,31 +191,70 @@
                                     <groupId>jakarta.tck.arquillian</groupId>
                                     <artifactId>arquillian-protocol-lib</artifactId>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${payara.home}/glassfish/lib</outputDirectory>
+                                    <outputDirectory>${payara.home}${file.separator}glassfish${file.separator}lib</outputDirectory>
                                     <destFileName>arquillian-protocol-lib.jar</destFileName>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>jakarta.tck</groupId>
-                                    <artifactId>libutil</artifactId>
+                                    <artifactId>common</artifactId>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${payara.home}/glassfish/lib</outputDirectory>
-                                    <destFileName>libutil.jar</destFileName>
+                                    <outputDirectory>${payara.home}${file.separator}glassfish${file.separator}lib</outputDirectory>
+                                    <destFileName>common.jar</destFileName>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>jakarta.tck.arquillian</groupId>
                                     <artifactId>tck-porting-lib</artifactId>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${payara.home}/glassfish/lib</outputDirectory>
+                                    <outputDirectory>${payara.home}${file.separator}glassfish${file.separator}lib</outputDirectory>
                                     <destFileName>tck-porting-lib.jar</destFileName>
                                 </artifactItem>
-                                <artifactItem>
-                                    <groupId>jakarta.tck</groupId>
-                                    <artifactId>runtime</artifactId>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${payara.home}/glassfish/lib</outputDirectory>
-                                    <destFileName>runtime.jar</destFileName>
-                                </artifactItem>
                             </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <inherited>false</inherited>
+                <configuration>
+                    <skip>${skipTests}</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>start-and-configure-james-mail</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <exec executable="docker">
+                                    <arg value="run"/>
+                                    <arg value="--name"/>
+                                    <arg value="james-mail"/>
+                                    <arg value="--rm"/>
+                                    <arg value="-d"/>
+                                    <arg value="-p"/>
+                                    <arg value="${smtp.port}:${smtp.port}"/>
+                                    <arg value="-p"/>
+                                    <arg value="${imap.port}:${imap.port}"/>
+                                    <arg value="--entrypoint=/bin/bash"/>
+                                    <arg value="jakartaee/cts-mailserver:0.1"/>
+                                    <arg value="-c"/>
+                                    <arg value="/root/startup.sh"/>
+                                </exec>
+                                <exec executable="sleep">
+                                    <arg value = "10"/>
+                                </exec>
+                                <exec executable="docker">
+                                    <arg value="exec"/>
+                                    <arg value="james-mail"/>
+                                    <arg value="/bin/bash"/>
+                                    <arg value="-c"/>
+                                    <arg value="/root/create_users.sh"/>
+                                </exec>
+                            </target>
                         </configuration>
                     </execution>
                 </executions>
@@ -196,42 +264,28 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>1-stop-domain</id>
+                        <id>start-domain</id>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                         <phase>pre-integration-test</phase>
                         <configuration>
-                            <executable>${payara.asadmin}</executable>
-                            <arguments>
-                                <argument>stop-domain</argument>
-                            </arguments>
-                            <successCodes>
-                                <successCode>0</successCode>
-                                <successCode>1</successCode>
-                            </successCodes>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>2-start-domain</id>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <phase>pre-integration-test</phase>
-                        <configuration>
+                            <skip>${skipTests}</skip>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>start-domain</argument>
+                                <argument>${payara.domain}</argument>
                             </arguments>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>1-populate-mailbox</id>
+                        <id>populate-mailbox</id>
                         <goals>
                             <goal>java</goal>
                         </goals>
                         <phase>pre-integration-test</phase>
                         <configuration>
+                            <skip>${skipTests}</skip>
                             <mainClass>com.sun.ts.tests.javamail.ee.util.fpopulate</mainClass>
                             <arguments>
                                 <argument>-s</argument>
@@ -252,12 +306,13 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>91-create-mail-resource</id>
+                        <id>create-mail-resource</id>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                         <phase>pre-integration-test</phase>
                         <configuration>
+                            <skip>${skipTests}</skip>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>create-javamail-resource</argument>
@@ -274,16 +329,30 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>92-restart-domain</id>
+                        <id>stop-domain</id>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                         <phase>pre-integration-test</phase>
                         <configuration>
+                            <skip>${skipTests}</skip>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>stop-domain</argument>
+                                <argument>${payara.domain}</argument>
                             </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>delete-james-mail-docker-container</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <executable>docker</executable>
+                            <commandlineArgs>rm --force james-mail</commandlineArgs>
                         </configuration>
                     </execution>
                 </executions>
@@ -298,30 +367,25 @@
                             <goal>verify</goal>
                         </goals>
                         <configuration>
-                            <dependenciesToScan>fish.payara.jakarta.tests.tck:jakarta-mail-platform-tck</dependenciesToScan>
+                            <dependenciesToScan>jakarta.tck:javamail</dependenciesToScan>
                             <includes>
                                 <include>**/*EJB*.*</include>
                                 <include>**/*AppClient*.*</include>
                             </includes>
                             <additionalClasspathElements>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/angus-mail.jar
-                                </additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/jakarta.mail-api.jar
-                                </additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/mail-connector.jar
-                                </additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/mail-runtime.jar
-                                </additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/glassfish-naming.jar
-                                </additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}angus-mail.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.mail-api.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}javamail-connector.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}javamail-runtime.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}glassfish-naming.jar</additionalClasspathElement>
                             </additionalClasspathElements>
                             <systemPropertyVariables>
                                 <payara.home>${payara.home}</payara.home>
-                                <java.naming.factory.initial>com.sun.enterprise.naming.impl.SerialInitContextFactory
-                                </java.naming.factory.initial>
-                                <ts.home>${env.TS_HOME}</ts.home>
+                                <java.naming.factory.initial>com.sun.enterprise.naming.impl.SerialInitContextFactory</java.naming.factory.initial>
+                                <ts.home>${project.basedir}${file.separator}jakartaeetck</ts.home>
                                 <project.basedir>${project.basedir}</project.basedir>
                                 <arquillian.xml>appclient-arquillian.xml</arquillian.xml>
+                                <ts.work.dir>${project.build.directory}</ts.work.dir>
                             </systemPropertyVariables>
                         </configuration>
                     </execution>
@@ -332,29 +396,25 @@
                             <goal>verify</goal>
                         </goals>
                         <configuration>
-                            <dependenciesToScan>fish.payara.jakarta.tests.tck:jakarta-mail-platform-tck</dependenciesToScan>
+                            <dependenciesToScan>jakarta.tck:javamail</dependenciesToScan>
                             <includes>
                                 <include>**/*JSP*.*</include>
                                 <include>**/*Servlet*.*</include>
                             </includes>
                             <additionalClasspathElements>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules//angus-mail.jar
-                                </additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules//jakarta.mail-api.jar
-                                </additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules//mail-connector.jar
-                                </additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules//mail-runtime.jar
-                                </additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules//glassfish-naming.jar
-                                </additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}angus-mail.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.mail-api.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}javamail-connector.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}javamail-runtime.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}glassfish-naming.jar</additionalClasspathElement>
                             </additionalClasspathElements>
                             <systemPropertyVariables>
                                 <payara.home>${payara.home}</payara.home>
                                 <java.naming.factory.initial>com.sun.enterprise.naming.impl.SerialInitContextFactory</java.naming.factory.initial>
-                                <ts.home>${env.TS_HOME}</ts.home>
+                                <ts.home>${project.basedir}${file.separator}jakartaeetck</ts.home>
                                 <project.basedir>${project.basedir}</project.basedir>
                                 <arquillian.xml>arquillian.xml</arquillian.xml>
+                                <ts.work.dir>${project.build.directory}</ts.work.dir>
                             </systemPropertyVariables>
                         </configuration>
                     </execution>
