@@ -93,6 +93,7 @@
         <dependency>
             <groupId>jakarta.servlet.jsp</groupId>
             <artifactId>jakarta.servlet.jsp-api</artifactId>
+            <version>${jakarta.tck.servlet.jsp-api.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
