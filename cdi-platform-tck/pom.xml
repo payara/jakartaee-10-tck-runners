@@ -333,15 +333,14 @@
                             
                             <!-- System Properties -->
                             <systemPropertyVariables>
-                                <glassfish.home>${payara.home}</glassfish.home>
-                                <glassfish.enableDerby>true</glassfish.enableDerby>
-                                <glassfish.maxHeapSize>2048m</glassfish.maxHeapSize>
-                                <glassfish.enableAssertions>:org.jboss.cdi.tck...</glassfish.enableAssertions>
+                                <payara.home>${payara.home}</payara.home>
                                 <payara.systemProperties>
                                     cdiTckExcludeDummy=true
                                     glassfish.servlet.loadAllOnStartup=true
                                 </payara.systemProperties>
                                 <payara.postBootCommands>
+                                    create-jvm-options -Xmx2048m
+                                    create-jvm-options -Xms1024m
                                     create-jms-resource --restype jakarta.jms.Queue --property Name=queue_test queue_test
                                     create-jms-resource --restype jakarta.jms.Topic --property Name=topic_test topic_test
                                     set configs.config.server-config.cdi-service.enable-implicit-cdi=true
