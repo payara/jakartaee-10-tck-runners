@@ -324,12 +324,14 @@
                                     </includes>
                                     <!-- Select the @Tag("tck-appclient") tests -->
                                     <groups>tck-appclient</groups>
-                                    <dependenciesToScan>jakarta.tck:jsonb-platform-tck</dependenciesToScan>                                    <systemPropertyVariables>
+                                    <dependenciesToScan>jakarta.tck:jsonb-platform-tck</dependenciesToScan>
+                                    <systemPropertyVariables>
                                         <payara.home>${payara.home}</payara.home>
                                         <junit.log.traceflag>true</junit.log.traceflag>
                                         <harness.log.traceflag>true</harness.log.traceflag>
                                         <cts.harness.debug>true</cts.harness.debug>
-                                        <java.io.tmpdir>${project.build.directory}${file.separator}tmp</java.io.tmpdir>                                        <project.basedir>${project.basedir}</project.basedir>
+                                        <java.io.tmpdir>${project.build.directory}${file.separator}tmp</java.io.tmpdir>
+                                        <project.basedir>${project.basedir}</project.basedir>
                                         <arquillian.xml>appclient-arquillian.xml</arquillian.xml>
                                     </systemPropertyVariables>
                                 </configuration>
@@ -357,7 +359,7 @@
                                         <junit.log.traceflag>true</junit.log.traceflag>
                                         <harness.log.traceflag>true</harness.log.traceflag>
                                         <cts.harness.debug>true</cts.harness.debug>
-                                        <java.io.tmpdir>/tmp</java.io.tmpdir>
+                                        <java.io.tmpdir>${project.build.directory}${file.separator}tmp</java.io.tmpdir>
                                         <project.basedir>${project.basedir}</project.basedir>
                                         <arquillian.xml>appclient-arquillian.xml</arquillian.xml>
                                     </systemPropertyVariables>
