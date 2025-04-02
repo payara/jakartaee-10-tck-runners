@@ -232,6 +232,7 @@
                             <executable>/bin/bash</executable>
                             <arguments>
                                 <argument>verify_and_start_domain.sh</argument>
+                                <argument>${payara.home}</argument>
                             </arguments>
                         </configuration>
                     </execution>
