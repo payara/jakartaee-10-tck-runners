@@ -266,7 +266,7 @@
                     </execution>
                     <execution>
                         <id>stop-payara-domain</id>
-                        <phase>post-integration-test</phase>
+                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
