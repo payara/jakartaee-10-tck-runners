@@ -223,7 +223,7 @@
                 <version>${exec-maven-plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>verify-and-start-domain</id>
+                        <id>increase-payara-memory.sh</id>
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>exec</goal>
@@ -231,50 +231,8 @@
                         <configuration>
                             <executable>/bin/bash</executable>
                             <arguments>
-                                <argument>verify_and_start_domain.sh</argument>
+                                <argument>increase_payara_memory.sh</argument>
                                 <argument>${payara.home}</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>delete-jvm-option-Xmx512m</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${payara.home}/bin/asadmin</executable>
-                            <arguments>
-                                <argument>delete-jvm-options</argument>
-                                <argument>-Xmx512m</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>create-jvm-option-Xmx2048m</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${payara.home}/bin/asadmin</executable>
-                            <arguments>
-                                <argument>create-jvm-options</argument>
-                                <argument>-Xmx2048m</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>stop-payara-domain</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${payara.home}/bin/asadmin</executable>
-                            <arguments>
-                                <argument>stop-domain</argument>
-                                <argument>domain1</argument>
                             </arguments>
                         </configuration>
                     </execution>
