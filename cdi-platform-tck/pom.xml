@@ -247,7 +247,6 @@
                             <arguments>
                                 <argument>create-jvm-options</argument>
                                 <argument>-Xmx2048m</argument>
-                                <argument>-Xms1024m</argument>
                             </arguments>
                         </configuration>
                     </execution>
