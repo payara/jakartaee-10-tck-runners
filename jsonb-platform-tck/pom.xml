@@ -210,6 +210,11 @@
                     <artifactId>arquillian-protocol-appclient</artifactId>
                     <version>${jakarta.tck.arquillian.version}</version>
                 </dependency>
+                <dependency>
+                    <groupId>jakarta.tck</groupId>
+                    <artifactId>jsonp-platform-tck</artifactId>
+                    <version>${jakarta.tck.platform.version}</version>
+                </dependency>
             </dependencies>
 
             <build>
