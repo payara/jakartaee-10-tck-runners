@@ -12,7 +12,7 @@ else
     echo "Domain $DOMAIN_NAME is already running."
 fi
 
-EXISTING_OPTIONS=$($PAYARA_HOME/bin/asadmin list-jvm-options | grep -E "-Xmx[0-9]+m")
+EXISTING_OPTIONS=$($PAYARA_HOME/bin/asadmin list-jvm-options | grep -E '-Xmx[0-9]+m')
 if [ -n "$EXISTING_OPTIONS" ]; then
     echo "Existing JVM options found: $EXISTING_OPTIONS. Deleting..."
     for OPTION in $EXISTING_OPTIONS; do
