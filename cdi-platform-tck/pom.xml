@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>cdi-platform-extra-tck</artifactId>
+    <artifactId>cdi-platform-tck</artifactId>
 
     <properties>
         <cdi.tck-4-1.version>4.1.0</cdi.tck-4-1.version>
