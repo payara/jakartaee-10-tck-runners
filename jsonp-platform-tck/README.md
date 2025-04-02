@@ -1,9 +1,9 @@
-# Jakarta JSONBP Extra Platform TCK
+# Jakarta JSON-P Extra Platform TCK
 
 ## Prerequisite
 Download and install the TCK from the tck-downloads module. From the top-level directory:
 
-`mvn clean install -pl . -pl tck-download -pl tck-download/jakarta-jsonp-platform-tck -Dpayara.version=...`
+`mvn clean install -pl . -pl tck-download -pl tck-download/jakarta-platform-tck -Dpayara.version=...`
 
 ## Test Execution
 

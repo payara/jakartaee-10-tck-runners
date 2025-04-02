@@ -11,7 +11,7 @@
     <property name="descriptorDir">target</property>
   </extension>
 
-  <group qualifier="glassfish-servers" default="true">
+  <group qualifier="payara-servers" default="true">
     <container qualifier="tck-javatest" default="true">
         <configuration>
             <property name="payaraHome">${payara.home}</property>

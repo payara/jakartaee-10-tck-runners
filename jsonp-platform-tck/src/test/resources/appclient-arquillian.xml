@@ -11,7 +11,7 @@
     <property name="descriptorDir">target/</property>
   </extension>
 
-  <group qualifier="glassfish-servers" default="true">
+  <group qualifier="payara-servers" default="true">
     <container qualifier="tck-appclient" default="true">
         <configuration>
             <property name="payaraHome">${payara.home}</property>
@@ -22,16 +22,16 @@
             <property name="clientEarDir">target/appclient</property>
             <property name="unpackClientEar">true</property>
             <!-- Need to populate from ts.jte command.testExecuteAppClient setting for glassfish -->
-            <property name="clientCmdLineString">${glassfish.home}/glassfish/bin/appclient \
+            <property name="clientCmdLineString">${payara.home}/glassfish/bin/appclient \
                 -Djdk.tls.client.enableSessionTicketExtension=false \
                 -Djdk.tls.server.enableSessionTicketExtension=false \
-                -Djava.security.policy=${glassfish.home}/glassfish/lib/appclient/client.policy \
+                -Djava.security.policy=${payara.home}/glassfish/lib/appclient/client.policy \
                 -Dcts.tmp=${ts.home}/tmp \
-                -Djava.security.auth.login.config=${glassfish.home}/glassfish/lib/appclient/appclientlogin.conf \
+                -Djava.security.auth.login.config=${payara.home}/glassfish/lib/appclient/appclientlogin.conf \
                 -Djava.protocol.handler.pkgs=javax.net.ssl \
                 -Djavax.net.ssl.keyStore=${ts.home}/bin/certificates/clientcert.jks \
                 -Djavax.net.ssl.keyStorePassword=changeit \
-                -Djavax.net.ssl.trustStore=${glassfish.home}/glassfish/domains/domain1/config/cacerts.jks \
+                -Djavax.net.ssl.trustStore=${payara.home}/glassfish/domains/domain1/config/cacerts.jks \
                 -Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl \
                 -Djavax.xml.parsers.DocumentBuilderFactory=com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl \
                 -Djavax.xml.transform.TransformerFactory=com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl \
@@ -41,8 +41,8 @@
                 -Doracle.jdbc.mapDateToTimestamp \
                 -Dstartup.login=false \
                 -Dauth.gui=false \
-                -Dlog.file.location=${glassfish.home}/glassfish/domains/domain1/logs \
-                -Dri.log.file.location=${glassfish.home}/glassfish/domains/domain1/logs \
+                -Dlog.file.location=${payara.home}/glassfish/domains/domain1/logs \
+                -Dri.log.file.location=${payara.home}/glassfish/domains/domain1/logs \
                 -DwebServerHost.2=localhost \
                 -DwebServerPort.2=8080 \
                 -Ddeliverable.class=com.sun.ts.lib.deliverable.cts.CTSDeliverable \
@@ -51,10 +51,10 @@
             </property>
             <property name="cmdLineArgSeparator">\\</property>
             <!-- Pass ENV vars here -->
-            <!-- <property name="clientEnvString">PATH=${env.PATH};LD_LIBRARY_PATH=${glassfish.home}/lib;AS_DEBUG=true;
-                APPCPATH=${glassfish.home}/glassfish/lib/arquillian-protocol-lib.jar:${glassfish.home}/glassfish/lib/tck-porting-lib.jar:target/appclient/lib/arquillian-core.jar:target/appclient/lib/arquillian-junit5.jar:${glassfish.home}/glassfish/modules/security.jar</property> -->
-            <property name="clientEnvString">PATH=${env.PATH};LD_LIBRARY_PATH=${glassfish.home}/lib;AS_DEBUG=true;
-                APPCPATH=target/lib/arquillian-protocol-lib.jar:target/lib/tck-porting-lib.jar:target/appclient/lib/arquillian-core.jar:target/appclient/lib/arquillian-junit5.jar:${glassfish.home}/glassfish/modules/security.jar:${glassfish.home}/glassfish/lib/gf-client.jar</property>
+            <!-- <property name="clientEnvString">PATH=${env.PATH};LD_LIBRARY_PATH=${payara.home}/lib;AS_DEBUG=true;
+                APPCPATH=${payara.home}/glassfish/lib/arquillian-protocol-lib.jar:${payara.home}/glassfish/lib/tck-porting-lib.jar:target/appclient/lib/arquillian-core.jar:target/appclient/lib/arquillian-junit5.jar:${payara.home}/glassfish/modules/security.jar</property> -->
+            <property name="clientEnvString">PATH=${env.PATH};LD_LIBRARY_PATH=${payara.home}/lib;AS_DEBUG=true;
+                APPCPATH=target/lib/arquillian-protocol-lib.jar:target/lib/tck-porting-lib.jar:target/appclient/lib/arquillian-core.jar:target/appclient/lib/arquillian-junit5.jar:${payara.home}/glassfish/modules/security.jar:${payara.home}/glassfish/lib/gf-client.jar</property>
             <property name="clientDir">${project.basedir}</property>
             <property name="workDir">/tmp</property>
             <property name="tsJteFile">jakartaeetck/bin/ts.jte</property>
