@@ -223,7 +223,7 @@
                 <version>${exec-maven-plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>stop-payara-domain</id>
+                        <id>start-payara-domain</id>
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>exec</goal>
@@ -231,7 +231,7 @@
                         <configuration>
                             <executable>${payara.home}/bin/asadmin</executable>
                             <arguments>
-                                <argument>stop-domain</argument>
+                                <argument>start-domain</argument>
                                 <argument>domain1</argument>
                             </arguments>
                         </configuration>
@@ -252,7 +252,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>start-payara-domain</id>
+                        <id>stop-payara-domain</id>
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>exec</goal>
@@ -260,7 +260,7 @@
                         <configuration>
                             <executable>${payara.home}/bin/asadmin</executable>
                             <arguments>
-                                <argument>start-domain</argument>
+                                <argument>stop-domain</argument>
                                 <argument>domain1</argument>
                             </arguments>
                         </configuration>
