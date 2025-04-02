@@ -201,7 +201,7 @@
         <module>authorization-tck</module>
         <module>batch-tck</module>
         <module>cdi-langmodel-tck</module>
-        <module>cdi-platform-extra-tck</module>
+        <module>cdi-platform-tck</module>
         <module>cdi-tck</module>
         <module>concurrent-tck</module>
         <module>core-tck</module>
