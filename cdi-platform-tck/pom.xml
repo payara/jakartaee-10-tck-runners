@@ -218,6 +218,56 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>${exec-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>stop-payara-domain</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${payara.home}/bin/asadmin</executable>
+                            <arguments>
+                                <argument>stop-domain</argument>
+                                <argument>domain1</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-jvm-options</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${payara.home}/bin/asadmin</executable>
+                            <arguments>
+                                <argument>create-jvm-options</argument>
+                                <argument>-Xmx2048m</argument>
+                                <argument>-Xms1024m</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>start-payara-domain</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${payara.home}/bin/asadmin</executable>
+                            <arguments>
+                                <argument>start-domain</argument>
+                                <argument>domain1</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
                 <configuration>
@@ -339,8 +389,6 @@
                                     glassfish.servlet.loadAllOnStartup=true
                                 </payara.systemProperties>
                                 <payara.postBootCommands>
-                                    create-jvm-options -Xmx2048m
-                                    create-jvm-options -Xms1024m
                                     create-jms-resource --restype jakarta.jms.Queue --property Name=queue_test queue_test
                                     create-jms-resource --restype jakarta.jms.Topic --property Name=topic_test topic_test
                                     set configs.config.server-config.cdi-service.enable-implicit-cdi=true
