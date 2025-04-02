@@ -223,7 +223,20 @@
                 <version>${exec-maven-plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>start-payara-domain</id>
+                        <id>verify-and-start-domain</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>/bin/bash</executable>
+                            <arguments>
+                                <argument>verify_and_start_domain.sh</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>delete-jvm-option-Xmx512m</id>
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>exec</goal>
@@ -231,13 +244,13 @@
                         <configuration>
                             <executable>${payara.home}/bin/asadmin</executable>
                             <arguments>
-                                <argument>start-domain</argument>
-                                <argument>domain1</argument>
+                                <argument>delete-jvm-options</argument>
+                                <argument>-Xmx512m</argument>
                             </arguments>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>create-jvm-options</id>
+                        <id>create-jvm-option-Xmx2048m</id>
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>exec</goal>
@@ -252,7 +265,7 @@
                     </execution>
                     <execution>
                         <id>stop-payara-domain</id>
-                        <phase>pre-integration-test</phase>
+                        <phase>post-integration-test</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
