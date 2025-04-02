@@ -27,7 +27,7 @@
                 -Djava.protocol.handler.pkgs=javax.net.ssl \
                 -Djavax.net.ssl.keyStore=${ts.home}/bin/certificates/clientcert.p12 \
                 -Djavax.net.ssl.keyStorePassword=changeit \
-                -Djavax.net.ssl.trustStore=${payara.home}/glassfish/domains/domain1/config/cacerts.jks \
+                -Djavax.net.ssl.trustStore=${payara.home}/glassfish/domains/domain1/config/cacerts.p12 \
                 -Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl \
                 -Djavax.xml.parsers.DocumentBuilderFactory=com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl \
                 -Djavax.xml.transform.TransformerFactory=com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl \
