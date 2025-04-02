@@ -311,7 +311,7 @@
                             <goal>verify</goal>
                         </goals>
                         <configuration>
-                            <argLine>-Xmx2048m</argLine>
+                            <argLine>-Xmx4096m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp/heapdump.hprof</argLine>
                             <!-- Surefire / TestNG Properties -->
                             <!-- The suite, the exclude and the test dependencies together determine which tests are being run -->
                             <suiteXmlFiles>
@@ -328,14 +328,14 @@
                                     <value>1</value>
                                 </property>
                             </properties>
-                            <forkCount>1</forkCount>
+                            <forkCount>0.5C</forkCount>
                             <reuseForks>true</reuseForks>
                             
                             <!-- System Properties -->
                             <systemPropertyVariables>
                                 <glassfish.home>${payara.home}</glassfish.home>
                                 <glassfish.enableDerby>true</glassfish.enableDerby>
-                                <glassfish.maxHeapSize>2048m</glassfish.maxHeapSize>
+                                <glassfish.maxHeapSize>4096m</glassfish.maxHeapSize>
                                 <glassfish.enableAssertions>:org.jboss.cdi.tck...</glassfish.enableAssertions>
                                 <payara.systemProperties>
                                     cdiTckExcludeDummy=true
