@@ -17,7 +17,6 @@
         <jakarta.tck.arquillian.version>11.0.0</jakarta.tck.arquillian.version>
         <jakarta.tck.common.version>11.0.0</jakarta.tck.common.version>
         <ts.home>${project.basedir}${file.separator}jakartaeetck</ts.home>
-        <skipServerStartStop>false</skipServerStartStop>
         <javatest-testGroups>tck-javatest</javatest-testGroups>
     </properties>
 
