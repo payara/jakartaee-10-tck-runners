@@ -109,9 +109,6 @@
         <jakarta.tck.pages.version>4.0.0</jakarta.tck.pages.version>
         <jakarta.tck.common.version>11.0.0-RC7</jakarta.tck.common.version>
         <jakarta.tck.expressly.version>6.0.0-M1</jakarta.tck.expressly.version>
-        <jakarta.tck.commons-lang.version>2.6</jakarta.tck.commons-lang.version>
-        <jakarta.tck.htmlunit.version>4.9.0</jakarta.tck.htmlunit.version>
-        <jakarta.tck.testng.version>7.9.0</jakarta.tck.testng.version>
         <jakarta.tck.signaturetest.version>11.0.0-M1</jakarta.tck.signaturetest.version>
         <jakarta.tck.persistence.version>3.2.0</jakarta.tck.persistence.version>
         <jakarta.tck.cdi.version>4.1.0</jakarta.tck.cdi.version>
@@ -338,6 +335,12 @@
                     <groupId>jakarta.tck</groupId>
                     <artifactId>sigtest-maven-plugin</artifactId>
                     <version>${jakarta.tck.sigtest-maven-plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

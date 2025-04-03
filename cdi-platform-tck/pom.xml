@@ -12,14 +12,16 @@
     <artifactId>cdi-platform-tck</artifactId>
 
     <properties>
-        <cdi.tck-4-1.version>4.1.0</cdi.tck-4-1.version>
-
         <maven.build.cache.enabled>false</maven.build.cache.enabled>
 
-        <shrinkwrap.version>2.0.0</shrinkwrap.version>
+        <excluded.groups>se</excluded.groups>
 
-        <weld.version>6.0.0.Beta4</weld.version>
-        <weld.version2>6.0.Beta5</weld.version2>
+        <commons-lang.version>2.6</commons-lang.version>
+        <htmlunit.version>4.9.0</htmlunit.version>
+        <testng.version>7.9.0</testng.version>
+
+        <weld.version>6.0.1.Final</weld.version>
+        <weld.api.version>6.0.Final</weld.api.version>
     </properties>
 
     <dependencyManagement>
@@ -105,7 +107,7 @@
         <dependency>
             <groupId>org.jboss.weld</groupId>
             <artifactId>weld-spi</artifactId>
-            <version>${weld.version2}</version>
+            <version>${weld.api.version}</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -147,7 +149,7 @@
         <dependency>
             <groupId>jakarta.enterprise</groupId>
             <artifactId>cdi-tck-api</artifactId>
-            <version>${cdi.tck-4-1.version}</version>
+            <version>${jakarta.tck.cdi.version}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -168,7 +170,6 @@
         <dependency>
             <groupId>org.glassfish.expressly</groupId>
             <artifactId>expressly</artifactId>
-            <version>${jakarta.tck.expressly.version}</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -181,13 +182,13 @@
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
-            <version>${jakarta.tck.commons-lang.version}</version>
+            <version>${commons-lang.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
 		    <groupId>org.htmlunit</groupId>
     		<artifactId>htmlunit</artifactId>
-    		<version>${jakarta.tck.htmlunit.version}</version>
+    		<version>${htmlunit.version}</version>
     		<scope>test</scope>
 		</dependency>
         
@@ -200,7 +201,7 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>${jakarta.tck.testng.version}</version>
+            <version>${testng.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -220,19 +221,187 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>${exec-maven-plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>increase-payara-memory.sh</id>
+                        <id>start-payara-server-for-config</id>
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>/bin/bash</executable>
+                            <skip>${skipServerStartStop}</skip>
+                            <executable>${payara.asadmin}</executable>
                             <arguments>
-                                <argument>increase_payara_memory.sh</argument>
-                                <argument>${payara.home}</argument>
+                                <argument>start-domain</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>set-Xmx-jvm-option</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipConfig}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-jvm-option</argument>
+                                <argument>--Xmx2048m</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-queue_test-jms-resource</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipConfig}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-jms-resource</argument>
+                                <argument>--restype</argument>
+                                <argument>jakarta.jms.Queue</argument>
+                                <argument>--property</argument>
+                                <argument>Name=queue_test</argument>
+                                <argument>queue_test</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-topic_test-jms-resource</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipConfig}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-jms-resource</argument>
+                                <argument>--restype</argument>
+                                <argument>jakarta.jms.Topic</argument>
+                                <argument>--property</argument>
+                                <argument>Name=topic_test</argument>
+                                <argument>topic_test</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>set-enable-implicit-cdi</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipConfig}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>set</argument>
+                                <argument>configs.config.server-config.cdi-service.enable-implicit-cdi=true</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-student-file-user</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipConfig}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-file-user</argument>
+                                <argument>--groups</argument>
+                                <argument>student</argument>
+                                <argument>--passwordfile</argument>
+                                <argument>${project.build.directory}/test-classes/password.txt</argument>
+                                <argument>student</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-printer-file-user</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipConfig}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-file-user</argument>
+                                <argument>--groups</argument>
+                                <argument>printer</argument>
+                                <argument>--passwordfile</argument>
+                                <argument>${project.build.directory}/test-classes/password.txt</argument>
+                                <argument>printer</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-alarm-file-user</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipConfig}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-file-user</argument>
+                                <argument>--groups</argument>
+                                <argument>student:alarm</argument>
+                                <argument>--passwordfile</argument>
+                                <argument>${project.build.directory}/test-classes/password.txt</argument>
+                                <argument>alarm</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>add-cdiTckExcludeDummy-property</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipConfig}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-system-property</argument>
+                                <argument>cdiTckExcludeDummy=true</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>add-loadAllOnStartup-property</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipConfig}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-system-property</argument>
+                                <argument>glassfish.servlet.loadAllOnStartup=true</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>stop-payara-server-after-config</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipServerStartStop}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>stop-domain</argument>
                             </arguments>
                         </configuration>
                     </execution>
@@ -240,7 +409,6 @@
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <!-- Disable annotation processor for test sources -->
                     <testCompilerArgument>-proc:none</testCompilerArgument>
@@ -316,12 +484,11 @@
 
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.5.2</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.surefire</groupId>
                         <artifactId>surefire-testng</artifactId>
-                        <version>3.5.2</version>
+                        <version>${maven-surefire-plugin.version}</version>
                     </dependency>
                 </dependencies>
                 <executions>
@@ -355,19 +522,6 @@
                             <!-- System Properties -->
                             <systemPropertyVariables>
                                 <payara.home>${payara.home}</payara.home>
-                                <payara.systemProperties>
-                                    cdiTckExcludeDummy=true
-                                    glassfish.servlet.loadAllOnStartup=true
-                                </payara.systemProperties>
-                                <payara.postBootCommands>
-                                    create-jms-resource --restype jakarta.jms.Queue --property Name=queue_test queue_test
-                                    create-jms-resource --restype jakarta.jms.Topic --property Name=topic_test topic_test
-                                    set configs.config.server-config.cdi-service.enable-implicit-cdi=true
-                                    create-file-user --groups student --passwordfile ${project.build.directory}/test-classes/password.txt student
-                                    create-file-user --groups printer --passwordfile ${project.build.directory}/test-classes/password.txt printer
-                                    create-file-user --groups student:alarm --passwordfile ${project.build.directory}/test-classes/password.txt alarm
-                                </payara.postBootCommands>
-
                                 <libPath>${project.build.outputDirectory}</libPath>
                                 <org.jboss.cdi.tck.libraryDirectory>${project.build.directory}/dependency/lib</org.jboss.cdi.tck.libraryDirectory>
                                 <debugMode>true</debugMode>
