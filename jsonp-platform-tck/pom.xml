@@ -14,8 +14,8 @@
 
     <properties>
         <payara.lib.dir>${payara.home}${file.separator}glassfish${file.separator}lib</payara.lib.dir>
-        <ts.home>${project.build.directory}${file.separator}jakartaeetck</ts.home>
-        <skipServerStartStop>false</skipServerStartStop>
+        <ts.home>${project.basedir}${file.separator}jakartaeetck</ts.home>
+        <javatest-testGroups>tck-javatest</javatest-testGroups>
     </properties>
 
     <dependencyManagement>
@@ -125,32 +125,6 @@
         <plugins>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <!-- https://github.com/jakartaee/jsonb-api/issues/330 -->
-                        <id>restart-payara-server</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target unless="${skipServerStartStop}">
-                                <exec executable="${payara.asadmin}">
-                                    <arg value="restart-domain" />
-                                    <arg value="${payara.domain}" />
-                                </exec>
-                            </target>
-                        </configuration>
-                    </execution>
-                </executions>
-                <configuration>
-                    <skip>${skipTests}</skip>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <executions>
                     <execution>
@@ -170,14 +144,15 @@
                             </includes>
 
                             <additionalClasspathElements>
-                                <additionalClasspathElement>${project.build.directory}${file.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}parsson.jar</additionalClasspathElement>                            </additionalClasspathElements>
+                                <additionalClasspathElement>${project.build.directory}${file.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}parsson.jar</additionalClasspathElement>
+                            </additionalClasspathElements>
 
                             <systemPropertyVariables>
-                                <glassfish.home>${payara.home}</glassfish.home>
+                                <payara.home>${payara.home}</payara.home>
                                 <junit.log.traceflag>true</junit.log.traceflag>
                                 <harness.log.traceflag>true</harness.log.traceflag>
                                 <cts.harness.debug>true</cts.harness.debug>
-                                <java.io.tmpdir>${project.build.directory}${file.separator}tmp</java.io.tmpdir>
+                                <java.io.tmpdir>${java.io.tmpdir}</java.io.tmpdir>
                             </systemPropertyVariables>
                         </configuration>
                     </execution>
@@ -199,11 +174,11 @@
                             </includes>
 
                             <systemPropertyVariables>
-                                <glassfish.home>${payara.home}</glassfish.home>
+                                <payara.home>${payara.home}</payara.home>
                                 <junit.log.traceflag>true</junit.log.traceflag>
                                 <harness.log.traceflag>true</harness.log.traceflag>
                                 <cts.harness.debug>true</cts.harness.debug>
-                                <java.io.tmpdir>${project.build.directory}${file.separator}tmp</java.io.tmpdir>
+                                <java.io.tmpdir>${java.io.tmpdir}</java.io.tmpdir>
                             </systemPropertyVariables>
                         </configuration>
                     </execution>
@@ -214,17 +189,6 @@
 
     <profiles>
         <profile>
-            <id>full</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <glassfish-artifact-id>glassfish</glassfish-artifact-id>
-                <javatest-testGroups>tck-javatest</javatest-testGroups>
-            </properties>
-        </profile>
-
-        <profile>
             <id>web</id>
             <properties>
                 <glassfish-artifact-id>web</glassfish-artifact-id>
@@ -234,7 +198,6 @@
 
         <profile>
             <id>appclient</id>
-
             <dependencies>
                 <dependency>
                     <groupId>jakarta.tck.arquillian</groupId>
@@ -242,7 +205,6 @@
                     <version>${jakarta.tck.arquillian.version}</version>
                 </dependency>
             </dependencies>
-
             <build>
                 <plugins>
                     <plugin>
@@ -330,13 +292,14 @@
                                     <groups>tck-appclient</groups>
                                     <dependenciesToScan>jakarta.tck:jsonp-platform-tck</dependenciesToScan>
                                     <systemPropertyVariables>
-                                        <glassfish.home>${payara.home}</glassfish.home>
+                                        <payara.home>${payara.home}</payara.home>
                                         <junit.log.traceflag>true</junit.log.traceflag>
                                         <harness.log.traceflag>true</harness.log.traceflag>
                                         <cts.harness.debug>true</cts.harness.debug>
-                                        <java.io.tmpdir>${project.build.directory}${file.separator}tmp</java.io.tmpdir>
+                                        <java.io.tmpdir>/}tmp</java.io.tmpdir>
                                         <project.basedir>${project.basedir}</project.basedir>
                                         <arquillian.xml>appclient-arquillian.xml</arquillian.xml>
+                                        <ts.home>${ts.home}</ts.home>
                                     </systemPropertyVariables>
                                 </configuration>
                             </execution>
@@ -357,16 +320,16 @@
                                     </includes>
                                     <!-- Select the @Tag("tck-appclient") tests -->
                                     <groups>tck-appclient</groups>
-                                    <dependenciesToScan>
-                                        jakarta.tck:jsonp-platform-tck</dependenciesToScan>
+                                    <dependenciesToScan>jakarta.tck:jsonp-platform-tck</dependenciesToScan>
                                     <systemPropertyVariables>
-                                        <glassfish.home>${payara.home}</glassfish.home>
+                                        <payara.home>${payara.home}</payara.home>
                                         <junit.log.traceflag>true</junit.log.traceflag>
                                         <harness.log.traceflag>true</harness.log.traceflag>
                                         <cts.harness.debug>true</cts.harness.debug>
-                                        <java.io.tmpdir>${project.build.directory}${file.separator}tmp</java.io.tmpdir>
+                                        <java.io.tmpdir>${java.io.tmpdir}</java.io.tmpdir>
                                         <project.basedir>${project.basedir}</project.basedir>
                                         <arquillian.xml>appclient-arquillian.xml</arquillian.xml>
+                                        <ts.home>${ts.home}</ts.home>
                                     </systemPropertyVariables>
                                     <properties>
                                         <configurationParameters>

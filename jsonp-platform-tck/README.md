@@ -1,21 +1,12 @@
 # Jakarta JSON-P Extra Platform TCK
 
 ## Prerequisite
-Download and install the TCK from the tck-downloads module. From the top-level directory:
+Install the Platform TCK via tck-download module, since the ones published to Maven Central are not allowed to be used for certification.
 
-`mvn clean install -pl . -pl tck-download -pl tck-download/jakarta-platform-tck -Dpayara.version=...`
+`mvn clean install -pl . -pl tck-download -pl tck-download/jakarta-platform-tck`
 
 ## Test Execution
 
-Run maven test from the module directory using remote arquillian profile, and provide the path to payara and its version
+Execute maven test with verify from the top-level directory:
 
-```
-cd jsonp-platform-tck
-mvn clean verify -Ppayara-server-remote -Dpayara.version=... -Dpayara.home=...
-```
-
-The test requires configuring a JVM option to pass (see https://github.com/jakartaee/jsonb-api/issues/330).
-The runner will configure this for you and restart the DAS.
-
-To skip server startup and shutdown, set `-DskipServerStartStop` to true. Defaults to false.
-To skip server configuration, set to `-DskipConfig` to true. Defaults to false.
+`mvn clean verify -Ppayara-server-managed,jakarta-staging,appclient -pl . -pl jsonp-platform-tck`
