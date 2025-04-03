@@ -191,7 +191,6 @@
         <profile>
             <id>web</id>
             <properties>
-                <glassfish-artifact-id>web</glassfish-artifact-id>
                 <javatest-testGroups>web</javatest-testGroups>
             </properties>
         </profile>
@@ -296,7 +295,7 @@
                                         <junit.log.traceflag>true</junit.log.traceflag>
                                         <harness.log.traceflag>true</harness.log.traceflag>
                                         <cts.harness.debug>true</cts.harness.debug>
-                                        <java.io.tmpdir>/}tmp</java.io.tmpdir>
+                                        <java.io.tmpdir>${java.io.tmpdir}</java.io.tmpdir>
                                         <project.basedir>${project.basedir}</project.basedir>
                                         <arquillian.xml>appclient-arquillian.xml</arquillian.xml>
                                         <ts.home>${ts.home}</ts.home>
