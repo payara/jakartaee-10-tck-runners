@@ -198,6 +198,7 @@
         <module>faces-tck</module>
         <module>inject-tck</module>
         <module>jsonb-tck</module>
+        <module>jsonb-platform-tck</module>
         <module>jsonp-tck</module>
         <module>pages-tck</module>
         <module>rest-tck</module>
