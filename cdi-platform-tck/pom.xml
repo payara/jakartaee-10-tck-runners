@@ -470,7 +470,7 @@
                                 <artifactItem>
                                     <groupId>jakarta.enterprise</groupId>
                                     <artifactId>cdi-tck-ext-lib</artifactId>
-                                    <version>${cdi.tck-4-1.version}</version>
+                                    <version>${jakarta.tck.cdi.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${payara.home}/glassfish/domains/domain1/lib/applibs</outputDirectory>
