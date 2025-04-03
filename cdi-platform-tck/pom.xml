@@ -22,6 +22,12 @@
 
         <weld.version>6.0.1.Final</weld.version>
         <weld.api.version>6.0.Final</weld.api.version>
+
+        <!--
+            Property used to configure skipping the creation of JMS resources, as these aren't a part of Web Profile.
+            The 'web' profile defined below will set this to true. Defaults to the value of skipConfig (false).
+        -->
+        <skipCreatingJms>${skipConfig}</skipCreatingJms>
     </properties>
 
     <dependencyManagement>
@@ -258,7 +264,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <skip>${skipConfig}</skip>
+                            <skip>${skipCreatingJms}</skip>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>create-jms-resource</argument>
@@ -277,7 +283,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <skip>${skipConfig}</skip>
+                            <skip>${skipCreatingJms}</skip>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>create-jms-resource</argument>
@@ -557,6 +563,7 @@
             <id>web</id>
             <properties>
                 <excluded.groups>javaee-full,se</excluded.groups>
+                <skipCreatingJms>true</skipCreatingJms>
             </properties>
         </profile>
     </profiles>
