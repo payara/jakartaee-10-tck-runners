@@ -212,6 +212,7 @@
         <module>messaging-platform-tck</module>
         <module>mail-platform-tck</module>
         <module>data-tck</module>
+        <module>expression-language-platform-tck</module>
     </modules>
 
     <dependencyManagement>
