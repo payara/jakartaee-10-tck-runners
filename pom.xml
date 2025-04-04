@@ -85,6 +85,8 @@
         <maven-dependency-plugin.version>3.7.1</maven-dependency-plugin.version>
         <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
+        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+        <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
         <exec-maven-plugin.version>3.3.0</exec-maven-plugin.version>
         <download-maven-plugin.version>1.9.0</download-maven-plugin.version>
         <arquillian.version>1.9.3.Final</arquillian.version>
@@ -104,8 +106,10 @@
         <jakarta.tck.websocket.version>2.2.0</jakarta.tck.websocket.version>
         <jakarta.tck.bean-validation.version>3.1.1</jakarta.tck.bean-validation.version>
         <jakarta.tck.servlet.jsp-api.version>4.0.0</jakarta.tck.servlet.jsp-api.version>
+        <jakarta.tck.ws.rs.version>4.0.0</jakarta.tck.ws.rs.version>
         <jakarta.tck.pages.version>4.0.0</jakarta.tck.pages.version>
         <jakarta.tck.common.version>11.0.0-RC7</jakarta.tck.common.version>
+        <jakarta.tck.expressly.version>6.0.0-M1</jakarta.tck.expressly.version>
         <jakarta.tck.signaturetest.version>11.0.0-M1</jakarta.tck.signaturetest.version>
         <jakarta.tck.persistence.version>3.2.0</jakarta.tck.persistence.version>
         <jakarta.tck.cdi.version>4.1.0</jakarta.tck.cdi.version>
@@ -121,8 +125,11 @@
         <jakarta-authentication-tck.version>3.1.0</jakarta-authentication-tck.version>
         <jakarta.tck.messaging.version>11.0.0-M14</jakarta.tck.messaging.version>
         <jakarta.tck.data.version>1.0.1</jakarta.tck.data.version>
+        <jakarta.tck.jms.version>3.1.0</jakarta.tck.jms.version>
         <!-- If updating this Faces TCK version - please also update the replacement poms we use under faces-tck -->
         <jakarta.tck.faces.version>4.1.1</jakarta.tck.faces.version>
+        <jakarta.tck.transaction.version>2.0.1</jakarta.tck.transaction.version>
+        <jakarta.tck.resource.version>2.1.0</jakarta.tck.resource.version>
         <jms-tck.version>11.0.0-payara</jms-tck.version>
 
         <!-- The profile to run - acceptable parameters are 'full', 'web', and 'core' -->
@@ -192,6 +199,7 @@
         <module>authorization-tck</module>
         <module>batch-tck</module>
         <module>cdi-langmodel-tck</module>
+        <module>cdi-platform-tck</module>
         <module>cdi-tck</module>
         <module>concurrent-tck</module>
         <module>core-tck</module>
@@ -330,6 +338,18 @@
                     <groupId>jakarta.tck</groupId>
                     <artifactId>sigtest-maven-plugin</artifactId>
                     <version>${jakarta.tck.sigtest-maven-plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven-jar-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
