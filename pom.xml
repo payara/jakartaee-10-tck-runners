@@ -101,16 +101,14 @@
         <jakarta-authorization-tck.version>3.0.0</jakarta-authorization-tck.version>
         <jakarta-mail-platform-tck.version>2.1.0</jakarta-mail-platform-tck.version>
         <jakarta-rest-tck.version>4.0.0</jakarta-rest-tck.version>
-        <jakarta.tck.sigtest-maven-plugin.version>2.3</jakarta.tck.sigtest-maven-plugin.version>
+        <jakarta.tck.sigtest-maven-plugin.version>2.6</jakarta.tck.sigtest-maven-plugin.version>
         <jakarta.tck.el.version>6.0.0</jakarta.tck.el.version>
         <jakarta.tck.websocket.version>2.2.0</jakarta.tck.websocket.version>
         <jakarta.tck.bean-validation.version>3.1.1</jakarta.tck.bean-validation.version>
-        <jakarta.tck.servlet.jsp-api.version>4.0.0</jakarta.tck.servlet.jsp-api.version>
         <jakarta.tck.ws.rs.version>4.0.0</jakarta.tck.ws.rs.version>
         <jakarta.tck.pages.version>4.0.0</jakarta.tck.pages.version>
-        <jakarta.tck.common.version>11.0.0-RC7</jakarta.tck.common.version>
-        <jakarta.tck.expressly.version>6.0.0-M1</jakarta.tck.expressly.version>
-        <jakarta.tck.signaturetest.version>11.0.0-M1</jakarta.tck.signaturetest.version>
+        <jakarta.tck.common.version>11.0.3</jakarta.tck.common.version>
+        <jakarta.tck.signaturetest.version>11.0.0</jakarta.tck.signaturetest.version>
         <jakarta.tck.persistence.version>3.2.0</jakarta.tck.persistence.version>
         <jakarta.tck.cdi.version>4.1.0</jakarta.tck.cdi.version>
         <cdi.api.version>4.1.0</cdi.api.version>
