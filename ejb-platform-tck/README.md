@@ -28,3 +28,8 @@ the JDBC resource that the runner will configure will be incorrect due to the pa
 of ':' and '\' as parameter separators and escape characters instead of as valid Windows path characters.
 To get around this, you can override the default maven configuration like so (substituting the path for your local environment): 
 `"-DdatabaseName=D\:\\Git\\JakartaEE10-TCK-Runners\\target\\payara7\\glassfish\\domains\\domain1\\config\\derbyDB"`
+
+The TCK is made up of two parts, 'ejb30' and 'ejb32'. You can skip these if desired using 
+
+To run a more specific subset of tests, look at using failsafe command-line overrides (`-Dit.test`) 
+or editing the `<includes>` configuration of failsafe in the  pom.

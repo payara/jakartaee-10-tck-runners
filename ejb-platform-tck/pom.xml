@@ -33,6 +33,10 @@
             The 'web' profile defined below will set this to true. Defaults to the value of skipConfig (false).
         -->
         <skipCreatingJms>${skipConfig}</skipCreatingJms>
+
+        <!-- Properties used for skipping parts of the TCK -->
+        <skipEjb30>${skipTests}</skipEjb30>
+        <skipEjb32>${skipTests}</skipEjb32>
     </properties>
 
     <dependencyManagement>
@@ -452,6 +456,7 @@
                             <goal>verify</goal>
                         </goals>
                         <configuration>
+                            <skip>${skipEjb30}</skip>
                             <dependenciesToScan>jakarta.tck:ejb30</dependenciesToScan>
                             <groups>${groups}</groups>
                         </configuration>
@@ -463,6 +468,7 @@
                             <goal>verify</goal>
                         </goals>
                         <configuration>
+                            <skip>${skipEjb32}</skip>
                             <dependenciesToScan>jakarta.tck:ejb32</dependenciesToScan>
                             <groups>${groups}</groups>
                         </configuration>
@@ -486,38 +492,6 @@
     </reporting>
 
     <profiles>
-        <profile>
-            <id>exclude-timeout</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <configuration>
-                            <excludes>
-                                <exclude>com.sun.ts.tests.ejb30.bb.session.stateful.timeout.annotated.ClientEjblitejspTest</exclude>
-                                <exclude>com.sun.ts.tests.ejb30.bb.session.stateful.timeout.descriptor.ClientEjblitejspTest</exclude>
-                                <exclude>com.sun.ts.tests.ejb30.lite.stateful.timeout.annotated.ClientEjblitejspTest</exclude>
-                                <exclude>com.sun.ts.tests.ejb30.lite.stateful.timeout.descriptor.ClientEjblitejspTest</exclude>
-                                <exclude>com.sun.ts.tests.ejb30.bb.session.stateful.concurrency.accesstimeout.annotated.ClientEjblitejspTest</exclude>
-                                <exclude>com.sun.ts.tests.ejb30.bb.session.stateful.concurrency.accesstimeout.annotated.ClientEjbliteservlet2Test</exclude>
-                                <exclude>com.sun.ts.tests.ejb30.bb.session.stateful.concurrency.accesstimeout.annotated.ClientEjbliteservletTest</exclude>
-                                <exclude>com.sun.ts.tests.ejb30.bb.session.stateful.concurrency.accesstimeout.annotated.JsfClientEjblitejsfTest</exclude>
-                                <exclude>com.sun.ts.tests.ejb30.bb.session.stateful.concurrency.metadata.annotated.ClientEjblitejspTest</exclude>
-                                <exclude>com.sun.ts.tests.ejb30.bb.session.stateful.concurrency.metadata.annotated.ClientEjbliteservlet2Test</exclude>
-                                <exclude>com.sun.ts.tests.ejb30.bb.session.stateful.concurrency.metadata.annotated.ClientEjbliteservletTest</exclude>
-                                <exclude>com.sun.ts.tests.ejb30.bb.session.stateful.concurrency.metadata.annotated.JsfClientEjblitejsfTest</exclude>
-                            </excludes>
-                            <groups>${groups}</groups>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
         <profile>
             <id>web</id>
             <properties>
