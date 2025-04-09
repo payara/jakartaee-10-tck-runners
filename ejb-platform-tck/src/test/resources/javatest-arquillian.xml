@@ -21,18 +21,10 @@
     <engine>
         <property name="deploymentExportPath">target/deployments</property>
     </engine>
-    <extension qualifier="jboss-descriptors">
-        <property name="descriptorDir">${tck.descriptor.path}</property>
-    </extension>
 
     <container qualifier="tck-javatest" default="true">
-        <configuration>
-            <property name="allowConnectingToRunningServer">true</property>
-            <property name="debug">false</property>
-            <property name="suspend">false</property>
-        </configuration>
         <protocol type="javatest">
-            <property name="workDir">${ts.home}${file.separator}tmp</property>
+            <property name="workDir">${ts.work.dir}</property>
             <property name="tsJteFile">${tck.jte.path}</property>
             <property name="tsSqlStmtFile">${ts.home}${file.separator}bin${file.separator}tssql.stmt</property>
             <property name="trace">true</property>

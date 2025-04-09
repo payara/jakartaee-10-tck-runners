@@ -1,1 +1,1 @@
-wildfly.arquillian.JBossTckExtension
+fish.payara.arquillian.PayaraTckExtension

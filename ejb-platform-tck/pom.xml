@@ -226,6 +226,52 @@
                             </target>
                         </configuration>
                     </execution>
+
+                    <execution>
+                        <id>start-database</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipConfig}</skip>
+                            <target>
+                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}startNetworkServer${script.extension}" spawn="true" dir="${payara.db.home}"/>
+                                <echo message="Waiting 3 seconds for database in forked process to start..."/>
+                                <sleep seconds="3"/>
+                            </target>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>execute-ddl</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipConfig}</skip>
+                            <target>
+                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}ij${script.extension}" dir="${payara.db.home}">
+                                    <arg value="${basedir}${file.separator}src${file.separator}test${file.separator}resources${file.separator}derby.ddl.sql" />
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>stop-database</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipConfig}</skip>
+                            <target>
+                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}stopNetworkServer${script.extension}" dir="${payara.db.home}"/>
+                            </target>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
 
@@ -439,12 +485,7 @@
                         <payara.httpPort>8080</payara.httpPort>
                         <arquillian.xml>javatest-arquillian.xml</arquillian.xml>
                         <ts.home>${ts.home}</ts.home>
-
-                        <payara.enableDerby>true</payara.enableDerby>
-                        <payara.derbyDatabaseName>${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}config${file.separator}derbyDB;create=true</payara.derbyDatabaseName>
-                        <payara.derbySQLFile>${project.build.directory}${file.separator}test-classes${file.separator}derby.ddl.sql</payara.derbySQLFile>
-                        <payara.derbyUser>cts1</payara.derbyUser>
-                        <payara.derbyPasswordFile>${project.build.directory}${file.separator}test-classes${file.separator}password.txt</payara.derbyPasswordFile>
+                        <ts.work.dir>${project.build.directory}</ts.work.dir>
                     </systemPropertyVariables>
                 </configuration>
 
