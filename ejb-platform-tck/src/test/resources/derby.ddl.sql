@@ -1,3 +1,5 @@
+CONNECT 'jdbc:derby://localhost:1527/derbyDB;create=true';
+
 drop table ctstable2 ;
 drop table ctstable1 ;
 create table ctstable1 (TYPE_ID int NOT NULL, TYPE_DESC varchar(32), primary key(TYPE_ID)) ;

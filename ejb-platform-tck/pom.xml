@@ -17,12 +17,6 @@
         <db.download.location>${project.build.directory}${file.separator}db-derby-${derby.version}-bin</db.download.location>
         <payara.db.home>${payara.home}${file.separator}javadb</payara.db.home>
 
-        <!--
-            Property which you must manually override on Windows as you need to escape the ':' and double escape the '\'s from the path.
-            Example: "-DdatabaseName=D\:\\Git\\JakartaEE10-TCK-Runners\\target\\payara7\\glassfish\\domains\\domain1\\config\\derbyDB"
-        -->
-        <databaseName>${payara.home}/glassfish/domains/domain1/config/derbyDB</databaseName>
-
         <ts.home>${basedir}${file.separator}src${file.separator}test${file.separator}resources${file.separator}jakartaeetck</ts.home>
         <tck.jte.path>${ts.home}${file.separator}bin${file.separator}ts.jte</tck.jte.path>
 
@@ -324,7 +318,7 @@
                                 <argument>--datasourceclassname</argument>
                                 <argument>org.apache.derby.jdbc.ClientDataSource</argument>
                                 <argument>--property</argument>
-                                <argument>databaseName=${databaseName}:serverName=localhost:portNumber=1527:user=cts1:password=cts1</argument>
+                                <argument>databaseName=derbyDB:serverName=localhost:portNumber=1527:user=cts1:password=cts1</argument>
                                 <argument>cts-derby-XA-pool</argument>
                             </arguments>
                         </configuration>
@@ -345,7 +339,7 @@
                                 <argument>--datasourceclassname</argument>
                                 <argument>org.apache.derby.jdbc.ClientDataSource</argument>
                                 <argument>--property</argument>
-                                <argument>databaseName=${databaseName}:serverName=localhost:portNumber=1527:user=cts1:password=cts1</argument>
+                                <argument>databaseName=derbyDB:serverName=localhost:portNumber=1527:user=cts1:password=cts1</argument>
                                 <argument>cts-derby-pool</argument>
                             </arguments>
                         </configuration>
