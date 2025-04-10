@@ -144,22 +144,6 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>copy-summariser-script</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${skipDockerBuild}</skip>
-                            <target>
-                                <echo>Copying ..${file.separator}summary-tck.sh to ${project.build.directory}${file.separator}cdi-platform-tck${file.separator}tck${file.separator}summary-tck.sh</echo>
-                                <copy file="..${file.separator}summary-tck.sh"
-                                      tofile="${project.build.directory}${file.separator}cdi-platform-tck${file.separator}tck${file.separator}summary-tck.sh"
-                                      overwrite="true" />
-                            </target>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>copy-entrypoint-script</id>
                         <phase>prepare-package</phase>
                         <goals>
