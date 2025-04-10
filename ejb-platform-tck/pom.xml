@@ -111,6 +111,11 @@
             <artifactId>tck-porting-lib</artifactId>
             <version>${jakarta.tck.arquillian.version}</version>
         </dependency>
+        <dependency>
+            <groupId>jakarta.tck.arquillian</groupId>
+            <artifactId>arquillian-protocol-lib</artifactId>
+            <version>${jakarta.tck.arquillian.version}</version>
+        </dependency>
 
         <!-- Junit5 -->
         <dependency>
