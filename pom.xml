@@ -206,6 +206,7 @@
         <module>jsonb-tck</module>
         <module>jsonb-platform-tck</module>
         <module>jsonp-tck</module>
+        <module>jsonp-platform-tck</module>
         <module>pages-tck</module>
         <module>rest-tck</module>
         <module>servlet-tck</module>
