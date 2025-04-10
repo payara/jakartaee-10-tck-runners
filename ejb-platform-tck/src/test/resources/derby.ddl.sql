@@ -54,6 +54,7 @@ DROP TABLE caller_groups ;
 DROP SCHEMA CTS1 RESTRICT;
 
 CREATE SCHEMA CTS1 AUTHORIZATION CTS1;
+SET SCHEMA CTS1;
 
 create table ctstable1 (TYPE_ID int NOT NULL, TYPE_DESC varchar(32), primary key(TYPE_ID)) ;
 create table ctstable2 (KEY_ID int NOT NULL, COF_NAME varchar(32), PRICE float, TYPE_ID int, primary key(KEY_ID), foreign key(TYPE_ID) references ctstable1) ;
