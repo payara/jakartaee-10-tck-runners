@@ -42,9 +42,6 @@ set -e
 # Run Maven command, adding all of our input parameters
 $@
 
-# Run our summary script for the "new" TCK
-echo "Generating aggregate failsafe report for the \"new\" TCK modules"
-./summary-tck.sh
 
 # Collect and tar "new" TCK server logs
 echo "Zipping the Payara logs for the \"new\" TCK"
