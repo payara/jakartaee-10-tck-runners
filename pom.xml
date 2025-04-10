@@ -227,6 +227,7 @@
         <module>ejb-platform-tck</module>
         <module>jdbc-platform-tck</module>
         <module>rest-platform-tck</module>
+        <module>persistence-platform-tck</module>
     </modules>
 
     <dependencyManagement>
