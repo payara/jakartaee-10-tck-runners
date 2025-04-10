@@ -128,22 +128,6 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>update-payara-version</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${skipDockerBuild}</skip>
-                            <target>
-                                <echo>Updating payara.version property value from expected default of 7.2024.1.Alpha3 in ${project.build.directory}${file.separator}cdi-platform-tck${file.separator}tck${file.separator}pom.xml</echo>
-                                <replace token = "payara.version>7.2024.1.Alpha3" value = "payara.version>${payara.version}" dir = "${project.build.directory}${file.separator}cdi-platform-tck${file.separator}tck">
-                                    <include name = "pom.xml"/>
-                                </replace>
-                            </target>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>copy-entrypoint-script</id>
                         <phase>prepare-package</phase>
                         <goals>
