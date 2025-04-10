@@ -316,7 +316,7 @@
                                 <argument>--restype</argument>
                                 <argument>javax.sql.XADataSource</argument>
                                 <argument>--datasourceclassname</argument>
-                                <argument>org.apache.derby.jdbc.ClientDataSource</argument>
+                                <argument>org.apache.derby.jdbc.ClientXADataSource</argument>
                                 <argument>--property</argument>
                                 <argument>databaseName=derbyDB:serverName=localhost:portNumber=1527:user=cts1:password=cts1</argument>
                                 <argument>cts-derby-XA-pool</argument>
