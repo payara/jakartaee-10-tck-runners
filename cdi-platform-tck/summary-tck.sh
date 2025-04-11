@@ -29,12 +29,12 @@ done < ${0%/*}/target/summarylist.txt
 
 #Create a specific failsafe-summary-custom.xml to aggregate the results in one file
 echo '<?xml version="1.0" encoding="UTF-8"?>' > ${0%/*}/target/failsafe-summary-custom.xml
-echo '<failsafe-summary xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/failsafe-summary.xsd" result="254" timeout="false">' >> ${0%/*}/target/failsafe-summary-custom.xml
+echo '<failsafe-summary xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/failsafe-summary.xsd" result="254" timeout="false">' >> ${0%/*}/target/failsafe-summary.xml
 echo '    <completed>'$COMPLETED'</completed>'  >> ${0%/*}/target/failsafe-summary-custom.xml
 echo '    <errors>'$ERRORS'</errors>' >> ${0%/*}/target/failsafe-summary-custom.xml
 echo '    <failures>'$FAILURES'</failures>' >> ${0%/*}/target/failsafe-summary-custom.xml
 echo '    <skipped>'$SKIPPED'</skipped>' >> ${0%/*}/target/failsafe-summary-custom.xml
-echo '    <failureMessage xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>' >> ${0%/*}/target/failsafe-summary-custom.xml
+echo '    <failureMessage xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>' >> ${0%/*}/target/failsafe-summary.xml
 echo '</failsafe-summary>' >> ${0%/*}/target/failsafe-summary-custom.xml
 
 #Clean the list of files
