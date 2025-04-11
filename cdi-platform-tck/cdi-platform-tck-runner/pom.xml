@@ -49,7 +49,6 @@
 
     <artifactId>cdi-platform-tck-runner</artifactId>
     <name>TCK: CDI Platform</name>
-    <packaging>pom</packaging>
 
     <description>This verifies the compliance of Payara using CDI Platform standalone TCK</description>
 
