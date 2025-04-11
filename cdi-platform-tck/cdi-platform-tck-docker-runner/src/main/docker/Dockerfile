@@ -25,5 +25,7 @@ RUN mvn install:install-file -DgroupId=fish.payara.distributions -DartifactId=@p
 
 WORKDIR /opt/cdi-platform-tck/tck
 
+RUN mvn clean verify -pl cdi-platform-tck/ -Dpayara.version=@payara.version@ -Ppayara-server-managed,jakarta-staging
+
 ENTRYPOINT ["/opt/cdi-platform-tck/tck/run-tck.sh"]
 CMD ["@maven.command@"]
