@@ -4,17 +4,10 @@
 - Set `JAVA_HOME` to Java 21.
 - Ensure Docker is installed and properly configured.
 
-## Download TCK Dependencies
+## Create Docker Image
 
-Use the `tck-download` module to fetch the `jakarta-platform-tck` artifact, which includes all relevant Platform TCKs (including CDI).
-
-Run the following command from the root directory of the TCK runners:
-
-```
-mvn clean install -pl .,:tck-download,:jakarta-platform-tck
-```
-
-Create the Docker image, specifying whether you intend to test against Platform or Web Profile and your Payara version
+Create the Docker image, specifying whether you intend to test against Platform or Web Profile and your Payara version.  
+This will copy the entire TCK runner project (the full maven project, not just this module) into the Docker container.
 
 ```
 # Platform

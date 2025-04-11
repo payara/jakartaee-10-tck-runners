@@ -42,7 +42,6 @@ set -e
 # Run Maven command, adding all of our input parameters
 $@
 
-
-# Collect and tar "new" TCK server logs
-echo "Zipping the Payara logs for the \"new\" TCK"
+# Collect and tar TCK server logs
+echo "Zipping the Payara logs for the TCK"
 zip -jvr target/payara-logs.zip target/payara7/glassfish/domains/domain1/logs

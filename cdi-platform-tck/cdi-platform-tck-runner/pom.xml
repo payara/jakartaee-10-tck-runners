@@ -523,34 +523,6 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>com.google.code.maven-replacer-plugin</groupId>
-                <artifactId>replacer</artifactId>
-                <version>1.5.3</version>
-                <executions>
-                    <execution>
-                        <id>replace-selenium-driver-version</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>replace</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${skipTests}</skip>
-                            <ignoreMissingFile>false</ignoreMissingFile>
-                            <includes>
-                                <include>${project.build.directory}/jakartaeetck/src/tcks/apis/cdi-ee-tck/tck/src/main/java/org/jboss/cdi/tck/selenium/ChromeDevtoolsDriver.java</include>
-                            </includes>
-                            <replacements>
-                                <replacement>
-                                    <!-- replace with the used version of Chrome! -->
-                                    <token>devtools.v124.network</token>
-                                    <value>devtools.v131.network</value>
-                                </replacement>
-                            </replacements>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <dependencies>
                     <dependency>

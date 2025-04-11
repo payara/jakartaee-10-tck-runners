@@ -56,8 +56,9 @@
     <description>This verifies the compliance of Payara using the Jakarta CDI Platform standalone TCK within a Docker container, to avoid issues caused with the selenium tests and more recent versions of Chrome</description>
 
     <properties>
+        <maven.profiles>payara-server-managed,jakarta-staging</maven.profiles>
         <!-- This is the maven command which the run-tck.sh script will execute within the container - -->
-        <maven.command>mvn help:active-profiles clean verify -Ppayara-ci-managed -Dtck.mode=platform -Dpayara.artifact=${payara.artifact}</maven.command>
+        <maven.command>mvn help:active-profiles clean verify -Dpayara.version=${payara.version} -P${maven.profiles} -pl . -pl tck-download -pl tck-download/jakarta-cdi-tck -pl tck-download/jakarta-platform-tck -pl cdi-platform-tck -pl cdi-platform-tck/cdi-platform-tck-runner</maven.command>
         <skipDockerBuild>${skipTests}</skipDockerBuild>
         <docker.image.pull.policy>IfNotPresent</docker.image.pull.policy>
         <skipDockerCleanup>${skipTests}</skipDockerCleanup>
@@ -65,15 +66,15 @@
 
     <dependencies>
         <dependency>
-            <groupId>fish.payara.jakarta.tests.tck</groupId>
-            <artifactId>jakarta-platform-tck</artifactId>
-            <type>zip</type>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>fish.payara.distributions</groupId>
             <artifactId>${payara.artifact}</artifactId>
             <type>zip</type>
+        </dependency>
+        <dependency>
+            <groupId>fish.payara.api</groupId>
+            <artifactId>payara-bom</artifactId>
+            <version>${payara.version}</version>
+            <type>pom</type>
         </dependency>
     </dependencies>
 
@@ -87,18 +88,30 @@
                         <phase>prepare-package</phase>
                         <configuration>
                             <target>
-                                <copy todir="${project.build.directory}/tck-runner/src/test/java/org/jboss/weld/tck/glassfish" overwrite="true">
-                                    <fileset dir="../cdi-platform-tck-runner/src/test/java/org/jboss/weld/tck/glassfish" includes="**/*.java"/>
-                                </copy>
-
-                                <copy todir="${project.build.directory}/tck-runner/src/test/resources" overwrite="true">
-                                    <fileset dir="../cdi-platform-tck-runner/src/test/resources" includes="**/*"/>
+                                <copy todir="${project.build.directory}/tck-runners" overwrite="true">
+                                    <fileset dir="..${file.separator}.." includes="**/*" excludes="**/target/**/*" />
                                 </copy>
                             </target>
                         </configuration>
                         <goals>
                             <goal>run</goal>
                         </goals>
+                    </execution>
+                    <execution>
+                        <id>copy-entrypoint-script</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipDockerBuild}</skip>
+                            <target>
+                                <echo>Copying src${file.separator}main${file.separator}docker${file.separator}run-tck.sh to ${project.build.directory}${file.separator}tck-runners${file.separator}run-tck.sh</echo>
+                                <copy file="src${file.separator}main${file.separator}docker${file.separator}run-tck.sh"
+                                      tofile="${project.build.directory}${file.separator}tck-runners${file.separator}run-tck.sh"
+                                      overwrite="true" />
+                            </target>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -124,30 +137,28 @@
                             </artifactItems>
                         </configuration>
                     </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
                     <execution>
-                        <id>copy-entrypoint-script</id>
+                        <id>copy-payara-bom</id>
                         <phase>prepare-package</phase>
                         <goals>
-                            <goal>run</goal>
+                            <goal>copy</goal>
                         </goals>
                         <configuration>
                             <skip>${skipDockerBuild}</skip>
-                            <target>
-                                <echo>Copying src${file.separator}main${file.separator}docker${file.separator}run-tck.sh to ${project.build.directory}${file.separator}cdi-platform-tck${file.separator}tck${file.separator}run-tck.sh</echo>
-                                <copy file="src${file.separator}main${file.separator}docker${file.separator}run-tck.sh"
-                                      tofile="${project.build.directory}${file.separator}cdi-platform-tck${file.separator}tck${file.separator}run-tck.sh"
-                                      overwrite="true" />
-                            </target>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>fish.payara.api</groupId>
+                                    <artifactId>payara-bom</artifactId>
+                                    <type>pom</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}${file.separator}payara</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>io.fabric8</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
@@ -203,7 +214,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>collect-failsafe-summary-custom.xml</id>
+                        <id>collect-failsafe-summary.xml</id>
                         <goals>
                             <goal>exec</goal>
                         </goals>
@@ -211,7 +222,7 @@
                         <configuration>
                             <skip>${skipTests}</skip>
                             <executable>docker</executable>
-                            <commandlineArgs>cp cdi-platform-tck-runner:/opt/cdi-platform-tck/tck/target/failsafe-summary-custom.xml ${project.build.directory}${file.separator}failsafe-summary-custom.xml</commandlineArgs>
+                            <commandlineArgs>cp cdi-platform-tck-runner:/opt/tck-runners/cdi-platform-tck/cdi-platform-tck-runner/target/failsafe-summary.xml ${project.build.directory}${file.separator}failsafe-summary.xml</commandlineArgs>
                         </configuration>
                     </execution>
                     <execution>
@@ -223,7 +234,7 @@
                         <configuration>
                             <skip>${skipTests}</skip>
                             <executable>docker</executable>
-                            <commandlineArgs>cp cdi-platform-tck-runner:/opt/cdi-platform-tck/tck/target/payara-logs.zip ${project.build.directory}${file.separator}payara-logs.zip</commandlineArgs>
+                            <commandlineArgs>cp cdi-platform-tck-runner:/opt/tck-runners/cdi-platform-tck/cdi-platform-tck-runner/target/payara-logs.zip ${project.build.directory}${file.separator}payara-logs.zip</commandlineArgs>
                         </configuration>
                     </execution>
                     <execution>
@@ -245,14 +256,14 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>verify-failsafe-summary-custom.xml</id>
+                        <id>verify-failsafe-summary.xml</id>
                         <goals>
                             <goal>verify</goal>
                         </goals>
                         <phase>verify</phase>
                         <configuration>
                             <skip>${skipTests}</skip>
-                            <summaryFile>${project.build.directory}${file.separator}failsafe-summary-custom.xml</summaryFile>
+                            <summaryFile>${project.build.directory}${file.separator}failsafe-summary.xml</summaryFile>
                         </configuration>
                     </execution>
                 </executions>
@@ -261,6 +272,12 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>web</id>
+            <properties>
+                <maven.profiles>payara-server-managed,jakarta-staging,web</maven.profiles>
+            </properties>
+        </profile>
         <profile>
             <id>use-saved-basic-ubuntu-chrome-image</id>
 

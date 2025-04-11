@@ -1,6 +1,6 @@
 FROM eclipsecbijenkins/basic-ubuntu-chrome
 
-EXPOSE 4848 5005 8080 8181 9009 14848 18080 18181
+EXPOSE 4848 5005 8080 8181 9009
 
 # Download and install Java, Maven, and Ant
 ADD https://cdn.azul.com/zulu/bin/zulu21.40.17-ca-jdk21.0.6-linux_x64.zip https://dlcdn.apache.org/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.zip https://dlcdn.apache.org//ant/binaries/apache-ant-1.10.15-bin.zip /opt/
@@ -16,16 +16,15 @@ RUN unzip zulu21.40.17-ca-jdk21.0.6-linux_x64.zip \
     && mv apache-ant-1.10.15 /opt/ant
 ENV JAVA_HOME=/opt/java/zulu MAVEN_HOME=/opt/maven ANT_HOME=/opt/ant PATH=/opt/java/zulu/bin:/opt/maven/bin:/opt/ant/bin:${PATH}
 
-# Copy the CDI Platform TCK and Payara distribution we're testing
-COPY maven/cdi-platform-tck cdi-platform-tck
+# Copy the TCK Runners project and Payara distribution we're testing
+COPY maven/tck-runners tck-runners
 COPY maven/payara payara
 
-# Install Payara in the Docker's local maven repository so it can be resolved
-RUN mvn install:install-file -DgroupId=fish.payara.distributions -DartifactId=@payara.artifact@ -Dpackaging=zip -Dversion=@payara.version@ -Dfile=payara/@payara.artifact@-@payara.version@.zip
+# Install Payara and the BOM in the Docker's local maven repository so it can be resolved
+RUN mvn install:install-file -DgroupId=fish.payara.distributions -DartifactId=@payara.artifact@ -Dpackaging=zip -Dversion=@payara.version@ -Dfile=payara/@payara.artifact@-@payara.version@.zip \
+    && mvn install:install-file -DgroupId=fish.payara.api -DartifactId=payara-bom -Dpackaging=pom -Dversion=@payara.version@ -Dfile=payara/payara-bom-@payara.version@.pom
 
-WORKDIR /opt/cdi-platform-tck/tck
+WORKDIR /opt/tck-runners
 
-RUN mvn clean verify -pl cdi-platform-tck/ -Dpayara.version=@payara.version@ -Ppayara-server-managed,jakarta-staging
-
-ENTRYPOINT ["/opt/cdi-platform-tck/tck/run-tck.sh"]
+ENTRYPOINT ["/opt/tck-runners/run-tck.sh"]
 CMD ["@maven.command@"]

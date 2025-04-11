@@ -42,8 +42,8 @@
           xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
     <fileSets>
         <fileSet>
-            <directory>target/cdi-platform-tck</directory>
-            <outputDirectory>cdi-platform-tck</outputDirectory>
+            <directory>target/tck-runners</directory>
+            <outputDirectory>tck-runners</outputDirectory>
             <fileMode>0755</fileMode>
         </fileSet>
         <fileSet>
