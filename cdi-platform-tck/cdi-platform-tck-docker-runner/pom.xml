@@ -222,7 +222,7 @@
                         <configuration>
                             <skip>${skipTests}</skip>
                             <executable>docker</executable>
-                            <commandlineArgs>cp cdi-platform-tck-runner:/opt/tck-runners/cdi-platform-tck/cdi-platform-tck-runner/target/failsafe-summary.xml ${project.build.directory}${file.separator}failsafe-summary.xml</commandlineArgs>
+                            <commandlineArgs>cp cdi-platform-tck-runner:/opt/tck-runners/cdi-platform-tck/cdi-platform-tck-runner/target/failsafe-reports/failsafe-summary.xml ${project.build.directory}${file.separator}failsafe-summary.xml</commandlineArgs>
                         </configuration>
                     </execution>
                     <execution>
