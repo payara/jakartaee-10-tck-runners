@@ -234,7 +234,7 @@
                         <configuration>
                             <skip>${skipTests}</skip>
                             <executable>docker</executable>
-                            <commandlineArgs>cp cdi-platform-tck-runner:/opt/tck-runners/cdi-platform-tck/cdi-platform-tck-runner/target/payara-logs.zip ${project.build.directory}${file.separator}payara-logs.zip</commandlineArgs>
+                            <commandlineArgs>cp cdi-platform-tck-runner:/opt/tck-runners/cdi-platform-tck/cdi-platform-tck-docker-runner/target/payara-logs.zip ${project.build.directory}${file.separator}payara-logs.zip</commandlineArgs>
                         </configuration>
                     </execution>
                     <execution>
