@@ -97,6 +97,12 @@
         <shrinkwrap.descriptors.version>2.0.0</shrinkwrap.descriptors.version>
         <jakarta.tck.arquillian.version>11.0.0</jakarta.tck.arquillian.version>
 
+        <!-- Derby DB properties -->
+        <derby.version>10.17.1.0</derby.version>
+        <derby.zip.url>https://dlcdn.apache.org//db/derby/db-derby-${derby.version}/db-derby-${derby.version}-bin.zip</derby.zip.url>
+        <db.download.location>${project.build.directory}${file.separator}db-derby-${derby.version}-bin</db.download.location>
+        <payara.db.home>${payara.home}${file.separator}javadb</payara.db.home>
+
         <!-- Jakarta EE versions -->
         <jakarta-annotations-tck.version>3.0.0</jakarta-annotations-tck.version>
         <jakarta-authorization-tck.version>3.0.0</jakarta-authorization-tck.version>
