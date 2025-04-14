@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+~ Copyright 2023 Red Hat, Inc.
+~
+~ Licensed under the Apache License, Version 2.0 (the "License");
+~ you may not use this file except in compliance with the License.
+~ You may obtain a copy of the License at
+~
+~   http://www.apache.org/licenses/LICENSE-2.0
+~
+~ Unless required by applicable law or agreed to in writing, software
+~ distributed under the License is distributed on an "AS IS" BASIS,
+~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~ See the License for the specific language governing permissions and
+~ limitations under the License.
+-->
+<arquillian xmlns="http://jboss.org/schema/arquillian" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
+    <container qualifier="tck-javatest">
+        <protocol type="javatest" default="true">
+            <property name="runClient">true</property>
+            <property name="runAsVehicle">true</property>
+            <property name="clientEarDir">target${file.separator}appclient</property>
+            <property name="unpackClientEar">true</property>
+            <property name="clientDir">${project.basedir}</property>
+            <property name="workDir">${ts.home}${file.separator}tmp</property>
+            <property name="tsJteFile">${ts.home}${file.separator}bin${file.separator}ts.jte</property>
+            <property name="tsSqlStmtFile">jakartaeetck${file.separator}sql${file.separator}derby${file.separator}derby.dml.sql</property>
+            <property name="trace">true</property>
+            <property name="clientTimeout">20000</property>
+        </protocol>
+    </container>
+
+    <container qualifier="tck-appclient">
+        <protocol type="appclient" default="true">
+            <property name="runClient">true</property>
+            <property name="runAsVehicle">true</property>
+            <property name="clientEarDir">target${file.separator}appclient</property>
+            <property name="unpackClientEar">true</property>
+            <!-- Need to populate from ts.jte command.testExecuteAppClient setting for glassfish -->
+            <property name="clientCmdLineString">${payara.home}${file.separator}glassfish${file.separator}bin${file.separator}appclient \
+                -Djdk.tls.client.enableSessionTicketExtension=false \
+                -Djdk.tls.server.enableSessionTicketExtension=false \
+                -Djava.security.policy=${payara.home}${file.separator}glassfish${file.separator}lib${file.separator}appclient${file.separator}client.policy \
+                -Dcts.tmp=${ts.home}${file.separator}tmp \
+                -Djava.security.auth.login.config=${payara.home}${file.separator}glassfish${file.separator}lib${file.separator}appclient${file.separator}appclientlogin.conf \
+                -Djava.protocol.handler.pkgs=javax.net.ssl \
+                -Djavax.net.ssl.keyStore=${ts.home}${file.separator}bin${file.separator}certificates${file.separator}clientcert.p12 \
+                -Djavax.net.ssl.keyStorePassword=changeit \
+                -Djavax.net.ssl.trustStore=${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}config${file.separator}cacerts.p12 \
+                -Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl \
+                -Djavax.xml.parsers.DocumentBuilderFactory=com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl \
+                -Djavax.xml.transform.TransformerFactory=com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl \
+                -Dorg.xml.sax.driver=com.sun.org.apache.xerces.internal.parsers.SAXParser \
+                -Dorg.xml.sax.parser=org.xml.sax.helpers.XMLReaderAdapter \
+                -Doracle.jdbc.J2EE13Compliant=true \
+                -Doracle.jdbc.mapDateToTimestamp \
+                -Dstartup.login=false \
+                -Dauth.gui=false \
+                -Dlog.file.location=${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}logs \
+                -Dri.log.file.location=${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}logs \
+                -DwebServerHost.2=localhost \
+                -DwebServerPort.2=8080 \
+                -Ddeliverable.class=com.sun.ts.lib.deliverable.cts.CTSDeliverable \
+                -jar \
+                ${clientEarDir}${file.separator}${clientAppArchive}
+            </property>
+            <property name="cmdLineArgSeparator">\\</property>
+            <!-- Pass ENV vars here -->
+            <property name="clientEnvString">PATH=${env.PATH};LD_LIBRARY_PATH=${payara.home}${file.separator}lib;AS_DEBUG=true;
+                APPCPATH=${payara.home}${file.separator}javadb${file.separator}lib${file.separator}derby.jar${path.separator}${payara.home}${file.separator}javadb${file.separator}lib${file.separator}derbyclient.jar${path.separator}${payara.home}${file.separator}javadb${file.separator}lib${file.separator}derbynet.jar${path.separator}${payara.home}${file.separator}javadb${file.separator}lib${file.separator}derbytools.jar${path.separator}${payara.home}${file.separator}javadb${file.separator}lib${file.separator}derbyrun.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}lib${file.separator}arquillian-protocol-lib.jar${path.separator}target${file.separator}appclient${file.separator}lib${file.separator}arquillian-core.jar${path.separator}target${file.separator}appclient${file.separator}lib${file.separator}arquillian-junit5.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}security.jar</property>
+            <property name="clientDir">${project.basedir}</property>
+            <property name="workDir">${ts.home}${file.separator}tmp</property>
+            <property name="tsJteFile">${ts.home}${file.separator}bin${file.separator}ts.jte</property>
+            <property name="tsSqlStmtFile">jakartaeetck${file.separator}sql${file.separator}derby${file.separator}derby.dml.sql</property>
+            <property name="trace">true</property>
+            <property name="clientTimeout">20000</property>
+        </protocol>
+    </container>
+</arquillian>
