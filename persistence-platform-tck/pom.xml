@@ -495,21 +495,6 @@
 
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <configuration>
-                    <trimStackTrace>false</trimStackTrace>
-                    <dependenciesToScan>jakarta.tck:persistence-platform-tck-tests</dependenciesToScan>
-                    <systemPropertyVariables>
-                        <payara.home>${payara.home}</payara.home>
-                        <junit.log.traceflag>true</junit.log.traceflag>
-                        <harness.log.traceflag>true</harness.log.traceflag>
-                        <cts.harness.debug>true</cts.harness.debug>
-                        <project.basedir>${project.basedir}</project.basedir>
-                        <ts.home>${ts.home}</ts.home>
-                        <ts.work.dir>${project.build.directory}</ts.work.dir>
-                        <log.file.location>${project.build.directory}</log.file.location>
-                    </systemPropertyVariables>
-                    <groups>${includeGroups}</groups>
-                </configuration>
 
                 <executions>
                     <execution>
@@ -519,12 +504,21 @@
                             <goal>verify</goal>
                         </goals>
                         <configuration>
+                            <dependenciesToScan>jakarta.tck:persistence-platform-tck-tests</dependenciesToScan>
                             <includes>
                                 <include>**/*Test.java</include>
                             </includes>
                             <groups>${includeGroups}</groups>
-
+                            <trimStackTrace>false</trimStackTrace>
                             <systemPropertyVariables>
+                                <payara.home>${payara.home}</payara.home>
+                                <junit.log.traceflag>true</junit.log.traceflag>
+                                <harness.log.traceflag>true</harness.log.traceflag>
+                                <cts.harness.debug>true</cts.harness.debug>
+                                <project.basedir>${project.basedir}</project.basedir>
+                                <ts.home>${ts.home}</ts.home>
+                                <ts.work.dir>${project.build.directory}</ts.work.dir>
+                                <log.file.location>${project.build.directory}</log.file.location>
                                 <arquillian.xml>arquillian.xml</arquillian.xml>
                             </systemPropertyVariables>
                         </configuration>
@@ -562,8 +556,12 @@
         </profile>
 
         <profile>
-            <id>appclient</id>
+            <id>platform</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
 
+            <!-- We don't need these dependencies if testing web profile -->
             <dependencies>
                 <dependency>
                     <groupId>jakarta.tck.arquillian</groupId>
@@ -576,30 +574,6 @@
                     <version>${jakarta.tck.arquillian.version}</version>
                 </dependency>
             </dependencies>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>jpa-tests-appclient</id>
-                                <goals>
-                                    <goal>integration-test</goal>
-                                    <goal>verify</goal>
-                                </goals>
-                                <configuration>
-                                    <includes>
-                                        <include>ee/jakarta/tck/persistence/**/*Test.java</include>
-                                    </includes>
-                                    <groups>platform</groups>
-                                    <excludedGroups>web</excludedGroups>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
         </profile>
     </profiles>
 
