@@ -494,10 +494,6 @@
                 <configuration>
                     <trimStackTrace>false</trimStackTrace>
                     <dependenciesToScan>jakarta.tck:persistence-platform-tck-tests</dependenciesToScan>
-<!--                    <excludes>-->
-<!--                        <exclude>ee.jakarta.tck.persistence.core.relationship.bidironexone.ClientPmservletTest</exclude>-->
-<!--                    </excludes>-->
-
                     <systemPropertyVariables>
                         <payara.home>${payara.home}</payara.home>
                         <junit.log.traceflag>true</junit.log.traceflag>
@@ -514,19 +510,6 @@
 
                 <executions>
                     <execution>
-                        <id>jpa-tests-cdi</id>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                        <configuration>
-                            <includes>
-                                <include>ee/jakarta/tck/persistence/ee/cdi/*Test.java</include>
-                            </includes>
-                        </configuration>
-                    </execution>
-
-                    <execution>
                         <id>jpa-tests-javatest</id>
                         <goals>
                             <goal>integration-test</goal>
@@ -534,7 +517,7 @@
                         </goals>
                         <configuration>
                             <includes>
-                                <include>ee/jakarta/tck/persistence/**/*Test.java</include>
+                                <include>**/*Test.java</include>
                             </includes>
                         </configuration>
                     </execution>
@@ -601,6 +584,8 @@
                                     <includes>
                                         <include>ee/jakarta/tck/persistence/**/*Test.java</include>
                                     </includes>
+                                    <groups>platform</groups>
+                                    <excludedGroups>web</excludedGroups>
                                 </configuration>
                             </execution>
                         </executions>
