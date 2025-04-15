@@ -16,33 +16,36 @@
         <ts.home>${project.basedir}${file.separator}jakartaeetck</ts.home>
     </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>fish.payara.api</groupId>
-                <artifactId>payara-bom</artifactId>
-                <version>${payara.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+<!--    <dependencyManagement>-->
+<!--        <dependencies>-->
+<!--            <dependency>-->
+<!--                <groupId>fish.payara.api</groupId>-->
+<!--                <artifactId>payara-bom</artifactId>-->
+<!--                <version>${payara.version}</version>-->
+<!--                <type>pom</type>-->
+<!--                <scope>import</scope>-->
+<!--            </dependency>-->
+<!--        </dependencies>-->
+<!--    </dependencyManagement>-->
 
     <dependencies>
         <!-- Jakarta EE dependencies -->
         <dependency>
             <groupId>jakarta.platform</groupId>
             <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>11.0.0-RC1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.inject</groupId>
             <artifactId>jakarta.inject-api</artifactId>
+            <version>2.0.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.persistence</groupId>
             <artifactId>jakarta.persistence-api</artifactId>
+            <version>3.2.0</version>
         </dependency>
 
         <!-- The TCK itself -->
@@ -129,6 +132,7 @@
         <dependency>
             <groupId>fish.payara.arquillian</groupId>
             <artifactId>payara-client-ee11</artifactId>
+            <version>4.0.alpha2</version>
             <scope>test</scope>
         </dependency>
 
@@ -503,12 +507,28 @@
                         <ts.home>${ts.home}</ts.home>
                         <ts.work.dir>${project.build.directory}</ts.work.dir>
                         <log.file.location>${project.build.directory}</log.file.location>
-                        <arquillian.xml>arquillian.xml</arquillian.xml>
                     </systemPropertyVariables>
                     <groups>${includeGroups}</groups>
                 </configuration>
 
                 <executions>
+                    <execution>
+                        <id>jpa-tests-cdi</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>ee/jakarta/tck/persistence/ee/cdi/*Test.java</include>
+                            </includes>
+
+                            <systemPropertyVariables>
+                                <arquillian.xml>rest-arquillian.xml</arquillian.xml>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </execution>
+
                     <execution>
                         <id>jpa-tests-javatest</id>
                         <goals>
@@ -517,8 +537,13 @@
                         </goals>
                         <configuration>
                             <includes>
-                                <include>**/*Test.java</include>
+                                <include>ee/jakarta/tck/persistence/**/*Test.java</include>
                             </includes>
+                            <groups>${includeGroups}</groups>
+
+                            <systemPropertyVariables>
+                                <arquillian.xml>arquillian.xml</arquillian.xml>
+                            </systemPropertyVariables>
                         </configuration>
                     </execution>
                 </executions>
