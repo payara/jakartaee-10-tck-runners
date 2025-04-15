@@ -115,7 +115,7 @@
         <jakarta.tck.ws.rs.version>4.0.0</jakarta.tck.ws.rs.version>
         <jakarta.tck.pages.version>4.0.0</jakarta.tck.pages.version>
         <jakarta.tck.pages-platform.version>11.0.0</jakarta.tck.pages-platform.version>
-        <jakarta.tck.common.version>11.0.3</jakarta.tck.common.version>
+        <jakarta.tck.common.version>11.0.5</jakarta.tck.common.version>
         <jakarta.tck.signaturetest.version>11.0.0</jakarta.tck.signaturetest.version>
         <jakarta.tck.persistence.version>3.2.0</jakarta.tck.persistence.version>
         <jakarta.tck.cdi.version>4.1.0</jakarta.tck.cdi.version>
