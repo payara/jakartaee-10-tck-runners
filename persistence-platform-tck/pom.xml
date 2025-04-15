@@ -503,7 +503,7 @@
                         <ts.home>${ts.home}</ts.home>
                         <ts.work.dir>${project.build.directory}</ts.work.dir>
                         <log.file.location>${project.build.directory}</log.file.location>
-                        <arquillian.xml>appclient.xml</arquillian.xml>
+                        <arquillian.xml>arquillian.xml</arquillian.xml>
                     </systemPropertyVariables>
                     <groups>${includeGroups}</groups>
                 </configuration>
