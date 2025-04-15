@@ -15,7 +15,6 @@
         <configuration>
             <property name="payaraHome">${payara.home}</property>
             <property name="debug">true</property>
-            <property name="suspend">false</property>
         </configuration>
         <protocol type="javatest">
             <property name="trace">true</property>
