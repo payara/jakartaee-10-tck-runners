@@ -568,12 +568,59 @@
                     <artifactId>arquillian-protocol-appclient</artifactId>
                     <version>${jakarta.tck.arquillian.version}</version>
                 </dependency>
-                <dependency>
-                    <groupId>jakarta.tck.arquillian</groupId>
-                    <artifactId>arquillian-protocol-lib</artifactId>
-                    <version>${jakarta.tck.arquillian.version}</version>
-                </dependency>
             </dependencies>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-tck-common</id>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <phase>generate-resources</phase>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>jakarta.tck</groupId>
+                                            <artifactId>common</artifactId>
+                                            <overWrite>true</overWrite>
+                                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                                            <destFileName>common.jar</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>jakarta.tck.arquillian</groupId>
+                                            <artifactId>tck-porting-lib</artifactId>
+                                            <overWrite>true</overWrite>
+                                            <outputDirectory>${project.build.directory}${file.separator}lib</outputDirectory>
+                                            <destFileName>tck-porting-lib.jar</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>jakarta.tck.arquillian</groupId>
+                                            <artifactId>arquillian-protocol-lib</artifactId>
+                                            <overWrite>true</overWrite>
+                                            <outputDirectory>${project.build.directory}${file.separator}lib</outputDirectory>
+                                            <destFileName>arquillian-protocol-lib.jar</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>jakarta.tck.arquillian</groupId>
+                                            <artifactId>arquillian-protocol-appclient</artifactId>
+                                            <overWrite>true</overWrite>
+                                            <outputDirectory>${project.build.directory}${file.separator}lib</outputDirectory>
+                                            <destFileName>arquillian-protocol-appclient.jar</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+
+
         </profile>
     </profiles>
 

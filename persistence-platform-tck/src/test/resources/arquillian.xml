@@ -78,7 +78,7 @@
                     APPCPATH=${payara.home}/glassfish/lib/arquillian-protocol-lib.jar:${payara.home}/glassfish/lib/tck-porting-lib.jar:target/appclient/lib/arquillian-core.jar:target/appclient/lib/arquillian-junit5.jar:${payara.home}/glassfish/modules/security.jar</property> -->
                 <property name="clientEnvString">
                     AS_JAVA=${env.JAVA_HOME};PATH=${env.PATH};LD_LIBRARY_PATH=${payara.home}/lib;AS_DEBUG=true;
-                    APPCPATH=target/appclient/lib/arquillian-protocol-lib.jar
+                    APPCPATH=target/appclient/lib/arquillian-protocol-lib.jar${path.separator}target/lib/common.jar${path.separator}target/lib/tck-porting-lib.jar${path.separator}target/appclient/lib/arquillian-core.jar${path.separator}target/appclient/lib/arquillian-junit5.jar${path.separator}${payara.home}/glassfish/modules/security.jar${path.separator}${payara.home}/glassfish/lib/gf-client.jar
                 </property>
                 <property name="clientDir">${project.basedir}</property>
                 <property name="workDir">${ts.work.dir}</property>
