@@ -178,6 +178,13 @@
             <artifactId>tck-porting-lib</artifactId>
             <version>${jakarta.tck.arquillian.version}</version>
         </dependency>
+
+        <!-- Jenkins seems to explicitly need this -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.18.0</version>
+        </dependency>
     </dependencies>
 
     <build>
