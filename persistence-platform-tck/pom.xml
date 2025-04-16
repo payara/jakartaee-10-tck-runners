@@ -133,7 +133,7 @@
         <dependency>
             <groupId>fish.payara.arquillian</groupId>
             <artifactId>payara-client-ee11</artifactId>
-            <version>4.0.alpha2</version>
+            <version>${payara.arquillian.version}</version>
             <scope>test</scope>
         </dependency>
 
