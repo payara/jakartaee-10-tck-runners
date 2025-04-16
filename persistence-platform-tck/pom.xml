@@ -472,7 +472,7 @@
                             <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>create-jvm-option</argument>
-                                <argument>-Xmx2048m</argument>
+                                <argument>-Xmx4096m</argument>
                             </arguments>
                         </configuration>
                     </execution>
