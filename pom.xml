@@ -208,6 +208,21 @@
         </repository>
     </repositories>
 
+    <pluginRepositories>
+        <!-- Try Maven central first, not last, which happens when omitted here -->
+        <pluginRepository>
+            <id>central</id>
+            <name>Central Repository</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
     <modules>
         <!-- 'tck-download' module at the top to ensure it resolves first -->
         <module>tck-download</module>
