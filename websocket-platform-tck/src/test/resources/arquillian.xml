@@ -8,8 +8,7 @@
   </engine>
 
   <group qualifier="payara" default="true">
-    <container qualifier="http" default="true"/>
-    <container qualifier="https"/>
+    <container qualifier="https" default="true"/>
   </group>
 
 </arquillian>
