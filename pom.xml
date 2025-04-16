@@ -265,6 +265,7 @@
         <module>rest-platform-tck</module>
         <module>persistence-platform-tck</module>
         <module>transaction-platform-tck</module>
+        <module>websocket-platform-tck</module>
     </modules>
 
     <dependencyManagement>
