@@ -59,7 +59,7 @@
         <ant.home>${project.build.directory}/apache-ant-${ant.version}</ant.home>
         <ant.zip.url>https://archive.apache.org/dist/ant/binaries/apache-ant-${ant.version}-bin.zip</ant.zip.url>
         <ant.executable>${ant.home}${file.separator}bin${file.separator}ant</ant.executable>
-        <maven.executable>${env.MAVEN_HOME}${file.separator}bin${file.separator}mvn</maven.executable>
+        <maven.executable>${maven.home}${file.separator}bin${file.separator}mvn</maven.executable>
         <maven.settings.xml>${user.home}${file.separator}.m2${file.separator}settings.xml</maven.settings.xml>
 
         <payara.home>${maven.multiModuleProjectDirectory}${file.separator}target${file.separator}payara7</payara.home>
@@ -223,6 +223,8 @@
         <module>data-tck</module>
         <module>expression-language-platform-tck</module>
         <module>ejb-platform-tck</module>
+        <module>jdbc-platform-tck</module>
+        <module>rest-platform-tck</module>
     </modules>
 
     <dependencyManagement>
