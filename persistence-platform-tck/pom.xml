@@ -34,18 +34,21 @@
         <dependency>
             <groupId>jakarta.platform</groupId>
             <artifactId>jakarta.jakartaee-api</artifactId>
+            <!-- Version should be provided by payara-bom - needs fixing -->
             <version>11.0.0-RC1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.inject</groupId>
             <artifactId>jakarta.inject-api</artifactId>
+            <!-- Version should be provided by payara-bom - needs fixing -->
             <version>2.0.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.persistence</groupId>
             <artifactId>jakarta.persistence-api</artifactId>
+            <!-- Version should be provided by payara-bom - needs fixing -->
             <version>3.2.0</version>
         </dependency>
 
