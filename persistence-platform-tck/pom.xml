@@ -16,6 +16,7 @@
         <ts.home>${project.basedir}${file.separator}jakartaeetck</ts.home>
     </properties>
 
+    <!-- Something in this BOM causes Junit to find no tests - this should be addressed -->
 <!--    <dependencyManagement>-->
 <!--        <dependencies>-->
 <!--            <dependency>-->
