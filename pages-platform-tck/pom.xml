@@ -56,31 +56,6 @@
         <junit.jupiter.version>5.9.1</junit.jupiter.version>
     </properties>
 
-    <!-- The Junit5 test frameworks -->
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.junit</groupId>
-                <artifactId>junit-bom</artifactId>
-                <version>5.12.0</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <version>1.9.3.Final</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.2</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
         <!-- Jakarta EE APIs -->
         <dependency>
@@ -384,7 +359,6 @@
                             <groups>platform</groups>
                             <dependenciesToScan>jakarta.tck:pages-platform-tck</dependenciesToScan>
                             <systemPropertyVariables>
-                                <payara.maxHeapSize>2048m</payara.maxHeapSize>
                                 <webServerHome>${payara.home}/glassfish</webServerHome>
                                 <webServerHost>localhost</webServerHost>
                                 <webServerPort>8080</webServerPort>
