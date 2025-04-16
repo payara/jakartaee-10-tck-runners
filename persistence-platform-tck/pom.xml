@@ -615,6 +615,35 @@
                                             <outputDirectory>${project.build.directory}${file.separator}lib</outputDirectory>
                                             <destFileName>arquillian-protocol-appclient.jar</destFileName>
                                         </artifactItem>
+                                        <!-- TODO - verify if these are necessary -->
+                                        <artifactItem>
+                                            <groupId>jakarta.tck</groupId>
+                                            <artifactId>persistence-platform-tck-common</artifactId>
+                                            <overWrite>true</overWrite>
+                                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                                            <destFileName>persistence-platform-tck-common.jar</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>jakarta.tck</groupId>
+                                            <artifactId>persistence-platform-tck-spec-tests</artifactId>
+                                            <overWrite>true</overWrite>
+                                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                                            <destFileName>persistence-platform-tck-spec-tests.jar</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>jakarta.tck</groupId>
+                                            <artifactId>persistence-platform-tck-tests</artifactId>
+                                            <overWrite>true</overWrite>
+                                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                                            <destFileName>persistence-platform-tck-tests.jar</destFileName>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>jakarta.tck</groupId>
+                                            <artifactId>persistence-platform-tck-dbprocedures</artifactId>
+                                            <overWrite>true</overWrite>
+                                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                                            <destFileName>persistence-platform-tck-dbprocedures.jar</destFileName>
+                                        </artifactItem>
                                     </artifactItems>
                                 </configuration>
                             </execution>
