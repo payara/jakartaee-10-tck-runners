@@ -281,7 +281,7 @@
                             <goal>run</goal>
                         </goals>
                         <configuration>
-                            <skip>${skipConfig}</skip>
+                            <skip>${skipServerStartStop}</skip>
                             <target>
                                 <exec executable="${payara.db.home}${file.separator}bin${file.separator}startNetworkServer${script.extension}" spawn="true" dir="${payara.db.home}"/>
                                 <echo message="Waiting 3 seconds for database in forked process to start..."/>
@@ -313,7 +313,7 @@
                             <goal>run</goal>
                         </goals>
                         <configuration>
-                            <skip>${skipConfig}</skip>
+                            <skip>${skipServerStartStop}</skip>
                             <target>
                                 <exec executable="${payara.db.home}${file.separator}bin${file.separator}stopNetworkServer${script.extension}" dir="${payara.db.home}"/>
                             </target>
