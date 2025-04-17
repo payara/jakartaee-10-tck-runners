@@ -201,6 +201,7 @@
 
                                 <echo message="${verifyResult}"/>
 
+                                <touch file="${project.build.directory}/summary.txt" />
                                 <if>
                                     <not>
                                         <contains string="${verifyResult}" substring="is a correctly formatted SMAP"/>
@@ -208,8 +209,13 @@
                                     <then>
                                         <echo message="Running tests failed." />
                                         <loadfile property="contents" srcFile="${payara.home}/glassfish/domains/domain1/logs/server.log" />
+                                        <echo message="${verifyResult}                                                               Failed." file="${project.build.directory}/summary.txt" />
+
                                         <fail status="${testResult}" message="${contents}" />
                                     </then>
+                                    <else>
+                                        <echo message="${verifyResult}                                                               Passed." file="${project.build.directory}/summary.txt" />
+                                    </else>
                                 </if>
                             </target>
                         </configuration>
