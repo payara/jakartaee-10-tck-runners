@@ -59,7 +59,7 @@
         <ant.home>${project.build.directory}/apache-ant-${ant.version}</ant.home>
         <ant.zip.url>https://archive.apache.org/dist/ant/binaries/apache-ant-${ant.version}-bin.zip</ant.zip.url>
         <ant.executable>${ant.home}${file.separator}bin${file.separator}ant</ant.executable>
-        <maven.executable>${env.MAVEN_HOME}${file.separator}bin${file.separator}mvn</maven.executable>
+        <maven.executable>${maven.home}${file.separator}bin${file.separator}mvn</maven.executable>
         <maven.settings.xml>${user.home}${file.separator}.m2${file.separator}settings.xml</maven.settings.xml>
 
         <payara.home>${maven.multiModuleProjectDirectory}${file.separator}target${file.separator}payara7</payara.home>
@@ -108,6 +108,7 @@
         <jakarta.tck.bean-validation.version>3.1.1</jakarta.tck.bean-validation.version>
         <jakarta.tck.ws.rs.version>4.0.0</jakarta.tck.ws.rs.version>
         <jakarta.tck.pages.version>4.0.0</jakarta.tck.pages.version>
+        <jakarta.tck.pages-platform.version>11.0.0</jakarta.tck.pages-platform.version>
         <jakarta.tck.common.version>11.0.3</jakarta.tck.common.version>
         <jakarta.tck.signaturetest.version>11.0.0</jakarta.tck.signaturetest.version>
         <jakarta.tck.persistence.version>3.2.0</jakarta.tck.persistence.version>
@@ -222,8 +223,11 @@
         <module>mail-platform-tck</module>
         <module>data-tck</module>
         <module>expression-language-platform-tck</module>
+        <module>pages-platform-tck</module>
         <module>ejb-platform-tck</module>
         <module>dsol-platform-tck</module>
+        <module>jdbc-platform-tck</module>
+        <module>rest-platform-tck</module>
     </modules>
 
     <dependencyManagement>
