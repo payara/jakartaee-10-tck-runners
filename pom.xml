@@ -108,6 +108,7 @@
         <jakarta.tck.bean-validation.version>3.1.1</jakarta.tck.bean-validation.version>
         <jakarta.tck.ws.rs.version>4.0.0</jakarta.tck.ws.rs.version>
         <jakarta.tck.pages.version>4.0.0</jakarta.tck.pages.version>
+        <jakarta.tck.pages-platform.version>11.0.0</jakarta.tck.pages-platform.version>
         <jakarta.tck.common.version>11.0.3</jakarta.tck.common.version>
         <jakarta.tck.signaturetest.version>11.0.0</jakarta.tck.signaturetest.version>
         <jakarta.tck.persistence.version>3.2.0</jakarta.tck.persistence.version>
@@ -222,6 +223,7 @@
         <module>mail-platform-tck</module>
         <module>data-tck</module>
         <module>expression-language-platform-tck</module>
+        <module>pages-platform-tck</module>
         <module>ejb-platform-tck</module>
         <module>jdbc-platform-tck</module>
         <module>rest-platform-tck</module>
