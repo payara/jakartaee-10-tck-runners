@@ -55,7 +55,6 @@
         <module>jakarta-platform-tck</module>
         <module>jakarta-data-tck</module>
         <module>jakarta-jms-tck</module>
-        <module>jakarta-pages-platform-tck</module>
     </modules>
 
     <build>
