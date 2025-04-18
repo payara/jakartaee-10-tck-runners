@@ -25,3 +25,5 @@ To skip configuring the server and database, specify `-DskipConfig=true`
 
 To run a more specific subset of tests, look at using failsafe command-line overrides (`-Dit.test`) 
 or editing the `<includes>` configuration of failsafe in the  pom.
+Test groups can be excluded using the `-DexcludedGroups` command line override.  
+The available groups to are `web`, `platform`, and `tck-appclient`.
