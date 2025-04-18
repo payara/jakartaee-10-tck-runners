@@ -12,11 +12,6 @@
     <artifactId>ejb-platform-tck</artifactId>
 
     <properties>
-        <derby.version>10.17.1.0</derby.version>
-        <derby.zip.url>https://dlcdn.apache.org//db/derby/db-derby-${derby.version}/db-derby-${derby.version}-bin.zip</derby.zip.url>
-        <db.download.location>${project.build.directory}${file.separator}db-derby-${derby.version}-bin</db.download.location>
-        <payara.db.home>${payara.home}${file.separator}javadb</payara.db.home>
-
         <ts.home>${basedir}${file.separator}src${file.separator}test${file.separator}resources${file.separator}jakartaeetck</ts.home>
         <tck.jte.path>${ts.home}${file.separator}bin${file.separator}ts.jte</tck.jte.path>
 

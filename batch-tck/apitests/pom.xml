@@ -32,14 +32,6 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
     <name>Jakarta Batch API TCK Runner for Payara</name>
 
     <properties>
-        <derby.version>10.17.1.0</derby.version>
-        <derby.zip.url>https://dlcdn.apache.org//db/derby/db-derby-${derby.version}/db-derby-${derby.version}-bin.zip</derby.zip.url>
-        <db.download.location>${project.build.directory}${file.separator}db-derby-${derby.version}-bin</db.download.location>
-        <payara.db.home>${payara.home}${file.separator}javadb</payara.db.home>
-
-        <!-- Used to help determine sh vs. bat -->
-        <script.ext/>
-
         <slf4j.version>2.0.16</slf4j.version>
     </properties>
 
@@ -204,7 +196,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                         <configuration>
                             <skip>${skipTests}</skip>
                             <target>
-                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}startNetworkServer${script.ext}" spawn="true" dir="${payara.db.home}"/>
+                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}startNetworkServer${script.extension}" spawn="true" dir="${payara.db.home}"/>
                                 <echo message="Waiting 3 seconds for database in forked process to start..."/>
                                 <sleep seconds="3"/>
                             </target>
@@ -220,7 +212,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                         <configuration>
                             <skip>${skipTests}</skip>
                             <target>
-                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}ij${script.ext}" dir="${payara.db.home}">
+                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}ij${script.extension}" dir="${payara.db.home}">
                                     <arg value="${basedir}${file.separator}src${file.separator}test${file.separator}resources${file.separator}derby.ddl.jbatch-tck.sql" />
                                 </exec>
                             </target>
@@ -305,7 +297,7 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
                         <configuration>
                             <skip>${skipTests}</skip>
                             <target>
-                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}stopNetworkServer${script.ext}" dir="${payara.db.home}"/>
+                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}stopNetworkServer${script.extension}" dir="${payara.db.home}"/>
                             </target>
                         </configuration>
                     </execution>
@@ -423,18 +415,4 @@ Copyright (c) 2022 Contributors to the Eclipse Foundation
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>windows</id>
-            <activation>
-                <os>
-                    <family>windows</family>
-                </os>
-            </activation>
-            <properties>
-                <script.ext>.bat</script.ext>
-            </properties>
-        </profile>
-    </profiles>
 </project>

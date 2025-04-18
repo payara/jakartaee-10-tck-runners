@@ -61,13 +61,10 @@
         <tck.home>${project.build.directory}/persistence-tck</tck.home>
         <payara.modules.dir>${payara.home}${file.separator}glassfish${file.separator}modules</payara.modules.dir>
 
-        <derby.version>10.17.1.0</derby.version>
-        <derby.zip.url>https://dlcdn.apache.org/db/derby/db-derby-${derby.version}/db-derby-${derby.version}-bin.zip</derby.zip.url>
         <jdbc.db>derby</jdbc.db>
         <jakarta.persistence.jdbc.driver>org.apache.derby.jdbc.ClientDriver</jakarta.persistence.jdbc.driver>
         <jakarta.persistence.jdbc.url>jdbc:derby://localhost:1527/derbyDB;create=true</jakarta.persistence.jdbc.url>
-        <javadb.dir>${payara.home}${file.separator}javadb</javadb.dir>
-        <javadb.lib.dir>${javadb.dir}${file.separator}lib</javadb.lib.dir>
+        <javadb.lib.dir>${payara.db.home}${file.separator}lib</javadb.lib.dir>
         <jdbc.lib.classpath>${javadb.lib.dir}${file.separator}derbyclient.jar,${javadb.lib.dir}${file.separator}derbyshared.jar,${javadb.lib.dir}${file.separator}derbytools.jar</jdbc.lib.classpath>
         <jdbc.driver.classes>${javadb.lib.dir}${file.separator}derbyclient.jar${path.separator}${javadb.lib.dir}${file.separator}derbyshared.jar${path.separator}${javadb.lib.dir}${file.separator}derbytools.jar</jdbc.driver.classes>
         <derby.sql.dir>${project.build.directory}${file.separator}persistence-tck${file.separator}sql${file.separator}derby</derby.sql.dir>
@@ -236,7 +233,7 @@
                         </goals>
                         <configuration>
                             <target>
-                                <exec executable="${javadb.dir}${file.separator}bin${file.separator}startNetworkServer${script.extension}" spawn="true" dir="${javadb.dir}"/>
+                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}startNetworkServer${script.extension}" spawn="true" dir="${payara.db.home}"/>
                                 <echo message="Waiting 3 seconds for database in forked process to start..."/>
                                 <sleep seconds="3"/>
                             </target>
@@ -315,7 +312,7 @@
                         </goals>
                         <configuration>
                             <target>
-                                <exec executable="${javadb.dir}${file.separator}bin${file.separator}stopNetworkServer${script.extension}"/>
+                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}stopNetworkServer${script.extension}"/>
                             </target>
                         </configuration>
                     </execution>

@@ -117,8 +117,6 @@
         <ts.home>.${file.separator}jakartaeetck</ts.home>
         <user1>cts1</user1>
         <user2>cts1</user2>
-        <derby.version>10.17.1.0</derby.version>
-        <derby.zip.url>https://dlcdn.apache.org/db/derby/db-derby-${derby.version}/db-derby-${derby.version}-bin.zip</derby.zip.url>
         <imq.varhome>${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}imq</imq.varhome>
         <dbprocedures.version>3.2.1-SNAPSHOT</dbprocedures.version>
     </properties>
