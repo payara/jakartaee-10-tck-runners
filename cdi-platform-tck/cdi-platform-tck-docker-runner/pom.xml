@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+  Copyright (c) 2025 Payara Foundation and/or its affiliates. All rights reserved.
+
+  The contents of this file are subject to the terms of either the GNU
+  General Public License Version 2 only ("GPL") or the Common Development
+  and Distribution License("CDDL") (collectively, the "License").  You
+  may not use this file except in compliance with the License.  You can
+  obtain a copy of the License at
+  https://github.com/payara/Payara/blob/master/LICENSE.txt
+  See the License for the specific
+  language governing permissions and limitations under the License.
+
+  When distributing the software, include this License Header Notice in each
+  file and include the License file at glassfish/legal/LICENSE.txt.
+
+  GPL Classpath Exception:
+  The Payara Foundation designates this particular file as subject to the "Classpath"
+  exception as provided by the Payara Foundation in the GPL Version 2 section of the License
+  file that accompanied this code.
+
+  Modifications:
+  If applicable, add the following below the License Header, with the fields
+  enclosed by brackets [] replaced by your own identifying information:
+  "Portions Copyright [year] [name of copyright owner]"
+
+  Contributor(s):
+  If you wish your version of this file to be governed by only the CDDL or
+  only the GPL Version 2, indicate your decision by adding "[Contributor]
+  elects to include this software in this distribution under the [CDDL or GPL
+  Version 2] license."  If you don't indicate a single choice of license, a
+  recipient has the option to distribute your version of this file under
+  either the CDDL, the GPL Version 2 or to extend the choice of license to
+  its licensees as provided above.  However, if you add GPL Version 2 code
+  and therefore, elected the GPL Version 2 license, then the option applies
+  only if the new code is made subject to such option by the copyright
+  holder.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>fish.payara.jakarta.tests.tck</groupId>
+        <artifactId>cdi-platform-tck-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>cdi-platform-tck-docker-runner</artifactId>
+    <name>TCK: CDI Platform (Docker)</name>
+
+    <packaging>pom</packaging>
+
+    <description>This verifies the compliance of Payara using the Jakarta CDI Platform standalone TCK within a Docker container, to avoid issues caused with the selenium tests and more recent versions of Chrome</description>
+
+    <properties>
+        <maven.profiles>payara-server-managed,jakarta-staging</maven.profiles>
+        <!-- This is the maven command which the run-tck.sh script will execute within the container - -->
+        <maven.command>mvn help:active-profiles clean verify -Dpayara.version=${payara.version} -P${maven.profiles} -pl . -pl tck-download -pl tck-download/jakarta-cdi-tck -pl tck-download/jakarta-platform-tck -pl cdi-platform-tck -pl cdi-platform-tck/cdi-platform-tck-runner</maven.command>
+        <skipDockerBuild>${skipTests}</skipDockerBuild>
+        <docker.image.pull.policy>IfNotPresent</docker.image.pull.policy>
+        <skipDockerCleanup>${skipTests}</skipDockerCleanup>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>fish.payara.distributions</groupId>
+            <artifactId>${payara.artifact}</artifactId>
+            <type>zip</type>
+        </dependency>
+        <dependency>
+            <groupId>fish.payara.api</groupId>
+            <artifactId>payara-bom</artifactId>
+            <version>${payara.version}</version>
+            <type>pom</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-tck-runner-files</id>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <target>
+                                <copy todir="${project.build.directory}/tck-runners" overwrite="true">
+                                    <fileset dir="..${file.separator}.." includes="**/*" excludes="**/target/**/*" />
+                                </copy>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>copy-entrypoint-script</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipDockerBuild}</skip>
+                            <target>
+                                <echo>Copying src${file.separator}main${file.separator}docker${file.separator}run-tck.sh to ${project.build.directory}${file.separator}tck-runners${file.separator}run-tck.sh</echo>
+                                <copy file="src${file.separator}main${file.separator}docker${file.separator}run-tck.sh"
+                                      tofile="${project.build.directory}${file.separator}tck-runners${file.separator}run-tck.sh"
+                                      overwrite="true" />
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-payara</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipDockerBuild}</skip>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>fish.payara.distributions</groupId>
+                                    <artifactId>${payara.artifact}</artifactId>
+                                    <type>zip</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}${file.separator}payara</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-payara-bom</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipDockerBuild}</skip>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>fish.payara.api</groupId>
+                                    <artifactId>payara-bom</artifactId>
+                                    <type>pom</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}${file.separator}payara</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.45.1</version>
+                <executions>
+                    <execution>
+                        <id>build-docker-image</id>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <skip>${skipDockerBuild}</skip>
+                            <images>
+                                <image>
+                                    <name>payara/cdi-platform-tck-runner</name>
+                                    <build>
+                                        <!-- On Windows with default setting ${*}, $PATH would get filtered as well -->
+                                        <filter>@</filter>
+                                        <tags>
+                                            <tag>${jakarta.tck.platform.version}</tag>
+                                        </tags>
+                                        <cleanup>none</cleanup>
+                                        <dockerFile>Dockerfile</dockerFile>
+                                        <assembly>
+                                            <mode>tar</mode>
+                                            <descriptor>assembly.xml</descriptor>
+                                            <tarLongFileMode>gnu</tarLongFileMode>
+                                        </assembly>
+                                        <imagePullPolicy>${docker.image.pull.policy}</imagePullPolicy>
+                                    </build>
+                                </image>
+                            </images>
+                            <verbose>true</verbose>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>run-cdi-platform-tck</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>integration-test</phase>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <executable>docker</executable>
+                            <commandlineArgs>run --name cdi-platform-tck-runner --init payara/cdi-platform-tck-runner</commandlineArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>collect-failsafe-summary.xml</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <executable>docker</executable>
+                            <commandlineArgs>cp cdi-platform-tck-runner:/opt/tck-runners/cdi-platform-tck/cdi-platform-tck-runner/target/failsafe-reports/failsafe-summary.xml ${project.build.directory}${file.separator}failsafe-summary.xml</commandlineArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>collect-payara-logs</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <executable>docker</executable>
+                            <commandlineArgs>cp cdi-platform-tck-runner:/opt/tck-runners/target/payara-logs.zip ${project.build.directory}${file.separator}payara-logs.zip</commandlineArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>remove-cdi-platform-tck-runner-container</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
+                        <configuration>
+                            <skip>${skipDockerCleanup}</skip>
+                            <executable>docker</executable>
+                            <commandlineArgs>container rm cdi-platform-tck-runner</commandlineArgs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>verify-failsafe-summary.xml</id>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                        <phase>verify</phase>
+                        <configuration>
+                            <skip>${skipTests}</skip>
+                            <summaryFile>${project.build.directory}${file.separator}failsafe-summary.xml</summaryFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>web</id>
+            <properties>
+                <maven.profiles>payara-server-managed,jakarta-staging,web</maven.profiles>
+            </properties>
+        </profile>
+        <profile>
+            <id>use-saved-basic-ubuntu-chrome-image</id>
+
+            <properties>
+                <!-- Backup saved to SharePoint for now under Payara/Engineering/Testing - this URL is set to expire and will need regenerating or replacing with a better solution -->
+                <!-- This backup exists as a fallback in case the eclipsecbijenkins/basic-ubuntu-chrome Docker image disappears or is otherwise updated and breaks our runner -->
+                <docker.image.download.url>https://c2b2.sharepoint.com/:u:/g/Payara/EeXj4-rX-BtFiXbZvkiYVzsBOnc_G68yfQ-OGc4iFanI7g?download=1</docker.image.download.url>
+                <docker.image.tar.name>basic-ubuntu-chrome.tar</docker.image.tar.name>
+                <docker.image.pull.policy>Never</docker.image.pull.policy>
+                <skipDockerImageDownload>${skipDockerBuild}</skipDockerImageDownload>
+            </properties>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.googlecode.maven-download-plugin</groupId>
+                        <artifactId>download-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>download-basic-ubuntu-chrome-tar</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>wget</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${skipDockerImageDownload}</skip>
+                                    <url>${docker.image.download.url}</url>
+                                    <unpack>false</unpack>
+                                    <outputDirectory>${project.build.directory}</outputDirectory>
+                                    <outputFileName>${docker.image.tar.name}</outputFileName>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>import-basic-ubuntu-chrome-image-tar</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <phase>prepare-package</phase>
+                                <configuration>
+                                    <skip>${skipDockerBuild}</skip>
+                                    <executable>docker</executable>
+                                    <commandlineArgs>image load --input ${project.build.directory}${file.separator}basic-ubuntu-chrome.tar</commandlineArgs>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
