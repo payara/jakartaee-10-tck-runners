@@ -87,6 +87,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
+                            <skip>${skipServerStartStop}</skip>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>start-domain</argument>
@@ -104,6 +105,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
+                            <skip>${skipServerStartStop}</skip>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>create-jdbc-connection-pool</argument>
@@ -132,6 +134,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
+                            <skip>${skipServerStartStop}</skip>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>create-jdbc-resource</argument>
@@ -148,6 +151,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
+                            <skip>${skipServerStartStop}</skip>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>stop-domain</argument>
@@ -176,7 +180,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <skip>${skipTests}</skip>
+                    <skip>${skipConfig}</skip>
                     <unpack>true</unpack>
                     <outputDirectory>${project.build.directory}</outputDirectory>
                 </configuration>
@@ -192,7 +196,8 @@
                             <goal>run</goal>
                         </goals>
                         <configuration>
-                            <target unless="skip.setup">
+                            <skip>${skipConfig}</skip>
+                            <target>
                                 <move todir="${payara.home}${file.separator}javadb">
                                     <fileset
                                             dir="${project.build.directory}${file.separator}db-derby-${derby.version}-bin"/>
@@ -213,11 +218,26 @@
                             <goal>run</goal>
                         </goals>
                         <configuration>
+                            <skip>${skipServerStartStop}</skip>
                             <target>
                                 <exec executable="${payara.db.home}${file.separator}bin${file.separator}startNetworkServer${script.extension}"
                                       spawn="true" dir="${payara.db.home}"/>
                                 <echo message="Waiting 3 seconds for database in forked process to start..."/>
                                 <sleep seconds="3"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>stop-database</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipServerStartStop</skip>
+                            <target>
+                                <exec executable="${payara.db.home}${file.separator}bin${file.separator}stopNetworkServer${script.extension}"
+                                      dir="${payara.db.home}"/>
                             </target>
                         </configuration>
                     </execution>
@@ -241,6 +261,7 @@
                     </dependency>
                 </dependencies>
                 <configuration>
+                    <skip>${skipConfig}</skip>
                     <driver>org.apache.derby.jdbc.ClientDriver</driver>
                     <url>jdbc:derby://localhost:1527/derbyDB;create=true</url>
                     <username>CTS1</username>
@@ -310,14 +331,14 @@
                         <artifactId>maven-dependency-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>002-copy-lib</id>
+                                <id>copy-lib</id>
                                 <goals>
                                     <goal>copy</goal>
                                 </goals>
                                 <phase>generate-resources</phase>
                                 <configuration>
+                                    <skip>${skipConfig}</skip>
                                     <artifactItems>
-
                                         <!-- The application client container needs these two dependencies -->
                                         <artifactItem>
                                             <groupId>jakarta.tck.arquillian</groupId>
@@ -350,7 +371,6 @@
                                 </goals>
                                 <configuration>
                                     <dependenciesToScan>jakarta.tck:transactions-tck</dependenciesToScan>
-                                    <!-- Select the @Tag("tck-appclient") tests -->
                                     <groups>tck-appclient</groups>
                                     <includes>
                                         <include>com/sun/ts/tests/jta/ee/txpropagationtest/*Ejb*.java</include>
