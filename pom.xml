@@ -55,6 +55,8 @@
 
         <jdk.version>21</jdk.version>
 
+        <commons-codec.version>1.18.0</commons-codec.version>
+
         <ant.version>1.10.15</ant.version>
         <ant.home>${project.build.directory}/apache-ant-${ant.version}</ant.home>
         <ant.zip.url>https://archive.apache.org/dist/ant/binaries/apache-ant-${ant.version}-bin.zip</ant.zip.url>
@@ -139,6 +141,7 @@
 
         <!-- The profile to run - acceptable parameters are 'full', 'web', and 'core' -->
         <jakarta.tck.platform>full</jakarta.tck.platform>
+        <jakarta.javatest.group>tck-javatest</jakarta.javatest.group>
         <javaee.level>${jakarta.tck.platform}</javaee.level>
     </properties>
 
@@ -260,6 +263,7 @@
         <module>jdbc-platform-tck</module>
         <module>rest-platform-tck</module>
         <module>persistence-platform-tck</module>
+        <module>transaction-platform-tck</module>
     </modules>
 
     <dependencyManagement>
@@ -432,6 +436,7 @@
             <properties>
                 <payara.artifact>payara-web</payara.artifact>
                 <jakarta.tck.platform>web</jakarta.tck.platform>
+                <jakarta.javatest.group>web</jakarta.javatest.group>
             </properties>
         </profile>
         <profile>
