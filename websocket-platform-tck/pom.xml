@@ -64,6 +64,7 @@
                         </goals>
                         <phase>generate-test-resources</phase>
                         <configuration>
+                            <skip>${skipConfig}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>jakarta.tck</groupId>
@@ -89,6 +90,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
+                            <skip>${skipServerStartStop}</skip>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>start-domain</argument>
@@ -106,6 +108,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
+                            <skip>${skipConfig}</skip>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>--passwordfile</argument>
@@ -126,6 +129,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
+                            <skip>${skipConfig}</skip>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>--passwordfile</argument>
@@ -144,6 +148,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
+                            <skip>${skipServerStartStop}</skip>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>stop-domain</argument>
