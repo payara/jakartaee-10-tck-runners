@@ -257,6 +257,7 @@
         <module>expression-language-platform-tck</module>
         <module>pages-platform-tck</module>
         <module>ejb-platform-tck</module>
+        <module>dsol-platform-tck</module>
         <module>jdbc-platform-tck</module>
         <module>rest-platform-tck</module>
         <module>persistence-platform-tck</module>
