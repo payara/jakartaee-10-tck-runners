@@ -112,6 +112,13 @@
             <artifactId>jakarta.enterprise.cdi-api</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- Required by jenkins due to varying transitive versions of this dependency -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>${commons-codec.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
