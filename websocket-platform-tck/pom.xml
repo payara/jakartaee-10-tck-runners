@@ -64,7 +64,6 @@
                         </goals>
                         <phase>generate-test-resources</phase>
                         <configuration>
-                            <skip>${skipConfig}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>jakarta.tck</groupId>
