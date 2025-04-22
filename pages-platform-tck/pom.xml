@@ -51,6 +51,11 @@
 
     <artifactId>pages-platform-tck</artifactId>
 
+    <properties>
+        <skipJMS>${skipConfig}</skipJMS>
+        <testGroup>platform</testGroup>
+    </properties>
+
     <dependencies>
         <!-- Jakarta EE APIs -->
         <dependency>
@@ -167,6 +172,7 @@
                         </goals>
                         <phase>pre-integration-test</phase>
                         <configuration>
+                            <skip>${skipJMS}</skip>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>create-jms-resource</argument>
@@ -185,6 +191,7 @@
                         </goals>
                         <phase>pre-integration-test</phase>
                         <configuration>
+                            <skip>${skipJMS}</skip>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>create-jms-resource</argument>
@@ -243,6 +250,7 @@
                         </goals>
                         <phase>pre-integration-test</phase>
                         <configuration>
+                            <skip>${skipJMS}</skip>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>create-jms-resource</argument>
@@ -259,6 +267,7 @@
                         </goals>
                         <phase>pre-integration-test</phase>
                         <configuration>
+                            <skip>${skipJMS}</skip>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>create-jms-resource</argument>
@@ -275,6 +284,7 @@
                         </goals>
                         <phase>pre-integration-test</phase>
                         <configuration>
+                            <skip>${skipJMS}</skip>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
                                 <argument>create-jms-resource</argument>
@@ -329,7 +339,7 @@
                             <goal>verify</goal>
                         </goals>
                         <configuration>
-                            <groups>platform</groups>
+                            <groups>${testGroup}</groups>
                             <dependenciesToScan>jakarta.tck:pages-platform-tck</dependenciesToScan>
                             <systemPropertyVariables>
                                 <webServerHome>${payara.home}/glassfish</webServerHome>
@@ -351,4 +361,14 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>web</id>
+            <properties>
+                <skipJMS>true</skipJMS>
+                <testGroup>web</testGroup>
+            </properties>
+        </profile>
+    </profiles>
 </project>
