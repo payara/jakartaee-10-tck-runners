@@ -330,6 +330,21 @@
                         </configuration>
                     </execution>
                     <execution>
+                        <id>disable-substitution</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipConfig}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-jvm-option</argument>
+                                <argument>-Dfish.payara.substitution.disable=true</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>create-derby-xa-pool</id>
                         <phase>pre-integration-test</phase>
                         <goals>
