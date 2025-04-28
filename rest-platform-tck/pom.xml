@@ -11,12 +11,6 @@
 
     <artifactId>rest-platform-tck</artifactId>
 
-    <properties>
-        <jakarta.ws.rs-api.version>4.0.0</jakarta.ws.rs-api.version>
-        <jersey.version>4.0.0-M2</jersey.version>
-        <yasson.version>3.0.4</yasson.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>jakarta.tck</groupId>
@@ -29,27 +23,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>jakarta.ws.rs</groupId>
-            <artifactId>jakarta.ws.rs-api</artifactId>
-            <version>${jakarta.ws.rs-api.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse</groupId>
-            <artifactId>yasson</artifactId>
-            <version>${yasson.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-client</artifactId>
-            <version>${jersey.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-json-jackson</artifactId>
-            <version>${jersey.version}</version>
-            <scope>provided</scope>
+            <groupId>fish.payara.arquillian</groupId>
+            <artifactId>payara-client-ee11</artifactId>
+            <version>${payara.arquillian.version}</version>
         </dependency>
     </dependencies>
 
