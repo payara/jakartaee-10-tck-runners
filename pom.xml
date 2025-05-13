@@ -267,6 +267,7 @@
         <module>transaction-platform-tck</module>
         <module>websocket-platform-tck</module>
         <module>connector-platform-tck</module>
+        <module>assembly-platform-tck</module>
     </modules>
 
     <dependencyManagement>
