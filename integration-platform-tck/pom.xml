@@ -23,7 +23,6 @@
         <derby.user>cts1</derby.user>
         <payara.lib.dir>${payara.home}/glassfish/lib</payara.lib.dir>
         <jakarta.platform.version>11.0.0-RC1</jakarta.platform.version>
-        <jakarta.tck.arquillian.version>11.0.0</jakarta.tck.arquillian.version>
         <javadb.lib>${payara.home}/javadb/lib</javadb.lib>
         <jdbc.classpath>${javadb.lib}/derbyclient.jar${path.separator}${javadb.lib}/derbyshared.jar${path.separator}${javadb.lib}/derbytools.jar</jdbc.classpath>
         <jdbc.db>derby</jdbc.db>
