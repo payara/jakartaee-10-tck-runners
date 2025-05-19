@@ -13,7 +13,6 @@
 
     <properties>
         <glassfish.lib.dir>${payara.home}${file.separator}glassfish${file.separator}lib</glassfish.lib.dir>
-        <tck.version>11.0.1-SNAPSHOT</tck.version>
         <whitebox.directory>target${file.separator}whiteboxes</whitebox.directory>
     </properties>
 
@@ -22,7 +21,7 @@
             <dependency>
                 <groupId>jakarta.tck</groupId>
                 <artifactId>artifacts-bom</artifactId>
-                <version>${tck.version}</version>
+                <version>${jakarta.tck.platform.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -145,7 +144,7 @@
                                 <artifactItem>
                                     <groupId>jakarta.tck</groupId>
                                     <artifactId>annotated</artifactId>
-                                    <version>${tck.version}</version>
+                                    <version>${jakarta.tck.platform.version}</version>
                                     <type>rar</type>
                                     <outputDirectory>${whitebox.directory}</outputDirectory>
                                     <destFileName>whitebox-anno_no_md.rar</destFileName>
@@ -153,7 +152,7 @@
                                 <artifactItem>
                                     <groupId>jakarta.tck</groupId>
                                     <artifactId>ibanno</artifactId>
-                                    <version>${tck.version}</version>
+                                    <version>${jakarta.tck.platform.version}</version>
                                     <type>rar</type>
                                     <outputDirectory>${whitebox.directory}</outputDirectory>
                                     <destFileName>whitebox-ibanno_no_md.rar</destFileName>
