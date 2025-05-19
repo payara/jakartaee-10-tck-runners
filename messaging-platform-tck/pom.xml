@@ -118,7 +118,6 @@
         <user1>cts1</user1>
         <user2>cts1</user2>
         <imq.varhome>${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}imq</imq.varhome>
-        <dbprocedures.version>3.2.1-SNAPSHOT</dbprocedures.version>
     </properties>
 
     <dependencies>
@@ -134,7 +133,7 @@
         <dependency>
             <groupId>jakarta.tck</groupId>
             <artifactId>jms-platform-tck</artifactId>
-            <version>${jakarta.tck.messaging.version}</version>
+            <version>${jakarta.tck.platform.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.arquillian.container</groupId>
@@ -228,18 +227,6 @@
             <groupId>jakarta.tck</groupId>
             <artifactId>common</artifactId>
             <version>${jakarta.tck.common.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.tck</groupId>
-            <artifactId>dbprocedures</artifactId>
-            <version>${dbprocedures.version}</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>jakarta.persistence</groupId>
-                    <artifactId>jakarta.persistence-api</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.derby</groupId>
@@ -350,26 +337,6 @@
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.directory}${file.separator}lib</outputDirectory>
                                     <destFileName>arquillian-protocol-lib.jar</destFileName>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-dbprocedures-jar</id>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <phase>pre-integration-test</phase>
-                        <configuration>
-                            <skip>${skipTests}</skip>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>jakarta.tck</groupId>
-                                    <artifactId>dbprocedures</artifactId>
-                                    <version>${dbprocedures.version}</version>
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${javadb.lib}</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
