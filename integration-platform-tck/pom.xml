@@ -33,6 +33,7 @@
         <jdbc.user>cts1</jdbc.user>
         <sql.directory>./sql</sql.directory>
         <tck.artifactId>integration</tck.artifactId>
+        <connection.attributes>"create=true"</connection.attributes>
     </properties>
 
     <dependencies>
@@ -377,7 +378,7 @@
                                 <argument>--datasourceclassname</argument>
                                 <argument>${derby.dataSource}</argument>
                                 <argument>--property</argument>
-                                <argument>DatabaseName=${derby.dbName}:serverName=${derby.server}:portNumber=${derby.port}:user=${derby.user}:password=${derby.passwd}:connectionAttributes=\"create=true\"</argument>
+                                <argument>DatabaseName=${derby.dbName}:serverName=${derby.server}:portNumber=${derby.port}:user=${derby.user}:password=${derby.passwd}:connectionAttributes=${connection.attributes}</argument>
                                 <argument>--steadypoolsize</argument>
                                 <argument>32</argument>
                                 <argument>--maxpoolsize</argument>
@@ -568,4 +569,18 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+            <properties>
+                <connection.attributes>\"create=true\"</connection.attributes>
+            </properties>
+        </profile>
+    </profiles>
 </project>
