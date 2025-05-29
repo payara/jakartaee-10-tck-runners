@@ -77,14 +77,6 @@
             <!-- Override version inherited from parent - doesn't seem to pass using 2.3 -->
             <version>2.2</version>
         </dependency>
-
-        <!-- Dependency added to ensure it resolves in the correct order -->
-        <dependency>
-            <groupId>fish.payara.jakarta.tests.tck</groupId>
-            <artifactId>jakarta-annotations-tck</artifactId>
-            <version>${project.version}</version>
-            <type>pom</type>
-        </dependency>
     </dependencies>
 
     <build>
