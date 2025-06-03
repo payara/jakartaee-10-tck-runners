@@ -562,6 +562,7 @@
                                 <cts.harness.debug>true</cts.harness.debug>
                                 <java.io.tmpdir>${root.tmp.directory}${path.separator}tmp</java.io.tmpdir>
                                 <arquillian.xml>arquillian.xml</arquillian.xml>
+                                <javax.net.ssl.trustStorePassword>changeit</javax.net.ssl.trustStorePassword>
                             </systemPropertyVariables>
                         </configuration>
                     </execution>
