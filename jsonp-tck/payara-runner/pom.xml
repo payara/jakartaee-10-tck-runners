@@ -136,6 +136,7 @@
                                 <jimage.dir>${jimage.dir}</jimage.dir>
                                 <optional.tech.packages.to.ignore>jakarta.xml.bind</optional.tech.packages.to.ignore>
                                 <signature.sigTestClasspath>${payara.json-api.jar}${path.separator}${jimage.dir}${file.separator}java.base${path.separator}${jimage.dir}${file.separator}java.rmi${path.separator}${jimage.dir}${file.separator}java.sql${path.separator}${jimage.dir}${file.separator}java.naming</signature.sigTestClasspath>
+                                <payara.home>${payara.home}</payara.home>
                             </systemPropertyVariables>
                         </configuration>
                     </execution>
@@ -154,6 +155,7 @@
                             <reuseForks>false</reuseForks>
                             <trimStackTrace>false</trimStackTrace>
                             <failIfNoTests>true</failIfNoTests>
+                            <payara.home>${payara.home}</payara.home>
                         </configuration>
                     </execution>
                 </executions>
