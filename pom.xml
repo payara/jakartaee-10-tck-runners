@@ -66,7 +66,7 @@
 
         <payara.home>${maven.multiModuleProjectDirectory}${file.separator}target${file.separator}payara7</payara.home>
         <!-- Note that Shrinkwrap Maven resolver WILL NOT read in whatever you specify on the command line - it will ALWAYS read this as-is -->
-        <payara.version>7.2025.1.Alpha2-SNAPSHOT</payara.version>
+        <payara.version>7.2025.1.Alpha3-SNAPSHOT</payara.version>
         <script.extension/>
         <executable.extension/>
         <root.tmp.directory/>
@@ -98,6 +98,7 @@
         <shrinkwrap.resolver.version>3.3.4</shrinkwrap.resolver.version>
         <shrinkwrap.descriptors.version>2.0.0</shrinkwrap.descriptors.version>
         <jakarta.tck.arquillian.version>11.0.5</jakarta.tck.arquillian.version>
+        <sql-maven-plugin.version>3.0.0</sql-maven-plugin.version>
 
         <!-- Derby DB properties -->
         <derby.version>10.17.1.0</derby.version>
@@ -126,7 +127,7 @@
         <jakarta.tck.jsonp.version>2.1.1</jakarta.tck.jsonp.version>
         <jakarta.tck.jsonb.version>3.0.0</jakarta.tck.jsonb.version>
         <jakarta.tck.batch.version>2.1.5</jakarta.tck.batch.version>
-        <jakarta.tck.platform.version>11.0.1-M5</jakarta.tck.platform.version>
+        <jakarta.tck.platform.version>11.0.1</jakarta.tck.platform.version>
         <jakarta.tck.core-profile.version>11.0.0</jakarta.tck.core-profile.version>
         <jakarta.tck.inject.version>2.0.2</jakarta.tck.inject.version>
         <jakarta-authentication-tck.version>3.1.0</jakarta-authentication-tck.version>
@@ -268,6 +269,7 @@
         <module>connector-platform-tck</module>
         <module>assembly-platform-tck</module>
         <module>integration-platform-tck</module>
+        <module>xa-platform-tck</module>
     </modules>
 
     <dependencyManagement>
@@ -402,6 +404,12 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>${maven-resources-plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>sql-maven-plugin</artifactId>
+                    <version>${sql-maven-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
