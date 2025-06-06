@@ -378,6 +378,19 @@
                             </target>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>stop-database</id>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
+                        <configuration>
+                            <skip>${skipServerStartStop}</skip>
+                            <target>
+                                <exec executable="${payara.home}${file.separator}javadb${file.separator}bin${file.separator}stopNetworkServer" dir="${project.build.directory}" />
+                            </target>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
