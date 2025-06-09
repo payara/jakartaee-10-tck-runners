@@ -127,7 +127,7 @@
         <jakarta.tck.jsonp.version>2.1.1</jakarta.tck.jsonp.version>
         <jakarta.tck.jsonb.version>3.0.0</jakarta.tck.jsonb.version>
         <jakarta.tck.batch.version>2.1.5</jakarta.tck.batch.version>
-        <jakarta.tck.platform.version>11.0.1-M5</jakarta.tck.platform.version>
+        <jakarta.tck.platform.version>11.0.1</jakarta.tck.platform.version>
         <jakarta.tck.core-profile.version>11.0.0</jakarta.tck.core-profile.version>
         <jakarta.tck.inject.version>2.0.2</jakarta.tck.inject.version>
         <jakarta-authentication-tck.version>3.1.0</jakarta-authentication-tck.version>
