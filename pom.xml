@@ -270,6 +270,7 @@
         <module>assembly-platform-tck</module>
         <module>integration-platform-tck</module>
         <module>xa-platform-tck</module>
+        <module>javaee-module-tck</module>
     </modules>
 
     <dependencyManagement>
