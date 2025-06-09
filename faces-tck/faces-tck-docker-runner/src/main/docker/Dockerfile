@@ -3,14 +3,14 @@ FROM eclipsecbijenkins/basic-ubuntu-chrome
 EXPOSE 4848 5005 8080 8181 9009 14848 18080 18181
 
 # Download and install Java, Maven, and Ant
-ADD https://cdn.azul.com/zulu/bin/zulu21.40.17-ca-jdk21.0.6-linux_x64.zip https://dlcdn.apache.org/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.zip https://dlcdn.apache.org//ant/binaries/apache-ant-1.10.15-bin.zip /opt/
+ADD https://cdn.azul.com/zulu/bin/zulu21.40.17-ca-jdk21.0.6-linux_x64.zip https://archive.apache.org/dist/maven/maven-3/3.9.10/binaries/apache-maven-3.9.10-bin.zip https://dlcdn.apache.org//ant/binaries/apache-ant-1.10.15-bin.zip /opt/
 WORKDIR /opt
 RUN unzip zulu21.40.17-ca-jdk21.0.6-linux_x64.zip \
     && rm zulu21.40.17-ca-jdk21.0.6-linux_x64.zip \
     && mv zulu21.40.17-ca-jdk21.0.6-linux_x64 /opt/java/zulu \
-    && unzip apache-maven-3.9.9-bin.zip \
-    && rm apache-maven-3.9.9-bin.zip \
-    && mv apache-maven-3.9.9 /opt/maven \
+    && unzip apache-maven-3.9.10-bin.zip \
+    && rm apache-maven-3.9.10-bin.zip \
+    && mv apache-maven-3.9.10 /opt/maven \
     && unzip apache-ant-1.10.15-bin.zip \
     && rm apache-ant-1.10.15-bin.zip \
     && mv apache-ant-1.10.15 /opt/ant
