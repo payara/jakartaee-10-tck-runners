@@ -17,8 +17,6 @@
     <properties>
         <derby.zip.url>https://dlcdn.apache.org//db/derby/db-derby-10.17.1.0/db-derby-10.17.1.0-bin.zip</derby.zip.url>
         <db.home>${project.build.directory}/db-derby-10.17.1.0-bin</db.home>
-        <jakarta.platform.version>11.0.0-M4</jakarta.platform.version>
-        <jakarta.common.version>11.0.0-M2</jakarta.common.version>
         <payara.toplevel.dir>payara7</payara.toplevel.dir>
         <jdbc.classpath>${payara.home}${file.separator}javadb${file.separator}lib${file.separator}derbyclient.jar:${payara.home}${file.separator}javadb${file.separator}lib${file.separator}derbyshared.jar:${payara.home}${file.separator}javadb${file.separator}lib${file.separator}derbytools.jar</jdbc.classpath>
         <db.delimiter>;</db.delimiter>
