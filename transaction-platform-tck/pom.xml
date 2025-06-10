@@ -246,7 +246,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>sql-maven-plugin</artifactId>
-                <version>3.0.0</version>
                 <!-- common configuration shared by all executions -->
                 <dependencies>
                     <dependency>
