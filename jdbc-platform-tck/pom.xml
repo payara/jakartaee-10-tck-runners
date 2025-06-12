@@ -268,26 +268,6 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>jdbc-appclient-tests</id>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                        <configuration>
-                            <includes>
-                                <include>**/*EJB*.*</include>
-                                <include>**/*AppClient*.*</include>
-                            </includes>
-                            <additionalClasspathElements>
-                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}glassfish-naming.jar</additionalClasspathElement>
-                            </additionalClasspathElements>
-                            <systemPropertyVariables>
-                                <arquillian.launch>tck-appclient</arquillian.launch>
-                            </systemPropertyVariables>
-                        </configuration>
-                    </execution>
-
-                    <execution>
                         <id>jdbc-javatest-tests</id>
                         <goals>
                             <goal>integration-test</goal>
@@ -315,5 +295,40 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>appclient</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>jdbc-appclient-tests</id>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                                <configuration>
+                                    <includes>
+                                        <include>**/*EJB*.*</include>
+                                        <include>**/*AppClient*.*</include>
+                                    </includes>
+                                    <additionalClasspathElements>
+                                        <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}glassfish-naming.jar</additionalClasspathElement>
+                                    </additionalClasspathElements>
+                                    <systemPropertyVariables>
+                                        <arquillian.launch>tck-appclient</arquillian.launch>
+                                    </systemPropertyVariables>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
