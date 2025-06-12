@@ -57,24 +57,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.netbeans.tools</groupId>
-                <artifactId>sigtest-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>sigtest</id>
-                        <phase>integration-test</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <action>strictcheck</action>
-                    <failOnError>true</failOnError>
-                    <packages>jakarta.batch.**</packages>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
@@ -90,7 +72,20 @@
                     <plugin>
                         <groupId>org.netbeans.tools</groupId>
                         <artifactId>sigtest-maven-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sigtest</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                         <configuration>
+                            <action>strictcheck</action>
+                            <failOnError>true</failOnError>
+                            <packages>jakarta.batch.**</packages>
                             <sigfile>${project.build.directory}${file.separator}sigtest-copy${file.separator}sigtest${file.separator}sigtest-1.6-batch.standalone.tck.sig-2.1-se11-OpenJDK-J9</sigfile>
                         </configuration>
                     </plugin>
@@ -106,9 +101,24 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.netbeans.tools</groupId>
+                        <groupId>jakarta.tck</groupId>
                         <artifactId>sigtest-maven-plugin</artifactId>
+                        <version>2.6</version>
+                        <executions>
+                            <execution>
+                                <id>sigtest</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                         <configuration>
+                            <action>strictcheck</action>
+                            <failOnError>true</failOnError>
+                            <packages>jakarta.batch.**</packages>
+                            <ignoreAllJDKClasses>true</ignoreAllJDKClasses>
+                            <release>17</release>
                             <sigfile>${project.build.directory}${file.separator}sigtest-copy${file.separator}sigtest${file.separator}sigtest-1.6-batch.standalone.tck.sig-2.1-se17-TemurinHotSpot</sigfile>
                         </configuration>
                     </plugin>
