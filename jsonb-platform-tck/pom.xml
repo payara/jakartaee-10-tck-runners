@@ -105,18 +105,6 @@
             <artifactId>payara-client-ee11</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>jakarta.enterprise</groupId>
-            <artifactId>jakarta.enterprise.cdi-api</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Required by jenkins due to varying transitive versions of this dependency -->
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>${commons-codec.version}</version>
-        </dependency>
     </dependencies>
 
     <build>
@@ -215,11 +203,6 @@
                     <artifactId>arquillian-protocol-appclient</artifactId>
                     <version>${jakarta.tck.arquillian.version}</version>
                 </dependency>
-                <dependency>
-                    <groupId>jakarta.tck</groupId>
-                    <artifactId>jsonp-platform-tck</artifactId>
-                    <version>${jakarta.tck.platform.version}</version>
-                </dependency>
             </dependencies>
 
             <build>
@@ -228,7 +211,7 @@
                         <artifactId>maven-dependency-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>04-copy-lib</id>
+                                <id>copy-libs</id>
                                 <goals>
                                     <goal>copy</goal>
                                 </goals>
@@ -251,10 +234,10 @@
                                         </artifactItem>
                                         <artifactItem>
                                             <groupId>jakarta.tck</groupId>
-                                            <artifactId>jsonp-platform-tck</artifactId>
+                                            <artifactId>jsonb-platform-tck</artifactId>
                                             <overWrite>true</overWrite>
                                             <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                                            <destFileName>jsonp-platform-tck.jar</destFileName>
+                                            <destFileName>jsonb-platform-tck.jar</destFileName>
                                         </artifactItem>
                                         <artifactItem>
                                             <groupId>jakarta.tck.arquillian</groupId>
@@ -267,7 +250,7 @@
                                 </configuration>
                             </execution>
                             <execution>
-                                <id>07-copy-protocol-lib</id>
+                                <id>copy-protocol-lib</id>
                                 <goals>
                                     <goal>copy</goal>
                                 </goals>
