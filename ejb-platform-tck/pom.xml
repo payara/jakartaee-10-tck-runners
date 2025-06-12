@@ -26,6 +26,8 @@
         <!-- Properties used for skipping parts of the TCK -->
         <skipEjb30>${skipTests}</skipEjb30>
         <skipEjb32>${skipTests}</skipEjb32>
+
+        <whitebox.directory>${project.build.directory}${file.separator}whiteboxes</whitebox.directory>
     </properties>
 
     <dependencyManagement>
@@ -43,12 +45,6 @@
     <dependencies>
         <!-- Jakarta EE APIs -->
         <dependency>
-            <groupId>jakarta.platform</groupId>
-            <artifactId>jakarta.jakartaee-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
             <groupId>jakarta.ejb</groupId>
             <artifactId>jakarta.ejb-api</artifactId>
             <scope>test</scope>
@@ -57,14 +53,6 @@
         <dependency>
             <groupId>jakarta.enterprise</groupId>
             <artifactId>jakarta.enterprise.cdi-api</artifactId>
-            <scope>test</scope>
-            <!-- CDI references wrong version of annotations -->
-            <exclusions>
-                <exclusion>
-                    <groupId>jakarta.annotation</groupId>
-                    <artifactId>jakarta.annotation-api</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>jakarta.inject</groupId>
@@ -120,11 +108,6 @@
         </dependency>
         <dependency>
             <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-suite-engine</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-reporting</artifactId>
             <scope>test</scope>
         </dependency>
@@ -143,6 +126,10 @@
         <dependency>
             <groupId>org.jboss.shrinkwrap.descriptors</groupId>
             <artifactId>shrinkwrap-descriptors-impl-base</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
         </dependency>
 
         <dependency>
@@ -164,10 +151,17 @@
             <version>3.1</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>${commons-codec.version}</version>
+            <groupId>jakarta.tck</groupId>
+            <artifactId>whitebox</artifactId>
+            <version>${jakarta.tck.platform.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.tck</groupId>
+            <artifactId>whitebox-tx</artifactId>
+            <version>${jakarta.tck.platform.version}</version>
+            <type>rar</type>
         </dependency>
     </dependencies>
 
@@ -208,7 +202,7 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>copy-protocol-lib</id>
+                        <id>install-whitebox</id>
                         <goals>
                             <goal>copy</goal>
                         </goals>
@@ -223,6 +217,27 @@
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${payara.home}${file.separator}glassfish${file.separator}lib</outputDirectory>
                                     <destFileName>arquillian-protocol-lib.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>jakarta.tck.arquillian</groupId>
+                                    <artifactId>arquillian-protocol-lib</artifactId>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}${file.separator}protocol</outputDirectory>
+                                    <destFileName>protocol.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>jakarta.tck</groupId>
+                                    <artifactId>whitebox</artifactId>
+                                    <outputDirectory>${payara.home}${file.separator}glassfish${file.separator}lib</outputDirectory>
+                                    <destFileName>whitebox.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>jakarta.tck</groupId>
+                                    <artifactId>whitebox-tx</artifactId>
+                                    <type>rar</type>
+                                    <outputDirectory>${whitebox.directory}</outputDirectory>
+                                    <destFileName>whitebox-tx.rar</destFileName>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
@@ -524,7 +539,7 @@
                     <systemPropertyVariables>
                         <payara.home>${payara.home}</payara.home>
                         <payara.httpPort>8080</payara.httpPort>
-                        <arquillian.xml>javatest-arquillian.xml</arquillian.xml>
+                        <arquillian.xml>arquillian.xml</arquillian.xml>
                         <ts.home>${ts.home}</ts.home>
                         <ts.work.dir>${project.build.directory}</ts.work.dir>
                     </systemPropertyVariables>
