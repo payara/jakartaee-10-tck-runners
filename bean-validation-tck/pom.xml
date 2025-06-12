@@ -172,7 +172,7 @@
                         <configuration>
                             <executable>${payara.asadmin}</executable>
                             <arguments>
-                                <argument>create-system-properties</argument>
+                                <argument>create-system-property</argument>
                                 <argument>validation.provider=org.hibernate.validator.HibernateValidator</argument>
                             </arguments>
                         </configuration>
