@@ -8,10 +8,10 @@ fi
 export TS_HOME=`pwd`/xml-ws-tck
 export PATH=${PATH}:${TS_HOME}/bin
 
-rm jakarta-xml-ws-tck-4.0.0.zip
-wget -c https://download.eclipse.org/jakartaee/xml-web-services/4.0/jakarta-xml-ws-tck-4.0.0.zip
+rm jakarta-xml-ws-tck-4.0.2.zip
+wget -c https://download.eclipse.org/jakartaee/xml-web-services/4.0/jakarta-xml-ws-tck-4.0.2.zip
 rm -rf ./xml-ws-tck
-unzip jakarta-xml-ws-tck-4.0.0.zip
+unzip jakarta-xml-ws-tck-4.0.2.zip
 
 
 cp prepare-server-password ${PAYARA}/bin
@@ -44,7 +44,7 @@ mkdir ${TS_HOME}/JTwork
 mkdir ${TS_HOME}/JTreport
 
 cd ${TS_HOME}/bin
-ant config.vi -Dwork.dir=${TS_HOME}/JTwork -Dreport.dir=${TS_HOME}/JTreport
+ant config.vi -Dwork.dir=${TS_HOME}/JTwork -Dreport.dir=${TS_HOME}/JTreport 
 
 ant deploy.all -Dwork.dir=${TS_HOME}/JTwork -Dreport.dir=${TS_HOME}/JTreport
 
