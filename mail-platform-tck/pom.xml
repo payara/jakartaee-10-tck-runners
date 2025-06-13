@@ -51,32 +51,6 @@
         </dependencies>
     </dependencyManagement>
 
-    <!-- These are REQUIRED here - shrinkwrap will not resolve them via the jakarta-staging profile -->
-    <repositories>
-        <repository>
-            <id>jakarta-staging</id>
-            <url>https://jakarta.oss.sonatype.org/content/groups/staging/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>jakarta-staging</id>
-            <url>https://jakarta.oss.sonatype.org/content/groups/staging/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
-
     <dependencies>
         <dependency>
             <groupId>jakarta.mail</groupId>

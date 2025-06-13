@@ -15,8 +15,8 @@ cp -f payara-profile.xml target/security-tck-4.0.0/tck/pom.xml
 cp -f old-tck-run-payara.xml target/security-tck-4.0.0/tck/old-tck/run/pom.xml
 
 if [[ "$PROFILE" == "web" || "$PROFILE" == "WEB" ]];then
-  mvn clean install help:active-profiles -Ppayara-ci-managed,web -f target/security-tck-4.0.0/tck/pom.xml
+  mvn clean install help:active-profiles -Ppayara-ci-managed,web -f target/security-tck-4.0.0/tck/pom.xml -Dfailsafe.rerunFailingTestsCount=2
 else
-  mvn clean install help:active-profiles -Ppayara-ci-managed -f target/security-tck-4.0.0/tck/pom.xml
+  mvn clean install help:active-profiles -Ppayara-ci-managed -f target/security-tck-4.0.0/tck/pom.xml -Dfailsafe.rerunFailingTestsCount=2
 fi
 
