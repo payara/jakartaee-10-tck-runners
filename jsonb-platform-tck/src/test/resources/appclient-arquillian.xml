@@ -22,34 +22,37 @@
             <property name="clientEarDir">target/appclient</property>
             <property name="unpackClientEar">true</property>
             <!-- Need to populate from ts.jte command.testExecuteAppClient setting for glassfish -->
-            <property name="clientCmdLineString">${payara.home}/glassfish/bin/appclient \
-                -Djava.security.auth.login.config=${payara.home}/glassfish/lib/appclient/appclientlogin.conf \
-                -Djava.protocol.handler.pkgs=javax.net.ssl \
-                -Djavax.net.ssl.keyStore=${ts.home}/bin/certificates/clientcert.p12 \
-                -Djavax.net.ssl.keyStorePassword=changeit \
-                -Djavax.net.ssl.trustStore=${payara.home}/glassfish/domains/domain1/config/cacerts.p12 \
-                -Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl \
-                -Djavax.xml.parsers.DocumentBuilderFactory=com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl \
-                -Djavax.xml.transform.TransformerFactory=com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl \
-                -Dorg.xml.sax.driver=com.sun.org.apache.xerces.internal.parsers.SAXParser \
-                -Dorg.xml.sax.parser=org.xml.sax.helpers.XMLReaderAdapter \
+            <property name="clientCmdLineString">
+                ${env.JAVA_HOME}/bin/java \
+                --add-opens java.base/java.lang=ALL-UNNAMED \
+                -cp \
+                ${payara.home}/glassfish/lib/gf-client.jar:${clientStubJar} \
+                -Djava.system.class.loader=org.glassfish.appclient.client.acc.agent.ACCAgentClassLoader \
+                -Dcom.sun.aas.configRoot=${payara.home}/glassfish/config \
+                -Dcts.tmp=${ts.home}/tmp \
                 -Doracle.jdbc.J2EE13Compliant=true \
                 -Doracle.jdbc.mapDateToTimestamp \
-                -Dstartup.login=false \
-                -Dauth.gui=false \
                 -Dlog.file.location=${payara.home}/glassfish/domains/domain1/logs \
                 -Dri.log.file.location=${payara.home}/glassfish/domains/domain1/logs \
                 -DwebServerHost.2=localhost \
                 -DwebServerPort.2=8080 \
-                -Ddeliverable.class=com.sun.ts.lib.deliverable.cts.CTSDeliverable \
-                -jar \
-                ${clientEarDir}/${clientAppArchive}
+                -javaagent:${payara.home}/glassfish/lib/gf-client.jar=arg=-configxml,arg=${payara.home}/glassfish/domains/domain1/config/glassfish-acc.xml,client=jar=${clientStubJar},arg=-name,arg=${clientAppArchiveName} \
+                org.glassfish.appclient.client.AppClientGroupFacade
             </property>
             <property name="cmdLineArgSeparator">\\</property>
             <!-- Pass ENV vars here -->
             <property name="clientEnvString">PATH=${env.PATH};LD_LIBRARY_PATH=${payara.home}/lib;AS_DEBUG=true;
-                APPCPATH=target/lib/arquillian-protocol-lib.jar:target/lib/tck-porting-lib.jar:target/appclient/lib/arquillian-core.jar:target/appclient/lib/arquillian-junit5.jar:${payara.home}/glassfish/modules/security.jar</property>
+                APPCPATH=${clientEarLibClasspath}:${payara.home}/glassfish/modules/security.jar</property>
             <property name="clientDir">${project.basedir}</property>
+            <property name="clientStubsCmdLine">${env.JAVA_HOME}/bin/java \
+                -jar \
+                ${payara.home}/glassfish/modules/admin-cli.jar \
+                get-client-stubs \
+                --appName \
+                ${deploymentName} \
+                target
+            </property>
+            <property name="clientStubsJarSuffix">Client</property>
             <property name="workDir">/tmp</property>
             <property name="tsJteFile">jakartaeetck/bin/ts.jte</property>
             <!-- <property name="tsSqlStmtFile">sql/derby/derby.dml.sql</property> -->

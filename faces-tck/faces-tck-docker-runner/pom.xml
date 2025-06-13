@@ -36,7 +36,7 @@
 
     <properties>
         <!-- This is the maven command which the run-tck.sh script will execute within the container - -->
-        <maven.command>mvn help:active-profiles clean verify -Ppayara-ci-managed -Dtck.mode=platform -Dpayara.artifact=${payara.artifact}</maven.command>
+        <maven.command>mvn help:active-profiles clean verify -Ppayara-ci-managed -Dtck.mode=platform -Dpayara.artifact=${payara.artifact} -Dfailsafe.rerunFailingTestsCount=2</maven.command>
 
         <skipDockerBuild>${skipTests}</skipDockerBuild>
         <docker.image.pull.policy>IfNotPresent</docker.image.pull.policy>

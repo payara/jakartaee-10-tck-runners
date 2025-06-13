@@ -34,13 +34,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <version>${arquillian.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -108,23 +101,9 @@
         </dependency>
 
         <dependency>
-            <groupId>fish.payara.arquillian</groupId>
-            <artifactId>payara-client-ee11</artifactId>
-            <version>${payara.arquillian.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.jboss.arquillian.junit5</groupId>
             <artifactId>arquillian-junit5-container</artifactId>
             <scope>test</scope>
-        </dependency>
-
-        <!-- Required by jenkins due to varying transitive versions of this dependency -->
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>${commons-codec.version}</version>
         </dependency>
     </dependencies>
 
@@ -217,7 +196,7 @@
                         <artifactId>maven-dependency-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>004-copy-lib</id>
+                                <id>copy-libs</id>
                                 <goals>
                                     <goal>copy</goal>
                                 </goals>
@@ -256,7 +235,7 @@
                                 </configuration>
                             </execution>
                             <execution>
-                                <id>03-copy-protocol-lib</id>
+                                <id>copy-protocol-lib</id>
                                 <goals>
                                     <goal>copy</goal>
                                 </goals>
@@ -291,8 +270,7 @@
                                         <additionalClasspathElement>${project.build.directory}${file.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}parsson.jar</additionalClasspathElement>
                                     </additionalClasspathElements>
                                     <includes>
-                                        <include>
-                                            com/sun/ts/tests/jsonp/api/patchtests/*Test*.java</include>
+                                        <include>com/sun/ts/tests/jsonp/api/patchtests/*Test*.java</include>
                                     </includes>
                                     <!-- Select the @Tag("tck-appclient") tests -->
                                     <groups>tck-appclient</groups>
@@ -321,8 +299,7 @@
                                         <additionalClasspathElement>${project.build.directory}${file.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}parsson.jar</additionalClasspathElement>
                                     </additionalClasspathElements>
                                     <includes>
-                                        <include>
-                                            com/sun/ts/tests/jsonp/pluggability/jsonprovidertests/**Test.java</include>
+                                        <include>com/sun/ts/tests/jsonp/pluggability/jsonprovidertests/**Test.java</include>
                                     </includes>
                                     <!-- Select the @Tag("tck-appclient") tests -->
                                     <groups>tck-appclient</groups>
