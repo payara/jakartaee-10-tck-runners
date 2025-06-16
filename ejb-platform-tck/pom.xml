@@ -412,7 +412,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>create-derby-xa-resource</id>
+                        <id>create-DBTimer-resource</id>
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>exec</goal>
@@ -429,7 +429,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>create-derby-resource</id>
+                        <id>create-DB1-resource</id>
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>exec</goal>
@@ -442,6 +442,23 @@
                                 <argument>--connectionpoolid</argument>
                                 <argument>cts-derby-pool</argument>
                                 <argument>jdbc/DB1</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-DB_no_tx-resource</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipConfig}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-jdbc-resource</argument>
+                                <argument>--connectionpoolid</argument>
+                                <argument>cts-derby-pool</argument>
+                                <argument>jdbc/DB_no_tx</argument>
                             </arguments>
                         </configuration>
                     </execution>
