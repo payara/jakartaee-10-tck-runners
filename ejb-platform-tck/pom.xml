@@ -26,6 +26,8 @@
         <!-- Properties used for skipping parts of the TCK -->
         <skipEjb30>${skipTests}</skipEjb30>
         <skipEjb32>${skipTests}</skipEjb32>
+
+        <whitebox.directory>${project.build.directory}${file.separator}whiteboxes</whitebox.directory>
     </properties>
 
     <dependencyManagement>
@@ -43,12 +45,6 @@
     <dependencies>
         <!-- Jakarta EE APIs -->
         <dependency>
-            <groupId>jakarta.platform</groupId>
-            <artifactId>jakarta.jakartaee-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
             <groupId>jakarta.ejb</groupId>
             <artifactId>jakarta.ejb-api</artifactId>
             <scope>test</scope>
@@ -57,14 +53,6 @@
         <dependency>
             <groupId>jakarta.enterprise</groupId>
             <artifactId>jakarta.enterprise.cdi-api</artifactId>
-            <scope>test</scope>
-            <!-- CDI references wrong version of annotations -->
-            <exclusions>
-                <exclusion>
-                    <groupId>jakarta.annotation</groupId>
-                    <artifactId>jakarta.annotation-api</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>jakarta.inject</groupId>
@@ -120,11 +108,6 @@
         </dependency>
         <dependency>
             <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-suite-engine</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-reporting</artifactId>
             <scope>test</scope>
         </dependency>
@@ -143,6 +126,10 @@
         <dependency>
             <groupId>org.jboss.shrinkwrap.descriptors</groupId>
             <artifactId>shrinkwrap-descriptors-impl-base</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
         </dependency>
 
         <dependency>
@@ -168,6 +155,18 @@
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>${commons-codec.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.tck</groupId>
+            <artifactId>whitebox</artifactId>
+            <version>${jakarta.tck.platform.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.tck</groupId>
+            <artifactId>whitebox-tx</artifactId>
+            <version>${jakarta.tck.platform.version}</version>
+            <type>rar</type>
         </dependency>
     </dependencies>
 
@@ -208,7 +207,7 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>copy-protocol-lib</id>
+                        <id>install-whitebox</id>
                         <goals>
                             <goal>copy</goal>
                         </goals>
@@ -223,6 +222,27 @@
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${payara.home}${file.separator}glassfish${file.separator}lib</outputDirectory>
                                     <destFileName>arquillian-protocol-lib.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>jakarta.tck.arquillian</groupId>
+                                    <artifactId>arquillian-protocol-lib</artifactId>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}${file.separator}protocol</outputDirectory>
+                                    <destFileName>protocol.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>jakarta.tck</groupId>
+                                    <artifactId>whitebox</artifactId>
+                                    <outputDirectory>${payara.home}${file.separator}glassfish${file.separator}lib</outputDirectory>
+                                    <destFileName>whitebox.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>jakarta.tck</groupId>
+                                    <artifactId>whitebox-tx</artifactId>
+                                    <type>rar</type>
+                                    <outputDirectory>${whitebox.directory}</outputDirectory>
+                                    <destFileName>whitebox-tx.rar</destFileName>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
@@ -392,7 +412,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>create-derby-xa-resource</id>
+                        <id>create-DBTimer-resource</id>
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>exec</goal>
@@ -409,7 +429,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>create-derby-resource</id>
+                        <id>create-DB1-resource</id>
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>exec</goal>
@@ -422,6 +442,23 @@
                                 <argument>--connectionpoolid</argument>
                                 <argument>cts-derby-pool</argument>
                                 <argument>jdbc/DB1</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-DB_no_tx-resource</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipConfig}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-jdbc-resource</argument>
+                                <argument>--connectionpoolid</argument>
+                                <argument>cts-derby-pool</argument>
+                                <argument>jdbc/DB_no_tx</argument>
                             </arguments>
                         </configuration>
                     </execution>
@@ -439,6 +476,59 @@
                                 <argument>--restype</argument>
                                 <argument>jakarta.jms.QueueConnectionFactory</argument>
                                 <argument>jms/QueueConnectionFactory</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-topic-connection-factory-jms-resource</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipCreatingJms}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-jms-resource</argument>
+                                <argument>--restype</argument>
+                                <argument>jakarta.jms.TopicConnectionFactory</argument>
+                                <argument>jms/TopicConnectionFactory</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-durable-connection-factory-jms-resource</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipCreatingJms}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-jms-resource</argument>
+                                <argument>--restype</argument>
+                                <argument>jakarta.jms.TopicConnectionFactory</argument>
+                                <argument>jms/DURABLE_SUB_CONNECTION_FACTORY</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-my_queue-jms-resource</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipCreatingJms}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-jms-resource</argument>
+                                <argument>--restype</argument>
+                                <argument>jakarta.jms.Queue</argument>
+                                <argument>--property</argument>
+                                <argument>imqDestinationName=MY_QUEUE</argument>
+                                <argument>MY_QUEUE</argument>
                             </arguments>
                         </configuration>
                     </execution>
@@ -480,6 +570,143 @@
                             </arguments>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>create-my_topic-jms-resource</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipCreatingJms}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-jms-resource</argument>
+                                <argument>--restype</argument>
+                                <argument>jakarta.jms.Topic</argument>
+                                <argument>--property</argument>
+                                <argument>imqDestinationName=MY_TOPIC</argument>
+                                <argument>MY_TOPIC</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>deploy-whitebox-tx-rar</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipConfig}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>deploy</argument>
+                                <argument>${whitebox.directory}${file.separator}whitebox-tx.rar</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-connector-connection-pool</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipConfig}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-connector-connection-pool</argument>
+                                <argument>--raname</argument>
+                                <argument>whitebox-tx</argument>
+                                <argument>--property</argument>
+                                <argument>eisPrincipalName=j2ee:userName=j2ee:password=j2ee:TSRValue=comp/TransactionSynchronizationRegistry</argument>
+                                <argument>--connectiondefinition</argument>
+                                <argument>com.sun.ts.tests.common.connector.whitebox.TSConnectionFactory</argument>
+                                <argument>cts-connector-pool-whitebox-tx-pool.rar</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-connector-resource</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipConfig}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-connector-resource</argument>
+                                <argument>--poolname</argument>
+                                <argument>cts-connector-pool-whitebox-tx-pool.rar</argument>
+                                <argument>eis/whitebox-tx</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>create-custom-dog-resource</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipConfig}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-custom-resource</argument>
+                                <argument>--restype</argument>
+                                <argument>com.sun.ts.lib.deliverable.cts.resource.Dog</argument>
+                                <argument>--factoryclass</argument>
+                                <argument>com.sun.ts.lib.deliverable.cts.resource.DogFactory</argument>
+                                <argument>custom/dog</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-custom-webServerURL-resource</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipConfig}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-custom-resource</argument>
+                                <argument>--restype</argument>
+                                <argument>java.net.URL</argument>
+                                <argument>--factoryclass</argument>
+                                <argument>org.glassfish.resources.custom.factory.URLObjectFactory</argument>
+                                <argument>--property</argument>
+                                <argument>spec=http\://localhost\:8080</argument>
+                                <argument>webServerURL</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-custom-webServerMdbtestURL-resource</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipConfig}</skip>
+                            <executable>${payara.asadmin}</executable>
+                            <arguments>
+                                <argument>create-custom-resource</argument>
+                                <argument>--restype</argument>
+                                <argument>java.net.URL</argument>
+                                <argument>--factoryclass</argument>
+                                <argument>org.glassfish.resources.custom.factory.URLObjectFactory</argument>
+                                <argument>--property</argument>
+                                <argument>spec=http\://localhost\:8080/mdbdest/TestServlet</argument>
+                                <argument>webServerMdbtestURL</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+
+
                     <execution>
                         <id>stop-payara-server-after-config</id>
                         <phase>pre-integration-test</phase>
@@ -524,7 +751,7 @@
                     <systemPropertyVariables>
                         <payara.home>${payara.home}</payara.home>
                         <payara.httpPort>8080</payara.httpPort>
-                        <arquillian.xml>javatest-arquillian.xml</arquillian.xml>
+                        <arquillian.xml>arquillian.xml</arquillian.xml>
                         <ts.home>${ts.home}</ts.home>
                         <ts.work.dir>${project.build.directory}</ts.work.dir>
                     </systemPropertyVariables>
