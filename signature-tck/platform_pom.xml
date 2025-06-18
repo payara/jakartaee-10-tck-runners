@@ -28,6 +28,8 @@
     <name>GlassFish: Jakarta EE Signature TCK Runner</name>
 
     <properties>
+        <PAYARA_HOME>${payara.home}</PAYARA_HOME>
+        <payara.home>${payara.home}</payara.home>
         <glassfish.home>${glassfish.root}${file.separator}glassfish</glassfish.home>
         <glassfish.root>${project.build.directory}${file.separator}payara7</glassfish.root>
         <glassfish.version>${payara.version}</glassfish.version>
@@ -302,7 +304,6 @@
                                 <!--suppress MavenModelInspection -->
                                 <additionalClasspathElement>${jakarta.api.jars}</additionalClasspathElement>
                             </additionalClasspathElements>
-
                             <systemPropertyVariables>
                                 <payara.home>${payara.home}</payara.home>
                             </systemPropertyVariables>
