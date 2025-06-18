@@ -77,6 +77,7 @@
                     ${deploymentName} \
                     target
                 </property>
+                <property name="clientStubsJarSuffix">Client</property>
                 <property name="workDir">${ts.work.dir}/tmp</property>
                 <property name="tsJteFile">jakartaeetck/bin/ts.jte</property>
                 <property name="tsSqlStmtFile">sql/derby/derby.dml.sql</property>
