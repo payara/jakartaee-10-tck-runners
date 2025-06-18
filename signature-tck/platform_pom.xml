@@ -304,7 +304,7 @@
                             </additionalClasspathElements>
 
                             <systemPropertyVariables>
-                                <payara.home>${project.build.directory}${file.separator}payara7</payara.home>
+                                <payara.home/>
                             </systemPropertyVariables>
                         </configuration>
                     </execution>
