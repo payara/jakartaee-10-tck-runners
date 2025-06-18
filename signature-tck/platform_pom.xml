@@ -200,7 +200,7 @@
                                     <artifactId>signaturetest</artifactId>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${payara.home}${file.separator}/lib</outputDirectory>
+                                    <outputDirectory>${payara.home}${file.separator}lib</outputDirectory>
                                     <destFileName>signaturetest.jar</destFileName>
                                 </artifactItem>
                                 <artifactItem>
@@ -208,7 +208,7 @@
                                     <artifactId>sigtest-maven-plugin</artifactId>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${payara.home}${file.separator}/lib</outputDirectory>
+                                    <outputDirectory>${payara.home}${file.separator}lib</outputDirectory>
                                     <destFileName>sigtest-maven-plugin.jar</destFileName>
                                 </artifactItem>
                             </artifactItems>
