@@ -77,7 +77,6 @@
         <dependency>
             <groupId>jakarta.tck</groupId>
             <artifactId>sigtest-maven-plugin</artifactId>
-            <version>${version.jakarta.tck.sigtest-maven-plugin}</version>
         </dependency>
 
         <!-- Jakarta TCK tools dependencies -->
