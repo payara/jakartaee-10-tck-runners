@@ -266,7 +266,6 @@
         <profile>
             <id>web</id>
             <properties>
-                <glassfish-artifact-id>web</glassfish-artifact-id>
                 <testGroups>web</testGroups>
                 <tck.profile>${testGroups}</tck.profile>
                 <javaee.level>web</javaee.level>
