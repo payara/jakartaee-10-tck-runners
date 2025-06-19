@@ -14,9 +14,6 @@
 
     <group qualifier="glassfish-servers" default="true">
         <container qualifier="tck-javatest" default="true">
-            <configuration>
-                <property name="glassFishHome">${project.build.directory}${file.separator}payara7</property>
-            </configuration>
             <protocol type="javatest">
                 <property name="trace">true</property>
                 <property name="workDir">${project.build.directory}</property>
