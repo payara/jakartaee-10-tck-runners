@@ -28,11 +28,6 @@
     <name>GlassFish: Jakarta EE Signature TCK Runner</name>
 
     <properties>
-        <glassfish.home>${glassfish.root}</glassfish.home>
-        <glassfish.root>${project.build.directory}/payara7</glassfish.root>
-        <glassfish.version>${payara.version}</glassfish.version>
-        <glassfish.version.main>8</glassfish.version.main>
-        <glassfish-artifact-id>glassfish</glassfish-artifact-id>
 
 
         <!-- Remnants from ancient TCK -->
