@@ -46,8 +46,6 @@
         <!-- Note that currently, this must have src as the first directory as it is hard-coded in the test -->
         <signature.file.dir>${base.tck.dir}/src</signature.file.dir>
 
-        <version.jakarta.tck>11.0.1</version.jakarta.tck>
-        <version.jakarta.tck.sigtest-maven-plugin>2.6</version.jakarta.tck.sigtest-maven-plugin>
     </properties>
 
     <!-- Import the tck relevant boms -->
