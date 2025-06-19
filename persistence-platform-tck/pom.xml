@@ -77,19 +77,19 @@
             <groupId>jakarta.tck</groupId>
             <artifactId>common</artifactId>
             <version>${jakarta.tck.common.version}</version>
-<!--            &lt;!&ndash; Jenkins seems to require us to require us to not use the version bundled with this (1.2) &ndash;&gt;-->
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <groupId>commons-codec</groupId>-->
-<!--                    <artifactId>commons-codec</artifactId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
+            <!-- Jenkins seems to require us to require us to not use the version bundled with this (1.2) -->
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-codec</groupId>
+                    <artifactId>commons-codec</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>commons-codec</groupId>-->
-<!--            <artifactId>commons-codec</artifactId>-->
-<!--            <version>${commons-codec.version}</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>${commons-codec.version}</version>
+        </dependency>
 
         <!-- Junit -->
         <dependency>
