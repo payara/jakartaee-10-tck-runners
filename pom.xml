@@ -138,7 +138,6 @@
         <jakarta-authentication-tck.version>3.1.0</jakarta-authentication-tck.version>
         <jakarta.tck.data.version>1.0.1</jakarta.tck.data.version>
         <jakarta.tck.jms.version>3.1.0</jakarta.tck.jms.version>
-        <jakarta.tck.signature.version>11.0.1</jakarta.tck.signature.version>
         <!-- If updating this Faces TCK version - please also update the replacement poms we use under faces-tck -->
         <jakarta.tck.faces.version>4.1.1</jakarta.tck.faces.version>
         <jakarta.tck.transaction.version>2.0.1</jakarta.tck.transaction.version>
