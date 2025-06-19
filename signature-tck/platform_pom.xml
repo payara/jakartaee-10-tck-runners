@@ -28,15 +28,6 @@
     <name>GlassFish: Jakarta EE Signature TCK Runner</name>
 
     <properties>
-        <PAYARA_HOME>${payara.home}</PAYARA_HOME>
-        <payara.home>${payara.home}</payara.home>
-        <glassfish.home>${glassfish.root}${file.separator}glassfish</glassfish.home>
-        <glassfish.root>${project.build.directory}${file.separator}payara7</glassfish.root>
-        <glassfish.version>${payara.version}</glassfish.version>
-        <glassfish-artifact-id>glassfish</glassfish-artifact-id>
-        <arquillian.junit5.version>1.7.0.Alpha14</arquillian.junit5.version>
-        <arquillian.protocol.version>11.0.11</arquillian.protocol.version>
-
         <!-- Remnants from ancient TCK -->
         <webServerHost>localhost</webServerHost>
         <webServerPort>8080</webServerPort>
