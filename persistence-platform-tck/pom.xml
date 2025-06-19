@@ -17,39 +17,27 @@
     </properties>
 
     <!-- Something in this BOM causes Junit to find no tests - this should be addressed -->
-<!--    <dependencyManagement>-->
-<!--        <dependencies>-->
-<!--            <dependency>-->
-<!--                <groupId>fish.payara.api</groupId>-->
-<!--                <artifactId>payara-bom</artifactId>-->
-<!--                <version>${payara.version}</version>-->
-<!--                <type>pom</type>-->
-<!--                <scope>import</scope>-->
-<!--            </dependency>-->
-<!--        </dependencies>-->
-<!--    </dependencyManagement>-->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>fish.payara.api</groupId>
+                <artifactId>payara-bom</artifactId>
+                <version>${payara.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
-        <!-- Jakarta EE dependencies -->
-        <dependency>
-            <groupId>jakarta.platform</groupId>
-            <artifactId>jakarta.jakartaee-api</artifactId>
-            <!-- Version should be provided by payara-bom - needs fixing -->
-            <version>11.0.0-RC1</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>jakarta.inject</groupId>
             <artifactId>jakarta.inject-api</artifactId>
-            <!-- Version should be provided by payara-bom - needs fixing -->
-            <version>2.0.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.persistence</groupId>
             <artifactId>jakarta.persistence-api</artifactId>
-            <!-- Version should be provided by payara-bom - needs fixing -->
-            <version>3.2.0</version>
         </dependency>
 
         <!-- The TCK itself -->
@@ -150,23 +138,6 @@
             <artifactId>payara-client-ee11</artifactId>
             <version>${payara.arquillian.version}</version>
             <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jboss.shrinkwrap.resolver</groupId>
-            <artifactId>shrinkwrap-resolver-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.shrinkwrap.resolver</groupId>
-            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.shrinkwrap.resolver</groupId>
-            <artifactId>shrinkwrap-resolver-api-maven</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.shrinkwrap.resolver</groupId>
-            <artifactId>shrinkwrap-resolver-spi-maven</artifactId>
         </dependency>
 
         <!-- Arquillian extensions for TCK  -->
@@ -511,7 +482,6 @@
 
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
-
                 <executions>
                     <execution>
                         <id>jpa-tests-javatest</id>
@@ -585,87 +555,6 @@
                     <version>${jakarta.tck.arquillian.version}</version>
                 </dependency>
             </dependencies>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>copy-tck-common</id>
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
-                                <phase>generate-resources</phase>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>jakarta.tck</groupId>
-                                            <artifactId>common</artifactId>
-                                            <overWrite>true</overWrite>
-                                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                                            <destFileName>common.jar</destFileName>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>jakarta.tck.arquillian</groupId>
-                                            <artifactId>tck-porting-lib</artifactId>
-                                            <overWrite>true</overWrite>
-                                            <outputDirectory>${project.build.directory}${file.separator}lib</outputDirectory>
-                                            <destFileName>tck-porting-lib.jar</destFileName>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>jakarta.tck.arquillian</groupId>
-                                            <artifactId>arquillian-protocol-lib</artifactId>
-                                            <overWrite>true</overWrite>
-                                            <outputDirectory>${project.build.directory}${file.separator}lib</outputDirectory>
-                                            <destFileName>arquillian-protocol-lib.jar</destFileName>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>jakarta.tck.arquillian</groupId>
-                                            <artifactId>arquillian-protocol-appclient</artifactId>
-                                            <overWrite>true</overWrite>
-                                            <outputDirectory>${project.build.directory}${file.separator}lib</outputDirectory>
-                                            <destFileName>arquillian-protocol-appclient.jar</destFileName>
-                                        </artifactItem>
-                                        <!-- TODO - verify if these are necessary -->
-                                        <artifactItem>
-                                            <groupId>jakarta.tck</groupId>
-                                            <artifactId>persistence-platform-tck-common</artifactId>
-                                            <overWrite>true</overWrite>
-                                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                                            <destFileName>persistence-platform-tck-common.jar</destFileName>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>jakarta.tck</groupId>
-                                            <artifactId>persistence-platform-tck-spec-tests</artifactId>
-                                            <overWrite>true</overWrite>
-                                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                                            <destFileName>persistence-platform-tck-spec-tests.jar</destFileName>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>jakarta.tck</groupId>
-                                            <artifactId>persistence-platform-tck-tests</artifactId>
-                                            <overWrite>true</overWrite>
-                                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                                            <destFileName>persistence-platform-tck-tests.jar</destFileName>
-                                        </artifactItem>
-                                        <artifactItem>
-                                            <groupId>jakarta.tck</groupId>
-                                            <artifactId>persistence-platform-tck-dbprocedures</artifactId>
-                                            <overWrite>true</overWrite>
-                                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                                            <destFileName>persistence-platform-tck-dbprocedures.jar</destFileName>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-
-
         </profile>
     </profiles>
 
