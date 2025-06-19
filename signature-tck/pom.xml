@@ -170,7 +170,7 @@
                 <executions>
 
                     <execution>
-                        <id>003-copy-protocol-lib</id>
+                        <id>copy-protocol-lib</id>
                         <goals>
                             <goal>copy</goal>
                         </goals>
