@@ -257,7 +257,6 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <glassfish-artifact-id>glassfish</glassfish-artifact-id>
                 <testGroups>platform</testGroups>
                 <tck.profile>${testGroups}</tck.profile>
                 <javaee.level>platform</javaee.level>
