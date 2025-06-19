@@ -241,7 +241,7 @@
                             </additionalClasspathElements>
 
                             <systemPropertyVariables>
-                                <glassfish.home>${glassfish.home}</glassfish.home>
+                                <payara.home>${payara.home}</payara.home>
                             </systemPropertyVariables>
                         </configuration>
                     </execution>
