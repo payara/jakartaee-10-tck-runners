@@ -209,7 +209,7 @@
                                 <artifactItem>
                                     <groupId>jakarta.tck</groupId>
                                     <artifactId>signaturevalidation</artifactId>
-                                    <version>${version.jakarta.tck}</version>
+                                    <version>${jakarta.tck.platform.version}</version>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${signature.file.dir}</outputDirectory>
                                     <includes>**/*.sig</includes>
