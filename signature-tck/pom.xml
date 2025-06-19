@@ -207,7 +207,7 @@
                             <!-- Export the properties defined below so they can be used for the signature tests -->
                             <exportAntProperties>true</exportAntProperties>
                             <target>
-                                <fileset id="jakarta-api-jars" dir="${glassfish.home}/glassfish/modules/">
+                                <fileset id="jakarta-api-jars" dir="${payara.home}/glassfish/modules/">
                                     <!-- Jakarta API's needed on the test class path -->
                                     <include name="jakarta.*"/>
                                 </fileset>
