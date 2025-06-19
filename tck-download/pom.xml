@@ -56,7 +56,6 @@
         <module>jakarta-data-tck</module>
         <module>jakarta-jms-tck</module>
         <module>jakarta-dsol-tck</module>
-        <module>jakarta-signature-tck</module>
     </modules>
 
     <build>
