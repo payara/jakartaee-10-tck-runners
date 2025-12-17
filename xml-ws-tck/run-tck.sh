@@ -37,7 +37,7 @@ then
    mv ${TS_HOME}/bin/ts.jte ${TS_HOME}/bin/ts.jte-origin
 fi
 sed "s/^webcontainer.home=\$/webcontainer.home=${PAYARA_REPL}glassfish/" ${TS_HOME}/bin/ts.jte-origin > ${TS_HOME}/bin/ts.jte-temp
-sed -E 's#(jaxws.classes=).+#\1${jaxws.lib}/pfl-tf.jar${pathsep}${jaxws.lib}/jakarta.servlet-api.jar${pathsep}${jaxws.lib}/pfl-basic.jar${pathsep}${jaxws.lib}/webservices-api-osgi.jar${pathsep}${jaxws.lib}/webservices-osgi.jar${pathsep}${jaxws.lib}/jaxb-osgi.jar${pathsep}${jaxws.lib}/gmbal.jar${pathsep}${jaxws.lib}/management-api.jar${pathsep}${jaxws.lib}/mimepull.jar${pathsep}${jaxws.lib}/ha-api.jar${pathsep}${jaxws.lib}/jakarta.xml.bind-api.jar${pathsep}${jaxws.lib}/jakarta.activation-api.jar${pathsep}${jaxws.lib}/angus-activation.jar${pathsep}${jaxws.lib}/metro-xmlsec-repackaged.jar#' -i ${TS_HOME}/bin/ts.jte-temp
+sed -E 's#(jaxws.classes=).+#\1${jaxws.lib}/pfl-tf.jar${pathsep}${jaxws.lib}/jakarta.servlet-api.jar${pathsep}${jaxws.lib}/pfl-basic.jar${pathsep}${jaxws.lib}/webservices-api-osgi.jar${pathsep}${jaxws.lib}/webservices-osgi.jar${pathsep}${jaxws.lib}/jaxb-osgi.jar${pathsep}${jaxws.lib}/gmbal.jar${pathsep}${jaxws.lib}/gmbal-api-only.jar${pathsep}${jaxws.lib}/management-api.jar${pathsep}${jaxws.lib}/mimepull.jar${pathsep}${jaxws.lib}/ha-api.jar${pathsep}${jaxws.lib}/jakarta.xml.bind-api.jar${pathsep}${jaxws.lib}/jakarta.activation-api.jar${pathsep}${jaxws.lib}/angus-activation.jar${pathsep}${jaxws.lib}/metro-xmlsec-repackaged.jar#' -i ${TS_HOME}/bin/ts.jte-temp
 mv ${TS_HOME}/bin/ts.jte-temp ${TS_HOME}/bin/ts.jte
 
 mkdir ${TS_HOME}/JTwork
