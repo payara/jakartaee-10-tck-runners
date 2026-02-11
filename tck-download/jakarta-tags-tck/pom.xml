@@ -35,7 +35,7 @@
                             <goal>wget</goal>
                         </goals>
                         <configuration>
-                            <url>${tck.test.tags.url}</url>
+                            <url>${tck.tests.platform.url}</url>
                             <unpack>true</unpack>
                         </configuration>
                     </execution>
