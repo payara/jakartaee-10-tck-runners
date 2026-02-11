@@ -52,7 +52,7 @@
                         </goals>
                         <configuration>
                             <file>${project.build.directory}/jakartaeetck/artifacts/${tck.test.tags.file}.jar</file>
-                            <sources>${project.build.directory}/${tck.test.tags.file}-sources.jar</sources>
+                            <sources>${project.build.directory}/jakartaeetck/artifacts/${tck.test.tags.file}-sources.jar</sources>
                             <groupId>${project.groupId}</groupId>
                             <artifactId>${project.artifactId}</artifactId>
                             <version>${project.version}</version>
