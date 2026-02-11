@@ -16,4 +16,4 @@ mvn clean install -pl .,:tck-download,:jakarta-cdi-tck,:jakarta-platform-tck
 
 ## Test Execution
 
-`mvn clean verify -pl . -pl cdi-platform-tck/ -pl cdi-platform-tck/cdi-platform-tck-runner -Dpayara.version=7.2025.1.Alpha1-SNAPSHOT -Ppayara-server-managed,jakarta-staging`
+`mvn clean verify -pl . -pl cdi-platform-tck/ -pl cdi-platform-tck/cdi-platform-tck-runner -Dpayara.version=7.2025.1.Alpha1-SNAPSHOT -Ppayara-server-managed`

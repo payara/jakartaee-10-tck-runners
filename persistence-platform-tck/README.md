@@ -9,11 +9,11 @@ Install the Platform TCK via tck-download module, since the ones published to Ma
 
 Execute maven test with verify from the top-level directory:
 
-`mvn clean verify -Ppayara-server-managed,jakarta-staging -pl . -pl persistence-platform-tck`
+`mvn clean verify -Ppayara-server-managed -pl . -pl persistence-platform-tck`
 
 Alternatively, execute against a remote server:
 
-`mvn clean verify -Ppayara-server-remote,jakarta-staging -pl . -pl persistence-platform-tck -Dpayara.home=/path/to/payara7`
+`mvn clean verify -Ppayara-server-remote -pl . -pl persistence-platform-tck -Dpayara.home=/path/to/payara7`
 
 ### Execution Options
 
