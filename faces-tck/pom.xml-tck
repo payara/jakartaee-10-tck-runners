@@ -322,14 +322,6 @@ mvn clean install -pl :old-tck-run -Dglassfish.suspend
         </dependency>
     </dependencies>
 
-    <repositories>
-        <repository>
-            <id>jakarta-staging</id>
-            <snapshots />
-            <url>https://jakarta.oss.sonatype.org/content/repositories/staging</url>
-        </repository>
-    </repositories>
-
     <build>
         <finalName>${project.artifactId}</finalName>
         <testResources>

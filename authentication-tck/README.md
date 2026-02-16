@@ -3,7 +3,7 @@
 ## Prerequisite
 
 Download and install the TCK into your local Maven repo.
-From the top-level directory: `mvn clean install -pl . -pl tck-download -pl tck-download/jakarta-authentication-tck -Pjakarta-staging`
+From the top-level directory: `mvn clean install -pl . -pl tck-download -pl tck-download/jakarta-authentication-tck`
 
 ## Test Execution
 

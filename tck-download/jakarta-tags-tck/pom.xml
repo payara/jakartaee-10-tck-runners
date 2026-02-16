@@ -15,9 +15,11 @@
     <name>TCK: Install Jakarta tags TCK</name>
 
     <properties>
-        <tck.test.tags.file>jakarta-tags-tck-${tck.test.tags.version}</tck.test.tags.file>
-        <tck.test.tags.url>https://download.eclipse.org/ee4j/jakartaee-tck/jakartaee11/staged/eftl/${tck.test.tags.file}.zip</tck.test.tags.url>
-        <tck.test.tags.version>11.0.0-M2</tck.test.tags.version>
+        <!-- It's bundled in the Platform TCK -->
+        <tck.test.platform.file>jakartaeetck-${jakarta.tck.platform.version}-dist.zip</tck.test.platform.file>
+        <tck.tests.platform.url>https://download.eclipse.org/jakartaee/platform/11/${tck.test.platform.file}</tck.tests.platform.url>
+
+        <tck.test.tags.file>tags-tck-${jakarta.tck.platform.version}</tck.test.tags.file>
     </properties>
 
     <build>
@@ -33,7 +35,7 @@
                             <goal>wget</goal>
                         </goals>
                         <configuration>
-                            <url>${tck.test.tags.url}</url>
+                            <url>${tck.tests.platform.url}</url>
                             <unpack>true</unpack>
                         </configuration>
                     </execution>
@@ -49,8 +51,8 @@
                             <goal>install-file</goal>
                         </goals>
                         <configuration>
-                            <file>${project.build.directory}/${tck.test.tags.file}.jar</file>
-                            <sources>${project.build.directory}/${tck.test.tags.file}-sources.jar</sources>
+                            <file>${project.build.directory}/jakartaeetck/artifacts/${tck.test.tags.file}.jar</file>
+                            <sources>${project.build.directory}/jakartaeetck/artifacts/${tck.test.tags.file}-sources.jar</sources>
                             <groupId>${project.groupId}</groupId>
                             <artifactId>${project.artifactId}</artifactId>
                             <version>${project.version}</version>
