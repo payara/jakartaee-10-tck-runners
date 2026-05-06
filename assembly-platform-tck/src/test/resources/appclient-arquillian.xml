@@ -33,7 +33,7 @@
                 -Dri.log.file.location=${payara.home}/glassfish/domains/domain1/logs \
                 -DwebServerHost.2=localhost \
                 -DwebServerPort.2=8080 \
-                -javaagent:${payara.home}/glassfish/lib/gf-client.jar=arg=-configxml,arg=${payara.home}/glassfish/domains/domain1/config/glassfish-acc.xml,client=jar=${clientStubJar},arg=-name,arg=${clientAppArchiveName} \
+                -javaagent:${payara.home}/glassfish/lib/gf-client.jar=arg=-configxml,arg=${payara.home}/glassfish/domains/domain1/config/payara-acc.xml,client=jar=${clientStubJar},arg=-name,arg=${clientAppArchiveName} \
                 org.glassfish.appclient.client.AppClientGroupFacade
             </property>
             <property name="cmdLineArgSeparator">\\</property>
