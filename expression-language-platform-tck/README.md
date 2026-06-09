@@ -9,4 +9,4 @@ Install the Platform TCK via tck-download module, since the ones published to Ma
 
 Execute maven test with verify from the top-level directory:
 
-`mvn clean verify -Ppayara-server-managed,jakarta-staging -pl . -pl expression-language-platform-tck`
+`mvn clean verify -Ppayara-server-managed -pl . -pl expression-language-platform-tck`

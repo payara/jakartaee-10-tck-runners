@@ -3,7 +3,7 @@ FROM eclipsecbijenkins/basic-ubuntu-chrome
 EXPOSE 4848 5005 8080 8181 9009
 
 # Download and install Java, Maven, and Ant
-ADD https://cdn.azul.com/zulu/bin/zulu21.40.17-ca-jdk21.0.6-linux_x64.zip https://archive.apache.org/dist/maven/maven-3/3.9.10/binaries/apache-maven-3.9.10-bin.zip https://dlcdn.apache.org//ant/binaries/apache-ant-1.10.15-bin.zip /opt/
+ADD https://cdn.azul.com/zulu/bin/zulu21.40.17-ca-jdk21.0.6-linux_x64.zip https://archive.apache.org/dist/maven/maven-3/3.9.10/binaries/apache-maven-3.9.10-bin.zip https://archive.apache.org/dist/ant/binaries/apache-ant-1.10.15-bin.zip /opt/
 WORKDIR /opt
 RUN unzip zulu21.40.17-ca-jdk21.0.6-linux_x64.zip \
     && rm zulu21.40.17-ca-jdk21.0.6-linux_x64.zip \
