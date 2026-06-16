@@ -67,12 +67,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>jakarta.ai</groupId>
-            <artifactId>jakarta-agentic-ai-tck</artifactId>
+            <groupId>jakarta.agentic-ai</groupId>
+            <artifactId>jakarta.agentic-ai-tck</artifactId>
             <version>${jakarta.tck.agentic-ai.version}</version>
         </dependency>
         <dependency>
-            <groupId>jakarta.ai</groupId>
+            <groupId>jakarta.agentic-ai</groupId>
             <artifactId>jakarta.agentic-ai-api</artifactId>
             <version>${jakarta.tck.agentic-ai.version}</version>
         </dependency>
@@ -94,6 +94,12 @@
             <groupId>jakarta.tck</groupId>
             <artifactId>sigtest-maven-plugin</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.27.7</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -109,7 +115,7 @@
                             <goal>verify</goal>
                         </goals>
                         <configuration>
-                            <dependenciesToScan>jakarta.ai:jakarta-agentic-ai-tck</dependenciesToScan>
+                            <dependenciesToScan>jakarta.agentic-ai:jakarta.agentic-ai-tck</dependenciesToScan>
                             <includes>
                                 <include>*</include>
                             </includes>
