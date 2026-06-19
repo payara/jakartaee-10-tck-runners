@@ -14,11 +14,8 @@
     <name>TCK: Install Jakarta Core Profile TCK</name>
 
     <properties>
-        <tck.test.core-profile.file>jakarta-core-profile-tck-${jakarta.tck.core-profile.version}.zip
-        </tck.test.core-profile.file>
-        <!-- Once released, get rid of the staging url and use the proper one -->
-        <tck.tests.core-profile.url>https://download.eclipse.org/ee4j/jakartaee-tck/jakartaee11/staged/eftl/${tck.test.core-profile.file}</tck.tests.core-profile.url>
-        <!--<tck.tests.core-profile.url>https://download.eclipse.org/jakartaee/coreprofile/11.0/${tck.test.core-profile.file}</tck.tests.core-profile.url>-->
+        <tck.test.core-profile.file>jakarta-core-profile-tck-${jakarta.tck.core-profile.version}.zip</tck.test.core-profile.file>
+        <tck.tests.core-profile.url>https://download.eclipse.org/jakartaee/coreprofile/11.0/${tck.test.core-profile.file}</tck.tests.core-profile.url>
     </properties>
 
     <build>
