@@ -55,12 +55,18 @@ public class WebArchiveUpdater implements LoadableExtension {
             for (DeploymentDescription description : descriptions) {
                 Archive<?> applicationArchive = description.getArchive();
 
-                if ((testClass.getName().contains("ClientCertAnnoTests"))
-                        && applicationArchive instanceof WebArchive webArchive) {
+                if (applicationArchive instanceof WebArchive webArchive) {
+                    if (testClass.getName().contains("ClientCertAnnoTests")) {
+                        webArchive.addAsWebInfResource(new File(
+                                "src" + File.separator + "test" + File.separator + "resources", "payara-web-clientcertanno_web.xml"),
+                                "payara-web.xml");
+                    }
 
-                    webArchive.addAsWebInfResource(new File(
-                            "src" + File.separator + "test" + File.separator + "resources", "payara-web.xml"),
-                            "payara-web.xml");
+                    if (testClass.getName().contains("ClientCertTests")) {
+                        webArchive.addAsWebInfResource(new File(
+                                "src" + File.separator + "test" + File.separator + "resources", "payara-web-clientcert_web.xml"),
+                                "payara-web.xml");
+                    }
                 }
             }
 

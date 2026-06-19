@@ -27,19 +27,19 @@ public class GlassfishApplicationArchiveProcessor implements ApplicationArchiveP
 
         if ("jsp_tagext_resource_httplistener_web.war".equals(archive.getName())) {
             WebArchive webArchive = (WebArchive) archive;
-            webArchive.addAsWebInfResource("jsp_tagext_resource_httplistener_web.war.sun-web.xml", "sun-web.xml");
+            webArchive.addAsWebInfResource("jsp_tagext_resource_httplistener_web.war.payara-web.xml", "payara-web.xml");
         } else if ("jsp_tagext_resource_listener_web.war".equals(archive.getName())) {
             WebArchive webArchive = (WebArchive) archive;
-            webArchive.addAsWebInfResource("jsp_tagext_resource_listener_web.war.sun-web.xml", "sun-web.xml");
+            webArchive.addAsWebInfResource("jsp_tagext_resource_listener_web.war.payara-web.xml", "payara-web.xml");
         } else if ("jsp_tagext_resource_taghandler_web.war".equals(archive.getName())) {
             WebArchive webArchive = (WebArchive) archive;
-            webArchive.addAsWebInfResource("jsp_tagext_resource_taghandler_web.war.sun-web.xml", "sun-web.xml");
+            webArchive.addAsWebInfResource("jsp_tagext_resource_taghandler_web.war.payara-web.xml", "payara-web.xml");
         } else if ("jsp_sec_secbasic_web.war".equals(archive.getName())) {
             WebArchive webArchive = (WebArchive) archive;
-            webArchive.addAsWebInfResource("jsp_sec_secbasic_web.war.sun-web.xml", "sun-web.xml");
+            webArchive.addAsWebInfResource("jsp_sec_secbasic_web.war.payara-web.xml", "payara-web.xml");
         } else if ("jsp_sec_secform_web.war".equals(archive.getName())) {
             WebArchive webArchive = (WebArchive) archive;
-            webArchive.addAsWebInfResource("jsp_sec_secform_web.war.sun-web.xml", "sun-web.xml");
+            webArchive.addAsWebInfResource("jsp_sec_secform_web.war.payara-web.xml", "payara-web.xml");
         }
 
     }

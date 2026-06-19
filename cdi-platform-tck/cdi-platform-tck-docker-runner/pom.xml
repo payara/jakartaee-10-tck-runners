@@ -56,7 +56,7 @@
     <description>This verifies the compliance of Payara using the Jakarta CDI Platform standalone TCK within a Docker container, to avoid issues caused with the selenium tests and more recent versions of Chrome</description>
 
     <properties>
-        <maven.profiles>payara-server-managed,jakarta-staging</maven.profiles>
+        <maven.profiles>payara-server-managed</maven.profiles>
         <!-- This is the maven command which the run-tck.sh script will execute within the container - -->
         <maven.command>mvn help:active-profiles clean verify -Dpayara.version=${payara.version} -P${maven.profiles} -pl . -pl tck-download -pl tck-download/jakarta-cdi-tck -pl tck-download/jakarta-platform-tck -pl cdi-platform-tck -pl cdi-platform-tck/cdi-platform-tck-runner -Dfailsafe.rerunFailingTestsCount=2</maven.command>
         <skipDockerBuild>${skipTests}</skipDockerBuild>
@@ -275,7 +275,7 @@
         <profile>
             <id>web</id>
             <properties>
-                <maven.profiles>payara-server-managed,jakarta-staging,web</maven.profiles>
+                <maven.profiles>payara-server-managed,web</maven.profiles>
             </properties>
         </profile>
         <profile>
