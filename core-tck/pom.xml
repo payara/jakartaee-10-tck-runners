@@ -52,6 +52,7 @@
 
     <properties>
         <resteasy.version>6.2.10.Final</resteasy.version>
+        <payara.arquillian.qualifier>payara-core-profile</payara.arquillian.qualifier>
     </properties>
 
     <dependencies>
@@ -189,7 +190,8 @@
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     <systemPropertyVariables>
                         <payara.home>${payara.home}</payara.home>
-                        <arquillian.launch>payara-core-profile</arquillian.launch>
+                        <payara.micro.jar>${payara.micro.jar}</payara.micro.jar>
+                        <arquillian.launch>${payara.arquillian.qualifier}</arquillian.launch>
                     </systemPropertyVariables>
                 </configuration>
                 <executions>
