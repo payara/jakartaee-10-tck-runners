@@ -17,6 +17,7 @@
         <payara.json-bind-api.jar>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.json.bind-api.jar</payara.json-bind-api.jar>
         <jimage.dir>${project.build.directory}${file.separator}jdk-bundle</jimage.dir>
         <skipServerStartStop>false</skipServerStartStop>
+        <payara.arquillian.qualifier>payara-remote</payara.arquillian.qualifier>
     </properties>
 
     <dependencyManagement>
@@ -161,9 +162,63 @@
                         <junit.jupiter.extensions.autodetection.enabled>true</junit.jupiter.extensions.autodetection.enabled>
                         <jimage.dir>${jimage.dir}</jimage.dir>
                         <signature.sigTestClasspath>${payara.json-bind-api.jar}${path.separator}${jimage.dir}${file.separator}java.base${path.separator}${jimage.dir}${file.separator}java.rmi${path.separator}${jimage.dir}${file.separator}java.sql${path.separator}${jimage.dir}${file.separator}java.naming</signature.sigTestClasspath>
+                        <arquillian.launch>${payara.arquillian.qualifier}</arquillian.launch>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>payara-micro-managed</id>
+            <activation>
+                <property>
+                    <name>payara.micro.managed</name>
+                </property>
+            </activation>
+            <properties>
+                <skipConfig>true</skipConfig>
+                <skipServerStartStop>true</skipServerStartStop>
+                <payara.json-bind-api.jar>${project.build.directory}${file.separator}dependency${file.separator}jakarta.json.bind-api.jar</payara.json-bind-api.jar>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-jsonb-api</id>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <phase>generate-test-resources</phase>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>jakarta.json.bind</groupId>
+                                            <artifactId>jakarta.json.bind-api</artifactId>
+                                            <overWrite>true</overWrite>
+                                            <outputDirectory>${project.build.directory}${file.separator}dependency</outputDirectory>
+                                            <destFileName>jakarta.json.bind-api.jar</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <payara.micro.jar>${payara.micro.jar}</payara.micro.jar>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
