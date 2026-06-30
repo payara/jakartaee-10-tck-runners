@@ -3,6 +3,7 @@
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
 
+    <defaultProtocol type="Servlet 5.0"/>
 
     <engine>
         <!-- Uncomment to export test archives for debug purposes -->
@@ -10,4 +11,14 @@
     </engine>
 
     <container qualifier="payara-managed" default="true"/>
+
+    <container qualifier="payara-micro">
+        <configuration>
+            <property name="microJar">${payara.micro.jar}</property>
+            <!-- -ea must be a JVM arg (before -jar); cmdOptions are inserted at index 1 -->
+            <property name="cmdOptions">-ea</property>
+            <!-- expose cdi-tck-lang-model server-wide so Weld can resolve companion classes -->
+            <property name="extraMicroOptions">--addlibs ${cdi.lang.model.jar}</property>
+        </configuration>
+    </container>
 </arquillian>
