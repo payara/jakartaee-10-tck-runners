@@ -25,6 +25,20 @@
         <adminHost>localhost</adminHost>
     </properties>
 
+    <profiles>
+        <profile>
+            <id>payara-micro-managed</id>
+            <activation>
+                <property>
+                    <name>payara.micro.managed</name>
+                </property>
+            </activation>
+            <modules>
+                <module>payara-micro-tests</module>
+            </modules>
+        </profile>
+    </profiles>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
