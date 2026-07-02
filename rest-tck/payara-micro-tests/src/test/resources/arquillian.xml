@@ -6,6 +6,7 @@
         <configuration>
             <property name="microJar">${payara.micro.jar}</property>
             <property name="extraMicroOptions">--port 8080</property>
+            <property name="javaVmArguments">-Xmx256m</property>
             <property name="startupTimeoutInSeconds">120</property>
             <property name="outputToConsole">true</property>
         </configuration>
