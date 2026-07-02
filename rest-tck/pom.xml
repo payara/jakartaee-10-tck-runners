@@ -14,6 +14,7 @@
 
     <modules>
         <module>payara-server-remote-tests</module>
+        <module>payara-micro-tests</module>
         <!-- Disabled by default until port conflict issue is resolved -->
         <!--<module>se-tests</module>-->
     </modules>
@@ -33,6 +34,9 @@
                     <name>payara.micro.managed</name>
                 </property>
             </activation>
+            <properties>
+                <payara.micro.jar>${maven.multiModuleProjectDirectory}${file.separator}target${file.separator}payara-micro-${payara.version}.jar</payara.micro.jar>
+            </properties>
             <modules>
                 <module>payara-micro-tests</module>
             </modules>
