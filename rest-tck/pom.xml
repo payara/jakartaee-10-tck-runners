@@ -31,7 +31,7 @@
             <id>payara-micro-managed</id>
             <activation>
                 <property>
-                    <name>payara.micro.managed</name>
+                    <name>payara-micro-managed</name>
                 </property>
             </activation>
             <properties>
