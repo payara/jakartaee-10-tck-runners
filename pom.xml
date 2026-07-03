@@ -624,7 +624,7 @@
             <id>payara-micro-managed</id>
 
             <properties>
-                <payara.micro.managed/>
+                <payara-micro-managed/>
                 <payara.micro.jar>${maven.multiModuleProjectDirectory}${file.separator}target${file.separator}payara-micro-${payara.version}.jar</payara.micro.jar>
                 <payara.arquillian.qualifier>payara-micro</payara.arquillian.qualifier>
             </properties>
