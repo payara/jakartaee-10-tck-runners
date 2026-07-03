@@ -206,4 +206,34 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>payara-micro-managed</id>
+            <activation>
+                <property>
+                    <name>payara-micro-managed</name>
+                </property>
+            </activation>
+            <properties>
+                <payara.arquillian.qualifier>payara-micro</payara.arquillian.qualifier>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>enforce-payara-home-is-set</id>
+                                <configuration>
+                                    <skip>true</skip>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
