@@ -178,7 +178,6 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <systemPropertyVariables>
-                                <payara.micro.jar>${payara.micro.jar}</payara.micro.jar>
                                 <arquillian.launch>payara-micro</arquillian.launch>
                                 <cdi.lang.model.jar>${project.build.directory}/micro-libs/cdi-tck-lang-model.jar</cdi.lang.model.jar>
                             </systemPropertyVariables>
