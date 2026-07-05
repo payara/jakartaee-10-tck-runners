@@ -149,19 +149,22 @@
                         <artifactId>maven-dependency-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>copy-annotation-api</id>
+                                <!-- Extract the annotation API jar bundled inside Payara Micro -->
+                                <id>unpack-micro-annotation-api</id>
                                 <goals>
-                                    <goal>copy</goal>
+                                    <goal>unpack</goal>
                                 </goals>
                                 <phase>generate-test-resources</phase>
                                 <configuration>
                                     <artifactItems>
                                         <artifactItem>
-                                            <groupId>jakarta.annotation</groupId>
-                                            <artifactId>jakarta.annotation-api</artifactId>
+                                            <groupId>fish.payara.extras</groupId>
+                                            <artifactId>payara-micro</artifactId>
+                                            <version>${payara.version}</version>
+                                            <type>jar</type>
                                             <overWrite>true</overWrite>
-                                            <outputDirectory>${project.build.directory}${file.separator}dependency</outputDirectory>
-                                            <destFileName>jakarta.annotation-api.jar</destFileName>
+                                            <outputDirectory>${project.build.directory}${file.separator}micro-home</outputDirectory>
+                                            <includes>glassfish/modules/jakarta.annotation-api.jar</includes>
                                         </artifactItem>
                                     </artifactItems>
                                 </configuration>
@@ -177,7 +180,7 @@
                                 <id>sig-test</id>
                                 <configuration>
                                     <systemPropertyVariables>
-                                        <sigTestClasspath>${project.build.directory}${file.separator}dependency${file.separator}jakarta.annotation-api.jar${path.separator}${jimage.dir}${file.separator}java.base${path.separator}${jimage.dir}${file.separator}java.rmi${path.separator}${jimage.dir}${file.separator}java.sql${path.separator}${jimage.dir}${file.separator}java.naming</sigTestClasspath>
+                                        <sigTestClasspath>${project.build.directory}${file.separator}micro-home${file.separator}glassfish${file.separator}modules${file.separator}jakarta.annotation-api.jar${path.separator}${jimage.dir}${file.separator}java.base${path.separator}${jimage.dir}${file.separator}java.rmi${path.separator}${jimage.dir}${file.separator}java.sql${path.separator}${jimage.dir}${file.separator}java.naming</sigTestClasspath>
                                     </systemPropertyVariables>
                                 </configuration>
                             </execution>

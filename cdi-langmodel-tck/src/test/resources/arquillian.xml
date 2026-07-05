@@ -12,7 +12,7 @@
 
     <container qualifier="payara-managed" default="true"/>
 
-    <container qualifier="payara-micro" default="true">
+    <container qualifier="payara-micro">
         <configuration>
             <property name="microJar">${payara.micro.jar}</property>
             <property name="cmdOptions">-ea</property>

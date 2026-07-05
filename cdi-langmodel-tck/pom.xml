@@ -67,19 +67,19 @@
                         <goals>
                             <goal>copy</goal>
                         </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>jakarta.enterprise</groupId>
+                                    <artifactId>cdi-tck-lang-model</artifactId>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${payara.home}/glassfish/lib</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <artifactItems>
-                        <artifactItem>
-                            <groupId>jakarta.enterprise</groupId>
-                            <artifactId>cdi-tck-lang-model</artifactId>
-                            <type>jar</type>
-                            <overWrite>true</overWrite>
-                            <outputDirectory>${payara.home}/glassfish/lib</outputDirectory>
-                        </artifactItem>
-                    </artifactItems>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -93,9 +93,13 @@
                 </dependencies>
                 <executions>
                     <execution>
+                        <id>enable-assertions-server-remote</id>
                         <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
                         <configuration>
-                            <target name="enabling assertions">
+                            <target if="payara.server.remote">
                                 <property name="domain.file" value="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}config${file.separator}domain.xml"/>
                                 <echo message="domain file: ${domain.file}"/>
                                 <replace file="${domain.file}">
@@ -104,9 +108,40 @@
                                 </replace>
                             </target>
                         </configuration>
+                    </execution>
+                    <execution>
+                        <id>enable-assertions-server-managed</id>
+                        <phase>generate-test-resources</phase>
                         <goals>
                             <goal>run</goal>
                         </goals>
+                        <configuration>
+                            <target if="payara.server.managed">
+                                <property name="domain.file" value="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}config${file.separator}domain.xml"/>
+                                <echo message="domain file: ${domain.file}"/>
+                                <replace file="${domain.file}">
+                                    <replacetoken><![CDATA[</java-config>]]></replacetoken>
+                                    <replacevalue><![CDATA[<jvm-options>-ea</jvm-options></java-config>]]></replacevalue>
+                                </replace>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>enable-assertions-micro</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target unless="payara.micro.managed">
+                                <property name="domain.file" value="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}config${file.separator}domain.xml"/>
+                                <echo message="domain file: ${domain.file}"/>
+                                <replace file="${domain.file}">
+                                    <replacetoken><![CDATA[</java-config>]]></replacetoken>
+                                    <replacevalue><![CDATA[<jvm-options>-ea</jvm-options></java-config>]]></replacevalue>
+                                </replace>
+                            </target>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -126,11 +161,6 @@
     <profiles>
         <profile>
             <id>payara-micro-managed</id>
-            <activation>
-                <property>
-                    <name>payara-micro-managed</name>
-                </property>
-            </activation>
             <build>
                 <plugins>
                     <plugin>
@@ -138,18 +168,8 @@
                         <artifactId>maven-dependency-plugin</artifactId>
                         <executions>
                             <execution>
-                                <!-- disable the glassfish/lib copy; not applicable to Micro -->
                                 <id>copy</id>
-                                <phase>none</phase>
-                            </execution>
-                            <execution>
-                                <!-- copy JAR to target so Payara Micro can load it via addlibs -->
-                                <id>copy-micro-libs</id>
-                                <phase>generate-test-resources</phase>
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
-                                <configuration>
+                                <configuration combine.self="override">
                                     <artifactItems>
                                         <artifactItem>
                                             <groupId>jakarta.enterprise</groupId>
@@ -166,19 +186,9 @@
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <phase>none</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <systemPropertyVariables>
-                                <arquillian.launch>payara-micro</arquillian.launch>
                                 <cdi.lang.model.jar>${project.build.directory}/micro-libs/cdi-tck-lang-model.jar</cdi.lang.model.jar>
                             </systemPropertyVariables>
                         </configuration>
