@@ -12,12 +12,10 @@
 
     <container qualifier="payara-managed" default="true"/>
 
-    <container qualifier="payara-micro">
+    <container qualifier="payara-micro" default="true">
         <configuration>
             <property name="microJar">${payara.micro.jar}</property>
-            <!-- -ea must be a JVM arg (before -jar); cmdOptions are inserted at index 1 -->
             <property name="cmdOptions">-ea</property>
-            <!-- expose cdi-tck-lang-model server-wide so Weld can resolve companion classes -->
             <property name="extraMicroOptions">--addlibs ${cdi.lang.model.jar}</property>
         </configuration>
     </container>
