@@ -51,20 +51,21 @@
     <artifactId>inject-tck</artifactId>
     <packaging>pom</packaging>
 
+    <modules>
+        <module>payara-micro-tests</module>
+    </modules>
+
     <profiles>
         <profile>
             <id>payara-micro-managed</id>
             <activation>
                 <property>
-                    <name>payara-micro-managed</name>
+                    <name>payara.micro.managed</name>
                 </property>
             </activation>
-            <modules>
-                <module>payara-micro-tests</module>
-            </modules>
             <build>
                 <plugins>
-                    <!-- Skip the Ant-based server TCK scripts; micro testing is in the sub-module -->
+                    <!-- Skip the Ant-based server TCK scripts when running against Micro -->
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>

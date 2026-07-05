@@ -50,6 +50,10 @@
 
     <artifactId>inject-tck-payara-micro-tests</artifactId>
 
+    <properties>
+        <maven.test.skip>true</maven.test.skip>
+    </properties>
+
     <dependencies>
         <!-- Jakarta Inject TCK: contains Tck class and TCK bean classes (org.atinject.tck.*) -->
         <dependency>
@@ -160,4 +164,18 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>payara-micro-managed</id>
+            <activation>
+                <property>
+                    <name>payara.micro.managed</name>
+                </property>
+            </activation>
+            <properties>
+                <maven.test.skip>false</maven.test.skip>
+            </properties>
+        </profile>
+    </profiles>
 </project>
