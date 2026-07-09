@@ -210,11 +210,6 @@
     <profiles>
         <profile>
             <id>payara-micro-managed</id>
-            <activation>
-                <property>
-                    <name>payara.micro.managed</name>
-                </property>
-            </activation>
             <properties>
                 <payara.arquillian.qualifier>payara-micro</payara.arquillian.qualifier>
             </properties>

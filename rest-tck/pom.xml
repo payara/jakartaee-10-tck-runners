@@ -29,11 +29,6 @@
     <profiles>
         <profile>
             <id>payara-micro-managed</id>
-            <activation>
-                <property>
-                    <name>payara.micro.managed</name>
-                </property>
-            </activation>
             <properties>
                 <payara.micro.jar>${maven.multiModuleProjectDirectory}${file.separator}target${file.separator}payara-micro-${payara.version}.jar</payara.micro.jar>
             </properties>
