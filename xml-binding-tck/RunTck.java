@@ -197,7 +197,7 @@ public class RunTck {
         try {
             switch (mode) {
                 case MULTI_JVM -> runMultiJvm();
-                case SINGLE_AGENT -> runAgents(1, effectiveConcurrency());
+                case SINGLE_AGENT -> runAgents(1, effectiveConcurrency()*2);  // 3x for single jvm. Switch to agentpool if you see concurrency issues.
                 case AGENT_POOL -> runAgents(effectiveConcurrency(), 1);
             }
         } finally {
