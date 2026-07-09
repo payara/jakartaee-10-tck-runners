@@ -141,7 +141,7 @@
         <jakarta.tck.transaction.version>2.0.1</jakarta.tck.transaction.version>
         <jakarta.tck.resource.version>2.1.0</jakarta.tck.resource.version>
         <jms-tck.version>11.0.0-payara</jms-tck.version>
-        <jakarta.tck.xml-binding.version>4.0.3</jakarta.tck.xml-binding.version>
+        <jakarta.tck.xml-binding.version>4.0.2</jakarta.tck.xml-binding.version>
         <jakarta.tck.mvc.version>3.0.0</jakarta.tck.mvc.version>
 
         <!-- The profile to run - acceptable parameters are 'full', 'web', and 'core' -->
