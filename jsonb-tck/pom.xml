@@ -172,11 +172,6 @@
     <profiles>
         <profile>
             <id>payara-micro-managed</id>
-            <activation>
-                <property>
-                    <name>payara.micro.managed</name>
-                </property>
-            </activation>
             <properties>
                 <skipConfig>true</skipConfig>
                 <skipServerStartStop>true</skipServerStartStop>
