@@ -14,6 +14,7 @@
 
     <modules>
         <module>payara-server-remote-tests</module>
+        <module>payara-micro-tests</module>
         <!-- Disabled by default until port conflict issue is resolved -->
         <!--<module>se-tests</module>-->
     </modules>
@@ -24,6 +25,15 @@
         <!-- used in arquillian connector as well as test target -->
         <adminHost>localhost</adminHost>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>payara-micro-managed</id>
+            <properties>
+                <payara.micro.jar>${maven.multiModuleProjectDirectory}${file.separator}target${file.separator}payara-micro-${payara.version}.jar</payara.micro.jar>
+            </properties>
+        </profile>
+    </profiles>
 
     <dependencyManagement>
         <dependencies>

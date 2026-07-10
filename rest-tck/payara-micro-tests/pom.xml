@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>fish.payara.jakarta.tests.tck</groupId>
+        <artifactId>rest-tck</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>rest-tck-payara-micro-tests</artifactId>
+
+    <properties>
+        <jimage.dir>${project.build.directory}${file.separator}jdk-bundle</jimage.dir>
+    </properties>
+
+    <dependencies>
+        <!-- ../tck-download/jakarta-rest-tck installs TCK artifacts -->
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta-restful-ws-tck</artifactId>
+            <version>${jakarta-rest-tck.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>fish.payara.arquillian</groupId>
+            <artifactId>arquillian-payara-micro-managed</artifactId>
+            <version>${payara.arquillian.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- tests run client-side and therefore need jersey on test classpath as well -->
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jersey.inject</groupId>
+            <artifactId>jersey-hk2</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-binding</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-jaxb</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-sse</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-multipart</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.junit5</groupId>
+            <artifactId>arquillian-junit5-container</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.protocol</groupId>
+            <artifactId>arquillian-protocol-servlet</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.tck</groupId>
+            <artifactId>sigtest-maven-plugin</artifactId>
+            <!-- Override version inherited from parent - doesn't seem to pass using 2.3 -->
+            <version>2.2</version>
+        </dependency>
+
+        <!-- TCK runtime dependencies -->
+
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>4.0.1</version>
+            <scope>runtime</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>kill-zombie-micro-before-tests</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <!-- Kill any Payara Micro zombies left over from a previous run
+                                     before the first test class tries to bind port 8080 -->
+                                <exec executable="sh" failonerror="false">
+                                    <arg value="-c"/>
+                                    <arg value="pkill -9 -f 'payara-micro.*\.jar' 2>/dev/null; exit 0"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-jakarta-ws-rs-api</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>jakarta.ws.rs</groupId>
+                                    <artifactId>jakarta.ws.rs-api</artifactId>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}/dependency</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>jakarta.xml.bind</groupId>
+                                    <artifactId>jakarta.xml.bind-api</artifactId>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}/dependency</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>payara-tests</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                        <configuration>
+                            <excludedGroups>${excluded.groups}</excludedGroups>
+                            <systemPropertyVariables>
+                                <!-- credentials for the test -->
+                                <user>j2ee</user>
+                                <password>j2ee</password>
+                                <authuser>javajoe</authuser>
+                                <authpassword>javajoe</authpassword>
+
+                                <webServerHost>${adminHost}</webServerHost>
+                                <webServerPort>8080</webServerPort>
+                                <cts.harness.debug>false</cts.harness.debug>
+                                <porting.ts.url.class.1>ee.jakarta.tck.ws.rs.lib.implementation.sun.common.SunRIURL</porting.ts.url.class.1>
+
+                                <jimage.dir>${jimage.dir}</jimage.dir>
+                                <optional.tech.packages.to.ignore>jakarta.xml.bind</optional.tech.packages.to.ignore>
+                                <signature.sigTestClasspath>${project.build.directory}${file.separator}dependency${file.separator}jakarta.ws.rs-api.jar${path.separator}${project.build.directory}${file.separator}dependency${file.separator}jakarta.xml.bind-api.jar${path.separator}${jimage.dir}${file.separator}java.base${path.separator}${jimage.dir}${file.separator}java.rmi${path.separator}${jimage.dir}${file.separator}java.sql${path.separator}${jimage.dir}${file.separator}java.naming</signature.sigTestClasspath>
+
+                                <payara.micro.jar>${payara.micro.jar}</payara.micro.jar>
+
+                                <!-- Enable ServiceLoader-based JUnit 5 extension auto-detection so
+                                     MicroPortCleanupExtension (in META-INF/services/) is picked up -->
+                                <junit.jupiter.extensions.autodetection.enabled>true</junit.jupiter.extensions.autodetection.enabled>
+                            </systemPropertyVariables>
+                            <dependenciesToScan>jakarta.ws.rs:jakarta-restful-ws-tck</dependenciesToScan>
+                            <excludes>
+                                <exclude>**/SeBootstrapIT.java</exclude>
+                                <exclude>ee.jakarta.tck.ws.rs.jaxrs21.ee.client.executor.rx.JAXRSClientIT</exclude>
+                                <exclude>ee.jakarta.tck.ws.rs.jaxrs21.ee.client.rxinvoker.JAXRSClientIT</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
