@@ -51,10 +51,6 @@
     <artifactId>inject-tck</artifactId>
     <packaging>pom</packaging>
 
-    <modules>
-        <module>payara-micro-tests</module>
-    </modules>
-
     <profiles>
         <profile>
             <id>payara-micro-managed</id>
@@ -63,6 +59,9 @@
                     <name>payara.micro.managed</name>
                 </property>
             </activation>
+            <modules>
+                <module>payara-micro-tests</module>
+            </modules>
             <build>
                 <plugins>
                     <!-- Skip the Ant-based server TCK scripts when running against Micro -->
