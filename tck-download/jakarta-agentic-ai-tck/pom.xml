@@ -91,6 +91,12 @@
                             <arguments>
                                 <argument>install</argument>
                                 <argument>-DskipTests</argument>
+                                <!-- Only the api and tck modules are needed to run the TCK.
+                                     Skip spec (asciidoctor plugin requires Maven 3.8.8+) and
+                                     examples, which are irrelevant here and fail on the CI Maven. -->
+                                <argument>-pl</argument>
+                                <argument>api,tck</argument>
+                                <argument>-am</argument>
                             </arguments>
                         </configuration>
                     </execution>
