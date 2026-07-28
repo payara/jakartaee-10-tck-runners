@@ -199,6 +199,9 @@
                                 <signature.sigTestClasspath>${project.build.directory}${file.separator}dependency${file.separator}jakarta.ws.rs-api.jar${path.separator}${project.build.directory}${file.separator}dependency${file.separator}jakarta.xml.bind-api.jar${path.separator}${jimage.dir}${file.separator}java.base${path.separator}${jimage.dir}${file.separator}java.rmi${path.separator}${jimage.dir}${file.separator}java.sql${path.separator}${jimage.dir}${file.separator}java.naming</signature.sigTestClasspath>
 
                                 <payara.micro.jar>${payara.micro.jar}</payara.micro.jar>
+                                <!-- Path to post-boot commands file; resolved by Arquillian from system properties
+                                     and substituted into extraMicroOptions in arquillian.xml -->
+                                <payara.micro.preboot.file>${project.build.testOutputDirectory}/preboot-commands.txt</payara.micro.preboot.file>
 
                                 <!-- Enable ServiceLoader-based JUnit 5 extension auto-detection so
                                      MicroPortCleanupExtension (in META-INF/services/) is picked up -->
