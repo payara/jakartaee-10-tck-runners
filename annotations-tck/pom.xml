@@ -53,6 +53,18 @@
     <artifactId>annotations-tck</artifactId>
     <packaging>pom</packaging>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>fish.payara.api</groupId>
+                <artifactId>payara-bom</artifactId>
+                <version>${payara.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <name>TCK: Annotations</name>
 
 
@@ -126,4 +138,56 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>payara-micro-managed</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <!-- Extract the annotation API jar bundled inside Payara Micro -->
+                                <id>unpack-micro-annotation-api</id>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <phase>generate-test-resources</phase>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>fish.payara.extras</groupId>
+                                            <artifactId>payara-micro</artifactId>
+                                            <version>${payara.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>
+                                            <outputDirectory>${project.build.directory}${file.separator}micro-home</outputDirectory>
+                                            <includes>glassfish/modules/jakarta.annotation-api.jar</includes>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sig-test</id>
+                                <configuration>
+                                    <systemPropertyVariables>
+                                        <sigTestClasspath>${project.build.directory}${file.separator}micro-home${file.separator}glassfish${file.separator}modules${file.separator}jakarta.annotation-api.jar${path.separator}${jimage.dir}${file.separator}java.base${path.separator}${jimage.dir}${file.separator}java.rmi${path.separator}${jimage.dir}${file.separator}java.sql${path.separator}${jimage.dir}${file.separator}java.naming</sigTestClasspath>
+                                    </systemPropertyVariables>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

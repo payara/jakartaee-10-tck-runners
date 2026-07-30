@@ -53,4 +53,10 @@
         </configuration>
     </container>
 
+    <container qualifier="payara-micro">
+        <configuration>
+            <property name="microJar">${payara.micro.jar}</property>
+        </configuration>
+    </container>
+
 </arquillian>

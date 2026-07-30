@@ -8,12 +8,333 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <artifactId>cdi-tck</artifactId>
 
     <properties>
         <porting.home>${basedir}${file.separator}cditck-porting</porting.home>
+        <weld.version>6.0.1.Final</weld.version>
+        <weld.api.version>6.0.Final</weld.api.version>
+        <testng.version>7.9.0</testng.version>
+        <commons-lang.version>2.6</commons-lang.version>
+        <payara.micro.jar>${project.build.directory}${file.separator}payara-micro-${payara.version}.jar</payara.micro.jar>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>payara-micro-managed</id>
+            <activation>
+                <property>
+                    <name>payara.micro.managed</name>
+                </property>
+            </activation>
+
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>fish.payara.api</groupId>
+                        <artifactId>payara-bom</artifactId>
+                        <version>${payara.version}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+
+            <dependencies>
+                <!-- CDI TCK SPI interfaces (Beans, Contexts, Contextuals, CreationalContexts, EL) -->
+                <dependency>
+                    <groupId>jakarta.enterprise</groupId>
+                    <artifactId>cdi-tck-api</artifactId>
+                    <version>${jakarta.tck.cdi.version}</version>
+                    <scope>test</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>*</groupId>
+                            <artifactId>*</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+
+                <!-- CDI Core TCK test classes (TestNG + Arquillian based) -->
+                <dependency>
+                    <groupId>jakarta.enterprise</groupId>
+                    <artifactId>cdi-tck-core-impl</artifactId>
+                    <version>${jakarta.tck.cdi.version}</version>
+                    <scope>test</scope>
+                </dependency>
+
+                <!-- CDI API -->
+                <dependency>
+                    <groupId>jakarta.enterprise</groupId>
+                    <artifactId>jakarta.enterprise.cdi-api</artifactId>
+                    <version>${cdi.api.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+
+                <!-- CDI EL API (provides ELAwareBeanManager, needed by PayaraMicroELImpl) -->
+                <dependency>
+                    <groupId>jakarta.enterprise</groupId>
+                    <artifactId>jakarta.enterprise.cdi-el-api</artifactId>
+                    <version>${cdi.api.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+
+                <!-- Weld internals needed by SPI implementations (run server-side) -->
+                <dependency>
+                    <groupId>org.jboss.weld</groupId>
+                    <artifactId>weld-api</artifactId>
+                    <scope>provided</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>*</groupId>
+                            <artifactId>*</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.weld</groupId>
+                    <artifactId>weld-spi</artifactId>
+                    <version>${weld.api.version}</version>
+                    <scope>provided</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>*</groupId>
+                            <artifactId>*</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.weld</groupId>
+                    <artifactId>weld-core-impl</artifactId>
+                    <version>${weld.version}</version>
+                    <scope>provided</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>*</groupId>
+                            <artifactId>*</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.weld.module</groupId>
+                    <artifactId>weld-web</artifactId>
+                    <version>${weld.version}</version>
+                    <scope>provided</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>*</groupId>
+                            <artifactId>*</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+
+                <!-- EL implementation (needed by GlassFishELImpl) -->
+                <dependency>
+                    <groupId>org.glassfish.expressly</groupId>
+                    <artifactId>expressly</artifactId>
+                    <scope>provided</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>*</groupId>
+                            <artifactId>*</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+
+                <!-- Arquillian Payara Micro Managed container -->
+                <dependency>
+                    <groupId>fish.payara.arquillian</groupId>
+                    <artifactId>arquillian-payara-micro-managed</artifactId>
+                    <version>${payara.arquillian.version}</version>
+                    <scope>test</scope>
+                </dependency>
+
+                <!-- Arquillian TestNG integration -->
+                <dependency>
+                    <groupId>org.jboss.arquillian.testng</groupId>
+                    <artifactId>arquillian-testng-container</artifactId>
+                    <scope>test</scope>
+                </dependency>
+
+                <!-- TestNG -->
+                <dependency>
+                    <groupId>org.testng</groupId>
+                    <artifactId>testng</artifactId>
+                    <version>${testng.version}</version>
+                    <scope>test</scope>
+                </dependency>
+
+                <!-- Shrinkwrap descriptors for test archive construction -->
+                <dependency>
+                    <groupId>org.jboss.shrinkwrap.descriptors</groupId>
+                    <artifactId>shrinkwrap-descriptors-impl-javaee</artifactId>
+                    <scope>test</scope>
+                </dependency>
+
+                <!-- Commons Lang used by CDI TCK test classes -->
+                <dependency>
+                    <groupId>commons-lang</groupId>
+                    <artifactId>commons-lang</artifactId>
+                    <version>${commons-lang.version}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <!-- Add micro SPI sources only when running against Payara Micro -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>add-micro-test-sources</id>
+                                <phase>generate-test-sources</phase>
+                                <goals>
+                                    <goal>add-test-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/test/micro/java</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>run-tck</id>
+                                <phase>none</phase>
+                            </execution>
+                            <!-- Kill any leftover Payara Micro processes before tests -->
+                            <execution>
+                                <id>kill-zombie-micro-before-tests</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <exec executable="sh" failonerror="false">
+                                            <arg value="-c"/>
+                                            <arg value="pkill -9 -f 'payara-micro.*\.jar' 2>/dev/null; exit 0"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- Build a test-jar so the Payara Micro SPI implementations are packaged
+                         into each test archive via org.jboss.cdi.tck.libraryDirectory -->
+                    <plugin>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>test-jar</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.build.directory}/dependency/lib</outputDirectory>
+                                    <archive>
+                                        <manifest>
+                                            <addClasspath>false</addClasspath>
+                                        </manifest>
+                                    </archive>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-payara-micro</id>
+                                <phase>generate-test-resources</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>fish.payara.extras</groupId>
+                                            <artifactId>payara-micro</artifactId>
+                                            <version>${payara.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>
+                                            <outputDirectory>${project.build.directory}</outputDirectory>
+                                            <destFileName>payara-micro-${payara.version}.jar</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>copy-cdi-tck-ext-lib</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>jakarta.enterprise</groupId>
+                                            <artifactId>cdi-tck-ext-lib</artifactId>
+                                            <version>${jakarta.tck.cdi.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>
+                                            <outputDirectory>${project.build.directory}/dependency/lib</outputDirectory>
+                                            <destFileName>cdi-tck-ext-lib.jar</destFileName>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.maven.surefire</groupId>
+                                <artifactId>surefire-testng</artifactId>
+                                <version>${maven-surefire-plugin.version}</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <id>cdi-tck-core-tests</id>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                                <configuration>
+                                    <dependenciesToScan>
+                                        <dependency>jakarta.enterprise:cdi-tck-core-impl</dependency>
+                                    </dependenciesToScan>
+                                    <includes>
+                                        <include>**/*Test.java</include>
+                                    </includes>
+                                    <excludedGroups>se,javaee-full</excludedGroups>
+                                    <systemPropertyVariables>
+                                        <payara.micro.jar>${payara.micro.jar}</payara.micro.jar>
+                                        <org.jboss.cdi.tck.libraryDirectory>${project.build.directory}/dependency/lib</org.jboss.cdi.tck.libraryDirectory>
+                                    </systemPropertyVariables>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <build>
         <plugins>
