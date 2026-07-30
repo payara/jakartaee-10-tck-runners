@@ -74,7 +74,7 @@
         <dependency>
             <groupId>jakarta.agentic-ai</groupId>
             <artifactId>jakarta.agentic-ai-api</artifactId>
-            <version>${jakarta.tck.agentic-ai.version}</version>
+            <version>${jakarta.agentic-ai.api.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.enterprise</groupId>
