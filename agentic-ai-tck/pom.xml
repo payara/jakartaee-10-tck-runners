@@ -100,6 +100,22 @@
             <version>3.27.7</version>
             <scope>test</scope>
         </dependency>
+        <!--
+            JSON-B API + implementation, required on the test/client classpath.
+            The TCK obtains these transitively via jakarta.jakartaee-api, but that
+            dependency is declared with 'provided' scope in the TCK parent POM, so
+            it is NOT transitive to this runner. Without JSON-B on the classpath,
+            JUnit Platform fails to load TCK test classes that reference
+            jakarta.json.bind (e.g. LlmContractTests' JsonbSerializer fixture),
+            producing "TestEngine with ID 'junit-jupiter' failed to discover tests".
+            Yasson brings jakarta.json.bind-api, jakarta.json-api and parsson.
+        -->
+        <dependency>
+            <groupId>org.eclipse</groupId>
+            <artifactId>yasson</artifactId>
+            <version>3.0.3</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
