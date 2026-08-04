@@ -13,12 +13,34 @@
     <packaging>pom</packaging>
 
     <properties>
-        <scriptExecutor>bash</scriptExecutor>
-        <scriptExtension>sh</scriptExtension>
-
         <checker.version>3.5.0</checker.version>
 
-        <concurrent.threads>1</concurrent.threads>
+        <!--
+            Default mode: single-agent (RunTck.java).
+            Use -Plegacy to fall back to the original run-tck.sh shell script.
+        -->
+        <tck.skip.shell>true</tck.skip.shell>
+        <tck.skip.java>${skipTests}</tck.skip.java>
+        <tck.mode>single-agent</tck.mode>
+        <tck.report.dir>JAXB_REPORT</tck.report.dir>
+
+        <!--
+            Number of concurrent tests / agent JVMs.
+            0 = auto-detect from Runtime.availableProcessors() (default for agent modes).
+            Override with -Dconcurrent.threads=N.
+        -->
+        <concurrent.threads>0</concurrent.threads>
+
+        <!--
+            Progress reporting. Set tck.progress=true to print a cumulative
+            pass/fail/error summary to the console at regular intervals while
+            tests are running. tck.progress.interval controls how often in
+            seconds (default 60 = every minute).
+
+            Example: -Dtck.progress=true -Dtck.progress.interval=30
+        -->
+        <tck.progress>true</tck.progress>
+        <tck.progress.interval>60</tck.progress.interval>
     </properties>
 
     <dependencies>
@@ -39,27 +61,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>enforce-os</id>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
-                        <configuration>
-                            <rules>
-                                <requireOS>
-                                    <family>unix</family>
-                                    <message>You cannot run this TCK on Windows</message>
-                                </requireOS>
-                            </rules>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -111,20 +112,58 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
+                    <!--
+                        Legacy runner: original run-tck.sh shell script (multi-jvm).
+                        Activated only by the -Plegacy profile (tck.skip.shell=${skipTests}).
+                        Skipped by default and by all other profiles (tck.skip.shell=true).
+                        Note: multi-jvm still requires a Unix-like OS because of the bundled
+                        shell scripts. The OS guard lives in RunTck.java for Java-based modes.
+                    -->
                     <execution>
-                        <id>run-tck</id>
+                        <id>run-tck-shell</id>
                         <phase>integration-test</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <skip>${skipTests}</skip>
-                            <executable>${scriptExecutor}</executable>
-                            <commandlineArgs>${basedir}${file.separator}run-tck.${scriptExtension} ${payara.home} ${concurrent.threads}</commandlineArgs>
+                            <skip>${tck.skip.shell}</skip>
+                            <executable>bash</executable>
+                            <arguments>
+                                <argument>${basedir}/run-tck.sh</argument>
+                                <argument>${payara.home}</argument>
+                                <argument>${concurrent.threads}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+
+                    <!--
+                        Fast-mode runner: RunTck.java single-file Java program.
+                        Activated by the single-agent / agent-pool profiles via tck.skip.java=${skipTests}.
+                        Supports multi-jvm, single-agent, and agent-pool modes.
+                    -->
+                    <execution>
+                        <id>run-tck-java</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${tck.skip.java}</skip>
+                            <executable>${java.home}/bin/java</executable>
+                            <arguments>
+                                <argument>${basedir}/RunTck.java</argument>
+                                <argument>${tck.mode}</argument>
+                                <argument>${payara.home}</argument>
+                                <argument>${concurrent.threads}</argument>
+                                <argument>${project.build.directory}/${tck.report.dir}</argument>
+                                <argument>${tck.progress}</argument>
+                                <argument>${tck.progress.interval}</argument>
+                            </arguments>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -138,10 +177,12 @@
                         <configuration>
                             <skip>${skipTests}</skip>
                             <target>
-                                <echo>Checking if ${project.build.directory}${file.separator}JAXB_REPORT${file.separator}JAXB-TCK${file.separator}text${file.separator}summary.txt contains failures or errors</echo>
-                                <fail message = "summary.txt contains 'Failed.'!">
+                                <echo>Checking ${project.build.directory}/${tck.report.dir}/JAXB-TCK/text/summary.txt for failures</echo>
+                                <fail message="summary.txt contains 'Failed.'!">
                                     <condition>
-                                        <resourcecontains resource="${project.build.directory}${file.separator}JAXB_REPORT${file.separator}JAXB-TCK${file.separator}text${file.separator}summary.txt" substring="Failed."/>
+                                        <resourcecontains
+                                            resource="${project.build.directory}/${tck.report.dir}/JAXB-TCK/text/summary.txt"
+                                            substring="Failed."/>
                                     </condition>
                                 </fail>
                             </target>
@@ -151,5 +192,87 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!--
+            Execution mode profiles. Profiles only set properties — no plugin/execution
+            overrides — to avoid Maven's execution-merge behaviour which caused the
+            base commandlineArgs to bleed into the profile's java invocation.
+
+            Agent modes auto-detect concurrency (concurrent.threads=0);
+            override with -Dconcurrent.threads=N.
+
+            See README.md and src/docs/developer/vendor-speedup-guide.adoc for details.
+        -->
+        <profile>
+            <!--
+                Legacy mode: original run-tck.sh shell script, multi-jvm.
+                Restores the behaviour that was the default before single-agent
+                became the default.  Use when you need a certified, unmodified
+                harness invocation, or on a system where the Java runner is
+                not yet validated.
+            -->
+            <id>legacy</id>
+            <properties>
+                <tck.skip.shell>${skipTests}</tck.skip.shell>
+                <tck.skip.java>true</tck.skip.java>
+                <tck.mode>multi-jvm</tck.mode>
+                <concurrent.threads>1</concurrent.threads>
+            </properties>
+        </profile>
+
+        <profile>
+            <!--
+                Single-agent mode (explicit). This is also the default when no
+                profile is specified — the explicit profile is kept for symmetry
+                and to make the intent clear in CI scripts.
+                One long-lived JavaTest agent JVM; N concurrent tests in one heap.
+            -->
+            <id>single-agent</id>
+            <properties>
+                <tck.skip.shell>true</tck.skip.shell>
+                <tck.skip.java>${skipTests}</tck.skip.java>
+                <tck.mode>single-agent</tck.mode>
+                <concurrent.threads>0</concurrent.threads>
+            </properties>
+        </profile>
+
+        <profile>
+            <!--
+                RunTck.java-driven multi-jvm mode. Functionally equivalent to the
+                legacy run-tck.sh path but adds the progress indicator, graceful
+                SIGINT report, and a dedicated MULTI_JVM_REPORT directory so all
+                three modes can be compared side-by-side.
+            -->
+            <id>multi-jvm</id>
+            <properties>
+                <tck.skip.shell>true</tck.skip.shell>
+                <tck.skip.java>${skipTests}</tck.skip.java>
+                <tck.mode>multi-jvm</tck.mode>
+                <!-- concurrent.threads intentionally kept at the default (1).
+                     Override with -Dconcurrent.threads=N to parallelise. -->
+                <concurrent.threads>1</concurrent.threads>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- N long-lived agent JVMs, each single-threaded: JVM reuse with process isolation. -->
+            <id>agent-pool</id>
+            <properties>
+                <tck.skip.shell>true</tck.skip.shell>
+                <tck.skip.java>${skipTests}</tck.skip.java>
+                <tck.mode>agent-pool</tck.mode>
+                <concurrent.threads>0</concurrent.threads>
+            </properties>
+        </profile>
+        <profile>
+            <!-- Frequent status update -->
+            <id>interactive</id>
+            <properties>
+                <tck.progress>true</tck.progress>
+                <tck.progress.interval>5</tck.progress.interval>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>
