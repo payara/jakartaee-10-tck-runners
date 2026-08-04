@@ -58,6 +58,7 @@
         <module>jakarta-dsol-tck</module>
         <module>jakarta-xml-binding-tck</module>
         <module>jakarta-mvc-tck</module>
+        <module>jakarta-agentic-ai-tck</module>
     </modules>
 
     <build>
