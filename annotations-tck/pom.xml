@@ -56,7 +56,6 @@
     <properties>
         <tck.home>${project.build.directory}/annotations-tck</tck.home>
         <tck.tests.home>${tck.home}/src/com/sun/ts/tests/signaturetest/caj</tck.tests.home>
-        <jimage.dir>${project.build.directory}/jdk-bundle</jimage.dir>
         <tck.download.url>https://download.eclipse.org/jakartaee/annotations/2.1/jakarta-annotations-tck-${jakarta-annotations-tck.version}.zip</tck.download.url>
         <harness.log.port>2000</harness.log.port>
     </properties>
