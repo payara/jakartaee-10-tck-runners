@@ -104,6 +104,8 @@
         <jakarta.tck.core-profile.version>10.0.3</jakarta.tck.core-profile.version>
         <jakarta.tck.inject.version>2.0.2</jakarta.tck.inject.version>
         <jakarta.tck.mvc.version>2.1.0</jakarta.tck.mvc.version>
+        <jakarta-annotations-tck.version>2.1.1</jakarta-annotations-tck.version>
+
         
         <!-- The profile to run - acceptable parameters are 'full', 'web', and 'core' -->
         <jakarta.tck.platform>full</jakarta.tck.platform>
@@ -141,6 +143,7 @@
         <module>servlet-tck</module>
         <module>tags-tck</module>
         <module>websocket-tck</module>
+        <module>annotations-tck</module>
         <module>summarizer</module>
     </modules>
 
