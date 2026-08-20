@@ -142,7 +142,6 @@
         <jakarta.tck.faces.version>4.1.1</jakarta.tck.faces.version>
         <jakarta.tck.transaction.version>2.0.1</jakarta.tck.transaction.version>
         <jakarta.tck.resource.version>2.1.0</jakarta.tck.resource.version>
-        <jms-tck.version>11.0.0-payara</jms-tck.version>
         <jakarta.tck.xml-binding.version>4.0.2</jakarta.tck.xml-binding.version>
         <jakarta.tck.mvc.version>3.0.0</jakarta.tck.mvc.version>
 
@@ -323,7 +322,6 @@
         <module>expression-language-tck</module>
         <module>bean-validation-tck</module>
         <module>persistence-tck</module>
-        <module>messaging-tck</module>
         <module>messaging-platform-tck</module>
         <module>mail-platform-tck</module>
         <module>data-tck</module>
