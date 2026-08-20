@@ -164,6 +164,9 @@
                         <signature.sigTestClasspath>${payara.json-bind-api.jar}${path.separator}${jimage.dir}${file.separator}java.base${path.separator}${jimage.dir}${file.separator}java.rmi${path.separator}${jimage.dir}${file.separator}java.sql${path.separator}${jimage.dir}${file.separator}java.naming</signature.sigTestClasspath>
                         <arquillian.launch>${payara.arquillian.qualifier}</arquillian.launch>
                     </systemPropertyVariables>
+                    <environmentVariables>
+                        <JAVA_TOOL_OPTIONS>-Djava.locale.providers=COMPAT</JAVA_TOOL_OPTIONS>
+                    </environmentVariables>
                 </configuration>
             </plugin>
         </plugins>
