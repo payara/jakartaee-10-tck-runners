@@ -26,16 +26,38 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- tests run client-side and therefore need jersey on test classpath as well -->
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-server</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-client</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-common</artifactId>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.glassfish.jersey.inject</groupId>
             <artifactId>jersey-hk2</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-grizzly2-http</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- jersey-container-servlet-core was merged into jersey-container-servlet as of the
+             Jersey 4.0 GA line (last published as a standalone artifact at 4.0.0-M2.payara-p1) -->
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -52,6 +74,66 @@
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-sse</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.json.bind</groupId>
+            <artifactId>jakarta.json.bind-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.json</groupId>
+            <artifactId>jakarta.json-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.activation</groupId>
+            <artifactId>jakarta.activation-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.parsson</groupId>
+            <artifactId>parsson</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse</groupId>
+            <artifactId>yasson</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.angus</groupId>
+            <artifactId>angus-activation</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.hk2</groupId>
+            <artifactId>hk2-locator</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-osgi</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.main.grizzly</groupId>
+            <artifactId>nucleus-grizzly-all</artifactId>
+            <version>4.1.2</version>
             <scope>test</scope>
         </dependency>
 
@@ -93,6 +175,32 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-jersey-runtime-jars</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/dependency</outputDirectory>
+                            <includeArtifactIds>
+                                jersey-server,jersey-client,jersey-common,jersey-media-sse,
+                                jersey-container-grizzly2-http,jersey-container-servlet,
+                                jersey-media-json-binding,jersey-media-jaxb,
+                                jakarta.ws.rs-api,jakarta.xml.bind-api,jakarta.json.bind-api,jakarta.json-api,
+                                jakarta.activation-api,parsson,yasson,angus-activation,hk2-locator,jaxb-osgi,
+                                nucleus-grizzly-all
+                            </includeArtifactIds>
+                            <excludeTransitive>true</excludeTransitive>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <executions>
                     <execution>
@@ -108,26 +216,25 @@
                                 <include>**/SeBootstrapIT.java</include>
                             </includes>
                             <additionalClasspathElements>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-server.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-client.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-common.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-media-sse.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-container-grizzly2-http.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-container-servlet.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-container-servlet-core.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-media-json-binding.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-media-jaxb.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/jakarta.ws.rs-api.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/jakarta.xml.bind-api.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/jakarta.json.bind-api.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/jakarta.json.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/parsson.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/hk2-locator.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/jaxb-osgi.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/yasson.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/nucleus-grizzly-all.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/jakarta.activation-api.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}/glassfish/modules/angus-activation.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/jersey-server.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/jersey-client.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/jersey-common.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/jersey-media-sse.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/jersey-container-grizzly2-http.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/jersey-container-servlet.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/jersey-media-json-binding.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/jersey-media-jaxb.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/jakarta.ws.rs-api.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/jakarta.xml.bind-api.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/jakarta.json.bind-api.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/jakarta.json-api.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/parsson.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/hk2-locator.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/jaxb-osgi.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/yasson.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/jakarta.activation-api.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/angus-activation.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/nucleus-grizzly-all.jar</additionalClasspathElement>
                             </additionalClasspathElements>
                         </configuration>
                     </execution>
