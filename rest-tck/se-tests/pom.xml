@@ -19,13 +19,6 @@
             <version>${jakarta-rest-tck.version}</version>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>fish.payara.arquillian</groupId>
-            <artifactId>arquillian-payara-server-remote</artifactId>
-            <scope>test</scope>
-        </dependency>
-
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-server</artifactId>
@@ -131,13 +124,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.glassfish.main.grizzly</groupId>
-            <artifactId>nucleus-grizzly-all</artifactId>
-            <version>4.1.2</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
@@ -190,8 +176,7 @@
                                 jersey-container-grizzly2-http,jersey-container-servlet,
                                 jersey-media-json-binding,jersey-media-jaxb,
                                 jakarta.ws.rs-api,jakarta.xml.bind-api,jakarta.json.bind-api,jakarta.json-api,
-                                jakarta.activation-api,parsson,yasson,angus-activation,hk2-locator,jaxb-osgi,
-                                nucleus-grizzly-all
+                                jakarta.activation-api,parsson,yasson,angus-activation,hk2-locator,jaxb-osgi
                             </includeArtifactIds>
                             <excludeTransitive>true</excludeTransitive>
                             <stripVersion>true</stripVersion>
@@ -234,7 +219,6 @@
                                 <additionalClasspathElement>${project.build.directory}/dependency/yasson.jar</additionalClasspathElement>
                                 <additionalClasspathElement>${project.build.directory}/dependency/jakarta.activation-api.jar</additionalClasspathElement>
                                 <additionalClasspathElement>${project.build.directory}/dependency/angus-activation.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${project.build.directory}/dependency/nucleus-grizzly-all.jar</additionalClasspathElement>
                             </additionalClasspathElements>
                         </configuration>
                     </execution>
