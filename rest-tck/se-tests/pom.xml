@@ -24,6 +24,7 @@
             <artifactId>jersey-server</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- tests run client-side and therefore need jersey on test classpath as well -->
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-client</artifactId>
