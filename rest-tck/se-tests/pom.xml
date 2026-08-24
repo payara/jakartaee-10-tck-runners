@@ -47,8 +47,6 @@
             <artifactId>jersey-container-grizzly2-http</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- jersey-container-servlet-core was merged into jersey-container-servlet as of the
-             Jersey 4.0 GA line (last published as a standalone artifact at 4.0.0-M2.payara-p1) -->
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>
@@ -202,24 +200,50 @@
                                 <include>**/SeBootstrapIT.java</include>
                             </includes>
                             <additionalClasspathElements>
-                                <additionalClasspathElement>${project.build.directory}/dependency/jersey-server.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${project.build.directory}/dependency/jersey-client.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${project.build.directory}/dependency/jersey-common.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${project.build.directory}/dependency/jersey-media-sse.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${project.build.directory}/dependency/jersey-container-grizzly2-http.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${project.build.directory}/dependency/jersey-container-servlet.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${project.build.directory}/dependency/jersey-media-json-binding.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${project.build.directory}/dependency/jersey-media-jaxb.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${project.build.directory}/dependency/jakarta.ws.rs-api.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${project.build.directory}/dependency/jakarta.xml.bind-api.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${project.build.directory}/dependency/jakarta.json.bind-api.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${project.build.directory}/dependency/jakarta.json-api.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${project.build.directory}/dependency/parsson.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${project.build.directory}/dependency/hk2-locator.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${project.build.directory}/dependency/jaxb-osgi.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${project.build.directory}/dependency/yasson.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${project.build.directory}/dependency/jakarta.activation-api.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${project.build.directory}/dependency/angus-activation.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/jersey-server.jar
+                                </additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/jersey-client.jar
+                                </additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/jersey-common.jar
+                                </additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/jersey-media-sse.jar
+                                </additionalClasspathElement>
+                                <additionalClasspathElement>
+                                    ${project.build.directory}/dependency/jersey-container-grizzly2-http.jar
+                                </additionalClasspathElement>
+                                <additionalClasspathElement>
+                                    ${project.build.directory}/dependency/jersey-container-servlet.jar
+                                </additionalClasspathElement>
+                                <additionalClasspathElement>
+                                    ${project.build.directory}/dependency/jersey-media-json-binding.jar
+                                </additionalClasspathElement>
+                                <additionalClasspathElement>
+                                    ${project.build.directory}/dependency/jersey-media-jaxb.jar
+                                </additionalClasspathElement>
+                                <additionalClasspathElement>
+                                    ${project.build.directory}/dependency/jakarta.ws.rs-api.jar
+                                </additionalClasspathElement>
+                                <additionalClasspathElement>
+                                    ${project.build.directory}/dependency/jakarta.xml.bind-api.jar
+                                </additionalClasspathElement>
+                                <additionalClasspathElement>
+                                    ${project.build.directory}/dependency/jakarta.json.bind-api.jar
+                                </additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/jakarta.json-api.jar
+                                </additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/parsson.jar
+                                </additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/hk2-locator.jar
+                                </additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/jaxb-osgi.jar
+                                </additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/yasson.jar
+                                </additionalClasspathElement>
+                                <additionalClasspathElement>
+                                    ${project.build.directory}/dependency/jakarta.activation-api.jar
+                                </additionalClasspathElement>
+                                <additionalClasspathElement>${project.build.directory}/dependency/angus-activation.jar
+                                </additionalClasspathElement>
                             </additionalClasspathElements>
                         </configuration>
                     </execution>
