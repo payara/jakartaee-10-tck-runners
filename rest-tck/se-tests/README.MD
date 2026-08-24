@@ -8,8 +8,6 @@ Copied to a separate module until we refactor the remote tests to managed profil
 * Make sure you don't have a running server
 * Run `mvn verify` here.
 
-## Additional properties
-
-`payara.home`:
-  path to payara installation, so that SigTest can verify jar files statically
+All test dependencies (Jersey, Jakarta APIs, parsson, yasson, etc.) are resolved from Maven
+via the `payara-bom`, so no local Payara installation or `payara.home` property is required.
 
