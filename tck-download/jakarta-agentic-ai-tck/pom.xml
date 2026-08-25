@@ -53,169 +53,31 @@
     <name>TCK: Install Jakarta Agentic AI TCK</name>
 
     <!--
-        Unlike most other Jakarta EE TCKs, the Agentic AI TCK is not distributed as
-        a ZIP on the Eclipse download site. Its 1.0.0-M1 artifacts (parent POM, API
-        and TCK) are published to Maven Central instead. This module downloads those
-        published artifacts from Maven Central and installs them into the local Maven
-        repository, so the runner consumes the exact ratified bits (matching SHAs)
-        rather than rebuilding them from a git clone.
+        Unlike most other Jakarta EE TCKs, the Agentic AI TCK is not (yet) distributed
+        as a ZIP on the Eclipse download site. Its 1.0.0-M1 artifacts are published to
+        Maven Central instead, so this module simply resolves the published TCK into the
+        local Maven repository - guaranteeing the runner uses the exact ratified bits
+        (matching SHAs) rather than rebuilding them from a git clone.
+
+        Only the TCK is fetched here; the API and any other dependencies are resolved
+        transitively by Maven when the runner builds. This module is kept so it can be
+        pointed at the Eclipse download site once the final version is published there.
     -->
-    <properties>
-        <agentic-ai.tck.version>${jakarta.tck.agentic-ai.version}</agentic-ai.tck.version>
-        <agentic-ai.api.version>${jakarta.agentic-ai.api.version}</agentic-ai.api.version>
-        <agentic-ai.central.base>https://repo.maven.apache.org/maven2/jakarta/agentic-ai</agentic-ai.central.base>
-
-        <agentic-ai.parent.pom>jakarta.agentic-ai-parent-${agentic-ai.tck.version}.pom</agentic-ai.parent.pom>
-        <agentic-ai.api.pom>jakarta.agentic-ai-api-${agentic-ai.api.version}.pom</agentic-ai.api.pom>
-        <agentic-ai.api.jar>jakarta.agentic-ai-api-${agentic-ai.api.version}.jar</agentic-ai.api.jar>
-        <agentic-ai.api.sources>jakarta.agentic-ai-api-${agentic-ai.api.version}-sources.jar</agentic-ai.api.sources>
-        <agentic-ai.tck.pom>jakarta.agentic-ai-tck-${agentic-ai.tck.version}.pom</agentic-ai.tck.pom>
-        <agentic-ai.tck.jar>jakarta.agentic-ai-tck-${agentic-ai.tck.version}.jar</agentic-ai.tck.jar>
-        <agentic-ai.tck.sources>jakarta.agentic-ai-tck-${agentic-ai.tck.version}-sources.jar</agentic-ai.tck.sources>
-    </properties>
-
     <build>
         <plugins>
             <plugin>
-                <groupId>com.googlecode.maven-download-plugin</groupId>
-                <artifactId>download-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>download-agentic-ai-parent-pom</id>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
+                        <id>get-agentic-ai-tck</id>
                         <phase>generate-resources</phase>
-                        <configuration>
-                            <url>${agentic-ai.central.base}/jakarta.agentic-ai-parent/${agentic-ai.tck.version}/${agentic-ai.parent.pom}</url>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                            <outputFileName>${agentic-ai.parent.pom}</outputFileName>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>download-agentic-ai-api-pom</id>
                         <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <phase>generate-resources</phase>
-                        <configuration>
-                            <url>${agentic-ai.central.base}/jakarta.agentic-ai-api/${agentic-ai.api.version}/${agentic-ai.api.pom}</url>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                            <outputFileName>${agentic-ai.api.pom}</outputFileName>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>download-agentic-ai-api-jar</id>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <phase>generate-resources</phase>
-                        <configuration>
-                            <url>${agentic-ai.central.base}/jakarta.agentic-ai-api/${agentic-ai.api.version}/${agentic-ai.api.jar}</url>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                            <outputFileName>${agentic-ai.api.jar}</outputFileName>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>download-agentic-ai-api-sources</id>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <phase>generate-resources</phase>
-                        <configuration>
-                            <url>${agentic-ai.central.base}/jakarta.agentic-ai-api/${agentic-ai.api.version}/${agentic-ai.api.sources}</url>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                            <outputFileName>${agentic-ai.api.sources}</outputFileName>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>download-agentic-ai-tck-pom</id>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <phase>generate-resources</phase>
-                        <configuration>
-                            <url>${agentic-ai.central.base}/jakarta.agentic-ai-tck/${agentic-ai.tck.version}/${agentic-ai.tck.pom}</url>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                            <outputFileName>${agentic-ai.tck.pom}</outputFileName>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>download-agentic-ai-tck-jar</id>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <phase>generate-resources</phase>
-                        <configuration>
-                            <url>${agentic-ai.central.base}/jakarta.agentic-ai-tck/${agentic-ai.tck.version}/${agentic-ai.tck.jar}</url>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                            <outputFileName>${agentic-ai.tck.jar}</outputFileName>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>download-agentic-ai-tck-sources</id>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <phase>generate-resources</phase>
-                        <configuration>
-                            <url>${agentic-ai.central.base}/jakarta.agentic-ai-tck/${agentic-ai.tck.version}/${agentic-ai.tck.sources}</url>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                            <outputFileName>${agentic-ai.tck.sources}</outputFileName>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-install-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>install-agentic-ai-parent-pom</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>install-file</goal>
+                            <goal>get</goal>
                         </goals>
                         <configuration>
-                            <file>${project.build.directory}${file.separator}${agentic-ai.parent.pom}</file>
-                            <pomFile>${project.build.directory}${file.separator}${agentic-ai.parent.pom}</pomFile>
-                            <groupId>jakarta.agentic-ai</groupId>
-                            <artifactId>jakarta.agentic-ai-parent</artifactId>
-                            <version>${agentic-ai.tck.version}</version>
-                            <packaging>pom</packaging>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>install-agentic-ai-api</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>install-file</goal>
-                        </goals>
-                        <configuration>
-                            <file>${project.build.directory}${file.separator}${agentic-ai.api.jar}</file>
-                            <pomFile>${project.build.directory}${file.separator}${agentic-ai.api.pom}</pomFile>
-                            <sources>${project.build.directory}${file.separator}${agentic-ai.api.sources}</sources>
-                            <groupId>jakarta.agentic-ai</groupId>
-                            <artifactId>jakarta.agentic-ai-api</artifactId>
-                            <version>${agentic-ai.api.version}</version>
-                            <packaging>jar</packaging>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>install-agentic-ai-tck</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>install-file</goal>
-                        </goals>
-                        <configuration>
-                            <file>${project.build.directory}${file.separator}${agentic-ai.tck.jar}</file>
-                            <pomFile>${project.build.directory}${file.separator}${agentic-ai.tck.pom}</pomFile>
-                            <sources>${project.build.directory}${file.separator}${agentic-ai.tck.sources}</sources>
-                            <groupId>jakarta.agentic-ai</groupId>
-                            <artifactId>jakarta.agentic-ai-tck</artifactId>
-                            <version>${agentic-ai.tck.version}</version>
-                            <packaging>jar</packaging>
+                            <artifact>jakarta.agentic-ai:jakarta.agentic-ai-tck:${jakarta.tck.agentic-ai.version}</artifact>
+                            <transitive>false</transitive>
                         </configuration>
                     </execution>
                 </executions>
