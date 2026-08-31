@@ -52,52 +52,32 @@
     <packaging>pom</packaging>
     <name>TCK: Install Jakarta Agentic AI TCK</name>
 
-    <properties>
-        <agentic-ai.clone.dir>${project.build.directory}${file.separator}agentic-ai</agentic-ai.clone.dir>
-    </properties>
+    <!--
+        Unlike most other Jakarta EE TCKs, the Agentic AI TCK is not (yet) distributed
+        as a ZIP on the Eclipse download site. Its 1.0.0-M1 artifacts are published to
+        Maven Central instead, so this module simply resolves the published TCK into the
+        local Maven repository - guaranteeing the runner uses the exact ratified bits
+        (matching SHAs) rather than rebuilding them from a git clone.
 
+        Only the TCK is fetched here; the API and any other dependencies are resolved
+        transitively by Maven when the runner builds. This module is kept so it can be
+        pointed at the Eclipse download site once the final version is published there.
+    -->
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>clone-agentic-ai-repo</id>
+                        <id>get-agentic-ai-tck</id>
                         <phase>generate-resources</phase>
                         <goals>
-                            <goal>exec</goal>
+                            <goal>get</goal>
                         </goals>
                         <configuration>
-                            <executable>git</executable>
-                            <arguments>
-                                <argument>clone</argument>
-                                <argument>--depth</argument>
-                                <argument>1</argument>
-                                <argument>https://github.com/jakartaee/agentic-ai.git</argument>
-                                <argument>${agentic-ai.clone.dir}</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>build-agentic-ai-tck</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${maven.executable}</executable>
-                            <workingDirectory>${agentic-ai.clone.dir}</workingDirectory>
-                            <arguments>
-                                <argument>install</argument>
-                                <argument>-DskipTests</argument>
-                                <!-- Only the api and tck modules are needed to run the TCK.
-                                     Skip spec (asciidoctor plugin requires Maven 3.8.8+) and
-                                     examples, which are irrelevant here and fail on the CI Maven. -->
-                                <argument>-pl</argument>
-                                <argument>api,tck</argument>
-                                <argument>-am</argument>
-                            </arguments>
+                            <artifact>jakarta.agentic-ai:jakarta.agentic-ai-tck:${jakarta.tck.agentic-ai.version}</artifact>
+                            <transitive>false</transitive>
                         </configuration>
                     </execution>
                 </executions>
