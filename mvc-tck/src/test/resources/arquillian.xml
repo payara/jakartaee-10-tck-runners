@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!--
 
-    Copyright (c) 2018, 2025 Eclipse Krazo committers and contributors
+    Copyright (c) 2018, 2026 Eclipse Krazo committers and contributors
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -33,6 +33,12 @@
         <configuration>
             <property name="adminHost">localhost</property>
             <property name="adminPort">4848</property>
+        </configuration>
+    </container>
+
+    <container qualifier="payara-micro">
+        <configuration>
+            <property name="microJar">${payara.micro.jar}</property>
         </configuration>
     </container>
 
