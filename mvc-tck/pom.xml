@@ -32,9 +32,6 @@
 
     <properties>
         <tck.home>${project.build.directory}/authorization-tck</tck.home>
-        <payara.arquillian.qualifier>payara</payara.arquillian.qualifier>
-        <payara.micro.artifact.id>payara-micro</payara.micro.artifact.id>
-        <payara.micro.jar>${project.build.directory}${file.separator}${payara.micro.artifact.id}-${payara.version}.jar</payara.micro.jar>
     </properties>
 
     <dependencyManagement>
@@ -155,90 +152,4 @@
         </plugins>
     </build>
 
-    <profiles>
-        <profile>
-            <id>payara-micro-managed</id>
-            <activation>
-                <property>
-                    <name>payara.micro.managed</name>
-                </property>
-            </activation>
-            <properties>
-                <payara.arquillian.qualifier>payara-micro</payara.arquillian.qualifier>
-            </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>copy-payara-micro-local</id>
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
-                                <phase>pre-integration-test</phase>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>fish.payara.extras</groupId>
-                                            <artifactId>${payara.micro.artifact.id}</artifactId>
-                                            <version>${payara.version}</version>
-                                            <type>jar</type>
-                                            <overWrite>true</overWrite>
-                                            <outputDirectory>${project.build.directory}</outputDirectory>
-                                            <destFileName>${payara.micro.artifact.id}-${payara.version}.jar</destFileName>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>payara-micro-platform-managed</id>
-            <activation>
-                <property>
-                    <name>payara.micro.platform.managed</name>
-                </property>
-            </activation>
-            <properties>
-                <payara.arquillian.qualifier>payara-micro</payara.arquillian.qualifier>
-                <payara.micro.artifact.id>payara-micro-platform</payara.micro.artifact.id>
-            </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>copy-payara-micro-platform-local</id>
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
-                                <phase>pre-integration-test</phase>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>fish.payara.extras</groupId>
-                                            <artifactId>payara-micro-platform</artifactId>
-                                            <version>${payara.version}</version>
-                                            <type>jar</type>
-                                            <overWrite>true</overWrite>
-                                            <outputDirectory>${project.build.directory}</outputDirectory>
-                                            <destFileName>payara-micro-platform-${payara.version}.jar</destFileName>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 </project>
