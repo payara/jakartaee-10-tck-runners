@@ -34,7 +34,7 @@ The TCK does not require any server-side configuration.
 Run from the top-level directory:
 
 ```
-mvn clean verify -pl . -pl mvc-tck -Dpayara.micro.managed -Dpayara.version=<version>
+mvn clean verify -pl . -pl mvc-tck -Ppayara.micro.managed -Dpayara.version=<version>
 ```
 
 ### Payara Micro Platform
@@ -42,5 +42,5 @@ mvn clean verify -pl . -pl mvc-tck -Dpayara.micro.managed -Dpayara.version=<vers
 Run from the top-level directory:
 
 ```
-mvn clean verify -pl . -pl mvc-tck -Dpayara.micro.managed -Dpayara.micro.artifact.id=payara-micro-platform -Dpayara.version=<version>
+mvn clean verify -pl . -pl mvc-tck -Ppayara-micro-managed -Ppayara-micro-platform -Dpayara.version=<version>
 ```

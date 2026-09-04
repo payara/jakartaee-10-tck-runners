@@ -76,7 +76,7 @@
         <payara.domain>domain1</payara.domain>
         <payara.arquillian.version>4.0.alpha4</payara.arquillian.version>
         <payara.arquillian.qualifier>payara</payara.arquillian.qualifier>
-        <payara.micro.artifact.id>payara-micro</payara.micro.artifact.id>
+        <payara.micro.artifact>payara-micro</payara.micro.artifact>
         <skipTests>false</skipTests>
         <skipConfig>${skipTests}</skipConfig>
         <skipServerStartStop>${skipTests}</skipServerStartStop>
@@ -627,7 +627,7 @@
             <id>payara-micro-managed</id>
             <properties>
                 <payara.micro.managed/>
-                <payara.micro.jar>${maven.multiModuleProjectDirectory}${file.separator}target${file.separator}${payara.micro.artifact.id}-${payara.version}.jar</payara.micro.jar>
+                <payara.micro.jar>${maven.multiModuleProjectDirectory}${file.separator}target${file.separator}${payara.micro.artifact}-${payara.version}.jar</payara.micro.jar>
                 <payara.arquillian.qualifier>payara-micro</payara.arquillian.qualifier>
             </properties>
 
@@ -640,7 +640,7 @@
             <dependencies>
                 <dependency>
                     <groupId>fish.payara.extras</groupId>
-                    <artifactId>${payara.micro.artifact.id}</artifactId>
+                    <artifactId>${payara.micro.artifact}</artifactId>
                     <version>${payara.version}</version>
                     <type>jar</type>
                 </dependency>
@@ -670,12 +670,12 @@
                                     <artifactItems>
                                         <artifactItem>
                                             <groupId>fish.payara.extras</groupId>
-                                            <artifactId>${payara.micro.artifact.id}</artifactId>
+                                            <artifactId>${payara.micro.artifact}</artifactId>
                                             <version>${payara.version}</version>
                                             <type>jar</type>
                                             <overWrite>true</overWrite>
                                             <outputDirectory>${maven.multiModuleProjectDirectory}${file.separator}target</outputDirectory>
-                                            <destFileName>${payara.micro.artifact.id}-${payara.version}.jar</destFileName>
+                                            <destFileName>${payara.micro.artifact}-${payara.version}.jar</destFileName>
                                         </artifactItem>
                                     </artifactItems>
                                 </configuration>
