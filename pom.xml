@@ -706,6 +706,17 @@
         </profile>
 
         <profile>
+            <!--
+                This is a supplemental profile to payara-micro-managed which changes the artefact
+            -->
+            <id>payara-micro-platform</id>
+
+            <properties>
+                <payara.micro.artifact>payara-micro-platform</payara.micro.artifact>
+            </properties>
+        </profile>
+
+        <profile>
             <id>windows</id>
             <activation>
                 <os>
