@@ -164,7 +164,7 @@
                                             <type>jar</type>
                                             <overWrite>true</overWrite>
                                             <outputDirectory>${project.build.directory}${file.separator}micro-home</outputDirectory>
-                                            <includes>glassfish/modules/jakarta.annotation-api.jar</includes>
+                                            <includes>MICRO-INF/runtime/jakarta.annotation-api.jar</includes>
                                         </artifactItem>
                                     </artifactItems>
                                 </configuration>
@@ -180,7 +180,7 @@
                                 <id>sig-test</id>
                                 <configuration>
                                     <systemPropertyVariables>
-                                        <sigTestClasspath>${project.build.directory}${file.separator}micro-home${file.separator}glassfish${file.separator}modules${file.separator}jakarta.annotation-api.jar${path.separator}${jimage.dir}${file.separator}java.base${path.separator}${jimage.dir}${file.separator}java.rmi${path.separator}${jimage.dir}${file.separator}java.sql${path.separator}${jimage.dir}${file.separator}java.naming</sigTestClasspath>
+                                        <sigTestClasspath>${project.build.directory}${file.separator}micro-home${file.separator}MICRO-INF${file.separator}runtime${file.separator}jakarta.annotation-api.jar${path.separator}${jimage.dir}${file.separator}java.base${path.separator}${jimage.dir}${file.separator}java.rmi${path.separator}${jimage.dir}${file.separator}java.sql${path.separator}${jimage.dir}${file.separator}java.naming</sigTestClasspath>
                                     </systemPropertyVariables>
                                 </configuration>
                             </execution>
