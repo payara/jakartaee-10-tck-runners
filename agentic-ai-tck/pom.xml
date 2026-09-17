@@ -111,7 +111,7 @@
             Yasson brings jakarta.json.bind-api, jakarta.json-api and parsson.
         -->
         <dependency>
-            <groupId>org.eclipse</groupId>
+            <groupId>org.eclipse.yasson</groupId>
             <artifactId>yasson</artifactId>
             <scope>test</scope>
         </dependency>
