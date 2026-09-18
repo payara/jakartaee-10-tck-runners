@@ -55,7 +55,7 @@
 
         <jdk.version>11</jdk.version>
 
-        <ant.version>1.10.14</ant.version>
+        <ant.version>1.10.15</ant.version>
         <ant.home>${project.build.directory}/apache-ant-${ant.version}</ant.home>
         <ant.zip.url>https://archive.apache.org/dist/ant/binaries/apache-ant-${ant.version}-bin.zip</ant.zip.url>
         <ant.executable>${ant.home}${file.separator}bin${file.separator}ant</ant.executable>
