@@ -115,6 +115,20 @@
             <artifactId>yasson</artifactId>
             <scope>test</scope>
         </dependency>
+        <!--
+            Jakarta Validation API, required on the test/client classpath for the
+            same reason as JSON-B above: the TCK obtains it transitively via
+            jakarta.jakartaee-api, but that is 'provided' in the TCK parent POM and
+            therefore not transitive here. Without it, JUnit Platform fails to load
+            the validation TCK test classes (e.g. the ValidatedAgent fixture that
+            references jakarta.validation.ConstraintViolationException), producing
+            "TestEngine with ID 'junit-jupiter' failed to discover tests".
+        -->
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -178,6 +192,16 @@
                             <systemPropertyVariables>
                                 <payara.home>${payara.home}</payara.home>
                                 <jimage.dir>${jimage.dir}</jimage.dir>
+                                <!--
+                                    Client-side (test JVM) signal that a compatible
+                                    implementation is present. Required by the TCK's
+                                    deployment-error tests, which gate at class level
+                                    with @EnabledIfSystemProperty (evaluated in this
+                                    JVM, not in the container). Without it those
+                                    negative-deployment assertions are silently
+                                    skipped even when the server has the option set.
+                                -->
+                                <jakarta.ai.agent.tck.implementation.present>true</jakarta.ai.agent.tck.implementation.present>
                                 <junit.jupiter.extensions.autodetection.enabled>true</junit.jupiter.extensions.autodetection.enabled>
                                 <signature.sigTestClasspath>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.agentic-ai-api.jar${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.base${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.rmi${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.sql${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.naming</signature.sigTestClasspath>
                             </systemPropertyVariables>
