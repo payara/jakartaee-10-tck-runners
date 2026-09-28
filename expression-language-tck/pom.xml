@@ -139,6 +139,7 @@
                      jimage tool and cannot run inside the container. The functional tests
                      run inside Payara Micro via the Arquillian IT below. -->
                 <el.tck.includes>**/ELSigTestIT.java</el.tck.includes>
+                <skipKillZombies>false</skipKillZombies>
             </properties>
 
             <dependencyManagement>
@@ -273,6 +274,7 @@
                                     <goal>run</goal>
                                 </goals>
                                 <configuration>
+                                    <skip>${skipKillZombies}</skip>
                                     <target>
                                         <exec executable="sh" failonerror="false">
                                             <arg value="-c"/>
