@@ -289,16 +289,44 @@
                     <plugin>
                         <artifactId>maven-failsafe-plugin</artifactId>
                         <executions>
-                            <!-- In-JVM signature test (needs jimage; cannot run in-container) -->
+                            <!-- The base build binds an in-JVM signature run under the
+                                 'payara-tests' id against ${payara.home}. That path is empty
+                                 under Micro, so disable it here and run the signature test via
+                                 the self-contained 'signature-test' execution below instead. -->
                             <execution>
                                 <id>payara-tests</id>
+                                <phase>none</phase>
+                            </execution>
+
+                            <!-- In-JVM signature test (needs jimage; cannot run in-container).
+                                 Self-contained: it no longer shares the base 'payara-tests' id,
+                                 so it must declare its own goals/includes/scan and full config. -->
+                            <execution>
+                                <id>signature-test</id>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
                                 <configuration>
                                     <additionalClasspathElements combine.self="override">
                                         <additionalClasspathElement>${el.modules.dir}${file.separator}jakarta.el-api.jar</additionalClasspathElement>
                                         <additionalClasspathElement>${el.modules.dir}${file.separator}expressly.jar</additionalClasspathElement>
                                     </additionalClasspathElements>
+
+                                    <dependenciesToScan>jakarta.tck:expression-language-tck</dependenciesToScan>
+
+                                    <test>${run.test}</test>
+                                    <includes>
+                                        <include>${el.tck.includes}</include>
+                                    </includes>
+
                                     <systemPropertyVariables>
                                         <el.classes>${el.modules.dir}${file.separator}jakarta.el-api.jar${path.separator}${el.modules.dir}${file.separator}expressly.jar</el.classes>
+                                        <variable.mapper>org.glassfish.expressly.lang.VariableMapperImpl</variable.mapper>
+                                        <junit.log.traceflag>true</junit.log.traceflag>
+                                        <harness.log.traceflag>true</harness.log.traceflag>
+                                        <cts.harness.debug>true</cts.harness.debug>
+                                        <jimage.dir>${project.build.directory}${file.separator}jdk-bundle</jimage.dir>
                                         <sigTestClasspath>${el.modules.dir}${file.separator}jakarta.el-api.jar${path.separator}${el.modules.dir}${file.separator}expressly.jar${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.base${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.rmi${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.sql${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.naming</sigTestClasspath>
                                     </systemPropertyVariables>
                                 </configuration>
