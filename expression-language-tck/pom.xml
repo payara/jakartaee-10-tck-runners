@@ -154,17 +154,6 @@
             </dependencyManagement>
 
             <dependencies>
-                <dependency>
-                    <groupId>jakarta.el</groupId>
-                    <artifactId>jakarta.el-api</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.glassfish.expressly</groupId>
-                    <artifactId>expressly</artifactId>
-                    <scope>test</scope>
-                </dependency>
-
                 <!-- Arquillian Payara Micro managed container -->
                 <dependency>
                     <groupId>fish.payara.arquillian</groupId>
@@ -230,18 +219,6 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-dependency-plugin</artifactId>
                         <executions>
-                            <execution>
-                                <id>copy-el-modules</id>
-                                <goals>
-                                    <goal>copy-dependencies</goal>
-                                </goals>
-                                <phase>pre-integration-test</phase>
-                                <configuration>
-                                    <includeArtifactIds>jakarta.el-api,expressly</includeArtifactIds>
-                                    <stripVersion>true</stripVersion>
-                                    <outputDirectory>${el.modules.dir}</outputDirectory>
-                                </configuration>
-                            </execution>
                             <!-- Pull down the Payara Micro uber-jar the container will launch -->
                             <execution>
                                 <id>copy-payara-micro</id>
@@ -271,6 +248,24 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId>
                         <executions>
+                            <execution>
+                                <id>extract-el-modules-from-micro</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <unzip src="${payara.micro.jar}" dest="${el.modules.dir}">
+                                            <patternset>
+                                                <include name="MICRO-INF/runtime/jakarta.el-api.jar"/>
+                                                <include name="MICRO-INF/runtime/expressly.jar"/>
+                                            </patternset>
+                                            <mapper type="flatten"/>
+                                        </unzip>
+                                    </target>
+                                </configuration>
+                            </execution>
                             <execution>
                                 <id>kill-zombie-micro-before-tests</id>
                                 <phase>pre-integration-test</phase>
@@ -319,7 +314,13 @@
                                     <includes combine.self="override">
                                         <include>**/ELTckIT.java</include>
                                     </includes>
-                                    <additionalClasspathElements combine.self="override"/>
+                                    <!-- Only the EL API is needed client-side, to Class.forName the TCK test
+                                         classes while enumerating them; the EL implementation under test is
+                                         the one inside Payara Micro (tests run in-container). Extracted from
+                                         Micro, not downloaded, so we never put a stray API jar on the path. -->
+                                    <additionalClasspathElements combine.self="override">
+                                        <additionalClasspathElement>${el.modules.dir}${file.separator}jakarta.el-api.jar</additionalClasspathElement>
+                                    </additionalClasspathElements>
                                     <!-- Report each dynamic test under its EL test name instead of elTckTests()[n] -->
                                     <statelessTestsetReporter implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5Xml30StatelessReporter">
                                         <usePhrasedTestCaseMethodName>true</usePhrasedTestCaseMethodName>
