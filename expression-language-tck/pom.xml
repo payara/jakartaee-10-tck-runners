@@ -51,7 +51,6 @@
     </parent>
 
     <artifactId>expression-language-tck</artifactId>
-    <packaging>jar</packaging>
 
     <name>TCK: Expression Language</name>
     <description>Runs the Expression Language TCK using jars from Payara</description>
