@@ -26,35 +26,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- tests run client-side and therefore need jersey on test classpath as well -->
-        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-client</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.glassfish.jersey.inject</groupId>
-            <artifactId>jersey-hk2</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-json-binding</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-jaxb</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-sse</artifactId>
-            <scope>test</scope>
-        </dependency>
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -79,7 +50,6 @@
         </dependency>
 
         <!-- TCK runtime dependencies -->
-
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
@@ -128,6 +98,11 @@
                                 <additionalClasspathElement>${payara.home}/glassfish/modules/nucleus-grizzly-all.jar</additionalClasspathElement>
                                 <additionalClasspathElement>${payara.home}/glassfish/modules/jakarta.activation-api.jar</additionalClasspathElement>
                                 <additionalClasspathElement>${payara.home}/glassfish/modules/angus-activation.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jersey-hk2.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/hk2-api.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/hk2-utils.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jakarta.inject-api.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${payara.home}/glassfish/modules/jakarta.validation-api.jar</additionalClasspathElement>
                             </additionalClasspathElements>
                         </configuration>
                     </execution>
@@ -135,5 +110,75 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>payara-micro-managed</id>
+            <properties>
+                <!-- Micro ships no server layout. Extract its impl jars into a synthesized
+                     glassfish/modules dir below and point payara.home there, so the base
+                     ${payara.home}/glassfish/modules classpath resolves to the Micro jars. -->
+                <payara.home>${project.build.directory}/micro-home</payara.home>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>extract-micro-runtime</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>fish.payara.extras</groupId>
+                                            <artifactId>payara-micro</artifactId>
+                                            <version>${payara.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>yes</overWrite>
+                                            <outputDirectory>${project.build.directory}/micro-home/glassfish/modules</outputDirectory>
+                                            <!-- Drop the MICRO-INF/runtime/ prefix so jars land directly in glassfish/modules. -->
+                                            <fileMappers>
+                                                <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.FlattenFileMapper"/>
+                                            </fileMappers>
+                                            <includes>
+                                                MICRO-INF/runtime/jersey-server.jar,
+                                                MICRO-INF/runtime/jersey-client.jar,
+                                                MICRO-INF/runtime/jersey-common.jar,
+                                                MICRO-INF/runtime/jersey-media-sse.jar,
+                                                MICRO-INF/runtime/jersey-container-grizzly2-http.jar,
+                                                MICRO-INF/runtime/jersey-container-servlet.jar,
+                                                MICRO-INF/runtime/jersey-media-json-binding.jar,
+                                                MICRO-INF/runtime/jersey-media-jaxb.jar,
+                                                MICRO-INF/runtime/jersey-hk2.jar,
+                                                MICRO-INF/runtime/hk2-api.jar,
+                                                MICRO-INF/runtime/hk2-utils.jar,
+                                                MICRO-INF/runtime/hk2-locator.jar,
+                                                MICRO-INF/runtime/jakarta.inject-api.jar,
+                                                MICRO-INF/runtime/jakarta.validation-api.jar,
+                                                MICRO-INF/runtime/jakarta.ws.rs-api.jar,
+                                                MICRO-INF/runtime/jakarta.xml.bind-api.jar,
+                                                MICRO-INF/runtime/jakarta.json.bind-api.jar,
+                                                MICRO-INF/runtime/jakarta.json.jar,
+                                                MICRO-INF/runtime/jaxb-osgi.jar,
+                                                MICRO-INF/runtime/yasson.jar,
+                                                MICRO-INF/runtime/nucleus-grizzly-all.jar,
+                                                MICRO-INF/runtime/jakarta.activation-api.jar,
+                                                MICRO-INF/runtime/angus-activation.jar
+                                            </includes>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
