@@ -62,7 +62,6 @@
              them with the equivalent jars unpacked from Payara Micro. -->
         <el.api.jar>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.el-api.jar</el.api.jar>
         <el.impl.jar>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}expressly.jar</el.impl.jar>
-        <el.tck.includes>**/*IT.java</el.tck.includes>
     </properties>
 
     <dependencies>
@@ -94,7 +93,7 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>signature-tests</id>
+                        <id>payara-tests</id>
                         <goals>
                             <goal>integration-test</goal>
                             <goal>verify</goal>
@@ -108,9 +107,6 @@
                             <dependenciesToScan>jakarta.tck:expression-language-tck</dependenciesToScan>
 
                             <test>${run.test}</test>
-                            <includes>
-                                <include>${el.tck.includes}</include>
-                            </includes>
 
                             <systemPropertyVariables>
                                 <el.classes>${el.api.jar}${path.separator}${el.impl.jar}</el.classes>
