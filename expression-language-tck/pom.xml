@@ -56,10 +56,13 @@
     <description>Runs the Expression Language TCK using jars from Payara</description>
 
     <properties>
-        <payara.micro.jar>${project.build.directory}${file.separator}payara-micro-${payara.version}.jar</payara.micro.jar>
-        <!-- Default run: every IT (sig test + functional tests) in-JVM. -->
+        <!-- The Expression Language TCK exercises the EL API and the Expressly
+             implementation directly, in-JVM. These point at the jars shipped in a
+             full Payara Server install; the payara-micro-managed profile overrides
+             them with the equivalent jars unpacked from Payara Micro. -->
+        <el.api.jar>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.el-api.jar</el.api.jar>
+        <el.impl.jar>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}expressly.jar</el.impl.jar>
         <el.tck.includes>**/*IT.java</el.tck.includes>
-        <build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -91,15 +94,15 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>payara-tests</id>
+                        <id>signature-tests</id>
                         <goals>
                             <goal>integration-test</goal>
                             <goal>verify</goal>
                         </goals>
                         <configuration>
                             <additionalClasspathElements>
-                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.el-api.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}expressly.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${el.api.jar}</additionalClasspathElement>
+                                <additionalClasspathElement>${el.impl.jar}</additionalClasspathElement>
                             </additionalClasspathElements>
 
                             <dependenciesToScan>jakarta.tck:expression-language-tck</dependenciesToScan>
@@ -110,13 +113,13 @@
                             </includes>
 
                             <systemPropertyVariables>
-                                <el.classes>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.el-api.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}expressly.jar</el.classes>
+                                <el.classes>${el.api.jar}${path.separator}${el.impl.jar}</el.classes>
                                 <variable.mapper>org.glassfish.expressly.lang.VariableMapperImpl</variable.mapper>
                                 <junit.log.traceflag>true</junit.log.traceflag>
                                 <harness.log.traceflag>true</harness.log.traceflag>
                                 <cts.harness.debug>true</cts.harness.debug>
                                 <jimage.dir>${project.build.directory}${file.separator}jdk-bundle</jimage.dir>
-                                <sigTestClasspath>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.el-api.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}expressly.jar${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.base${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.rmi${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.sql${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.naming</sigTestClasspath>
+                                <sigTestClasspath>${el.api.jar}${path.separator}${el.impl.jar}${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.base${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.rmi${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.sql${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.naming</sigTestClasspath>
                             </systemPropertyVariables>
                         </configuration>
                     </execution>
@@ -135,116 +138,12 @@
             </activation>
             <properties>
                 <el.modules.dir>${project.build.directory}${file.separator}el-modules</el.modules.dir>
-                <!-- In-JVM run is restricted to the signature test, which needs the JDK
-                     jimage tool and cannot run inside the container. The functional tests
-                     run inside Payara Micro via the Arquillian IT below. -->
-                <el.tck.includes>**/ELSigTestIT.java</el.tck.includes>
-                <skipKillZombies>false</skipKillZombies>
+                <el.api.jar>${el.modules.dir}${file.separator}jakarta.el-api.jar</el.api.jar>
+                <el.impl.jar>${el.modules.dir}${file.separator}expressly.jar</el.impl.jar>
             </properties>
-
-            <dependencyManagement>
-                <dependencies>
-                    <dependency>
-                        <groupId>fish.payara.api</groupId>
-                        <artifactId>payara-bom</artifactId>
-                        <version>${payara.version}</version>
-                        <type>pom</type>
-                        <scope>import</scope>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
-
-            <dependencies>
-                <!-- Arquillian Payara Micro managed container -->
-                <dependency>
-                    <groupId>fish.payara.arquillian</groupId>
-                    <artifactId>arquillian-payara-micro-managed</artifactId>
-                    <version>${payara.arquillian.version}</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>fish.payara.arquillian</groupId>
-                    <artifactId>payara-client-ee11</artifactId>
-                    <version>${payara.arquillian.version}</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.jboss.arquillian.junit5</groupId>
-                    <artifactId>arquillian-junit5-container</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.jboss.arquillian.protocol</groupId>
-                    <artifactId>arquillian-protocol-servlet-jakarta</artifactId>
-                    <version>1.8.0.Final</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.jboss.shrinkwrap.resolver</groupId>
-                    <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <!-- Used inside the container to discover and run the EL TCK tests -->
-                <dependency>
-                    <groupId>org.junit.platform</groupId>
-                    <artifactId>junit-platform-launcher</artifactId>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
 
             <build>
                 <plugins>
-                    <!-- Compile the Arquillian IT that boots Payara Micro; only present
-                         when running against Micro. -->
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>build-helper-maven-plugin</artifactId>
-                        <version>${build-helper-maven-plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <id>add-micro-test-sources</id>
-                                <phase>generate-test-sources</phase>
-                                <goals>
-                                    <goal>add-test-source</goal>
-                                </goals>
-                                <configuration>
-                                    <sources>
-                                        <source>src/test/micro/java</source>
-                                    </sources>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <!-- Pull down the Payara Micro uber-jar the container will launch -->
-                            <execution>
-                                <id>copy-payara-micro</id>
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
-                                <phase>pre-integration-test</phase>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>fish.payara.extras</groupId>
-                                            <artifactId>payara-micro</artifactId>
-                                            <version>${payara.version}</version>
-                                            <type>jar</type>
-                                            <overWrite>true</overWrite>
-                                            <outputDirectory>${project.build.directory}</outputDirectory>
-                                            <destFileName>payara-micro-${payara.version}.jar</destFileName>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <!-- Kill any leftover Payara Micro processes before tests -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId>
@@ -265,104 +164,6 @@
                                             <mapper type="flatten"/>
                                         </unzip>
                                     </target>
-                                </configuration>
-                            </execution>
-                            <execution>
-                                <id>kill-zombie-micro-before-tests</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                                <configuration>
-                                    <skip>${skipKillZombies}</skip>
-                                    <target>
-                                        <exec executable="sh" failonerror="false">
-                                            <arg value="-c"/>
-                                            <arg value="pkill -9 -f 'payara-micro.*\.jar' 2>/dev/null; exit 0"/>
-                                        </exec>
-                                    </target>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <plugin>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <executions>
-                            <!-- The base build binds an in-JVM signature run under the
-                                 'payara-tests' id against ${payara.home}. That path is empty
-                                 under Micro, so disable it here and run the signature test via
-                                 the self-contained 'signature-test' execution below instead. -->
-                            <execution>
-                                <id>payara-tests</id>
-                                <phase>none</phase>
-                            </execution>
-
-                            <!-- In-JVM signature test (needs jimage; cannot run in-container).
-                                 Self-contained: it no longer shares the base 'payara-tests' id,
-                                 so it must declare its own goals/includes/scan and full config. -->
-                            <execution>
-                                <id>signature-test</id>
-                                <goals>
-                                    <goal>integration-test</goal>
-                                    <goal>verify</goal>
-                                </goals>
-                                <configuration>
-                                    <additionalClasspathElements combine.self="override">
-                                        <additionalClasspathElement>${el.modules.dir}${file.separator}jakarta.el-api.jar</additionalClasspathElement>
-                                        <additionalClasspathElement>${el.modules.dir}${file.separator}expressly.jar</additionalClasspathElement>
-                                    </additionalClasspathElements>
-
-                                    <dependenciesToScan>jakarta.tck:expression-language-tck</dependenciesToScan>
-
-                                    <test>${run.test}</test>
-                                    <includes>
-                                        <include>${el.tck.includes}</include>
-                                    </includes>
-
-                                    <systemPropertyVariables>
-                                        <el.classes>${el.modules.dir}${file.separator}jakarta.el-api.jar${path.separator}${el.modules.dir}${file.separator}expressly.jar</el.classes>
-                                        <variable.mapper>org.glassfish.expressly.lang.VariableMapperImpl</variable.mapper>
-                                        <junit.log.traceflag>true</junit.log.traceflag>
-                                        <harness.log.traceflag>true</harness.log.traceflag>
-                                        <cts.harness.debug>true</cts.harness.debug>
-                                        <jimage.dir>${project.build.directory}${file.separator}jdk-bundle</jimage.dir>
-                                        <sigTestClasspath>${el.modules.dir}${file.separator}jakarta.el-api.jar${path.separator}${el.modules.dir}${file.separator}expressly.jar${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.base${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.rmi${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.sql${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.naming</sigTestClasspath>
-                                    </systemPropertyVariables>
-                                </configuration>
-                            </execution>
-
-                            <!-- Functional EL TCK tests run INSIDE Payara Micro via Arquillian -->
-                            <execution>
-                                <id>payara-micro-tests</id>
-                                <goals>
-                                    <goal>integration-test</goal>
-                                    <goal>verify</goal>
-                                </goals>
-                                <configuration>
-                                    <dependenciesToScan combine.self="override"/>
-                                    <includes combine.self="override">
-                                        <include>**/ELTckIT.java</include>
-                                    </includes>
-                                    <!-- Only the EL API is needed client-side, to Class.forName the TCK test
-                                         classes while enumerating them; the EL implementation under test is
-                                         the one inside Payara Micro (tests run in-container). Extracted from
-                                         Micro, not downloaded, so we never put a stray API jar on the path. -->
-                                    <additionalClasspathElements combine.self="override">
-                                        <additionalClasspathElement>${el.modules.dir}${file.separator}jakarta.el-api.jar</additionalClasspathElement>
-                                    </additionalClasspathElements>
-                                    <!-- Report each dynamic test under its EL test name instead of elTckTests()[n] -->
-                                    <statelessTestsetReporter implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5Xml30StatelessReporter">
-                                        <usePhrasedTestCaseMethodName>true</usePhrasedTestCaseMethodName>
-                                    </statelessTestsetReporter>
-                                    <systemPropertyVariables>
-                                        <payara.micro.jar>${payara.micro.jar}</payara.micro.jar>
-                                        <arquillian.launch>payara-micro</arquillian.launch>
-                                        <variable.mapper>org.glassfish.expressly.lang.VariableMapperImpl</variable.mapper>
-                                        <junit.log.traceflag>true</junit.log.traceflag>
-                                        <harness.log.traceflag>true</harness.log.traceflag>
-                                        <cts.harness.debug>true</cts.harness.debug>
-                                    </systemPropertyVariables>
                                 </configuration>
                             </execution>
                         </executions>
