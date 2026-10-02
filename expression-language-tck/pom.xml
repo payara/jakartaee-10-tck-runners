@@ -51,10 +51,18 @@
     </parent>
 
     <artifactId>expression-language-tck</artifactId>
-    <packaging>pom</packaging>
 
     <name>TCK: Expression Language</name>
     <description>Runs the Expression Language TCK using jars from Payara</description>
+
+    <properties>
+        <!-- The Expression Language TCK exercises the EL API and the Expressly
+             implementation directly, in-JVM. These point at the jars shipped in a
+             full Payara Server install; the payara-micro-managed profile overrides
+             them with the equivalent jars unpacked from Payara Micro. -->
+        <el.api.jar>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.el-api.jar</el.api.jar>
+        <el.impl.jar>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}expressly.jar</el.impl.jar>
+    </properties>
 
     <dependencies>
 
@@ -92,8 +100,8 @@
                         </goals>
                         <configuration>
                             <additionalClasspathElements>
-                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.el-api.jar</additionalClasspathElement>
-                                <additionalClasspathElement>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}expressly.jar</additionalClasspathElement>
+                                <additionalClasspathElement>${el.api.jar}</additionalClasspathElement>
+                                <additionalClasspathElement>${el.impl.jar}</additionalClasspathElement>
                             </additionalClasspathElements>
 
                             <dependenciesToScan>jakarta.tck:expression-language-tck</dependenciesToScan>
@@ -101,13 +109,13 @@
                             <test>${run.test}</test>
 
                             <systemPropertyVariables>
-                                <el.classes>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.el-api.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}expressly.jar</el.classes>
+                                <el.classes>${el.api.jar}${path.separator}${el.impl.jar}</el.classes>
                                 <variable.mapper>org.glassfish.expressly.lang.VariableMapperImpl</variable.mapper>
                                 <junit.log.traceflag>true</junit.log.traceflag>
                                 <harness.log.traceflag>true</harness.log.traceflag>
                                 <cts.harness.debug>true</cts.harness.debug>
                                 <jimage.dir>${project.build.directory}${file.separator}jdk-bundle</jimage.dir>
-                                <sigTestClasspath>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.el-api.jar${path.separator}${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}expressly.jar${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.base${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.rmi${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.sql${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.naming</sigTestClasspath>
+                                <sigTestClasspath>${el.api.jar}${path.separator}${el.impl.jar}${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.base${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.rmi${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.sql${path.separator}${project.build.directory}${file.separator}jdk-bundle${file.separator}java.naming</sigTestClasspath>
                             </systemPropertyVariables>
                         </configuration>
                     </execution>
@@ -115,4 +123,49 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>payara-micro-managed</id>
+            <activation>
+                <property>
+                    <name>payara.micro.managed</name>
+                </property>
+            </activation>
+            <properties>
+                <el.modules.dir>${project.build.directory}${file.separator}el-modules</el.modules.dir>
+                <el.api.jar>${el.modules.dir}${file.separator}jakarta.el-api.jar</el.api.jar>
+                <el.impl.jar>${el.modules.dir}${file.separator}expressly.jar</el.impl.jar>
+            </properties>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>extract-el-modules-from-micro</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <unzip src="${payara.micro.jar}" dest="${el.modules.dir}">
+                                            <patternset>
+                                                <include name="MICRO-INF/runtime/jakarta.el-api.jar"/>
+                                                <include name="MICRO-INF/runtime/expressly.jar"/>
+                                            </patternset>
+                                            <mapper type="flatten"/>
+                                        </unzip>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
