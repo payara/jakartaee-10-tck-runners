@@ -22,8 +22,6 @@
 
     <modules>
         <module>payara-runner</module>
-        <module>glassfish-runner</module>
-        <module>glassfish-runner-pluggability</module>
     </modules>
 
 </project>
