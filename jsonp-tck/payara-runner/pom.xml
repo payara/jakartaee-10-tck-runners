@@ -132,9 +132,6 @@
                             <goal>test</goal>
                         </goals>
                         <configuration>
-                            <excludes>
-                                <exclude>JsonpSignatureTest*</exclude>
-                            </excludes>
                             <dependenciesToScan>
                                 <dependency>jakarta.json:jakarta.json-tck-tests-pluggability</dependency>
                             </dependenciesToScan>
