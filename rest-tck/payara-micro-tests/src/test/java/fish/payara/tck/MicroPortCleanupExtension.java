@@ -36,7 +36,7 @@ public class MicroPortCleanupExtension implements AfterAllCallback {
 
     private void killAllPayaraMicroProcesses() throws IOException, InterruptedException {
         // Kill all JVM processes running payara-micro JAR files
-        new ProcessBuilder("sh", "-c", "pkill -9 -f 'payara-micro.*\\.jar' 2>/dev/null || true")
+        new ProcessBuilder("sh", "-c", "pkill -9 -f 'payara-micro-[0-9][^/ ]*\\.jar' 2>/dev/null || true")
                 .start()
                 .waitFor();
     }

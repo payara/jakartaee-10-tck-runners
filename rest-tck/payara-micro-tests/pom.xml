@@ -148,7 +148,7 @@
                                      before the first test class tries to bind port 8080 -->
                                 <exec executable="sh" failonerror="false">
                                     <arg value="-c"/>
-                                    <arg value="pkill -9 -f 'payara-micro.*\.jar' 2>/dev/null; exit 0"/>
+                                    <arg value="pkill -9 -f 'payara-micro-[0-9][^/ ]*\.jar' 2>/dev/null; exit 0"/>
                                 </exec>
                             </target>
                         </configuration>
