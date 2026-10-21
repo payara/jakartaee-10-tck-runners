@@ -93,46 +93,13 @@
                 </dependencies>
                 <executions>
                     <execution>
-                        <id>enable-assertions-server-remote</id>
+                        <id>enable-assertions</id>
                         <phase>generate-test-resources</phase>
                         <goals>
                             <goal>run</goal>
                         </goals>
                         <configuration>
-                            <target if="payara.server.remote">
-                                <property name="domain.file" value="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}config${file.separator}domain.xml"/>
-                                <echo message="domain file: ${domain.file}"/>
-                                <replace file="${domain.file}">
-                                    <replacetoken><![CDATA[</java-config>]]></replacetoken>
-                                    <replacevalue><![CDATA[<jvm-options>-ea</jvm-options></java-config>]]></replacevalue>
-                                </replace>
-                            </target>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>enable-assertions-server-managed</id>
-                        <phase>generate-test-resources</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target if="payara.server.managed">
-                                <property name="domain.file" value="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}config${file.separator}domain.xml"/>
-                                <echo message="domain file: ${domain.file}"/>
-                                <replace file="${domain.file}">
-                                    <replacetoken><![CDATA[</java-config>]]></replacetoken>
-                                    <replacevalue><![CDATA[<jvm-options>-ea</jvm-options></java-config>]]></replacevalue>
-                                </replace>
-                            </target>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>enable-assertions-micro</id>
-                        <phase>generate-test-resources</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
+                            <!-- Payara Server only; Micro gets -ea through cmdOptions in arquillian.xml -->
                             <target unless="payara.micro.managed">
                                 <property name="domain.file" value="${payara.home}${file.separator}glassfish${file.separator}domains${file.separator}domain1${file.separator}config${file.separator}domain.xml"/>
                                 <echo message="domain file: ${domain.file}"/>

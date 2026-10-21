@@ -114,6 +114,22 @@
     </dependencies>
 
     <build>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <excludes>
+                    <exclude>postboot-commands.txt</exclude>
+                </excludes>
+            </testResource>
+            <!-- filtered so the password file paths resolve to this module's directory -->
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>postboot-commands.txt</include>
+                </includes>
+            </testResource>
+        </testResources>
         <plugins>
 
             <plugin>
@@ -157,12 +173,15 @@
                                     <artifactId>jakarta.ws.rs-api</artifactId>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.directory}/dependency</outputDirectory>
+                                    <!-- unversioned names, as referenced by signature.sigTestClasspath -->
+                                    <destFileName>jakarta.ws.rs-api.jar</destFileName>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>jakarta.xml.bind</groupId>
                                     <artifactId>jakarta.xml.bind-api</artifactId>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.directory}/dependency</outputDirectory>
+                                    <destFileName>jakarta.xml.bind-api.jar</destFileName>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
@@ -202,6 +221,8 @@
                                 <!-- Path to post-boot commands file; resolved by Arquillian from system properties
                                      and substituted into extraMicroOptions in arquillian.xml -->
                                 <payara.micro.preboot.file>${project.build.testOutputDirectory}/preboot-commands.txt</payara.micro.preboot.file>
+                                <!-- Creates the j2ee / javajoe file realm users that the Server module creates with asadmin -->
+                                <payara.micro.postboot.file>${project.build.testOutputDirectory}/postboot-commands.txt</payara.micro.postboot.file>
 
                                 <!-- Enable ServiceLoader-based JUnit 5 extension auto-detection so
                                      MicroPortCleanupExtension (in META-INF/services/) is picked up -->

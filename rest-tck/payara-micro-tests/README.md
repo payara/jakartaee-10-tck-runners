@@ -4,24 +4,24 @@ Runs the Jakarta REST TCK against Payara Micro using the Arquillian Payara Micro
 
 ## Prerequisites
 
-JDK 21 is required. Download and install the TCK and Payara Micro from the root directory:
+JDK 11 or later is required. Download and install the TCK from the root directory:
 
 ```bash
-mvn clean install -pl . -pl tck-download -pl tck-download/jakarta-rest-tck -Dpayara-micro-managed
+mvn clean install -pl . -pl tck-download -pl tck-download/jakarta-rest-tck
 ```
 
 ## Running
 
-From the root directory:
+From the root directory (`-am` includes the root project, which downloads Payara Micro):
 
 ```bash
-mvn verify -Dpayara-micro-managed -pl rest-tck/payara-micro-tests
+mvn verify -Ppayara-micro-managed -pl rest-tck/payara-micro-tests -am
 ```
 
 To override the Payara version:
 
 ```bash
-mvn verify -Dpayara-micro-managed -pl rest-tck/payara-micro-tests -Dpayara.version=<version>
+mvn verify -Ppayara-micro-managed -pl rest-tck/payara-micro-tests -am -Dpayara.version=<version>
 ```
 
 ## Notes

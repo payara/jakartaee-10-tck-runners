@@ -165,7 +165,7 @@
                         <arquillian.launch>${payara.arquillian.qualifier}</arquillian.launch>
                     </systemPropertyVariables>
                     <environmentVariables>
-                        <JAVA_TOOL_OPTIONS>-Djava.locale.providers=COMPAT</JAVA_TOOL_OPTIONS>
+                        <JAVA_TOOL_OPTIONS>${payara.micro.jvm.args} -Djava.locale.providers=COMPAT</JAVA_TOOL_OPTIONS>
                     </environmentVariables>
                 </configuration>
             </plugin>
