@@ -24,7 +24,9 @@ import jakarta.enterprise.inject.spi.DefinitionException;
 import fish.payara.arquillian.container.payara.managed.PayaraMicroContainerConfiguration;
 import fish.payara.arquillian.container.payara.managed.PayaraMicroDeployableContainer;
 import org.jboss.arquillian.container.spi.client.container.DeploymentException;
+import org.jboss.arquillian.container.spi.client.protocol.metadata.HTTPContext;
 import org.jboss.arquillian.container.spi.client.protocol.metadata.ProtocolMetaData;
+import org.jboss.arquillian.container.spi.client.protocol.metadata.Servlet;
 import org.jboss.shrinkwrap.api.Archive;
 
 /**
@@ -97,6 +99,14 @@ public class PayaraMicroTckContainer extends PayaraMicroDeployableContainer {
 
         String microLog = microLog();
         if (!microLog.contains(LOAD_FAILURE_FRAGMENT)) {
+            if (!hasTestServlet(metaData)) {
+                // Seen on Jenkins: the adapter returned before Micro listed the Arquillian servlet, so the
+                // test failed with "ArquillianServletRunnerEE9 not found". Restart Micro once.
+                LOGGER.severe("Deployed " + archive.getName() + " without an Arquillian servlet in the metadata, "
+                        + "restarting Micro once. Micro output:\n" + microLog);
+                undeploy(archive);
+                metaData = super.deploy(archive);
+            }
             return metaData;
         }
 
@@ -113,6 +123,19 @@ public class PayaraMicroTckContainer extends PayaraMicroDeployableContainer {
             throw new DeploymentException(message, new DefinitionException(message));
         }
         throw new DeploymentException(message);
+    }
+
+    private static boolean hasTestServlet(ProtocolMetaData metaData) {
+        HTTPContext context = metaData.getContext(HTTPContext.class);
+        if (context == null) {
+            return false;
+        }
+        for (Servlet servlet : context.getServlets()) {
+            if (servlet.getName().startsWith("ArquillianServletRunner")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private String microLog() {
