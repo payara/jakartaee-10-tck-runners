@@ -204,7 +204,8 @@
                                 <id>run-tck</id>
                                 <phase>none</phase>
                             </execution>
-                            <!-- Kill any leftover Payara Micro processes before tests -->
+                            <!-- Kill leftover Payara Micro processes of this build before tests. Matching on this
+                                 build's jar path keeps it from killing Micro instances of other jobs on a shared agent. -->
                             <execution>
                                 <id>kill-zombie-micro-before-tests</id>
                                 <phase>pre-integration-test</phase>
@@ -215,7 +216,7 @@
                                     <target>
                                         <exec executable="sh" failonerror="false">
                                             <arg value="-c"/>
-                                            <arg value="pkill -9 -f 'payara-micro-[0-9][^/ ]*\.jar' 2>/dev/null; exit 0"/>
+                                            <arg value="pkill -9 -f -- '-jar ${payara.micro.jar}' 2>/dev/null; exit 0"/>
                                         </exec>
                                     </target>
                                 </configuration>

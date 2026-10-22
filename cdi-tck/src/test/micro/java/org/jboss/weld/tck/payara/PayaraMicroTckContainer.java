@@ -86,7 +86,14 @@ public class PayaraMicroTckContainer extends PayaraMicroDeployableContainer {
 
     @Override
     public ProtocolMetaData deploy(Archive<?> archive) throws DeploymentException {
-        ProtocolMetaData metaData = super.deploy(archive);
+        ProtocolMetaData metaData;
+        try {
+            metaData = super.deploy(archive);
+        } catch (DeploymentException e) {
+            // "No applications were found deployed" says nothing about why; surface Micro's output
+            LOGGER.severe("Deploying " + archive.getName() + " failed (" + e.getMessage() + "). Micro output:\n" + microLog());
+            throw e;
+        }
 
         String microLog = microLog();
         if (!microLog.contains(LOAD_FAILURE_FRAGMENT)) {
