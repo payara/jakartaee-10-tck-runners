@@ -153,37 +153,24 @@
                             </target>
                         </configuration>
                     </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
                     <execution>
-                        <id>copy-jakarta-ws-rs-api</id>
+                        <id>extract-micro-rest-apis</id>
                         <phase>pre-integration-test</phase>
                         <goals>
-                            <goal>copy</goal>
+                            <goal>run</goal>
                         </goals>
                         <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>jakarta.ws.rs</groupId>
-                                    <artifactId>jakarta.ws.rs-api</artifactId>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/dependency</outputDirectory>
-                                    <!-- unversioned names, as referenced by signature.sigTestClasspath -->
-                                    <destFileName>jakarta.ws.rs-api.jar</destFileName>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>jakarta.xml.bind</groupId>
-                                    <artifactId>jakarta.xml.bind-api</artifactId>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/dependency</outputDirectory>
-                                    <destFileName>jakarta.xml.bind-api.jar</destFileName>
-                                </artifactItem>
-                            </artifactItems>
+                            <!-- The signature test must check the API jars that Payara Micro actually ships, not ones resolved from Maven Central -->
+                            <target>
+                                <mkdir dir="${project.build.directory}/dependency"/>
+                                <unzip src="${payara.micro.jar}" dest="${project.build.directory}/dependency" overwrite="true">
+                                    <patternset>
+                                        <include name="MICRO-INF/runtime/jakarta.ws.rs-api.jar"/>
+                                        <include name="MICRO-INF/runtime/jakarta.xml.bind-api.jar"/>
+                                    </patternset>
+                                    <mapper type="flatten"/>
+                                </unzip>
+                            </target>
                         </configuration>
                     </execution>
                 </executions>

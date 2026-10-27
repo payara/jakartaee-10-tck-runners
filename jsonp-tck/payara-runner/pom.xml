@@ -184,7 +184,7 @@
                 </property>
             </activation>
             <properties>
-                <payara.json-api.jar>${project.build.directory}${file.separator}dependency${file.separator}jakarta.json-api.jar</payara.json-api.jar>
+                <payara.json-api.jar>${project.build.directory}${file.separator}dependency${file.separator}jakarta.json.jar</payara.json-api.jar>
                 <payara.micro.jar>${project.build.directory}${file.separator}payara-micro-${payara.version}.jar</payara.micro.jar>
             </properties>
             <build>
@@ -194,21 +194,13 @@
                         <artifactId>maven-dependency-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>copy-jakarta-json-api</id>
+                                <id>copy-payara-micro</id>
                                 <phase>generate-test-resources</phase>
                                 <goals>
                                     <goal>copy</goal>
                                 </goals>
                                 <configuration>
                                     <artifactItems>
-                                        <artifactItem>
-                                            <groupId>jakarta.json</groupId>
-                                            <artifactId>jakarta.json-api</artifactId>
-                                            <type>jar</type>
-                                            <overWrite>true</overWrite>
-                                            <outputDirectory>${project.build.directory}${file.separator}dependency</outputDirectory>
-                                            <destFileName>jakarta.json-api.jar</destFileName>
-                                        </artifactItem>
                                         <artifactItem>
                                             <groupId>fish.payara.extras</groupId>
                                             <artifactId>payara-micro</artifactId>
@@ -219,6 +211,38 @@
                                             <destFileName>payara-micro-${payara.version}.jar</destFileName>
                                         </artifactItem>
                                     </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.ant</groupId>
+                                <artifactId>ant</artifactId>
+                                <version>${ant.version}</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <id>extract-micro-json-api</id>
+                                <phase>generate-test-resources</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- The signature test must check the API jar that Payara Micro actually ships, not one resolved from Maven Central -->
+                                    <target>
+                                        <mkdir dir="${project.build.directory}${file.separator}dependency"/>
+                                        <unzip src="${payara.micro.jar}" dest="${project.build.directory}${file.separator}dependency" overwrite="true">
+                                            <patternset>
+                                                <include name="MICRO-INF/runtime/jakarta.json.jar"/>
+                                            </patternset>
+                                            <mapper type="flatten"/>
+                                        </unzip>
+                                    </target>
                                 </configuration>
                             </execution>
                         </executions>

@@ -184,24 +184,32 @@
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.ant</groupId>
+                                <artifactId>ant</artifactId>
+                                <version>${ant.version}</version>
+                            </dependency>
+                        </dependencies>
                         <executions>
                             <execution>
-                                <id>copy-jsonb-api</id>
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
+                                <id>extract-micro-jsonb-api</id>
                                 <phase>generate-test-resources</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
                                 <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>jakarta.json.bind</groupId>
-                                            <artifactId>jakarta.json.bind-api</artifactId>
-                                            <overWrite>true</overWrite>
-                                            <outputDirectory>${project.build.directory}${file.separator}dependency</outputDirectory>
-                                            <destFileName>jakarta.json.bind-api.jar</destFileName>
-                                        </artifactItem>
-                                    </artifactItems>
+                                    <!-- The signature test must check the API jar that Payara Micro actually ships, not one resolved from Maven Central -->
+                                    <target>
+                                        <mkdir dir="${project.build.directory}${file.separator}dependency"/>
+                                        <unzip src="${payara.micro.jar}" dest="${project.build.directory}${file.separator}dependency" overwrite="true">
+                                            <patternset>
+                                                <include name="MICRO-INF/runtime/jakarta.json.bind-api.jar"/>
+                                            </patternset>
+                                            <mapper type="flatten"/>
+                                        </unzip>
+                                    </target>
                                 </configuration>
                             </execution>
                         </executions>
