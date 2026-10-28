@@ -147,7 +147,7 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <configuration>
-                    <skip>${skipTests}</skip>
+                    <skip>${skipServerStartStop}</skip>
                 </configuration>
                 <executions>
                     <execution>
@@ -217,6 +217,7 @@
                     <systemPropertyVariables>
                         <payara.home>${payara.home}</payara.home>
                         <validation.provider>org.hibernate.validator.HibernateValidator</validation.provider>
+                        <payara.micro.sysprops.file>${project.build.testOutputDirectory}/micro-system.properties</payara.micro.sysprops.file>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
