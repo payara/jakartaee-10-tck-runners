@@ -65,6 +65,14 @@
                     <scope>test</scope>
                 </dependency>
 
+                <!-- CDI Web TCK test classes (TestNG + Arquillian based) -->
+                <dependency>
+                    <groupId>jakarta.enterprise</groupId>
+                    <artifactId>cdi-tck-web-impl</artifactId>
+                    <version>${jakarta.tck.cdi.version}</version>
+                    <scope>test</scope>
+                </dependency>
+
                 <!-- CDI API -->
                 <dependency>
                     <groupId>jakarta.enterprise</groupId>
@@ -122,7 +130,21 @@
                     </exclusions>
                 </dependency>
 
-                <!-- EL implementation, needed by PayaraMicroELImpl -->
+                <!-- Weld's own TCK porting package: provides the Beans, Contexts and EL SPI implementations -->
+                <dependency>
+                    <groupId>org.jboss.weld</groupId>
+                    <artifactId>weld-porting-package-tck</artifactId>
+                    <version>${weld.version}</version>
+                    <scope>test</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>*</groupId>
+                            <artifactId>*</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+
+                <!-- EL implementation, needed by Weld's ELImpl -->
                 <dependency>
                     <groupId>org.glassfish.expressly</groupId>
                     <artifactId>expressly</artifactId>
@@ -286,6 +308,15 @@
                                             <outputDirectory>${project.build.directory}/dependency/lib</outputDirectory>
                                             <destFileName>cdi-tck-ext-lib.jar</destFileName>
                                         </artifactItem>
+                                        <artifactItem>
+                                            <groupId>org.jboss.weld</groupId>
+                                            <artifactId>weld-porting-package-tck</artifactId>
+                                            <version>${weld.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>
+                                            <outputDirectory>${project.build.directory}/dependency/lib</outputDirectory>
+                                            <destFileName>weld-porting-package-tck.jar</destFileName>
+                                        </artifactItem>
                                     </artifactItems>
                                 </configuration>
                             </execution>
@@ -312,6 +343,7 @@
                                 <configuration>
                                     <dependenciesToScan>
                                         <dependency>jakarta.enterprise:cdi-tck-core-impl</dependency>
+                                        <dependency>jakarta.enterprise:cdi-tck-web-impl</dependency>
                                     </dependenciesToScan>
                                     <includes>
                                         <include>**/*Test.java</include>
