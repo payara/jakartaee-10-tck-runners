@@ -1,0 +1,2 @@
+create-file-user --passwordfile ${project.basedir}/j2ee.pass --groups staff:mgr:DIRECTOR j2ee
+create-file-user --passwordfile ${project.basedir}/javajoe.pass --groups guest:OTHERROLE javajoe

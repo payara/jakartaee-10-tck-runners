@@ -17,6 +17,7 @@
         <payara.json-bind-api.jar>${payara.home}${file.separator}glassfish${file.separator}modules${file.separator}jakarta.json.bind-api.jar</payara.json-bind-api.jar>
         <jimage.dir>${project.build.directory}${file.separator}jdk-bundle</jimage.dir>
         <skipServerStartStop>false</skipServerStartStop>
+        <payara.arquillian.qualifier>payara-remote</payara.arquillian.qualifier>
     </properties>
 
     <dependencyManagement>
@@ -161,9 +162,69 @@
                         <junit.jupiter.extensions.autodetection.enabled>true</junit.jupiter.extensions.autodetection.enabled>
                         <jimage.dir>${jimage.dir}</jimage.dir>
                         <signature.sigTestClasspath>${payara.json-bind-api.jar}${path.separator}${jimage.dir}${file.separator}java.base${path.separator}${jimage.dir}${file.separator}java.rmi${path.separator}${jimage.dir}${file.separator}java.sql${path.separator}${jimage.dir}${file.separator}java.naming</signature.sigTestClasspath>
+                        <arquillian.launch>${payara.arquillian.qualifier}</arquillian.launch>
                     </systemPropertyVariables>
+                    <environmentVariables>
+                        <JAVA_TOOL_OPTIONS>${payara.micro.jvm.args} -Djava.locale.providers=COMPAT</JAVA_TOOL_OPTIONS>
+                    </environmentVariables>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>payara-micro-managed</id>
+            <properties>
+                <skipConfig>true</skipConfig>
+                <skipServerStartStop>true</skipServerStartStop>
+                <payara.json-bind-api.jar>${project.build.directory}${file.separator}dependency${file.separator}jakarta.json.bind-api.jar</payara.json-bind-api.jar>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.ant</groupId>
+                                <artifactId>ant</artifactId>
+                                <version>${ant.version}</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <id>extract-micro-jsonb-api</id>
+                                <phase>generate-test-resources</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- The signature test must check the API jar that Payara Micro actually ships, not one resolved from Maven Central -->
+                                    <target>
+                                        <mkdir dir="${project.build.directory}${file.separator}dependency"/>
+                                        <unzip src="${payara.micro.jar}" dest="${project.build.directory}${file.separator}dependency" overwrite="true">
+                                            <patternset>
+                                                <include name="MICRO-INF/runtime/jakarta.json.bind-api.jar"/>
+                                            </patternset>
+                                            <mapper type="flatten"/>
+                                        </unzip>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <payara.micro.jar>${payara.micro.jar}</payara.micro.jar>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
