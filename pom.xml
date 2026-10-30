@@ -76,6 +76,8 @@
         <payara.domain>domain1</payara.domain>
         <payara.arquillian.version>4.0.alpha4</payara.arquillian.version>
         <payara.arquillian.qualifier>payara</payara.arquillian.qualifier>
+        <!-- JVM options for managed Payara Micro; set by the payara-micro-managed profile -->
+        <payara.micro.jvm.args/>
         <payara.micro.artifact>payara-micro</payara.micro.artifact>
         <skipTests>false</skipTests>
         <skipConfig>${skipTests}</skipConfig>
@@ -630,6 +632,9 @@
                 <skipServerStartStop>true</skipServerStartStop>
                 <payara.micro.jar>${maven.multiModuleProjectDirectory}${file.separator}target${file.separator}${payara.micro.artifact}-${payara.version}.jar</payara.micro.jar>
                 <payara.arquillian.qualifier>payara-micro</payara.arquillian.qualifier>
+                <!-- JVM options for the managed Micro process, passed via JAVA_TOOL_OPTIONS (inherited by the process the
+                     connector launches). preferIPv4Stack stops Arquillian building URLs from IPv6 link-local addresses. -->
+                <payara.micro.jvm.args>-Djava.net.preferIPv4Stack=true</payara.micro.jvm.args>
             </properties>
 
             <activation>
@@ -687,6 +692,9 @@
                     <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
+                            <environmentVariables>
+                                <JAVA_TOOL_OPTIONS>${payara.micro.jvm.args}</JAVA_TOOL_OPTIONS>
+                            </environmentVariables>
                             <systemPropertyVariables>
                                 <payara.micro.jar>${payara.micro.jar}</payara.micro.jar>
                                 <arquillian.launch>${payara.arquillian.qualifier}</arquillian.launch>
@@ -696,6 +704,9 @@
                     <plugin>
                         <artifactId>maven-failsafe-plugin</artifactId>
                         <configuration>
+                            <environmentVariables>
+                                <JAVA_TOOL_OPTIONS>${payara.micro.jvm.args}</JAVA_TOOL_OPTIONS>
+                            </environmentVariables>
                             <systemPropertyVariables>
                                 <payara.micro.jar>${payara.micro.jar}</payara.micro.jar>
                                 <arquillian.launch>${payara.arquillian.qualifier}</arquillian.launch>
