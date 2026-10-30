@@ -72,7 +72,7 @@
                     <scope>provided</scope>
                 </dependency>
 
-                <!-- CDI EL API (provides ELAwareBeanManager, needed by PayaraMicroELImpl) -->
+                <!-- CDI EL API (provides ELAwareBeanManager, needed by Weld's ELImpl) -->
                 <dependency>
                     <groupId>jakarta.enterprise</groupId>
                     <artifactId>jakarta.enterprise.cdi-el-api</artifactId>
@@ -129,7 +129,21 @@
                     </exclusions>
                 </dependency>
 
-                <!-- EL implementation (needed by GlassFishELImpl) -->
+                <!-- Weld's own TCK porting package: provides the Beans, Contexts and EL SPI implementations -->
+                <dependency>
+                    <groupId>org.jboss.weld</groupId>
+                    <artifactId>weld-porting-package-tck</artifactId>
+                    <version>${weld.version}</version>
+                    <scope>test</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>*</groupId>
+                            <artifactId>*</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+
+                <!-- EL implementation, needed by Weld's ELImpl -->
                 <dependency>
                     <groupId>org.glassfish.expressly</groupId>
                     <artifactId>expressly</artifactId>
@@ -211,7 +225,8 @@
                                 <id>run-tck</id>
                                 <phase>none</phase>
                             </execution>
-                            <!-- Kill any leftover Payara Micro processes before tests -->
+                            <!-- Kill leftover Payara Micro processes of this build before tests. Matching on this
+                                 build's jar path keeps it from killing Micro instances of other jobs on a shared agent. -->
                             <execution>
                                 <id>kill-zombie-micro-before-tests</id>
                                 <phase>pre-integration-test</phase>
@@ -222,7 +237,7 @@
                                     <target>
                                         <exec executable="sh" failonerror="false">
                                             <arg value="-c"/>
-                                            <arg value="pkill -9 -f 'payara-micro.*\.jar' 2>/dev/null; exit 0"/>
+                                            <arg value="pkill -9 -f -- '-jar ${payara.micro.jar}' 2>/dev/null; exit 0"/>
                                         </exec>
                                     </target>
                                 </configuration>
@@ -292,6 +307,15 @@
                                             <outputDirectory>${project.build.directory}/dependency/lib</outputDirectory>
                                             <destFileName>cdi-tck-ext-lib.jar</destFileName>
                                         </artifactItem>
+                                        <artifactItem>
+                                            <groupId>org.jboss.weld</groupId>
+                                            <artifactId>weld-porting-package-tck</artifactId>
+                                            <version>${weld.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>
+                                            <outputDirectory>${project.build.directory}/dependency/lib</outputDirectory>
+                                            <destFileName>weld-porting-package-tck.jar</destFileName>
+                                        </artifactItem>
                                     </artifactItems>
                                 </configuration>
                             </execution>
@@ -327,6 +351,12 @@
                                         <payara.micro.jar>${payara.micro.jar}</payara.micro.jar>
                                         <org.jboss.cdi.tck.libraryDirectory>${project.build.directory}/dependency/lib</org.jboss.cdi.tck.libraryDirectory>
                                     </systemPropertyVariables>
+                                    <!-- The managed adapter ignores javaVmArguments/cmdOptions; the spawned Micro JVM
+                                         inherits this env var. Needed by ExcludeFiltersTest (system-properties group),
+                                         whose bean exclusion is evaluated inside Micro, not the test JVM. -->
+                                    <environmentVariables>
+                                        <JAVA_TOOL_OPTIONS>-DcdiTckExcludeDummy=true</JAVA_TOOL_OPTIONS>
+                                    </environmentVariables>
                                 </configuration>
                             </execution>
                         </executions>
