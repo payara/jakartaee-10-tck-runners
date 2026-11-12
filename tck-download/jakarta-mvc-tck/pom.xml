@@ -34,10 +34,8 @@
 
     <properties>
         <!-- This download is currently broken - download from Central for now -->
-<!--        <tck.test.mvc.file>jakarta-mvc-tck-${jakarta.tck.mvc.version}.zip</tck.test.mvc.file>-->
-<!--        <tck.tests.mvc.url>https://download.eclipse.org/jakartaee/mvc/3.0/${tck.test.mvc.file}</tck.tests.mvc.url>-->
-
-        <tck.tests.mvc.url>https://repo1.maven.org/maven2/jakarta/mvc/tck/mvc-tck-distribution/${jakarta.tck.mvc.version}/mvc-tck-distribution-${jakarta.tck.mvc.version}-${jakarta.tck.mvc.version}.zip</tck.tests.mvc.url>
+        <tck.test.mvc.file>jakarta-mvc-tck-${jakarta.tck.mvc.version}.zip</tck.test.mvc.file>
+        <tck.tests.mvc.url>https://download.eclipse.org/jakartaee/mvc/3.0/${tck.test.mvc.file}</tck.tests.mvc.url>
     </properties>
 
     <build>
