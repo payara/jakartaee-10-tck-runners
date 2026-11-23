@@ -157,14 +157,6 @@
                     </exclusions>
                 </dependency>
 
-                <!-- Arquillian Payara Micro Managed container -->
-                <dependency>
-                    <groupId>fish.payara.arquillian</groupId>
-                    <artifactId>arquillian-payara-micro-managed</artifactId>
-                    <version>${payara.arquillian.version}</version>
-                    <scope>test</scope>
-                </dependency>
-
                 <!-- Arquillian TestNG integration -->
                 <dependency>
                     <groupId>org.jboss.arquillian.testng</groupId>
@@ -272,26 +264,6 @@
                         <artifactId>maven-dependency-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>copy-payara-micro</id>
-                                <phase>generate-test-resources</phase>
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>fish.payara.extras</groupId>
-                                            <artifactId>payara-micro</artifactId>
-                                            <version>${payara.version}</version>
-                                            <type>jar</type>
-                                            <overWrite>true</overWrite>
-                                            <outputDirectory>${project.build.directory}</outputDirectory>
-                                            <destFileName>payara-micro-${payara.version}.jar</destFileName>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                            <execution>
                                 <id>copy-cdi-tck-ext-lib</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
@@ -350,7 +322,6 @@
                                     </includes>
                                     <excludedGroups>se,javaee-full</excludedGroups>
                                     <systemPropertyVariables>
-                                        <payara.micro.jar>${payara.micro.jar}</payara.micro.jar>
                                         <org.jboss.cdi.tck.libraryDirectory>${project.build.directory}/dependency/lib</org.jboss.cdi.tck.libraryDirectory>
                                     </systemPropertyVariables>
                                     <!-- The managed adapter ignores javaVmArguments/cmdOptions; the spawned Micro JVM

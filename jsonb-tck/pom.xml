@@ -97,7 +97,8 @@
                             <goal>run</goal>
                         </goals>
                         <configuration>
-                            <target unless="${skipConfig}">
+                            <skip>${skipConfig}</skip>
+                            <target unless="payara.micro.managed">
                                 <exec executable="${payara.asadmin}">
                                     <arg value="create-jvm-options" />
                                     <arg value="-Djava.locale.providers=COMPAT" />
@@ -113,7 +114,8 @@
                             <goal>run</goal>
                         </goals>
                         <configuration>
-                            <target unless="${skipServerStartStop}">
+                            <skip>${skipServerStartStop}</skip>
+                            <target unless="payara.micro.managed">
                                 <exec executable="${payara.asadmin}">
                                     <arg value="restart-domain" />
                                     <arg value="${payara.domain}" />
@@ -176,8 +178,6 @@
         <profile>
             <id>payara-micro-managed</id>
             <properties>
-                <skipConfig>true</skipConfig>
-                <skipServerStartStop>true</skipServerStartStop>
                 <payara.json-bind-api.jar>${project.build.directory}${file.separator}dependency${file.separator}jakarta.json.bind-api.jar</payara.json-bind-api.jar>
             </properties>
             <build>
@@ -185,13 +185,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.apache.ant</groupId>
-                                <artifactId>ant</artifactId>
-                                <version>${ant.version}</version>
-                            </dependency>
-                        </dependencies>
                         <executions>
                             <execution>
                                 <id>extract-micro-jsonb-api</id>
@@ -213,15 +206,6 @@
                                 </configuration>
                             </execution>
                         </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <configuration>
-                            <systemPropertyVariables>
-                                <payara.micro.jar>${payara.micro.jar}</payara.micro.jar>
-                            </systemPropertyVariables>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>
