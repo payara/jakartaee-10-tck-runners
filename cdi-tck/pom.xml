@@ -18,7 +18,6 @@
         <weld.api.version>5.0.SP3</weld.api.version>
         <testng.version>7.9.0</testng.version>
         <commons-lang.version>2.6</commons-lang.version>
-        <payara.micro.jar>${project.build.directory}${file.separator}payara-micro-${payara.version}.jar</payara.micro.jar>
     </properties>
 
     <profiles>
