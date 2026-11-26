@@ -83,9 +83,6 @@
         <payara-nexus-staging.repo.releases.enabled>false</payara-nexus-staging.repo.releases.enabled>
         <payara-nexus-staging.repo.snapshots.enabled>false</payara-nexus-staging.repo.snapshots.enabled>
 
-        <payara-nexus-staging.repo.releases.enabled>false</payara-nexus-staging.repo.releases.enabled>
-        <payara-nexus-staging.repo.snapshots.enabled>false</payara-nexus-staging.repo.snapshots.enabled>
-
         <!-- Build & test plugin versions -->
         <maven-install-plugin.version>3.1.2</maven-install-plugin.version>
         <maven-failsafe-plugin.version>3.5.3</maven-failsafe-plugin.version>
@@ -733,14 +730,6 @@
                 <script.extension>.bat</script.extension>
                 <ant.executable>${ant.home}${file.separator}bin${file.separator}ant.cmd</ant.executable>
                 <maven.executable>${env.MAVEN_HOME}${file.separator}bin${file.separator}mvn.cmd</maven.executable>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>payara-nexus-staging</id>
-            <properties>
-                <payara-nexus-staging.repo.releases.enabled>true</payara-nexus-staging.repo.releases.enabled>
-                <payara-nexus-staging.repo.snapshots.enabled>true</payara-nexus-staging.repo.snapshots.enabled>
             </properties>
         </profile>
 
