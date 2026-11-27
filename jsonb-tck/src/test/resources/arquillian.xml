@@ -12,4 +12,11 @@
         </configuration>
     </container>
 
+    <container qualifier="payara-micro">
+        <configuration>
+            <property name="microJar">${payara.micro.jar}</property>
+            <property name="javaVmArguments">-Djava.locale.providers=COMPAT</property>
+        </configuration>
+    </container>
+
 </arquillian>

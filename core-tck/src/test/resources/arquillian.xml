@@ -48,8 +48,14 @@
         <!-- property name="deploymentExportPath">target/</property-->
     </engine>
 
-    <container qualifier="payara-core-profile" default="true">
+    <container qualifier="payara" default="true">
         <configuration>
+        </configuration>
+    </container>
+
+    <container qualifier="payara-micro">
+        <configuration>
+            <property name="microJar">${payara.micro.jar}</property>
         </configuration>
     </container>
 

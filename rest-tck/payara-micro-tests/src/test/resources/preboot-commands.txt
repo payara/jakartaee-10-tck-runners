@@ -1,0 +1,1 @@
+set configs.config.server-config.network-config.protocols.protocol.http-listener.http.trace-enabled=true

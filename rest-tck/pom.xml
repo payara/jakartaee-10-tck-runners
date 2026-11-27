@@ -25,6 +25,18 @@
         <adminHost>localhost</adminHost>
     </properties>
 
+    <profiles>
+        <profile>
+            <id>payara-micro-managed</id>
+            <modules>
+                <module>payara-micro-tests</module>
+            </modules>
+            <properties>
+                <payara.micro.jar>${maven.multiModuleProjectDirectory}${file.separator}target${file.separator}payara-micro-${payara.version}.jar</payara.micro.jar>
+            </properties>
+        </profile>
+    </profiles>
+
     <dependencyManagement>
         <dependencies>
             <dependency>

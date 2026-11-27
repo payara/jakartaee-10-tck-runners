@@ -51,6 +51,18 @@
     <artifactId>annotations-tck</artifactId>
     <packaging>pom</packaging>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>fish.payara.api</groupId>
+                <artifactId>payara-bom</artifactId>
+                <version>${payara.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <name>TCK: Annotations</name>
 
     <properties>
@@ -58,6 +70,8 @@
         <tck.tests.home>${tck.home}/src/com/sun/ts/tests/signaturetest/caj</tck.tests.home>
         <tck.download.url>https://download.eclipse.org/jakartaee/annotations/2.1/jakarta-annotations-tck-${jakarta-annotations-tck.version}.zip</tck.download.url>
         <harness.log.port>2000</harness.log.port>
+        <!-- Annotation API jar under test; overridden by the payara-micro-managed profile -->
+        <annotation.api.jar>${payara.home}/glassfish/modules/jakarta.annotation-api.jar</annotation.api.jar>
     </properties>
 
     <build>
@@ -163,8 +177,8 @@
                                 <tck-setting key="jimage.dir"       value="${jimage.dir}"/>
                                 <!-- local.classes feeds into ts.run.classpath → CLASSPATH for the test JVM;
                                      reflection mode needs the annotation API jar loadable via Class.forName() -->
-                                <tck-setting key="local.classes"    value="${payara.home}/glassfish/modules/jakarta.annotation-api.jar"/>
-                                <tck-setting key="sigTestClasspath" value="${payara.home}/glassfish/modules/jakarta.annotation-api.jar${pathsep}${jimage.dir}/java.base${pathsep}${jimage.dir}/java.rmi${pathsep}${jimage.dir}/java.sql${pathsep}${jimage.dir}/java.naming"/>
+                                <tck-setting key="local.classes"    value="${annotation.api.jar}"/>
+                                <tck-setting key="sigTestClasspath" value="${annotation.api.jar}${pathsep}${jimage.dir}/java.base${pathsep}${jimage.dir}/java.rmi${pathsep}${jimage.dir}/java.sql${pathsep}${jimage.dir}/java.naming"/>
 
                                 <!-- jakarta.annotation.ManagedBean was removed in Jakarta EE 10 -->
                                 <tck-setting key="ca.sig.managedbean" value="false"/>
@@ -231,4 +245,44 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>payara-micro-managed</id>
+            <properties>
+                <annotation.api.jar>${project.build.directory}/micro-home/MICRO-INF/runtime/jakarta.annotation-api.jar</annotation.api.jar>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <!-- Extract the annotation API jar bundled inside Payara Micro -->
+                                <id>unpack-micro-annotation-api</id>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <phase>generate-test-resources</phase>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>fish.payara.extras</groupId>
+                                            <artifactId>payara-micro</artifactId>
+                                            <version>${payara.version}</version>
+                                            <type>jar</type>
+                                            <overWrite>true</overWrite>
+                                            <outputDirectory>${project.build.directory}${file.separator}micro-home</outputDirectory>
+                                            <includes>MICRO-INF/runtime/jakarta.annotation-api.jar</includes>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
