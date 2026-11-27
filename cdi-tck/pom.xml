@@ -18,9 +18,25 @@
         <testng.version>7.9.0</testng.version>
         <commons-lang.version>2.6</commons-lang.version>
         <payara.micro.jar>${project.build.directory}${file.separator}payara-micro-${payara.version}.jar</payara.micro.jar>
+        <!-- TestNG groups excluded when running on Payara Micro (Web Profile / full level) -->
+        <cdi.tck.excludedGroups>se,javaee-full</cdi.tck.excludedGroups>
     </properties>
 
     <profiles>
+        <!-- Core Profile only requires CDI Lite. Mirror cdi-lite-tck-suite, which also excludes the 'cdi-full' group,
+             so that -Djavaee.level=core does not run the CDI Full / Web Profile tests on Payara Micro. -->
+        <profile>
+            <id>cdi-core-level</id>
+            <activation>
+                <property>
+                    <name>javaee.level</name>
+                    <value>core</value>
+                </property>
+            </activation>
+            <properties>
+                <cdi.tck.excludedGroups>cdi-full,se,javaee-full</cdi.tck.excludedGroups>
+            </properties>
+        </profile>
         <profile>
             <id>payara-micro-managed</id>
             <activation>
@@ -322,7 +338,7 @@
                                     <includes>
                                         <include>**/*Test.java</include>
                                     </includes>
-                                    <excludedGroups>se,javaee-full</excludedGroups>
+                                    <excludedGroups>${cdi.tck.excludedGroups}</excludedGroups>
                                     <systemPropertyVariables>
                                         <payara.micro.jar>${payara.micro.jar}</payara.micro.jar>
                                         <org.jboss.cdi.tck.libraryDirectory>${project.build.directory}/dependency/lib</org.jboss.cdi.tck.libraryDirectory>
